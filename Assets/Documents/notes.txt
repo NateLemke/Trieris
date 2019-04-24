@@ -1,0 +1,10 @@
+Ship properties and things
+
+	// reset is called at the end of a turn after the final phase 
+	reset()
+		sets canAct to true
+		sets momentum to true
+		sets movedForward to false
+		sets canActAfterCollision to be true
+
+		
