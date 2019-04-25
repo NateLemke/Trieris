@@ -145,10 +145,8 @@ public class GameLogic : MonoBehaviour {
                 int playerShipNo = 0;
                 foreach(Ship s in port.node.getShips())
                 {
-                    if (s.team == gameManager.playerTeam)
+                    if (s.team != ship.team)
                         enemyShipNo++;
-                    else
-                        playerShipNo++;
                 }
                 //List<Ship> enemyShips = ship.getNode().getShips().stream()
                 //        .filter(target->target.getTeamColor() != ship.getTeamColor()).collect(Collectors.toList());
@@ -163,10 +161,10 @@ public class GameLogic : MonoBehaviour {
                     }
                     */
                     ship.capturePort();
-                    int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");
-                    ship.setFront(direction);
+                    //int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");
+                    //ship.setFront(direction);
                 }
-                else if(playerShipNo == 0)
+                else if(enemyShipNo == 0)
                 {
                     // commenting out 
 
