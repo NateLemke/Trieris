@@ -40,7 +40,7 @@ public class Ship : MonoBehaviour {
     TrierisAI ai = null;
 
     // new variables
-    public bool playingAnimation { get; set; }
+    //public bool playingAnimation { get; set; }
     delegate bool animateDelegate();
     animateDelegate animate;
     public AnimationCurve MoveCurve;
@@ -304,7 +304,8 @@ public class Ship : MonoBehaviour {
 
             // pause the turn I guess
             //Debug.Log("RAMED");
-            playingAnimation = true;
+
+            //playingAnimation = true;
         }
     }
 
@@ -351,7 +352,9 @@ public class Ship : MonoBehaviour {
         //endNode = node;
         
         //startAnimation(forwardsAnimate);
-        startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
+        //startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
+
+        AnimationManager.actionAnimations.Add(this,new MovementAnimation(node,destNode,this));
 
         node.getShips().Remove(this);
         node = destNode;
@@ -364,7 +367,8 @@ public class Ship : MonoBehaviour {
         momentum = 0;
         //Debug.Log("----Turning ship "+relativeDirection);
 
-        startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
+        //startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
+        AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
     }
 
     public void setFront(int direction) {
@@ -641,18 +645,18 @@ public class Ship : MonoBehaviour {
     {
     }
 
-    private void startAnimation(animateDelegate a) {
-        Debug.Log("Begin animation");
-        animationStart = Time.time;
-        animate = a;
-        playingAnimation = true;
-    }
+    //private void startAnimation(animateDelegate a) {
+    //    Debug.Log("Begin animation");
+    //    animationStart = Time.time;
+    //    animate = a;
+    //    playingAnimation = true;
+    //}
 
-    private void startAnimationCo(IEnumerator e) {
-        animationStart = Time.time;
-        playingAnimation = true;
-        StartCoroutine(e);
-    }
+    //private void startAnimationCo(IEnumerator e) {
+    //    animationStart = Time.time;
+    //    playingAnimation = true;
+    //    StartCoroutine(e);
+    //}
 
     //private bool forwardsAnimate() {
     //    transform.position = Vector3.Lerp(startNode.getRealPos(),endNode.getRealPos(),Time.time - animationStart);
@@ -672,7 +676,7 @@ public class Ship : MonoBehaviour {
             yield return null;
         }
         DebugControl.log("animation","animation stop");
-        playingAnimation = false;
+        //playingAnimation = false;
 
         yield return null;
     }
@@ -683,7 +687,7 @@ public class Ship : MonoBehaviour {
             yield return null;
         }
         DebugControl.log("animation","animation stop");
-        playingAnimation = false;
+        //playingAnimation = false;
 
     }
 

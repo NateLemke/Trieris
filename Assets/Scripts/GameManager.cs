@@ -93,13 +93,16 @@ public class GameManager : MonoBehaviour {
         }
 
         if (processingTurn) {
-            animationPlaying = false;
+            animationPlaying = AnimationManager.playingAnimation;
             needRedirect = false;
-            foreach (Ship ship in ships) {
-                if (animationPlaying = ship.playingAnimation) {
-                    break;
-                }
-            }
+            //foreach (Ship ship in ships) {
+            //if (animationPlaying = ship.playingAnimation) {
+            //    break;
+            //}
+            //}
+            //if (animationPlaying = AnimationManager.playingAnimation) {
+            //    break;
+            //}
 
             if (!animationPlaying && !needRedirect) {
                 processingTurn = gameLogic.executePhase();

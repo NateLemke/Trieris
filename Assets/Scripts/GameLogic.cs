@@ -76,7 +76,7 @@ public class GameLogic : MonoBehaviour {
         
         phaseIndex = 0;
         executePhase(phaseIndex);
-
+        AnimationManager.playAnimations();
     }
 
     //[System.Obsolete]
