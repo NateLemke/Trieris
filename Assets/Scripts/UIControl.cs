@@ -31,6 +31,8 @@ public class UIControl : MonoBehaviour {
     Sprite holdSprite;
     //GameObject selection;
 
+    public GameObject optionsPanel;
+
     
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
@@ -106,6 +108,8 @@ public class UIControl : MonoBehaviour {
     private void Awake() {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
+        optionsPanel = GameObject.Find("OptionsMenu");
+        optionsPanel.SetActive(false);
         DebugControl.init();
     }
 
@@ -180,7 +184,13 @@ public class UIControl : MonoBehaviour {
             redirectText.color = Color.green;
         }
 
-
+        if (Input.GetKeyDown("escape"))
+        {
+            if (!optionsPanel.active)
+                optionsPanel.SetActive(true);
+            else
+                optionsPanel.SetActive(false);
+        }
     }
 
     public void redirect(int newDirection) {
