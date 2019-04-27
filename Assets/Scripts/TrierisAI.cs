@@ -87,7 +87,7 @@ public class TrierisAI {
                     phase = catapultMove[0];
                     catapultDirection = catapultMove[1];
                     if(catapultDirection != -1 && phase != -1) {
-                        Debug.Log("Setting catapult for phase: " + phase + " dir: "+catapultDirection);
+                        //Debug.Log("Setting catapult for phase: " + phase + " dir: "+catapultDirection);
                     }
                 }
                 

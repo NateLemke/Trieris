@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
     private Board board;
-    private GameLogic gameLogic;
+    public GameLogic gameLogic;
     private PlayerPlanningBoard planBoard;
     private List<Ship> ships = new List<Ship>();
     private TrierisUIInterface trierisUI;
@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour {
     public bool processingTurn { get; set; }
     public bool animationPlaying = false;
     public bool needRedirect = false;
+    public bool needCaptureChoice = false;
     public bool shipCrashed;
     public static GameManager main;
     public List<Team> teams = new List<Team>();
@@ -92,19 +93,17 @@ public class GameManager : MonoBehaviour {
             }
         }
 
+        foreach (Ship ship in ships) {
+            if(needCaptureChoice = ship.needCaptureChoice) {
+                break;
+            }
+        }
+
         if (processingTurn) {
             animationPlaying = AnimationManager.playingAnimation;
-            needRedirect = false;
-            //foreach (Ship ship in ships) {
-            //if (animationPlaying = ship.playingAnimation) {
-            //    break;
-            //}
-            //}
-            //if (animationPlaying = AnimationManager.playingAnimation) {
-            //    break;
-            //}
-
-            if (!animationPlaying && !needRedirect) {
+            //needRedirect = false;
+            
+            if (!animationPlaying && !needRedirect && !needCaptureChoice) {
                 processingTurn = gameLogic.executePhase();
             }
         }
@@ -304,5 +303,11 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public delegate IEnumerator coroutineDel();
+
+    public void startCoroutine(coroutineDel d) {
+        d();
     }
 }

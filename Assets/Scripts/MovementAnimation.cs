@@ -13,12 +13,12 @@ public class MovementAnimation : Animation {
         ship = s;
     }
 
-    public override IEnumerator playAnimation() {
+    public override IEnumerator playAnimation(float speed) {
         if (!complete) {
             startTime = Time.time;
 
-            while (Time.time - startTime < ANIMATION_SPEED) {
-                ship.transform.position = Vector3.Lerp(startPosition.getRealPos(),endPosition.getRealPos(),(Time.time - startTime) / ANIMATION_SPEED);
+            while (Time.time - startTime < speed) {
+                ship.transform.position = Vector3.Lerp(startPosition.getRealPos(),endPosition.getRealPos(),(Time.time - startTime) / speed);
                 yield return null;
             }
             complete = true;

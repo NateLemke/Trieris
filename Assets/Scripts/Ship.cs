@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -46,6 +47,7 @@ public class Ship : MonoBehaviour {
     public AnimationCurve MoveCurve;
     //public bool crashed;
     public bool needRedirect;
+    public bool needCaptureChoice;
     //private 
     private float animationSpeed = 0.7f;
     private float animationStart;
@@ -316,7 +318,7 @@ public class Ship : MonoBehaviour {
             CatapultBullet bullet = Instantiate(go,Position,Quaternion.identity).GetComponent<CatapultBullet>();
             bullet.target = target;
             bullet.startPos = Position;
-            Debug.Log("firing catapult");
+            //Debug.Log("firing catapult");
         }
 
     }
@@ -336,6 +338,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void move(int direction) {                           //throws ShipCrashedException 
+        //Debug.Log("Begin")
         DebugControl.log("action","----moving ship");
         Node destNode = node.getAdjacentNode(direction);
         if (destNode == null) {
@@ -346,15 +349,18 @@ public class Ship : MonoBehaviour {
             return;
             //GameManager.main.shipCrashed = true;
             //throw new ShipCrashedException(this);
-        }       
+        }
 
         //new line
         //endNode = node;
-        
+
         //startAnimation(forwardsAnimate);
         //startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
 
+
         AnimationManager.actionAnimations.Add(this,new MovementAnimation(node,destNode,this));
+
+
 
         node.getShips().Remove(this);
         node = destNode;
@@ -369,6 +375,9 @@ public class Ship : MonoBehaviour {
 
         //startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
         AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
+
+
+
     }
 
     public void setFront(int direction) {
@@ -484,29 +493,32 @@ public class Ship : MonoBehaviour {
 
     private void broadsideRam(Ship target) {
         DebugControl.log("ramming","broadside ram");
-        target.life -= momentum * 2;
+        //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
+        AnimationManager.addRamming(this,target,momentum * 2);
     }
 
     private void headOnRam(Ship target) {
         DebugControl.log("ramming","head on ram");
-        target.life -= momentum;
+        //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
         if (!target.movedForward) {
             this.life--;
         }
+        AnimationManager.addRamming(this,target,momentum);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
         DebugControl.log("ramming","glancing ram");
-        target.life -= momentum;
+        //target.life -= momentum;
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);        
         if (!target.movedForward && this.front != target.front) {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
             this.life--;
         }
+        AnimationManager.addRamming(this,target,momentum);
     }
 
     public void setAI(TrierisAI ai) {

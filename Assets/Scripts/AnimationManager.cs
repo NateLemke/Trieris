@@ -7,8 +7,8 @@ public static class AnimationManager
 {
     public static Dictionary<Ship,Animation> actionAnimations = new Dictionary<Ship,Animation>();
     //public static List<Animation> shipAnimations = new List<Animation>();
-    static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
-
+    public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
+    public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
     //public static AnimationManager main;
 
     //public static void Awake() {
@@ -20,35 +20,43 @@ public static class AnimationManager
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
-        yield return playCombatAnims();
-        yield return playNonCombatAnims();
+        yield return playRammingActions();
+        yield return playBasicActions();
         playingAnimation = false;
         actionAnimations.Clear();
         rammingResolutions.Clear();
         yield return null;
     }
 
-    static IEnumerator playCombatAnims() {
+    static IEnumerator playRammingActions() {
 
         // sort list
 
         for (int i = 0; i < rammingResolutions.Count;i++) {
-            yield return rammingResolutions[i].resolve();            
+            yield return rammingResolutions[i].resolve();
+            Ship target = rammingResolutions[i].target;
+            Ship attacker = rammingResolutions[i].attacker;
+            for (int j = 0; j < rammingResolutions.Count; j++) {
+                if(rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
+                    rammingResolutions[j].resolve();
+                    break;
+                }
+            }
         }
 
         yield return null;
     }
 
-    static IEnumerator playNonCombatAnims() {
+    static IEnumerator playBasicActions() {
         List<Animation> anims = actionAnimations.Values.ToList();
         for (int i = 0; i < anims.Count; i++) {
-            yield return anims[i].playAnimation();
+            yield return anims[i].playAnimation(0.3f);
         }
         yield return null;
     }
 
-    public static void addCombat() {
-
+    public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
+        rammingResolutions.Add(new CombatResolution(attacker,target,damageToTarget,damageToAttacker));
     }
 
     private static void drawMultipleShips(Node node,Graphics g) {
