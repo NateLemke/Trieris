@@ -46,7 +46,7 @@ public class Ship : MonoBehaviour {
     animateDelegate animate;
     public AnimationCurve MoveCurve;
     //public bool crashed;
-    public bool needRedirect;
+    public bool needRedirect = true;
     public bool needCaptureChoice;
     //private 
     private float animationSpeed = 0.7f;
@@ -598,7 +598,6 @@ public class Ship : MonoBehaviour {
     private void Start() {
         underlay = transform.GetChild(0).GetComponent<SpriteRenderer>();
         underlay.color = Color.clear;
-        needRedirect = true;
     }
     
     private void Update() {
@@ -610,10 +609,15 @@ public class Ship : MonoBehaviour {
 
         //chooseDirection();
 
-        if(team == GameManager.main.playerTeam)
-        {
-            chooseDirection();
+        try {
+            if (team == GameManager.main.playerTeam) {
+                chooseDirection();
+            }
+        } catch(Exception e) {
+            ;
         }
+
+        
 
     canHold();
     }
@@ -746,7 +750,15 @@ public class Ship : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        
+
+
+        if (needRedirect) {
+            Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
+        }
+
+        if (needCaptureChoice) {
+            Gizmos.DrawIcon(transform.position + new Vector3(0.25f,0),"needPortCapture.png",true);
+        }
     }
 
     // Initiates Combat Text

@@ -56,9 +56,11 @@ public class GameLogic : MonoBehaviour {
 
     //[System.Obsolete]
     public bool executePhase() {
-        Debug.Log("begin phase " + phaseIndex);
+        //Debug.Log("begin phase " + phaseIndex);
+        //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE " + phaseIndex);
         if (phaseIndex >= 3) {
+            UIControl.main.devPhaseTrack(4);
             gameManager.checkVictory();
 
             foreach (Ship s in gameManager.getPlayerShips()) {
@@ -84,8 +86,9 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void executePhase(int phase) {
+        UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
-        handleCapture();
+        // handle capture used to be here
         foreach (Ship ship in gameManager.getShips()) {
             if (ship.getCanAct()) {
                 try {
@@ -109,6 +112,7 @@ public class GameLogic : MonoBehaviour {
         handleCatapults();
         sinkShips();
         StartCoroutine( AnimationManager.playAnimations());
+        handleCapture();
     }
 
     private void handleCapture() {

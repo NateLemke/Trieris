@@ -186,6 +186,8 @@ public class TrierisAI {
     }
 
     public int setNewShipDirection(Ship ship) {
+        //Debug.Log("setting new AI direction for "+ship);
+        ship.needRedirect = false;
         //queue = new PriorityQueue<NodePath>(8,comparator);
         queue = new List<NodePath>();
         visitedNodes = new List<Node>();

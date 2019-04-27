@@ -47,6 +47,9 @@ public class GameManager : MonoBehaviour {
         foreach (Team.Type teamType in (Team.Type[])Enum.GetValues(typeof(Team.Type))) {
             teams.Add(new Team(teamType));
         }
+
+        // set player's team to 0 by default
+        playerTeam = teams[0];
     }
 
     // SHOULDNT HAVE TO USE THIS CONSTRUCTOR
@@ -76,6 +79,7 @@ public class GameManager : MonoBehaviour {
                 int direction = ai.setNewShipDirection(ship);
                 ship.setFront(direction);
                 ship.needRedirect = false;
+                //Debug.Log("hello!");
                 ship.setSpriteRotation();
             }
         }
@@ -89,6 +93,7 @@ public class GameManager : MonoBehaviour {
 
         foreach (Ship ship in ships) {
             if (needRedirect = ship.needRedirect) {
+                //Debug.Log(ship+ "needs redirect")
                 break;
             }
         }
