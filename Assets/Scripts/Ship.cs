@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,12 +41,13 @@ public class Ship : MonoBehaviour {
     TrierisAI ai = null;
 
     // new variables
-    public bool playingAnimation { get; set; }
+    //public bool playingAnimation { get; set; }
     delegate bool animateDelegate();
     animateDelegate animate;
     public AnimationCurve MoveCurve;
     //public bool crashed;
-    public bool needRedirect;
+    public bool needRedirect = true;
+    public bool needCaptureChoice;
     //private 
     private float animationSpeed = 0.7f;
     private float animationStart;
@@ -304,7 +306,8 @@ public class Ship : MonoBehaviour {
 
             // pause the turn I guess
             //Debug.Log("RAMED");
-            playingAnimation = true;
+
+            //playingAnimation = true;
         }
     }
 
@@ -315,7 +318,7 @@ public class Ship : MonoBehaviour {
             CatapultBullet bullet = Instantiate(go,Position,Quaternion.identity).GetComponent<CatapultBullet>();
             bullet.target = target;
             bullet.startPos = Position;
-            Debug.Log("firing catapult");
+            //Debug.Log("firing catapult");
         }
 
     }
@@ -335,6 +338,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void move(int direction) {                           //throws ShipCrashedException 
+        //Debug.Log("Begin")
         DebugControl.log("action","----moving ship");
         Node destNode = node.getAdjacentNode(direction);
         if (destNode == null) {
@@ -345,13 +349,18 @@ public class Ship : MonoBehaviour {
             return;
             //GameManager.main.shipCrashed = true;
             //throw new ShipCrashedException(this);
-        }       
+        }
 
         //new line
         //endNode = node;
-        
+
         //startAnimation(forwardsAnimate);
-        startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
+        //startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
+
+
+        AnimationManager.actionAnimations.Add(this,new MovementAnimation(node,destNode,this));
+
+
 
         node.getShips().Remove(this);
         node = destNode;
@@ -364,7 +373,11 @@ public class Ship : MonoBehaviour {
         momentum = 0;
         //Debug.Log("----Turning ship "+relativeDirection);
 
-        startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
+        //startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
+        AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
+
+
+
     }
 
     public void setFront(int direction) {
@@ -480,29 +493,32 @@ public class Ship : MonoBehaviour {
 
     private void broadsideRam(Ship target) {
         DebugControl.log("ramming","broadside ram");
-        target.life -= momentum * 2;
+        //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
+        AnimationManager.addRamming(this,target,momentum * 2);
     }
 
     private void headOnRam(Ship target) {
         DebugControl.log("ramming","head on ram");
-        target.life -= momentum;
+        //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
         if (!target.movedForward) {
             this.life--;
         }
+        AnimationManager.addRamming(this,target,momentum);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
         DebugControl.log("ramming","glancing ram");
-        target.life -= momentum;
+        //target.life -= momentum;
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);        
         if (!target.movedForward && this.front != target.front) {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
             this.life--;
         }
+        AnimationManager.addRamming(this,target,momentum);
     }
 
     public void setAI(TrierisAI ai) {
@@ -582,7 +598,6 @@ public class Ship : MonoBehaviour {
     private void Start() {
         underlay = transform.GetChild(0).GetComponent<SpriteRenderer>();
         underlay.color = Color.clear;
-        needRedirect = true;
     }
     
     private void Update() {
@@ -594,10 +609,15 @@ public class Ship : MonoBehaviour {
 
         //chooseDirection();
 
-        if(team == GameManager.main.playerTeam)
-        {
-            chooseDirection();
+        try {
+            if (team == GameManager.main.playerTeam) {
+                chooseDirection();
+            }
+        } catch(Exception e) {
+            ;
         }
+
+        
 
     canHold();
     }
@@ -641,18 +661,18 @@ public class Ship : MonoBehaviour {
     {
     }
 
-    private void startAnimation(animateDelegate a) {
-        Debug.Log("Begin animation");
-        animationStart = Time.time;
-        animate = a;
-        playingAnimation = true;
-    }
+    //private void startAnimation(animateDelegate a) {
+    //    Debug.Log("Begin animation");
+    //    animationStart = Time.time;
+    //    animate = a;
+    //    playingAnimation = true;
+    //}
 
-    private void startAnimationCo(IEnumerator e) {
-        animationStart = Time.time;
-        playingAnimation = true;
-        StartCoroutine(e);
-    }
+    //private void startAnimationCo(IEnumerator e) {
+    //    animationStart = Time.time;
+    //    playingAnimation = true;
+    //    StartCoroutine(e);
+    //}
 
     //private bool forwardsAnimate() {
     //    transform.position = Vector3.Lerp(startNode.getRealPos(),endNode.getRealPos(),Time.time - animationStart);
@@ -672,7 +692,7 @@ public class Ship : MonoBehaviour {
             yield return null;
         }
         DebugControl.log("animation","animation stop");
-        playingAnimation = false;
+        //playingAnimation = false;
 
         yield return null;
     }
@@ -683,7 +703,7 @@ public class Ship : MonoBehaviour {
             yield return null;
         }
         DebugControl.log("animation","animation stop");
-        playingAnimation = false;
+        //playingAnimation = false;
 
     }
 
@@ -730,7 +750,15 @@ public class Ship : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        
+
+
+        if (needRedirect) {
+            Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
+        }
+
+        if (needCaptureChoice) {
+            Gizmos.DrawIcon(transform.position + new Vector3(0.25f,0),"needPortCapture.png",true);
+        }
     }
 
     // Initiates Combat Text

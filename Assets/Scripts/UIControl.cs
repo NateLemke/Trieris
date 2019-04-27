@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,10 +19,12 @@ public class UIControl : MonoBehaviour {
     Dropdown teamSelect;
     Image teamColor;
 
-    GameObject compass;
+   // GameObject compass;
     GameObject debugMenu;
     GameObject DevUI;
     GameObject LogToggle;
+    GameObject phaseTracker;
+    Text captureTracker;
 
     Image[] actionImages = new Image[4];
 
@@ -32,8 +34,7 @@ public class UIControl : MonoBehaviour {
     //GameObject selection;
 
     public GameObject optionsPanel;
-
-    
+    public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
 
@@ -42,12 +43,12 @@ public class UIControl : MonoBehaviour {
             for (int i = 0; i < actions.Length; i++) {
                 selected = value;
                 actions[i].interactable = false;
-                compass.SetActive(false);
+                //compass.SetActive(false);
                 shipID.text = "No Ship";
             }
         } else {
             selected = value;
-            compass.SetActive(true);
+            //compass.SetActive(true);
             shipID.text = "Ship " + (value.getID() + 1);
             for (int i = 0; i < value.life; i++) {
                 //Debug.Log(i); 
@@ -75,14 +76,14 @@ public class UIControl : MonoBehaviour {
             {
                 selected = gameManager.getPlayerShips()[value];
                 actions[i].interactable = false;
-                compass.SetActive(false);
+                //compass.SetActive(false);
                 shipID.text = "No Ship";
             }
         }
         else
         {
             selected = gameManager.getPlayerShips()[value];
-            compass.SetActive(true);
+            //compass.SetActive(true);
             shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
             for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
             {
@@ -115,27 +116,20 @@ public class UIControl : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //Debug.Log("init UIcontrol");
-        //Debug.Log("test: " + test);
+        main = this;
+        captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
+        phaseTracker = GameObject.Find("PhaseTracker");
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
         startTurn = GameObject.Find("Go").GetComponent<Button>();
-        compass = GameObject.Find("Compass");
-        compass.SetActive(false);
-        //debugMenu = GameObject.Find("DebugGrid");
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        
-        //Debug.Log("debug name " + debugMenu.name);
-        //debugMenu.SetActive(false);
-        //selection = GameObject.Find("selection");
-        //selection.SetActive(false);
         shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
         for (int i = 0; i < actions.Length; i++) {
             actions[i] = GameObject.Find("Phase" + (i+1)).GetComponent<Dropdown>();
         }
         teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
         teamSelect.ClearOptions();
-        //teamSelect.options.Add(new Dropdown.OptionData() { text = "none" });
+
         foreach (Team t in gameManager.teams) {            
             teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
         }
@@ -191,11 +185,19 @@ public class UIControl : MonoBehaviour {
             else
                 optionsPanel.SetActive(false);
         }
+    
+        if (gameManager.needCaptureChoice) {
+            captureTracker.text = "need capture";
+            captureTracker.color = Color.red;
+        } else {
+            captureTracker.text = "no capture";
+            captureTracker.color = Color.green;
+        }
     }
 
     public void redirect(int newDirection) {
         selected.redirect(newDirection);
-        compass.SetActive(false);
+        //compass.SetActive(false);
     }
 
     public void testMove() {
@@ -244,6 +246,10 @@ public class UIControl : MonoBehaviour {
         Debug.Log("Player team set...");
         gameManager.setPlayerTeam((Team.Type)teamSelect.value);
         teamColor.color = gameManager.teams[teamSelect.value].getColor();
+
+        foreach(Ship ship in gameManager.playerTeam.ships) {
+            ship.needRedirect = true;
+        }
     }
 
     public void toggleDevUI() {
@@ -306,6 +312,26 @@ public class UIControl : MonoBehaviour {
                 tempCol.a = 0;
                 image.color = tempCol;
                 break;
+        }
+    }
+
+    public void devPhaseTrack(int i) {
+        if(phaseTracker.activeSelf) {
+            phaseTracker.GetComponentInChildren<Text>().text = "Phase " + (i + 1);
+            Image phaseImg = phaseTracker.GetComponent<Image>(); 
+            switch (i) {
+                case 0:
+                phaseImg.color = Color.blue; break;
+                case 1:
+                phaseImg.color = Color.green; break;
+                case 2:
+                phaseImg.color = Color.yellow; break;
+                case 3:
+                phaseImg.color = Color.red; break;
+                case 4:
+                phaseImg.color = Color.black;
+                phaseTracker.GetComponentInChildren<Text>().text = "planning phase";break;
+            }
         }
     }
 
