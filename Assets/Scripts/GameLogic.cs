@@ -66,6 +66,7 @@ public class GameLogic : MonoBehaviour {
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.actions = new Ship.Action[4];
+                s.populateDefaultActions();
             }
 
             Image image;

@@ -26,12 +26,17 @@ public class UIControl : MonoBehaviour {
     GameObject phaseTracker;
     Text captureTracker;
 
+    GameObject TeamSelectUI;
+
     Image[] actionImages = new Image[4];
+    Button[] actionPanels = new Button[4];
 
     Sprite straightArrow;
     Sprite curvedArrow;
     Sprite holdSprite;
     //GameObject selection;
+
+    Color defaultGreen;
 
     public static UIControl main;
 
@@ -59,7 +64,16 @@ public class UIControl : MonoBehaviour {
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
-                setActionImages(-1);
+                if (j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                }
+                else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
@@ -94,8 +108,17 @@ public class UIControl : MonoBehaviour {
 
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
-            {   
-                setActionImages(-1);
+            {
+                if (j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                }
+                else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
@@ -127,6 +150,8 @@ public class UIControl : MonoBehaviour {
         teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
         teamSelect.ClearOptions();
 
+        TeamSelectUI = GameObject.Find("TeamSelectPanel");
+
         foreach (Team t in gameManager.teams) {            
             teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
         }
@@ -139,10 +164,19 @@ public class UIControl : MonoBehaviour {
         LogToggle = GameObject.Find("DebugToggle");
         LogToggle.SetActive(false);
 
+
         actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
         actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
         actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
+
+        actionPanels[0] = GameObject.Find("PanelAction1").GetComponent<Button>();
+        actionPanels[1] = GameObject.Find("PanelAction2").GetComponent<Button>();
+        actionPanels[2] = GameObject.Find("PanelAction3").GetComponent<Button>();
+        actionPanels[3] = GameObject.Find("PanelAction4").GetComponent<Button>();
+
+        defaultGreen = actionPanels[0].colors.normalColor;
+
 
         straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
         curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
@@ -243,6 +277,21 @@ public class UIControl : MonoBehaviour {
         }
     }
 
+    public void setTeam(int i)
+    {
+        Debug.Log("Player team set...");
+        gameManager.setPlayerTeam((Team.Type)i);
+        teamColor.color = gameManager.teams[teamSelect.value].getColor();
+
+        foreach (Ship ship in gameManager.playerTeam.ships)
+        {
+            ship.needRedirect = true;
+        }
+
+        gameManager.cameraLock = false;
+        TeamSelectUI.SetActive(false);
+    }
+
     public void toggleDevUI() {
         DevUI.SetActive(!DevUI.activeSelf);
         LogToggle.SetActive(!LogToggle.activeSelf);
@@ -326,4 +375,21 @@ public class UIControl : MonoBehaviour {
         }
     }
 
+    private void setDamaged()
+    {
+        Button b = actionPanels[selected.currentActionIndex];
+        ColorBlock cb = b.colors;
+        cb.normalColor = new Color(1, 0, 0, 1);
+        b.colors = cb;
+    }
+
+    private void setUndamaged()
+    {
+        Button b = actionPanels[selected.currentActionIndex];
+        ColorBlock cb = b.colors;
+        cb.normalColor = defaultGreen;
+        b.colors = cb;
+    }
+
 }
+
