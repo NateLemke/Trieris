@@ -105,6 +105,15 @@ public static class AnimationManager
         int counter = 0;
         for(int i = 0; i < rounded; i++) {
             for(int j = 0; j < rounded; j++) {
+                Vector2 pos = new Vector2(i,j);
+                pos += n.getRealPos();
+                Debug.DrawLine(pos + Vector2.up,pos + Vector2.down,Color.red);
+                Debug.DrawLine(pos + Vector2.left,pos + Vector2.right,Color.red);
+                counter++;
+                if(counter >= f) {
+                    return;
+                }
+            }
         }
     }
 
