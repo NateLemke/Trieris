@@ -23,13 +23,19 @@ public class UIControl : MonoBehaviour {
     GameObject debugMenu;
     GameObject DevUI;
     GameObject LogToggle;
+    GameObject TeamSelectUI;
 
     Image[] actionImages = new Image[4];
+    Button[] actionPanels = new Button[4];
 
     Sprite straightArrow;
     Sprite curvedArrow;
     Sprite holdSprite;
+
+    Color defaultGreen;
     //GameObject selection;
+
+    
 
     
 
@@ -57,7 +63,16 @@ public class UIControl : MonoBehaviour {
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
-                setActionImages(-1);
+                if (j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                }
+                else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
@@ -92,8 +107,16 @@ public class UIControl : MonoBehaviour {
 
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
-            {   
-                setActionImages(-1);
+            {
+                if(j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                } else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
@@ -120,11 +143,14 @@ public class UIControl : MonoBehaviour {
         compass.SetActive(false);
         //debugMenu = GameObject.Find("DebugGrid");
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        
+
+        TeamSelectUI = GameObject.Find("TeamSelectPanel");
+
         //Debug.Log("debug name " + debugMenu.name);
         //debugMenu.SetActive(false);
         //selection = GameObject.Find("selection");
         //selection.SetActive(false);
+
         shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
         for (int i = 0; i < actions.Length; i++) {
             actions[i] = GameObject.Find("Phase" + (i+1)).GetComponent<Dropdown>();
@@ -136,7 +162,7 @@ public class UIControl : MonoBehaviour {
             teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
         }
         teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
-        teamSelect.value = 1;
+        //teamSelect.value = 1;
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -149,9 +175,17 @@ public class UIControl : MonoBehaviour {
         actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
 
+        actionPanels[0] = GameObject.Find("PanelAction1").GetComponent<Button>();
+        actionPanels[1] = GameObject.Find("PanelAction2").GetComponent<Button>();
+        actionPanels[2] = GameObject.Find("PanelAction3").GetComponent<Button>();
+        actionPanels[3] = GameObject.Find("PanelAction4").GetComponent<Button>();
+
+        defaultGreen = actionPanels[0].colors.normalColor;
+
         straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
         curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
         holdSprite = Resources.Load("StopSymbol", typeof(Sprite)) as Sprite;
+
     }
 	
 	// Update is called once per frame
@@ -236,6 +270,21 @@ public class UIControl : MonoBehaviour {
         teamColor.color = gameManager.teams[teamSelect.value].getColor();
     }
 
+    /// <summary>
+    /// Used for team select UI
+    /// Nate
+    /// </summary>
+    public void setTeam(int i)
+    {
+        Debug.Log("Player team set...");
+        gameManager.setPlayerTeam((Team.Type)i);
+        teamColor.color = gameManager.teams[teamSelect.value].getColor();
+
+        gameManager.cameraLock = false;
+
+        TeamSelectUI.SetActive(false);
+    }
+
     public void toggleDevUI() {
         DevUI.SetActive(!DevUI.activeSelf);
         LogToggle.SetActive(!LogToggle.activeSelf);
@@ -291,12 +340,37 @@ public class UIControl : MonoBehaviour {
                 //image.rectTransform.Rotate(new Vector3(0, 0, 90));
                 break;
 
+            case 6:
+                image.sprite = holdSprite;
+                tempCol.a = 255;
+                tempCol.r = 255;
+                tempCol.b = 0;
+                tempCol.g = 0;
+                image.color = tempCol;
+                break;
+
             default:
                 image.sprite = null;
                 tempCol.a = 0;
                 image.color = tempCol;
                 break;
         }
+    }
+
+    private void setDamaged()
+    {
+        Button b = actionPanels[selected.currentActionIndex];
+        ColorBlock cb = b.colors;
+        cb.normalColor = new Color(1, 0, 0, 1);
+        b.colors = cb;
+    }
+
+    private void setUndamaged()
+    {
+        Button b = actionPanels[selected.currentActionIndex];
+        ColorBlock cb = b.colors;
+        cb.normalColor = defaultGreen;
+        b.colors = cb;
     }
 
 }

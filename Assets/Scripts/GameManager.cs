@@ -32,7 +32,9 @@ public class GameManager : MonoBehaviour {
     public List<Team> teams = new List<Team>();
     LineRenderer lineRenderer;
     public Team playerTeam;
-    
+
+    //Locks camera movement and zoom
+    public bool cameraLock;
 
     private void Awake() {
         lineRenderer = GetComponent<LineRenderer>();
@@ -82,6 +84,9 @@ public class GameManager : MonoBehaviour {
 
         // set GameLogic
         gameLogic = GetComponent<GameLogic>();
+
+        //Locks camera for Team Select
+        cameraLock = true;
     }
 
     private void Update() {
