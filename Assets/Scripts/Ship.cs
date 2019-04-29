@@ -427,10 +427,10 @@ public class Ship : MonoBehaviour {
         movedForward = false;
         if (frontAfterCollision != -1) {
             front = frontAfterCollision;
+            //setSpriteRotation();
         }
         canAct = canActAfterCollision;
         frontAfterCollision = -1;
-        setSpriteRotation();
     }
 
     public void populateDefaultActions() {
@@ -684,28 +684,28 @@ public class Ship : MonoBehaviour {
     //}
 
 
-    IEnumerator animateForwardsCo(Vector3 startPos, Vector3 endPos) {
+    //IEnumerator animateForwardsCo(Vector3 startPos, Vector3 endPos) {
 
-        while(Time.time - animationStart < animationSpeed) {
-            transform.position = Vector3.Lerp(startPos,endPos,(Time.time - animationStart)/animationSpeed);
-            //Debug.Log("animating...");
-            yield return null;
-        }
-        DebugControl.log("animation","animation stop");
-        //playingAnimation = false;
+    //    while(Time.time - animationStart < animationSpeed) {
+    //        transform.position = Vector3.Lerp(startPos,endPos,(Time.time - animationStart)/animationSpeed);
+    //        //Debug.Log("animating...");
+    //        yield return null;
+    //    }
+    //    DebugControl.log("animation","animation stop");
+    //    //playingAnimation = false;
 
-        yield return null;
-    }
+    //    yield return null;
+    //}
 
-    IEnumerator animateRotate(Quaternion start, Quaternion end) {
-        while (Time.time - animationStart < animationSpeed) {
-            transform.rotation = Quaternion.Lerp(start,end,(Time.time - animationStart)/animationSpeed);
-            yield return null;
-        }
-        DebugControl.log("animation","animation stop");
-        //playingAnimation = false;
+    //IEnumerator animateRotate(Quaternion start, Quaternion end) {
+    //    while (Time.time - animationStart < animationSpeed) {
+    //        transform.rotation = Quaternion.Lerp(start,end,(Time.time - animationStart)/animationSpeed);
+    //        yield return null;
+    //    }
+    //    DebugControl.log("animation","animation stop");
+    //    //playingAnimation = false;
 
-    }
+    //}
 
     public void setSpriteRotation() {
         transform.eulerAngles = new Vector3(0,0,(front)*-45);

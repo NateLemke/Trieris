@@ -31,16 +31,19 @@ public class CombatResolution {
         try {
             if (A != null) {
                 //StartCoroutine(A.playAnimation());
-                GameManager.main.StartCoroutine(A.playAnimation(1f));
+                GameManager.main.StartCoroutine(A.playAnimation(0.3f,2f));
             }
             if (B != null) {
                 //StartCoroutine(B.playAnimation());
-                GameManager.main.StartCoroutine(B.playAnimation(1f));
+                GameManager.main.StartCoroutine(B.playAnimation(0.3f,2f));
 
             }
         } catch (Exception e) {
             ;
         }
+
+        attacker.setSpriteRotation();
+        target.setSpriteRotation();
         
         if(B == null) {
             while (!A.complete) {

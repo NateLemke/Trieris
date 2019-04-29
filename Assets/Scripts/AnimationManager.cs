@@ -20,6 +20,7 @@ public static class AnimationManager
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
+        rammingResolutions.Sort(new RammingSorter());
         yield return playRammingActions();
         yield return playBasicActions();
         playingAnimation = false;
@@ -50,7 +51,7 @@ public static class AnimationManager
     static IEnumerator playBasicActions() {
         List<Animation> anims = actionAnimations.Values.ToList();
         for (int i = 0; i < anims.Count; i++) {
-            yield return anims[i].playAnimation(0.3f);
+            yield return anims[i].playAnimation(0.3f,0.5f);
         }
         yield return null;
     }
@@ -85,8 +86,22 @@ public static class AnimationManager
         //addMultipleShipDetails(g,shipsInNode,(int)fontSize);
     }
 
+    static void sortRammingOrder() {
+
+    }
 
 
 
 
+
+}
+
+class RammingSorter : IComparer<CombatResolution> {
+    public int Compare(CombatResolution x,CombatResolution y) {
+        if (x.attacker.Position.x < y.attacker.Position.x) {
+            return -1;
+        } else {
+            return (x.attacker.Position.y < y.attacker.Position.y) ? 1 : -1;
+        }
+    }
 }

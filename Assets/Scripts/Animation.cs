@@ -9,5 +9,5 @@ public abstract class Animation
     protected float startTime;
     public bool complete = false;
 
-    public abstract IEnumerator playAnimation(float speed);
+    public abstract IEnumerator playAnimation(float speed,float delay);
 }

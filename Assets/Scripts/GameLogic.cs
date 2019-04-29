@@ -154,7 +154,7 @@ public class GameLogic : MonoBehaviour {
                 {
                     // commenting out 
 
-                    Debug.Log("Handle AI capture");
+                    //Debug.Log("Handle AI capture");
 
                     if (ship.getAI().decidePortCapture())
                     {

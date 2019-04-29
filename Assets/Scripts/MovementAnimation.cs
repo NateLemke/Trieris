@@ -4,24 +4,33 @@ using UnityEngine;
 
 public class MovementAnimation : Animation {
 
-    public Node startPosition;
-    public Node endPosition;
+    public Node startNode;
+    public Node endNode;
 
     public MovementAnimation(Node start, Node end, Ship s) {
-        startPosition = start;
-        endPosition = end;
+        startNode = start;
+        endNode = end;
         ship = s;
     }
 
-    public override IEnumerator playAnimation(float speed) {
+    public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
+        if (complete) {
+            yield break;
+        }
+        Vector3 pos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
+        GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
+        GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);
+        arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();
+        yield return new WaitForSeconds(delay);
         if (!complete) {
             startTime = Time.time;
 
             while (Time.time - startTime < speed) {
-                ship.transform.position = Vector3.Lerp(startPosition.getRealPos(),endPosition.getRealPos(),(Time.time - startTime) / speed);
+                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endNode.getRealPos(),(Time.time - startTime) / speed);
                 yield return null;
             }
             complete = true;
+            GameObject.Destroy(arrow);
         }        
     }
 }
