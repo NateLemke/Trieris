@@ -1,56 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class AnimationManager : MonoBehaviour
+public static class AnimationManager 
 {
-    // stack for animations to be processed
-    // stack for non-combat animation
-    // stack for combat animations
+    public static Dictionary<Ship,Animation> actionAnimations = new Dictionary<Ship,Animation>();
+    //public static List<Animation> shipAnimations = new List<Animation>();
+    public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
+    public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
+    //public static AnimationManager main;
+
+    //public static void Awake() {
+    //    main = this;
+    //}
+
+    public static bool playingAnimation = false;
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public static IEnumerator playAnimations() {
+        playingAnimation = true;
+        yield return playRammingActions();
+        yield return playBasicActions();
+        playingAnimation = false;
+        actionAnimations.Clear();
+        rammingResolutions.Clear();
+        yield return null;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // if combat animations.count > 0 AND animation playing == false
-            // being next combat animation
+    static IEnumerator playRammingActions() {
+
+        // sort list
+
+        for (int i = 0; i < rammingResolutions.Count;i++) {
+            yield return rammingResolutions[i].resolve();
+            Ship target = rammingResolutions[i].target;
+            Ship attacker = rammingResolutions[i].attacker;
+            for (int j = 0; j < rammingResolutions.Count; j++) {
+                if(rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
+                    rammingResolutions[j].resolve();
+                    break;
+                }
+            }
+        }
+
+        yield return null;
     }
 
-    public void playingAnimation() {
-        // foreach ship
-            // if playinganimation == true
-                // return true
-        // return false
+    static IEnumerator playBasicActions() {
+        List<Animation> anims = actionAnimations.Values.ToList();
+        for (int i = 0; i < anims.Count; i++) {
+            yield return anims[i].playAnimation(0.3f);
+        }
+        yield return null;
     }
 
-    public void prepareAnmations() {
-
-        // also need to assign animation destinations 
-
-        // foreach animation in animations to be processed
-            // if animation.ship has taken or delt damage
-                // add to combat animation stack
-            // else
-                // add to non-combat animation stack
-                // sort combat animations by location??
-                // from left to right??
+    public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
+        rammingResolutions.Add(new CombatResolution(attacker,target,damageToTarget,damageToAttacker));
     }
 
-    public void runAnimations() {
-        prepareAnmations();
-        // foreach animation in non-combat animations
-            // start animation
-        // if combat animations.count > 0
-            // start first combat animation
-    }
-
-    private void drawMultipleShips(Node node,Graphics g) {
+    private static void drawMultipleShips(Node node,Graphics g) {
 
         List<Ship> shipsInNode = new List<Ship>();
         //BufferedImage image;
