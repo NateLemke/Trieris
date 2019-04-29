@@ -358,13 +358,16 @@ public class Ship : MonoBehaviour {
         //startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
 
 
-        AnimationManager.actionAnimations.Add(this,new MovementAnimation(node,destNode,this));
+        
 
-
+        Node startNode = node;
 
         node.getShips().Remove(this);
         node = destNode;
         node.getShips().Add(this);
+
+        AnimationManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this));
+        ;
     }
 
 

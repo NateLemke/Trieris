@@ -17,6 +17,8 @@ public static class AnimationManager
 
     public static bool playingAnimation = false;
 
+    public static float nodeMultiShipScale = 0.3f;
+
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
@@ -90,25 +92,53 @@ public static class AnimationManager
 
     }
 
-    //public static Vector2 shipNodePos(Ship s, Node n) {
+    public static Vector2 shipNodePos(Ship s,Node n) {
+
+        //float scale = 0.3f;
         
-    //    float sqr = Mathf.Sqrt((float)n.getShips().Count);
-    //    float rounded = Mathf.Ceil(sqr);
+
+        List<Ship> ships = n.getShips();
+
+        if(ships.Count == 0) {
+            Debug.LogError("No ships in node!");
+        }
+
+        if(ships.Count == 1) {
+            return n.getRealPos();
+        }
+
+        float sqr = Mathf.Sqrt(ships.Count);
+        float rounded = Mathf.Ceil(sqr);
 
 
+        int i = 0;
+        for (; i < ships.Count; i++) {
+            if(ships[i] == s) {
+                break;
+            }
+        }
 
-    //}
+        int x = (i) % (int)rounded  ;
+        int y = i / (int)rounded;
 
-    public static void NodePositions(int f, Node n) {
+        float offset = (rounded - 1) * nodeMultiShipScale / 2f;
+        Vector2 pos = new Vector2(x * nodeMultiShipScale - offset,-y * 0.3f);
+
+        return pos + n.getRealPos();
+    }
+
+    public static void NodePositions(int f, Node n, Color c) {
+        //float scale = 0.3f;
         float sqr = Mathf.Sqrt(f);
         float rounded = Mathf.Ceil(sqr);
         int counter = 0;
         for(int i = 0; i < rounded; i++) {
             for(int j = 0; j < rounded; j++) {
-                Vector2 pos = new Vector2(i,j);
+                float offset = (rounded -1)* nodeMultiShipScale / 2f;
+                Vector2 pos = new Vector2(j * nodeMultiShipScale - offset,-i * 0.3f);
                 pos += n.getRealPos();
-                Debug.DrawLine(pos + Vector2.up,pos + Vector2.down,Color.red);
-                Debug.DrawLine(pos + Vector2.left,pos + Vector2.right,Color.red);
+                Debug.DrawLine(pos + Vector2.up * 0.1f,pos + Vector2.down * 0.1f,c);
+                Debug.DrawLine(pos + Vector2.left * 0.1f,pos + Vector2.right * 0.1f,c);
                 counter++;
                 if(counter >= f) {
                     return;

@@ -6,11 +6,15 @@ public class MovementAnimation : Animation {
 
     public Node startNode;
     public Node endNode;
+    Vector3 startPos;
+    Vector2 endPos;
 
     public MovementAnimation(Node start, Node end, Ship s) {
         startNode = start;
         endNode = end;
         ship = s;
+
+        endPos = AnimationManager.shipNodePos(ship,endNode); 
     }
 
     public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
@@ -26,11 +30,14 @@ public class MovementAnimation : Animation {
             startTime = Time.time;
 
             while (Time.time - startTime < speed) {
-                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endNode.getRealPos(),(Time.time - startTime) / speed);
+                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / speed);
                 yield return null;
             }
             complete = true;
             GameObject.Destroy(arrow);
+            foreach(Ship s in endNode.getShips()) {
+                s.transform.position = AnimationManager.shipNodePos(s,endNode);
+            }
         }        
     }
 }

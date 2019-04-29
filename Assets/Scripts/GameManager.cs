@@ -113,11 +113,11 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        Node n1 = board.getNodeAt(9,10);
-        AnimationManager.NodePositions(3,n1);
+        //Node n1 = board.getNodeAt(7,7);
+        //AnimationManager.NodePositions(3,n1,Color.red);
 
-        Node n21 = board.getNodeAt(14,10);
-        AnimationManager.NodePositions(5,n1);
+        //Node n2 = board.getNodeAt(9,9);
+        //AnimationManager.NodePositions(5,n2,Color.blue);
 
     }
 
