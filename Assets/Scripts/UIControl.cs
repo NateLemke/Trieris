@@ -109,8 +109,8 @@ public class UIControl : MonoBehaviour {
     private void Awake() {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
-        optionsPanel = GameObject.Find("OptionsMenu");
-        optionsPanel.SetActive(false);
+        optionsPanel = GameObject.Find("OverlayCanvas");
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
         DebugControl.init();
     }
 

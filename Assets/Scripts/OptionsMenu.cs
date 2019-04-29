@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class OptionsMenu : MonoBehaviour
 {
-    public GameObject optionsPanel;
     public void QuitGame()
     {
         //For Editor Closing
@@ -14,6 +13,6 @@ public class OptionsMenu : MonoBehaviour
     }
     public void CloseOptions()
     {
-        optionsPanel.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
