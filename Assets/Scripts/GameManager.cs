@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour {
 
     private Board board;
-    public GameLogic gameLogic;
+    private GameLogic gameLogic;
     private PlayerPlanningBoard planBoard;
     private List<Ship> ships = new List<Ship>();
     private TrierisUIInterface trierisUI;
@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour {
     public bool processingTurn { get; set; }
     public bool animationPlaying = false;
     public bool needRedirect = false;
-    public bool needCaptureChoice = false;
     public bool shipCrashed;
     public static GameManager main;
     public List<Team> teams = new List<Team>();
@@ -49,9 +48,6 @@ public class GameManager : MonoBehaviour {
         foreach (Team.Type teamType in (Team.Type[])Enum.GetValues(typeof(Team.Type))) {
             teams.Add(new Team(teamType));
         }
-
-        // set player's team to 0 by default
-        playerTeam = teams[0];
     }
 
     // SHOULDNT HAVE TO USE THIS CONSTRUCTOR
@@ -81,7 +77,6 @@ public class GameManager : MonoBehaviour {
                 int direction = ai.setNewShipDirection(ship);
                 ship.setFront(direction);
                 ship.needRedirect = false;
-                //Debug.Log("hello!");
                 ship.setSpriteRotation();
             }
         }
@@ -98,22 +93,20 @@ public class GameManager : MonoBehaviour {
 
         foreach (Ship ship in ships) {
             if (needRedirect = ship.needRedirect) {
-                //Debug.Log(ship+ "needs redirect")
-                break;
-            }
-        }
-
-        foreach (Ship ship in ships) {
-            if(needCaptureChoice = ship.needCaptureChoice) {
                 break;
             }
         }
 
         if (processingTurn) {
-            animationPlaying = AnimationManager.playingAnimation;
-            //needRedirect = false;
-            
-            if (!animationPlaying && !needRedirect && !needCaptureChoice) {
+            animationPlaying = false;
+            needRedirect = false;
+            foreach (Ship ship in ships) {
+                if (animationPlaying = ship.playingAnimation) {
+                    break;
+                }
+            }
+
+            if (!animationPlaying && !needRedirect) {
                 processingTurn = gameLogic.executePhase();
             }
         }
@@ -313,11 +306,5 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
-    }
-
-    public delegate IEnumerator coroutineDel();
-
-    public void startCoroutine(coroutineDel d) {
-        d();
     }
 }
