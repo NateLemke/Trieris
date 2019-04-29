@@ -90,7 +90,9 @@ public static class AnimationManager
 
     }
 
+    public static Vector2 shipNodePos(Ship s) {
 
+    }
 
 
 
