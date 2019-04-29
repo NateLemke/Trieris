@@ -87,7 +87,7 @@ public class TrierisAI {
                     phase = catapultMove[0];
                     catapultDirection = catapultMove[1];
                     if(catapultDirection != -1 && phase != -1) {
-                        //Debug.Log("Setting catapult for phase: " + phase + " dir: "+catapultDirection);
+                        Debug.Log("Setting catapult for phase: " + phase + " dir: "+catapultDirection);
                     }
                 }
                 
@@ -186,8 +186,6 @@ public class TrierisAI {
     }
 
     public int setNewShipDirection(Ship ship) {
-        //Debug.Log("setting new AI direction for "+ship);
-        ship.needRedirect = false;
         //queue = new PriorityQueue<NodePath>(8,comparator);
         queue = new List<NodePath>();
         visitedNodes = new List<Node>();
