@@ -90,8 +90,22 @@ public static class AnimationManager
 
     }
 
-    public static Vector2 shipNodePos(Ship s) {
+    //public static Vector2 shipNodePos(Ship s, Node n) {
+        
+    //    float sqr = Mathf.Sqrt((float)n.getShips().Count);
+    //    float rounded = Mathf.Ceil(sqr);
 
+
+
+    //}
+
+    public static void NodePositions(int f, Node n) {
+        float sqr = Mathf.Sqrt(f);
+        float rounded = Mathf.Ceil(sqr);
+        int counter = 0;
+        for(int i = 0; i < rounded; i++) {
+            for(int j = 0; j < rounded; j++) {
+        }
     }
 
 

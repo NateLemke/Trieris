@@ -112,6 +112,13 @@ public class GameManager : MonoBehaviour {
                 processingTurn = gameLogic.executePhase();
             }
         }
+
+        Node n1 = board.getNodeAt(9,10);
+        AnimationManager.NodePositions(3,n1);
+
+        Node n21 = board.getNodeAt(14,10);
+        AnimationManager.NodePositions(5,n1);
+
     }
 
 
