@@ -36,7 +36,10 @@ public class MovementAnimation : Animation {
             complete = true;
             GameObject.Destroy(arrow);
             foreach(Ship s in endNode.getShips()) {
-                s.transform.position = AnimationManager.shipNodePos(s,endNode);
+                if(AnimationManager.actionAnimations.ContainsKey(s) && !(AnimationManager.actionAnimations[s] is MovementAnimation && !AnimationManager.actionAnimations[s].complete)) {
+                    s.transform.position = AnimationManager.shipNodePos(s,endNode);
+                }
+                
             }
         }        
     }

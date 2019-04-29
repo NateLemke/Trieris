@@ -14,7 +14,7 @@ public class GameLogic : MonoBehaviour {
     //private int index = 0;
 
     // NEW STUFF
-    public ushort phaseIndex = 0;
+    public ushort phaseIndex = 4;
 
     enum Phases { planning, phaseOne, phaseTwo, phaseThree };
     bool readyNext = false;

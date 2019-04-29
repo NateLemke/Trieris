@@ -200,8 +200,12 @@ public class UIControl : MonoBehaviour {
         //ship.setAction(1,actions[1].value + 1,-1);
         //ship.setAction(2,actions[2].value + 1,-1);
         //ship.setAction(3,actions[3].value + 1,-1);
+        if(GameManager.main.gameLogic.phaseIndex == 4) {
+            gameLogic.newExecuteTurn();
+        } else {
+            Debug.Log("Phase not == 4");
+        }
         
-        gameLogic.newExecuteTurn();
 
         //gameLogic.executePhase(0);
     }
