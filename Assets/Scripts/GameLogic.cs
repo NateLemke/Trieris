@@ -36,9 +36,33 @@ public class GameLogic : MonoBehaviour {
     //    this.aiShips = aiShips;
     //}
 
+        [System.Obsolete]
+    public bool executeTurn() {
+        Debug.Log("BEGIN OLD OLD OLD TURN");
+        //for (Ship ship : ships) {
+        //    if (!(ship.ready()))
+        //        ship.populateDefaultActions();
+        //}
+        foreach (Ship ship in gameManager.getShips()) {
+            if (!(ship.ready()))
+                ship.populateDefaultActions();
+        }
+        
+        for (int i = 0; i < PHASES; i++) {
+            executePhase(phaseIndex);
+            if (phaseIndex == 3) {
+                // I commented out ships resetting before, why? :thinking:
+                resetShips();
+                gameManager.checkVictory();
+                phaseIndex = 0;
+            } else {
+                phaseIndex++;
+            }
+        }
+        return true;
+    }
 
     public void newExecuteTurn() {
-        Debug.Log("Begin turn");
         DebugControl.log("turn","BEGIN TURN");
         gameManager.setAIActions();
         gameManager.processingTurn = true;
@@ -51,25 +75,25 @@ public class GameLogic : MonoBehaviour {
         }
         
         phaseIndex = 0;
-        executePhase(phaseIndex);        
+        executePhase(phaseIndex);
+
     }
 
     //[System.Obsolete]
     public bool executePhase() {
-        //Debug.Log("begin phase " + phaseIndex);
-        //UIControl.main.devPhaseTrack(phaseIndex);
-        DebugControl.log("turn","--PHASE " + phaseIndex);
-        if (phaseIndex >= 3) {
-            UIControl.main.devPhaseTrack(4);
+        if(phaseIndex >= 3) {
             gameManager.checkVictory();
 
-            foreach (Ship s in gameManager.getPlayerShips()) {
+            foreach (Ship s in gameManager.getPlayerShips())
+            {
                 s.currentActionIndex = 0;
                 s.actions = new Ship.Action[4];
+                s.populateDefaultActions();
             }
 
             Image image;
-            for (int i = 0; i < 4; i++) {
+            for(int i = 0; i < 4; i++)
+            {
                 image = actionImages[i].GetComponent<Image>();
                 var tempCol = image.color;
                 image.sprite = null;
@@ -86,9 +110,8 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void executePhase(int phase) {
-        UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
-        // handle capture used to be here
+        handleCapture();
         foreach (Ship ship in gameManager.getShips()) {
             if (ship.getCanAct()) {
                 try {
@@ -111,8 +134,6 @@ public class GameLogic : MonoBehaviour {
         updateShips();
         handleCatapults();
         sinkShips();
-        StartCoroutine( AnimationManager.playAnimations());
-        handleCapture();
     }
 
     private void handleCapture() {
@@ -140,13 +161,7 @@ public class GameLogic : MonoBehaviour {
                         ship.setFront(direction);
                     }
                     */
-
-
-                    //ship.capturePort();
-
-                    ship.needCaptureChoice = true;
-                    Debug.Log(ship + " needs port capture choice");
-
+                    ship.capturePort();
                     //int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");
                     //ship.setFront(direction);
                 }
