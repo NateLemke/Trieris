@@ -49,7 +49,7 @@ public class Ship : MonoBehaviour {
     public bool needRedirect = true;
     public bool needCaptureChoice;
     //private 
-    private float animationSpeed = 0.7f;
+    //private float animationSpeed = 0.7f;
     private float animationStart;
     SpriteRenderer underlay;
     public Team team;

@@ -24,7 +24,12 @@ public class UIControl : MonoBehaviour {
     GameObject DevUI;
     GameObject LogToggle;
     GameObject phaseTracker;
+    Text turnPhase;
     Text captureTracker;
+    Text victoryTracker;
+    GameObject redirectNotice;
+    GameObject captureNotice;
+    GameObject rammingNotice;
 
     Image[] actionImages = new Image[4];
 
@@ -36,6 +41,92 @@ public class UIControl : MonoBehaviour {
     public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
+
+    void Start() {
+        main = this;
+        captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
+        phaseTracker = GameObject.Find("PhaseTracker");
+        animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
+        redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
+        startTurn = GameObject.Find("Go").GetComponent<Button>();
+        debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
+        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
+        for (int i = 0; i < actions.Length; i++) {
+            actions[i] = GameObject.Find("Phase" + (i + 1)).GetComponent<Dropdown>();
+        }
+        teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
+        teamSelect.ClearOptions();
+
+        foreach (Team t in gameManager.teams) {
+            teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
+        }
+        teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
+        teamSelect.value = 1;
+
+        Selected = null;
+        DevUI = GameObject.Find("DevUI");
+        DevUI.SetActive(false);
+        LogToggle = GameObject.Find("DebugToggle");
+        LogToggle.SetActive(false);
+
+        actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
+        actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
+        actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
+        actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
+
+        straightArrow = Resources.Load("StraightArrow",typeof(Sprite)) as Sprite;
+        curvedArrow = Resources.Load("CurvedArrow",typeof(Sprite)) as Sprite;
+        holdSprite = Resources.Load("StopSymbol",typeof(Sprite)) as Sprite;
+
+        victoryTracker = GameObject.Find("VictoryCounter").GetComponentInChildren<Text>();
+        turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
+
+        redirectNotice = GameObject.Find("PendingRedirect");
+        captureNotice = GameObject.Find("PendingCapture");
+        rammingNotice = GameObject.Find("PendingRamming");
+        rammingNotice.SetActive(false);
+    }
+
+    void Update() {
+        //if(gameManager.animationPlaying || gameManager.needRedirect) {
+        //    startTurn.interactable = false;
+        //} else {
+        //    startTurn.interactable = true;
+        //}
+
+        if (gameManager.animationPlaying) {
+            animationText.text = "animation playing";
+            animationText.color = Color.red;
+        } else {
+            animationText.text = "no animation";
+            animationText.color = Color.green;
+        }
+
+        if (gameManager.needRedirect) {
+            //compass.SetActive(true);
+            redirectText.text = "need redirect";
+            redirectText.color = Color.red;
+            redirectNotice.SetActive(true);
+        } else {
+            //compass.SetActive(false);
+            redirectText.text = "no redirect";
+            redirectText.color = Color.green;
+            redirectNotice.SetActive(false);
+
+        }
+
+        if (gameManager.needCaptureChoice) {
+            captureTracker.text = "need capture";
+            captureTracker.color = Color.red;
+            captureNotice.SetActive(true);
+        } else {
+            captureTracker.text = "no capture";
+            captureTracker.color = Color.green;
+            captureNotice.SetActive(false);
+        }
+
+
+    }
 
     private void setSelection(Ship value) {
         if(value == null) {
@@ -112,79 +203,10 @@ public class UIControl : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-        main = this;
-        captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
-        phaseTracker = GameObject.Find("PhaseTracker");
-        animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
-        redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
-        startTurn = GameObject.Find("Go").GetComponent<Button>();
-        debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
-        for (int i = 0; i < actions.Length; i++) {
-            actions[i] = GameObject.Find("Phase" + (i+1)).GetComponent<Dropdown>();
-        }
-        teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
-        teamSelect.ClearOptions();
 
-        foreach (Team t in gameManager.teams) {            
-            teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
-        }
-        teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
-        teamSelect.value = 1;
-
-        Selected = null;
-        DevUI = GameObject.Find("DevUI");
-        DevUI.SetActive(false);
-        LogToggle = GameObject.Find("DebugToggle");
-        LogToggle.SetActive(false);
-
-        actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
-        actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
-        actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
-        actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
-
-        straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
-        curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
-        holdSprite = Resources.Load("StopSymbol", typeof(Sprite)) as Sprite;
-    }
 	
 	// Update is called once per frame
-	void Update () {
-        //if(gameManager.animationPlaying || gameManager.needRedirect) {
-        //    startTurn.interactable = false;
-        //} else {
-        //    startTurn.interactable = true;
-        //}
-
-        if (gameManager.animationPlaying) {
-            animationText.text = "animation playing";
-            animationText.color = Color.red;
-        } else {
-            animationText.text = "no animation";
-            animationText.color = Color.green;
-        }
-
-        if (gameManager.needRedirect) {
-            //compass.SetActive(true);
-            redirectText.text = "need redirect";
-            redirectText.color = Color.red;
-        } else {
-            //compass.SetActive(false);
-            redirectText.text = "no redirect";
-            redirectText.color = Color.green;
-        }
-
-        if (gameManager.needCaptureChoice) {
-            captureTracker.text = "need capture";
-            captureTracker.color = Color.red;
-        } else {
-            captureTracker.text = "no capture";
-            captureTracker.color = Color.green;
-        }
-
-
-    }
+	
 
     public void redirect(int newDirection) {
         selected.redirect(newDirection);
@@ -192,22 +214,15 @@ public class UIControl : MonoBehaviour {
     }
 
     public void testMove() {
-        //Ship ship = selected;
 
-        
-
-        //ship.setAction(0,actions[0].value+1,-1);
-        //ship.setAction(1,actions[1].value + 1,-1);
-        //ship.setAction(2,actions[2].value + 1,-1);
-        //ship.setAction(3,actions[3].value + 1,-1);
-        if(GameManager.main.gameLogic.phaseIndex == 4) {
+        GameLogic gl = GameManager.main.gameLogic;
+        if (GameManager.main.gameLogic.phaseIndex == 4) {
             gameLogic.newExecuteTurn();
         } else {
             Debug.Log("Phase not == 4");
         }
         
 
-        //gameLogic.executePhase(0);
     }
 
     public void setAction(int i) {
@@ -328,6 +343,14 @@ public class UIControl : MonoBehaviour {
                 phaseTracker.GetComponentInChildren<Text>().text = "planning phase";break;
             }
         }
+    }
+
+    public static void postNotice(string s, float time) {
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/TempText");
+        GameObject go = Instantiate(prefab,GameObject.Find("NoticeHolder").transform);
+        go.GetComponent<TempText>().lifetime = time;
+        go.GetComponent<Text>().text = s;
+        //Debug.Break();
     }
 
 }

@@ -14,7 +14,9 @@ public class GameLogic : MonoBehaviour {
     //private int index = 0;
 
     // NEW STUFF
-    public ushort phaseIndex = 4;
+    public int phaseIndex { get; set; }
+    public int TurnIndex { get { return turnIndex; } set { } }
+    private int turnIndex = 1;
 
     enum Phases { planning, phaseOne, phaseTwo, phaseThree };
     bool readyNext = false;
@@ -27,6 +29,7 @@ public class GameLogic : MonoBehaviour {
         actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
         actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
+        phaseIndex = 4;
     }
 
     //public GameLogic(GameManager trieris,List<Ship> ships,List<Ship> playerShips,List<Ship> aiShips) {
@@ -36,6 +39,7 @@ public class GameLogic : MonoBehaviour {
     //    this.aiShips = aiShips;
     //}
 
+    
 
     public void newExecuteTurn() {
         Debug.Log("Begin turn");
@@ -55,14 +59,15 @@ public class GameLogic : MonoBehaviour {
     }
 
     //[System.Obsolete]
-    public bool executePhase() {
+    public bool executeNewPhase() {
         //Debug.Log("begin phase " + phaseIndex);
         //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE " + phaseIndex);
+        
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
             gameManager.checkVictory();
-
+            turnIndex++;
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.actions = new Ship.Action[4];
@@ -88,6 +93,7 @@ public class GameLogic : MonoBehaviour {
     private void executePhase(int phase) {
         UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
+        UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         // handle capture used to be here
         foreach (Ship ship in gameManager.getShips()) {
             if (ship.getCanAct()) {
@@ -108,10 +114,16 @@ public class GameLogic : MonoBehaviour {
         }
 
         handleCollisions();
-        updateShips();
+
+        //we are now instead going to run updateFrontAfterCollision in the ramming animation
+        //updateShips();
         handleCatapults();
         sinkShips();
         StartCoroutine( AnimationManager.playAnimations());
+        
+    }
+
+    public void postAnimation() {
         handleCapture();
     }
 

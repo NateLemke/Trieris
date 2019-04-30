@@ -8,9 +8,9 @@ public class GameManager : MonoBehaviour {
 
     private Board board;
     public GameLogic gameLogic;
-    private PlayerPlanningBoard planBoard;
+    //private PlayerPlanningBoard planBoard;
     private List<Ship> ships = new List<Ship>();
-    private TrierisUIInterface trierisUI;
+    //private TrierisUIInterface trierisUI;
     //public List<Ship> playerShips;
     //List<Ship> allAIShips = new List<Ship>();
     private List<TrierisAI> aiList;
@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
             //needRedirect = false;
             
             if (!animationPlaying && !needRedirect && !needCaptureChoice) {
-                processingTurn = gameLogic.executePhase();
+                processingTurn = gameLogic.executeNewPhase();
             }
         }
 
@@ -122,9 +122,9 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void setUI(TrierisUIInterface ui) {
-        this.trierisUI = ui;
-    }
+    //public void setUI(TrierisUIInterface ui) {
+    //    this.trierisUI = ui;
+    //}
 
     public List<Ship> getPlayerShips() {
         int teamIndex = (int)playerTeam.getTeamType();
@@ -153,18 +153,18 @@ public class GameManager : MonoBehaviour {
         return r;
     }
 
-    public TrierisUIInterface getUI() {
-        return trierisUI;
-    }
+    //public TrierisUIInterface getUI() {
+    //    return trierisUI;
+    //}
 
 
     public Board getBoard() {
         return board;
     }
 
-    public void setShipAction(int shipIndex,int actionIndex,int actionType,int catapultDirection) {         // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
-        planBoard.setShipAction(shipIndex, actionIndex, actionType, catapultDirection);
-    }
+    //public void setShipAction(int shipIndex,int actionIndex,int actionType,int catapultDirection) {         // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
+    //    planBoard.setShipAction(shipIndex, actionIndex, actionType, catapultDirection);
+    //}
 
     public bool executeTurn() {
         //if (!gameOver && gameLogic.executeTurn()) {
@@ -192,17 +192,17 @@ public class GameManager : MonoBehaviour {
         }    
     }
 
-    public Ship promptPlayerShips(string message,List<Ship> shipChoices) {
-        if (shipChoices.Count == 1) {
-            return shipChoices[0];
-        }
-        Ship result = trierisUI.promptPlayerShips(message,shipChoices);
-        return result == null ? shipChoices[0] : result;
-    }
+    //public Ship promptPlayerShips(string message,List<Ship> shipChoices) {
+    //    if (shipChoices.Count == 1) {
+    //        return shipChoices[0];
+    //    }
+    //    //Ship result = trierisUI.promptPlayerShips(message,shipChoices);
+    //    return result == null ? shipChoices[0] : result;
+    //}
 
-    public int promptPlayerDirection(string message) {
-        return trierisUI.promptPlayerDirection(message);
-    }
+    //public int promptPlayerDirection(string message) {
+    //    //return trierisUI.promptPlayerDirection(message);
+    //}
 
     public bool promptPlayerCapture(string message) {
         //return trierisUI.promptPlayerCapture(message);
@@ -232,20 +232,20 @@ public class GameManager : MonoBehaviour {
         this.gameOver = true;
     }
 
-    public void promptInitialFace() {
-        foreach(Ship ship in getPlayerShips()) {
-            int direction = trierisUI.promptPlayerDirection("Choose ship " + ship.getID() + "'s initial direction.");
-            ship.setFront(direction);
-        }
-        /*
-        for (TrierisAI ai : aiList) {
-            for (Ship ship : ai.getShips()) {
-                int direction = ai.setNewShipDirection(ship);
-                ship.setFront(direction);
-            }
-        }
-        */
-    }
+    //public void promptInitialFace() {
+    //    foreach(Ship ship in getPlayerShips()) {
+    //        //int direction = trierisUI.promptPlayerDirection("Choose ship " + ship.getID() + "'s initial direction.");
+    //        ship.setFront(direction);
+    //    }
+    //    /*
+    //    for (TrierisAI ai : aiList) {
+    //        for (Ship ship : ai.getShips()) {
+    //            int direction = ai.setNewShipDirection(ship);
+    //            ship.setFront(direction);
+    //        }
+    //    }
+    //    */
+    //}
 
     // N E W   S T U F F
 

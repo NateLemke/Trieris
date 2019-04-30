@@ -28,6 +28,7 @@ public static class AnimationManager
         playingAnimation = false;
         actionAnimations.Clear();
         rammingResolutions.Clear();
+        GameManager.main.gameLogic.postAnimation();
         yield return null;
     }
 
@@ -52,6 +53,7 @@ public static class AnimationManager
 
     static IEnumerator playBasicActions() {
         List<Animation> anims = actionAnimations.Values.ToList();
+        
         for (int i = 0; i < anims.Count; i++) {
             yield return anims[i].playAnimation(0.3f,0.5f);
         }

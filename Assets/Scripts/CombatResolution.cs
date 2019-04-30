@@ -22,6 +22,10 @@ public class CombatResolution {
 
     public IEnumerator resolve() {
 
+        if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+            ;
+        }
+
         Animation A = AnimationManager.actionAnimations[attacker];
         Animation B = null;
         if (AnimationManager.actionAnimations.ContainsKey(target)) {
@@ -42,8 +46,7 @@ public class CombatResolution {
             ;
         }
 
-        attacker.setSpriteRotation();
-        target.setSpriteRotation();
+        
         
         if(B == null) {
             while (!A.complete) {
@@ -51,17 +54,18 @@ public class CombatResolution {
             }
         } else {
             while (!A.complete && !B.complete) {
+                if (GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+                    ;
+                }
                 yield return null;
             }
         }
-
-
-
         
         target.life -= damageToTarget;
         attacker.life -= damageToAttacker;
-        
-        // deal damage or something ...
+
+        target.updateFrontAfterCollision();
+        attacker.updateFrontAfterCollision();
 
         resolved = true;
         yield return null;
