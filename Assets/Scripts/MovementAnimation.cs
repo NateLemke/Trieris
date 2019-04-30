@@ -21,6 +21,10 @@ public class MovementAnimation : Animation {
         if (complete) {
             yield break;
         }
+        if (Input.GetKey(KeyCode.Space)) {
+            speed = 0.12f;
+            delay = 0.12f;
+        }
         Vector3 pos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
         GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);

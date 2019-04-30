@@ -17,6 +17,10 @@ public class RotationAnimation : Animation {
         if (complete) {
             yield break;
         }
+        if (Input.GetKey(KeyCode.Space)) {
+            speed = 0.12f;
+            delay = 0.12f;
+        }
         Vector3 pos = ship.Position;
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
         GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);

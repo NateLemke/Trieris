@@ -83,10 +83,11 @@ public class Ship : MonoBehaviour {
             {
                 lifeValue = value;
             }
+            setHealthBar();
         }
     }
 
-    
+    public GameObject redirectUI;
 
     // shouldn't use constructors with monobehavior game objects
 
@@ -126,7 +127,9 @@ public class Ship : MonoBehaviour {
 
         populateDefaultActions();
 
-        this.GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
+        //this
+        this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
+
 
         //actions[0] = new ReverseAction(1,this);
         //actions[1] = new ReverseAction(1,this);
@@ -134,6 +137,7 @@ public class Ship : MonoBehaviour {
         //actions[3] = new ReverseAction(1,this);
 
         currentActionIndex = 0;
+        setHealthBar();
     }
 
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
@@ -596,11 +600,15 @@ public class Ship : MonoBehaviour {
 
     // NEW STUFF
 
-    
+    private void Awake() {
+        underlay = transform.Find("underlay").GetComponent<SpriteRenderer>();
+        underlay.color = Color.clear;
+        redirectUI = transform.Find("ShipUI/Direction").gameObject;
+        redirectUI.SetActive(false);
+    }
 
     private void Start() {
-        underlay = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        underlay.color = Color.clear;
+        
     }
     
     private void Update() {
@@ -777,5 +785,22 @@ public class Ship : MonoBehaviour {
         temp.GetComponent<Text>().text = text;
         temp.GetComponent<Animator>().SetTrigger("Hit");
         Destroy(temp.gameObject, 2);
+    }
+
+    void setHealthBar() {
+        Image[] healthBoxes = transform.GetComponentsInChildren<Image>();
+        for(int i = 1; i <= 4; i++) {
+            //if(i <= life) {
+            //    healthBoxes[i].color = team.getColor();
+            //} else {
+
+            //}
+
+            healthBoxes[i].color = (i <= life) ? team.getColorLight() : Color.black;
+        }
+    }
+
+    public void setRedirectUI(bool b) {
+        redirectUI.SetActive(b);
     }
 }

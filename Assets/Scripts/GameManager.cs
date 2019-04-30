@@ -59,13 +59,13 @@ public class GameManager : MonoBehaviour {
     //    ships = board.getAllShips();
     //}
 
-    private void Start() {        
+    private void Start() {
 
         // set player ships and board
         //TeamColor playerColor = trierisUI.promptPlayerTeam();
-        
+
         //planBoard = new PlayerPlanningBoard(playerShips);
-                        
+
         // set ai ships
         // we make an AI for each team, and simply skip the AI's control for the player's team
         // this will allow us to change the player's team duing the game which will be useful for debugging and testing
@@ -74,7 +74,8 @@ public class GameManager : MonoBehaviour {
             aiList.Add(new TrierisAI(teams[i]));
         }
 
-        foreach (TrierisAI ai in aiList) {
+        foreach (TrierisAI ai in getAllAi()) {
+            
             foreach (Ship ship in ai.getShips()) {
                 int direction = ai.setNewShipDirection(ship);
                 ship.setFront(direction);
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour {
 
         // set GameLogic
         gameLogic = GetComponent<GameLogic>();
+        revealRedirects();
     }
 
     private void Update() {
@@ -178,7 +180,7 @@ public class GameManager : MonoBehaviour {
 
     public void setAIActions() {
         if (!gameOver) {
-            foreach (TrierisAI ai in aiList) {
+            foreach (TrierisAI ai in getAllAi()) {
                 if(ai.GetTeam() == playerTeam) {
                     Debug.Log("found a ship");
                     continue;
@@ -255,7 +257,7 @@ public class GameManager : MonoBehaviour {
             parent = Instantiate(new GameObject());
             parent.name = "Ships";
         }
-        GameObject shipPrefab = Resources.Load("Ship") as GameObject;
+        GameObject shipPrefab = Resources.Load("Ship2") as GameObject;
         GameObject spawn = Instantiate(shipPrefab,node.getPosition(),Quaternion.identity);
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
@@ -321,5 +323,15 @@ public class GameManager : MonoBehaviour {
 
     public void startCoroutine(coroutineDel d) {
         d();
+    }
+
+    public void revealRedirects() {
+        foreach(Ship s in getPlayerShips()) {
+            s.setRedirectUI(true);
+        }
+    }
+
+    public void setPlayerTeam() {
+        revealRedirects();
     }
 }

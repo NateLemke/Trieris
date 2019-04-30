@@ -13,11 +13,11 @@ public class UIControl : MonoBehaviour {
     //private int test = 99;
     Text animationText;
     Text redirectText;
-    Button startTurn;
-    Dropdown[] actions = new Dropdown[4];
-    Text shipID;
-    Dropdown teamSelect;
-    Image teamColor;
+    //Button startTurn;
+    //Dropdown[] actions = new Dropdown[4];
+    //Text shipID;
+    //Dropdown teamSelect;
+    //Image teamColor;
 
    // GameObject compass;
     GameObject debugMenu;
@@ -36,7 +36,7 @@ public class UIControl : MonoBehaviour {
     Sprite straightArrow;
     Sprite curvedArrow;
     Sprite holdSprite;
-    //GameObject selection;
+    GameObject selection;
 
     public static UIControl main;
 
@@ -48,20 +48,20 @@ public class UIControl : MonoBehaviour {
         phaseTracker = GameObject.Find("PhaseTracker");
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
-        startTurn = GameObject.Find("Go").GetComponent<Button>();
+        //startTurn = GameObject.Find("Go").GetComponent<Button>();
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
-        for (int i = 0; i < actions.Length; i++) {
-            actions[i] = GameObject.Find("Phase" + (i + 1)).GetComponent<Dropdown>();
-        }
-        teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
-        teamSelect.ClearOptions();
+        //shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
+        //for (int i = 0; i < actions.Length; i++) {
+        //    actions[i] = GameObject.Find("Phase" + (i + 1)).GetComponent<Dropdown>();
+        //}
+        //teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
+        //teamSelect.ClearOptions();
 
-        foreach (Team t in gameManager.teams) {
-            teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
-        }
-        teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
-        teamSelect.value = 1;
+        //foreach (Team t in gameManager.teams) {
+        //    teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
+        //}
+        //teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
+        //teamSelect.value = 1;
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -124,22 +124,23 @@ public class UIControl : MonoBehaviour {
             captureTracker.color = Color.green;
             captureNotice.SetActive(false);
         }
-
+        string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
+        turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
 
     }
 
     private void setSelection(Ship value) {
         if(value == null) {
-            for (int i = 0; i < actions.Length; i++) {
-                selected = value;
-                actions[i].interactable = false;
-                //compass.SetActive(false);
-                shipID.text = "No Ship";
-            }
+            //for (int i = 0; i < actions.Length; i++) {
+            //    selected = value;
+            //    actions[i].interactable = false;
+            //    //compass.SetActive(false);
+            //    //shipID.text = "No Ship";
+            //}
         } else {
             selected = value;
             //compass.SetActive(true);
-            shipID.text = "Ship " + (value.getID() + 1);
+            //shipID.text = "Ship " + (value.getID() + 1);
             for (int i = 0; i < value.life; i++) {
                 //Debug.Log(i); 
                 //actions[i].interactable = false;                
@@ -162,19 +163,19 @@ public class UIControl : MonoBehaviour {
     {
         if (gameManager.getPlayerShips()[value] == null)
         {
-            for (int i = 0; i < actions.Length; i++)
-            {
-                selected = gameManager.getPlayerShips()[value];
-                actions[i].interactable = false;
-                //compass.SetActive(false);
-                shipID.text = "No Ship";
-            }
+            //for (int i = 0; i < actions.Length; i++)
+            //{
+            //    selected = gameManager.getPlayerShips()[value];
+            //    //actions[i].interactable = false;
+            //    //compass.SetActive(false);
+            //    //shipID.text = "No Ship";
+            //}
         }
         else
         {
             selected = gameManager.getPlayerShips()[value];
             //compass.SetActive(true);
-            shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
+            //shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
             for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
             {
                 //Debug.Log(i); 
@@ -235,14 +236,14 @@ public class UIControl : MonoBehaviour {
         //Debug.Log("action " + i + " is now " + selected.actions[i].actionIndex);
     }
 
-    //public void setSelected(Ship ship) {
-    //    if(ship == null) {
-    //        selection.SetActive(false);
-    //    } else {
-    //        selection.transform.position = ship.transform.position;
-    //        selection.SetActive(true);
-    //    }
-    //}
+    public void setSelected(Ship ship) {
+        if (ship == null) {
+            selection.SetActive(false);
+        } else {
+            selection.transform.position = ship.transform.position;
+            selection.SetActive(true);
+        }
+    }
 
     public void toggleDebugMenu() {
         debugMenu.SetActive(!debugMenu.activeSelf);
@@ -254,8 +255,8 @@ public class UIControl : MonoBehaviour {
         //    gameManager.setPlayerTeam()
         //}
         Debug.Log("Player team set...");
-        gameManager.setPlayerTeam((Team.Type)teamSelect.value);
-        teamColor.color = gameManager.teams[teamSelect.value].getColor();
+        //gameManager.setPlayerTeam((Team.Type)teamSelect.value);
+        //teamColor.color = gameManager.teams[teamSelect.value].getColor();
 
         foreach(Ship ship in gameManager.playerTeam.ships) {
             ship.needRedirect = true;

@@ -22,11 +22,16 @@ public class CombatResolution {
 
     public IEnumerator resolve() {
 
-        if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+        //if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+        //    ;
+        //}
+        Animation A = null;
+        try {
+            A = AnimationManager.actionAnimations[attacker];
+        } catch (Exception e) {
             ;
         }
-
-        Animation A = AnimationManager.actionAnimations[attacker];
+        
         Animation B = null;
         if (AnimationManager.actionAnimations.ContainsKey(target)) {
             B = AnimationManager.actionAnimations[target];
@@ -43,7 +48,7 @@ public class CombatResolution {
 
             }
         } catch (Exception e) {
-            ;
+            Debug.LogWarning("Rammed without moving?");
         }
 
         

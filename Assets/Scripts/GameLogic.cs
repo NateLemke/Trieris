@@ -66,6 +66,7 @@ public class GameLogic : MonoBehaviour {
         
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
+            phaseIndex = 4;
             gameManager.checkVictory();
             turnIndex++;
             foreach (Ship s in gameManager.getPlayerShips()) {
