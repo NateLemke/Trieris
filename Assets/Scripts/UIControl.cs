@@ -30,6 +30,8 @@ public class UIControl : MonoBehaviour {
 
     Image[] actionImages = new Image[4];
     Button[] actionPanels = new Button[4];
+    Button[] attackPanels = new Button[4];
+    Button[] attackArrows = new Button[9];
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -37,6 +39,9 @@ public class UIControl : MonoBehaviour {
     //GameObject selection;
 
     Color defaultGreen;
+    Color attackUnclicked;
+    Color attackClicked;
+    Color arrowYellow;
 
     public static UIControl main;
 
@@ -77,6 +82,34 @@ public class UIControl : MonoBehaviour {
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
+
+            foreach (Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            foreach (Button b in attackArrows)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = arrowYellow;
+                b.colors = cb;
+            }
+
+            if (selected.catapultIndex >= 0)
+            {
+                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+                colBlock.normalColor = attackClicked;
+                attackPanels[selected.catapultIndex].colors = colBlock;
+
+                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
+                {
+                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
+                    colorBlock.normalColor = attackClicked;
+                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
+                }
+            }
         }
         
     }
@@ -122,6 +155,34 @@ public class UIControl : MonoBehaviour {
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
+
+            foreach(Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            foreach (Button b in attackArrows)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = arrowYellow;
+                b.colors = cb;
+            }
+
+            if(selected.catapultIndex >= 0)
+            {
+                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+                colBlock.normalColor = attackClicked;
+                attackPanels[selected.catapultIndex].colors = colBlock;
+
+                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
+                {
+                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
+                    colorBlock.normalColor = attackClicked;
+                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
+                }
+            }
         }
 
     }
@@ -175,7 +236,26 @@ public class UIControl : MonoBehaviour {
         actionPanels[2] = GameObject.Find("PanelAction3").GetComponent<Button>();
         actionPanels[3] = GameObject.Find("PanelAction4").GetComponent<Button>();
 
+        attackPanels[0] = GameObject.Find("PanelAttack1").GetComponent<Button>();
+        attackPanels[1] = GameObject.Find("PanelAttack2").GetComponent<Button>();
+        attackPanels[2] = GameObject.Find("PanelAttack3").GetComponent<Button>();
+        attackPanels[3] = GameObject.Find("PanelAttack4").GetComponent<Button>();
+
+        attackArrows[0] = GameObject.Find("ArrowN").GetComponent<Button>();
+        attackArrows[1] = GameObject.Find("ArrowNE").GetComponent<Button>();
+        attackArrows[2] = GameObject.Find("ArrowE").GetComponent<Button>();
+        attackArrows[3] = GameObject.Find("ArrowSE").GetComponent<Button>();
+        attackArrows[4] = GameObject.Find("ArrowS").GetComponent<Button>();
+        attackArrows[5] = GameObject.Find("ArrowSW").GetComponent<Button>();
+        attackArrows[6] = GameObject.Find("ArrowW").GetComponent<Button>();
+        attackArrows[7] = GameObject.Find("ArrowNW").GetComponent<Button>();
+        attackArrows[8] = GameObject.Find("Middle").GetComponent<Button>();
+
+
         defaultGreen = actionPanels[0].colors.normalColor;
+        attackUnclicked = attackPanels[0].colors.normalColor;
+        attackClicked = attackPanels[0].colors.pressedColor;
+        arrowYellow = attackArrows[0].colors.normalColor;
 
 
         straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
@@ -242,7 +322,7 @@ public class UIControl : MonoBehaviour {
 
     public void setAction(int i) {
         //Debug.Log("action "+i+" was " + selected.actions[i].actionIndex);
-        selected.setAction(selected.currentActionIndex,i,1);
+        selected.setAction(selected.currentActionIndex,i,-1);
         setActionImages(i);
         
         if(selected.currentActionIndex < (selected.life - 1))
@@ -391,5 +471,46 @@ public class UIControl : MonoBehaviour {
         b.colors = cb;
     }
 
+    public void setCatapultIndex(int i)
+    {
+        foreach(Button b in attackPanels)
+        {
+            ColorBlock cb = b.colors;
+            cb.normalColor = attackUnclicked;
+            b.colors = cb;
+        }
+
+        ColorBlock colBlock = attackPanels[i].colors;
+        colBlock.normalColor = attackClicked;
+        attackPanels[i].colors = colBlock;
+
+        selected.catapultIndex = i;
+    }
+
+    public void setAttackDirection(int i)
+    {
+        foreach (Button b in attackArrows)
+        {
+            ColorBlock cb = b.colors;
+            cb.normalColor = arrowYellow;
+            b.colors = cb;
+        }
+
+        if (selected.catapultIndex >= 0 && selected != null)
+        {
+            
+            
+            ColorBlock colBlock = attackArrows[i].colors;
+            colBlock.normalColor = attackClicked;
+            attackArrows[i].colors = colBlock;
+
+            foreach (Ship.Action a in selected.actions)
+            {
+                a.setCatapult(-1);
+            }
+
+            selected.actions[selected.catapultIndex].setCatapult(i);
+        }
+    }
 }
 
