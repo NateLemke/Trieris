@@ -51,7 +51,7 @@ public class GameLogic : MonoBehaviour {
         }
         
         phaseIndex = 0;
-        executePhase(phaseIndex);        
+        executePhase(phaseIndex);
     }
 
     //[System.Obsolete]

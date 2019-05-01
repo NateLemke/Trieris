@@ -38,6 +38,7 @@ public class UIControl : MonoBehaviour {
 
     Color defaultGreen;
 
+    public GameObject optionsPanel;
     public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
@@ -131,6 +132,8 @@ public class UIControl : MonoBehaviour {
     private void Awake() {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
+        optionsPanel = GameObject.Find("OverlayCanvas");
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
         DebugControl.init();
     }
 
@@ -209,6 +212,14 @@ public class UIControl : MonoBehaviour {
             redirectText.color = Color.green;
         }
 
+        if (Input.GetKeyDown("escape"))
+        {
+            if (!optionsPanel.active)
+                optionsPanel.SetActive(true);
+            else
+                optionsPanel.SetActive(false);
+        }
+    
         if (gameManager.needCaptureChoice) {
             captureTracker.text = "need capture";
             captureTracker.color = Color.red;
@@ -216,8 +227,6 @@ public class UIControl : MonoBehaviour {
             captureTracker.text = "no capture";
             captureTracker.color = Color.green;
         }
-
-
     }
 
     public void redirect(int newDirection) {
