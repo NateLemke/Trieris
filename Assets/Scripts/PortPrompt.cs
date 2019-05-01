@@ -14,8 +14,6 @@ public class PortPrompt : MonoBehaviour
         portNotification = transform.Find("CaptureNotification").gameObject;
         //portNotification.SetActive(false);
         //portPromptPanel.SetActive(false);
-
-        portNotification.SetActive(true);
     }
 
     public void activatePrompt()
