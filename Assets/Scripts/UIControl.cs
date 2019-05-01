@@ -31,13 +31,24 @@ public class UIControl : MonoBehaviour {
     GameObject captureNotice;
     GameObject rammingNotice;
 
+    GameObject TeamSelectUI;
+
     Image[] actionImages = new Image[4];
+    Button[] actionPanels = new Button[4];
+    Button[] attackPanels = new Button[4];
+    Button[] attackArrows = new Button[9];
 
     Sprite straightArrow;
     Sprite curvedArrow;
     Sprite holdSprite;
     GameObject selection;
 
+    Color defaultGreen;
+    Color attackUnclicked;
+    Color attackClicked;
+    Color arrowYellow;
+
+    public GameObject optionsPanel;
     public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
@@ -185,10 +196,47 @@ public class UIControl : MonoBehaviour {
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
-                setActionImages(-1);
+                if (j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                }
+                else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
+
+            foreach (Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            foreach (Button b in attackArrows)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = arrowYellow;
+                b.colors = cb;
+            }
+
+            if (selected.catapultIndex >= 0)
+            {
+                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+                colBlock.normalColor = attackClicked;
+                attackPanels[selected.catapultIndex].colors = colBlock;
+
+                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
+                {
+                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
+                    colorBlock.normalColor = attackClicked;
+                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
+                }
+            }
         }
         
     }
@@ -220,11 +268,48 @@ public class UIControl : MonoBehaviour {
 
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
-            {   
-                setActionImages(-1);
+            {
+                if (j >= selected.getLife())
+                {
+                    setDamaged();
+                    setActionImages(-1);
+                }
+                else
+                {
+                    setUndamaged();
+                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                }
                 selected.currentActionIndex++;
             }
             selected.currentActionIndex = 0;
+
+            foreach(Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            foreach (Button b in attackArrows)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = arrowYellow;
+                b.colors = cb;
+            }
+
+            if(selected.catapultIndex >= 0)
+            {
+                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+                colBlock.normalColor = attackClicked;
+                attackPanels[selected.catapultIndex].colors = colBlock;
+
+                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
+                {
+                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
+                    colorBlock.normalColor = attackClicked;
+                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
+                }
+            }
         }
 
     }
@@ -234,6 +319,8 @@ public class UIControl : MonoBehaviour {
     private void Awake() {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
+        optionsPanel = GameObject.Find("OverlayCanvas");
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
         DebugControl.init();
     }
 
@@ -241,6 +328,7 @@ public class UIControl : MonoBehaviour {
 
 	
 	// Update is called once per frame
+
 
     public void redirect(int newDirection) {
         selected.redirect(newDirection);
@@ -261,7 +349,7 @@ public class UIControl : MonoBehaviour {
 
     public void setAction(int i) {
         //Debug.Log("action "+i+" was " + selected.actions[i].actionIndex);
-        selected.setAction(selected.currentActionIndex,i,1);
+        selected.setAction(selected.currentActionIndex,i,-1);
         setActionImages(i);
         
         if(selected.currentActionIndex < (selected.life - 1))
@@ -460,3 +548,4 @@ public class UIControl : MonoBehaviour {
         }
     }
 }
+
