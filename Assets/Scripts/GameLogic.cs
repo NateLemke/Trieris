@@ -23,14 +23,7 @@ public class GameLogic : MonoBehaviour {
 
     Image[] actionImages = new Image[4];
 
-    private void Start() {
-        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
-        actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
-        actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
-        actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
-        phaseIndex = 4;
-    }
+
 
     //public GameLogic(GameManager trieris,List<Ship> ships,List<Ship> playerShips,List<Ship> aiShips) {
     //    this.gameManager = trieris;
