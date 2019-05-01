@@ -82,7 +82,7 @@ public class Ship : MonoBehaviour {
     }
 
     public int currentActionIndex;
-    public int catapultIndex; 
+
 
     private int lifeValue;
     public int life
@@ -157,7 +157,6 @@ public class Ship : MonoBehaviour {
 
         currentActionIndex = 0;
         setHealthBar();
-        catapultIndex = -1;
     }
 
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
@@ -180,7 +179,7 @@ public class Ship : MonoBehaviour {
     }
 
     public  abstract class Action {
-        public int catapultDirection = -1;
+        protected int catapultDirection = -1;
         public bool reverseReady = false;
         public int actionIndex;
         // since java inner classes are different than c sharp nested classes
@@ -201,11 +200,6 @@ public class Ship : MonoBehaviour {
         }
 
         protected abstract void affectShip();      // throws ShipCrashedException
-
-        public void setCatapult(int i)
-        {
-            catapultDirection = i;
-        } 
 
     }
 
