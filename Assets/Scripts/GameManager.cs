@@ -33,8 +33,6 @@ public class GameManager : MonoBehaviour {
     public List<Team> teams = new List<Team>();
     LineRenderer lineRenderer;
     public Team playerTeam;
-
-    public bool cameraLock;
     
 
     private void Awake() {
@@ -52,8 +50,6 @@ public class GameManager : MonoBehaviour {
 
         // set player's team to 0 by default
         playerTeam = teams[0];
-
-        cameraLock = true;
     }
 
     // SHOULDNT HAVE TO USE THIS CONSTRUCTOR

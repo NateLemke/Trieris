@@ -55,7 +55,7 @@ public class GameLogic : MonoBehaviour {
         }
         
         phaseIndex = 0;
-        executePhase(phaseIndex);
+        executePhase(phaseIndex);        
     }
 
     //[System.Obsolete]
@@ -71,9 +71,7 @@ public class GameLogic : MonoBehaviour {
             turnIndex++;
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
-                s.catapultIndex = -1;
                 s.actions = new Ship.Action[4];
-                s.populateDefaultActions();
             }
 
             Image image;
