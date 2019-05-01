@@ -28,6 +28,7 @@ public class InputControl : MonoBehaviour {
 
     float shipSelectRadius = 0.2f;
 
+    public static bool fastAnimation = false;
 
     private void Awake() {
         mainCamera = GameObject.Find("Main Camera");
@@ -61,7 +62,9 @@ public class InputControl : MonoBehaviour {
     void Update() {
         cameraUpdate();
         shipSelectUpdate();
-
+        if (Input.GetKeyDown(KeyCode.F)) {
+            fastAnimation = !fastAnimation;
+        }
     }
 
     public void shipSelectUpdate() {
@@ -90,13 +93,13 @@ public class InputControl : MonoBehaviour {
                 DebugControl.log("select","selected ship "+hover.team.ToString()+" " + hover.getID());
             }
         }
-        foreach(Ship s in gameManager.getPlayerShips()) {
-            s.underlayUpdate(hover,uiControl.Selected);
-            if(s == uiControl.Selected)
-                s.shipUIOn();
-            else
-                s.shipUIOff();
-        }
+        //foreach(Ship s in gameManager.getPlayerShips()) {
+        //    s.underlayUpdate(hover,uiControl.Selected);
+        //    if(s == uiControl.Selected)
+        //        s.shipUIOn();
+        //    else
+        //        s.shipUIOff();
+        //}
     }
 
     public void cameraUpdate() {

@@ -28,7 +28,15 @@ public class Ship : MonoBehaviour {
     //public int life = MAX_HEALTH;
     private int momentum = 0;
     private int portRepairCount = 0;
-    private bool movedForward = false;
+    private bool movedForward { get { return movedForwardField; } set {
+            movedForwardField = value;
+            if(team.getTeamType() == Team.Type.green && id == 3) {
+                ;
+            }
+        }
+    }
+
+    private bool movedForwardField = false;
 
     public int fireDirection = -1;
 
@@ -47,6 +55,17 @@ public class Ship : MonoBehaviour {
     public AnimationCurve MoveCurve;
     //public bool crashed;
     public bool needRedirect = true;
+    //public bool needRedirect {
+    //    get { return needRedirectField; }
+    //    set {
+    //        needRedirectField = value;
+    //        if (team.getTeamType() == Team.Type.red) {
+    //            ;
+    //        }
+    //    }
+    //}
+
+    private bool needRedirectField = true;
     public bool needCaptureChoice;
     //private 
     //private float animationSpeed = 0.7f;
@@ -214,6 +233,9 @@ public class Ship : MonoBehaviour {
         }
 
         protected override void affectShip() {
+            if (ship.team.getTeamType() == Team.Type.green && ship.id == 3 ) {
+                ;
+            }
             ship.hold();
             if (catapultDirection == -1) {
                 ship.repair();
@@ -350,6 +372,7 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
+            redirectUI.SetActive(true);
             return;
             //GameManager.main.shipCrashed = true;
             //throw new ShipCrashedException(this);
@@ -383,7 +406,7 @@ public class Ship : MonoBehaviour {
         //startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
         AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
 
-
+        movedForward = false;
 
     }
 
@@ -394,6 +417,7 @@ public class Ship : MonoBehaviour {
     public void hold() {
         //Debug.Log("holding...");
         momentum = 0;
+        movedForward = false;
     }
 
     public void speedup() {
@@ -427,7 +451,7 @@ public class Ship : MonoBehaviour {
         node.getPort().setTeam(team);
         canActAfterCollision = false;
         canAct = false;
-        
+        movedForward = false;
     }
 
     public void updateFrontAfterCollision() {
@@ -503,7 +527,7 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        AnimationManager.addRamming(this,target,momentum * 2);
+        addRammingAnimation(target,momentum * 2);
     }
 
     private void headOnRam(Ship target) {
@@ -514,7 +538,7 @@ public class Ship : MonoBehaviour {
         if (!target.movedForward) {
             this.life--;
         }
-        AnimationManager.addRamming(this,target,momentum);
+        addRammingAnimation(target,momentum);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
@@ -526,6 +550,12 @@ public class Ship : MonoBehaviour {
             this.life--;
         }
         AnimationManager.addRamming(this,target,momentum);
+        addRammingAnimation(target,momentum);
+    }
+    void addRammingAnimation(Ship target, int dmg) {
+        AnimationManager.involvedInRamming.Add(this);
+        AnimationManager.involvedInRamming.Add(target);
+        AnimationManager.addRamming(this,target,dmg);
     }
 
     public void setAI(TrierisAI ai) {

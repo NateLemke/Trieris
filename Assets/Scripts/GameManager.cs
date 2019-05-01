@@ -74,10 +74,14 @@ public class GameManager : MonoBehaviour {
             aiList.Add(new TrierisAI(teams[i]));
         }
 
-        foreach (TrierisAI ai in getAllAi()) {
-            
-            foreach (Ship ship in ai.getShips()) {
-                int direction = ai.setNewShipDirection(ship);
+        foreach (Team t in teams) {
+            if (t == playerTeam) {
+                continue;
+                Debug.LogError("player team is not ai!");
+            }
+            foreach (Ship ship in t.ships) {
+
+                int direction = ship.getAI().setNewShipDirection(ship);
                 ship.setFront(direction);
                 ship.needRedirect = false;
                 //Debug.Log("hello!");
@@ -92,6 +96,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update() {
+
+        //AnimationManager.focusCamera();
 
         foreach (Ship ship in ships) {
             if (needRedirect = ship.needRedirect) {
@@ -129,8 +135,7 @@ public class GameManager : MonoBehaviour {
     //}
 
     public List<Ship> getPlayerShips() {
-        int teamIndex = (int)playerTeam.getTeamType();
-        return teams[teamIndex].ships;
+        return playerTeam.ships;
     }
 
     public List<Ship> getAllAiShips() {
@@ -145,9 +150,16 @@ public class GameManager : MonoBehaviour {
 
     public List<TrierisAI> getAllAi() {
         List<TrierisAI> r = new List<TrierisAI>();
-        for (int i = 0; i < teams.Count; i++) {
-            if (i != (int)playerTeam.getTeamType()) {
-                foreach(Ship s in teams[i].ships) {
+        //for (int i = 0; i < teams.Count; i++) {
+        //    if (i != (int)playerTeam.getTeamType()) {
+        //        foreach(Ship s in teams[i].ships) {
+        //            r.Add(s.getAI());
+        //        }
+        //    }
+        //}
+        foreach(Team t in teams) {
+            if(t != playerTeam) {
+                foreach (Ship s in t.ships) {
                     r.Add(s.getAI());
                 }
             }
@@ -261,7 +273,7 @@ public class GameManager : MonoBehaviour {
         GameObject spawn = Instantiate(shipPrefab,node.getPosition(),Quaternion.identity);
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
-        //Debug.Log("can act: "+ship.getCanAct());
+        //Debug.Log("can act: "+ship.getCanActa());
         ships.Add(ship);
         ship.intialize(team,node);
         ship.name = team.getTeamType().ToString() + " ship " + ship.getID();

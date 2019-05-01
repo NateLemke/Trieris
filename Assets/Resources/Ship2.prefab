@@ -2837,7 +2837,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  needRedirect: 0
+  needRedirect: 1
   needCaptureChoice: 0
   currentActionIndex: 0
   redirectUI: {fileID: 0}

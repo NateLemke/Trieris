@@ -21,13 +21,15 @@ public class MovementAnimation : Animation {
         if (complete) {
             yield break;
         }
-        if (Input.GetKey(KeyCode.Space)) {
-            speed = 0.12f;
-            delay = 0.12f;
+        
+        if (Input.GetKey(KeyCode.Space) || InputControl.fastAnimation) {
+            speed = 0.03f;
+            delay = 0.03f;
         }
-        Vector3 pos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
+        Vector3 arrowPos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
+        yield return AnimationManager.focus(arrowPos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
-        GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);
+        GameObject arrow = GameObject.Instantiate(prefab,arrowPos,ship.transform.rotation);
         arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();
         yield return new WaitForSeconds(delay);
         if (!complete) {

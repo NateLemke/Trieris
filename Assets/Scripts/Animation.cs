@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Animation 
 {
-    protected Ship ship;
+    public Ship ship;
     //public static float ANIMATION_SPEED = 0.7f;
     protected float startTime;
     public bool complete = false;

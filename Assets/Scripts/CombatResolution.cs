@@ -51,7 +51,9 @@ public class CombatResolution {
             Debug.LogWarning("Rammed without moving?");
         }
 
-        
+        if(A == null) {
+            Debug.LogError("attacker has no animation?");
+        }
         
         if(B == null) {
             while (!A.complete) {

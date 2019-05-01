@@ -2470,8 +2470,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  needRedirect: 0
+  needRedirect: 1
+  needCaptureChoice: 0
   currentActionIndex: 0
+  redirectUI: {fileID: 0}
 --- !u!212 &3003996913175009880
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3266,9 +3268,9 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2750184012408442539, guid: eda7d88617c6b0146b2ccaefecce1be9,
+    - target: {fileID: 4475447661479985484, guid: eda7d88617c6b0146b2ccaefecce1be9,
         type: 3}
-      propertyPath: m_FillAmount
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2750184012408442538, guid: eda7d88617c6b0146b2ccaefecce1be9,
@@ -3286,9 +3288,9 @@ PrefabInstance:
       propertyPath: bar
       value: 
       objectReference: {fileID: 4502346214788559465}
-    - target: {fileID: 4475447661479985484, guid: eda7d88617c6b0146b2ccaefecce1be9,
+    - target: {fileID: 2750184012408442539, guid: eda7d88617c6b0146b2ccaefecce1be9,
         type: 3}
-      propertyPath: m_Enabled
+      propertyPath: m_FillAmount
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2750184011992871677, guid: eda7d88617c6b0146b2ccaefecce1be9,
@@ -3328,6 +3330,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CBT
       objectReference: {fileID: 0}
+    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     - target: {fileID: 4077031272601837247, guid: d294833786d4d254cbc52d9fff79b0b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3433,11 +3440,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294833786d4d254cbc52d9fff79b0b5, type: 3}
 --- !u!224 &8248026384413463058 stripped

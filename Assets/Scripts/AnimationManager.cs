@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class AnimationManager 
 {
+    public static HashSet<Ship> involvedInRamming = new HashSet<Ship>();
     public static Dictionary<Ship,Animation> actionAnimations = new Dictionary<Ship,Animation>();
     //public static List<Animation> shipAnimations = new List<Animation>();
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
@@ -15,6 +16,8 @@ public static class AnimationManager
     //    main = this;
     //}
 
+    public static bool movingCamera = false;
+
     public static bool playingAnimation = false;
 
     public static float nodeMultiShipScale = 0.3f;
@@ -23,11 +26,16 @@ public static class AnimationManager
     public static IEnumerator playAnimations() {
         playingAnimation = true;
         rammingResolutions.Sort(new RammingSorter());
-        yield return playRammingActions();
+        
         yield return playBasicActions();
+        yield return playRammingActions();
+        // resolve ramming choices
+        // play catapult animations
+
         playingAnimation = false;
         actionAnimations.Clear();
         rammingResolutions.Clear();
+        involvedInRamming.Clear();
         GameManager.main.gameLogic.postAnimation();
         yield return null;
     }
@@ -54,9 +62,13 @@ public static class AnimationManager
     static IEnumerator playBasicActions() {
         List<Animation> anims = actionAnimations.Values.ToList();
         
-        for (int i = 0; i < anims.Count; i++) {
-            yield return anims[i].playAnimation(0.3f,0.5f);
+        foreach(Animation a in anims) {
+            if (involvedInRamming.Contains(a.ship)) {
+                continue;
+            }
+            yield return a.playAnimation(0.3f,0.5f);
         }
+
         yield return null;
     }
 
@@ -149,7 +161,46 @@ public static class AnimationManager
         }
     }
 
+    public static Vector2[] getBoardView() {
+        float camHeight = Camera.main.orthographicSize * 2f;
+        float camWidth = camHeight * Camera.main.aspect;
+        Vector2 camPos = Camera.main.transform.position;
+        //Debug.DrawLine(camPos + new Vector2(0,camHeight / 2),camPos + new Vector2(0,-camHeight / 2),Color.red);
+        //Debug.DrawLine(camPos + new Vector2(camWidth / 2,0),camPos + new Vector2(-camWidth / 2,0),Color.blue);
+        float canvasWidth = GameObject.Find("OverlayCanvas").GetComponent<RectTransform>().rect.width;
+        float sideUIWidth = GameObject.Find("UISidePanel").GetComponent<RectTransform>().rect.width;
+        float ratio = (canvasWidth - sideUIWidth) / canvasWidth;
+        //Debug.DrawLine(camPos + new Vector2(-camWidth / 2,2),camPos + new Vector2(camWidth * ratio / 2,2),Color.green);
+        Vector2[] r = new Vector2[2];
+        r[0] = camPos - new Vector2(camWidth / 2,camHeight / 2);
+        r[1] = new Vector2(camWidth * ratio,camHeight);
+        return r;
+    }
 
+    public static void focusCamera() {
+        Vector2[] bv = getBoardView();
+        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+    }
+
+    public static IEnumerator focus(Vector2 v, float margin, float speed) {
+        Vector2[] bv = getBoardView();
+        margin = bv[1].y * margin;
+        if(v.x < bv[0].x + margin || v.x > bv[0].x + bv[1].x - margin || v.y < bv[0].y + margin || v.y > bv[0].y + +bv[1].y - margin) {
+            yield return moveCameraTo(v,speed);
+        }
+    }
+
+    public static IEnumerator moveCameraTo(Vector3 pos, float duration) {
+        Vector3 startPos = Camera.main.transform.position;
+        pos.z = startPos.z;
+        movingCamera = true;
+        float startTime = Time.time;
+        while((Time.time - startTime) / duration < 1f) {
+            Camera.main.transform.position = Vector3.Lerp(startPos,pos,(Time.time - startTime) / duration);
+            yield return null;
+        }
+        movingCamera = false;
+    }
 
 }
 

@@ -187,7 +187,13 @@ public class GameLogic : MonoBehaviour {
     // Event Handler class, where I will either pass in the node of the
     // collision or the ship list at that node
     private void handleCollisions() {
+        
         foreach (Ship ship in gameManager.getShips()) {
+
+            if(ship.team.getTeamType() == Team.Type.green && ship.getID() == 3) {
+                ;
+            }
+
             if (ship.getMoved()) {
                 DebugControl.log("position","ship " + ship.getID() + " at " +ship.getNode().ToString());
                 if (ship.getNode().getNumberOfShips() > 1) {
