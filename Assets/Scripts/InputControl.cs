@@ -107,18 +107,18 @@ public class InputControl : MonoBehaviour {
         cameraHeight = camera.orthographicSize * 2.0f;
         cameraWidth = cameraHeight * camera.aspect;
         //zoom
-        if ((input = Input.mouseScrollDelta.y) != 0) {
+        if ((input = Input.mouseScrollDelta.y) != 0 && !gameManager.cameraLock) {
             cameraZoom(input);
         }
         
         // move camera
         Vector3 move = new Vector3();
-        if ((input = Input.GetAxis("Horizontal")) != 0) {
+        if ((input = Input.GetAxis("Horizontal")) != 0 && !gameManager.cameraLock) {
             if((camera.transform.position.x + input) < (rightBound + camera.orthographicSize)
                 && (camera.transform.position.x + input) > (leftBound - camera.orthographicSize))
                 move.x = input;
         }
-        if ((input = Input.GetAxis("Vertical")) != 0) {
+        if ((input = Input.GetAxis("Vertical")) != 0 && !gameManager.cameraLock) {
             if ((camera.transform.position.y + input) < (topBound + camera.orthographicSize)
                 && (camera.transform.position.y + input) > (bottomBound - camera.orthographicSize))
                 move.y = input;
