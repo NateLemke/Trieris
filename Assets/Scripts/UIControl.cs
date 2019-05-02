@@ -11,6 +11,7 @@ public class UIControl : MonoBehaviour {
 
     Text animationText;
     Text redirectText;
+    Text shipID;
 
     GameObject debugMenu;
     GameObject DevUI;
@@ -64,6 +65,7 @@ public class UIControl : MonoBehaviour {
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
+        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -165,7 +167,7 @@ public class UIControl : MonoBehaviour {
 
         if(value != null) {
             selected = value;
-
+            shipID.text = "Ship " + (value.getID() + 1);
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
@@ -230,7 +232,7 @@ public class UIControl : MonoBehaviour {
         {
             selected = gameManager.getPlayerShips()[value];
             //compass.SetActive(true);
-            //shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
+            shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
             for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
             {
                 //Debug.Log(i); 
