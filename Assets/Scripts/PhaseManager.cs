@@ -264,6 +264,14 @@ public static class PhaseManager
         sinkAnimations.Clear();
     }
 
+    static void removeShipFromCatapultAnimations(Ship s) {
+        foreach(CombatResolution cr in catapultResolutions) {
+            if( cr.attacker == s) {
+                catapultResolutions.Remove(cr);
+            }
+        }
+    }
+
 }
 
 class RammingSorter : IComparer<CombatResolution> {
