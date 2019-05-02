@@ -113,6 +113,7 @@ public class GameLogic : MonoBehaviour {
 
     public void postAnimation() {
         handleCapture();
+        sinkShips();
     }
 
     private void handleCapture() {
@@ -246,10 +247,12 @@ public class GameLogic : MonoBehaviour {
         foreach (Ship ship in gameManager.getShips()) {
             if (ship.getLife() <= 0) {
                 sunkShips.Add(ship);
+                Debug.Log("Sunk ship added");
             }
         }
         foreach (Ship ship in sunkShips) {
             ship.sink();
+            Debug.Log("Sinking ship");
         }
     }
 

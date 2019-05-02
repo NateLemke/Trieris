@@ -374,8 +374,8 @@ public class Ship : MonoBehaviour {
             node.getShips().Remove(this);
         }
         node = null;
-        //team.ships.Remove(this);
-        //Destroy(this);
+        team.ships.Remove(this);
+        Destroy(this.gameObject);
     }
 
     public void capturePort() {
