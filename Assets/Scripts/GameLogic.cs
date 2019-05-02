@@ -118,15 +118,14 @@ public class GameLogic : MonoBehaviour {
     private void handleCapture() {
         foreach (Ship ship in gameManager.getShips()) {
             Port port = ship.getNode().getPort();
+            int enemyShipNo = 0;
+            
             if (port != null && port.getTeam() != ship.team) {
-
-                int enemyShipNo = 0;
-                foreach(Ship s in port.node.getShips())
+                foreach (Ship s in port.node.getShips())
                 {
                     if (s.team != ship.team)
                         enemyShipNo++;
                 }
-
                 if (ship.team == gameManager.playerTeam && enemyShipNo == 0)
                 {
                     ship.needCaptureChoice = true;
