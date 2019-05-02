@@ -147,6 +147,8 @@ public class GameLogic : MonoBehaviour {
                     //ship.capturePort();
 
                     ship.needCaptureChoice = true;
+                    port.getGameObject().GetComponent<PortPrompt>().activateNotification();
+                    //port.transform.gameObject.GetComponent<PortPrompt>().activateNotification();
                     Debug.Log(ship + " needs port capture choice");
 
                     //int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");

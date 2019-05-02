@@ -26,10 +26,26 @@ public class PortPrompt : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && portPromptPanel.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(portPromptPanel.GetComponent<RectTransform>(), Input.mousePosition, Camera.main))
         {
-            portNotification.SetActive(true);
-            portPromptPanel.SetActive(false);
+            activateNotification();
         }
     }
+
+    public void activateNotification()
+    {
+        portNotification.SetActive(true);
+        portPromptPanel.SetActive(false);
+    }
+
+    public void accept()
+    {
+        
+    }
+
+    public void decline()
+    {
+
+    }
+
     void Update()
     {
         CheckUnfocus();
