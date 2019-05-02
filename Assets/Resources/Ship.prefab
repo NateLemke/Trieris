@@ -3472,6 +3472,7 @@ MonoBehaviour:
   needRedirect: 0
   needCaptureChoice: 0
   currentActionIndex: 0
+  catapultIndex: 0
 --- !u!212 &3003996913175009880
 SpriteRenderer:
   m_ObjectHideFlags: 0

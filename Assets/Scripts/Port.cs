@@ -22,6 +22,7 @@ public class Port {
     }
     private Team team;
 
+    private GameObject go;
 
     //private Vector2 pos;
 
@@ -38,7 +39,7 @@ public class Port {
         team = t;
         capital = isCaptial;
         node = GameManager.main.getBoard().getNodeAt(p);
-        GameObject go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
+        go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
 
         go.transform.position = node.getRealPos();
         spriteRenderer = go.GetComponent<SpriteRenderer>();
@@ -50,6 +51,11 @@ public class Port {
         }
         go.transform.SetParent(parent.transform);
         GameManager.main.spawnShip(node,t);
+    }
+
+    public GameObject getGameObject()
+    {
+        return go;
     }
 
     //public Port(bool isCapital,Color teamColor) {
