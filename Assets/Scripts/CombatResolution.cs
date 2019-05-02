@@ -22,7 +22,16 @@ public class CombatResolution {
 
     public IEnumerator resolve() {
 
-        Animation A = AnimationManager.actionAnimations[attacker];
+        //if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+        //    ;
+        //}
+        Animation A = null;
+        try {
+            A = AnimationManager.actionAnimations[attacker];
+        } catch (Exception e) {
+            ;
+        }
+        
         Animation B = null;
         if (AnimationManager.actionAnimations.ContainsKey(target)) {
             B = AnimationManager.actionAnimations[target];
@@ -31,15 +40,19 @@ public class CombatResolution {
         try {
             if (A != null) {
                 //StartCoroutine(A.playAnimation());
-                GameManager.main.StartCoroutine(A.playAnimation(1f));
+                GameManager.main.StartCoroutine(A.playAnimation(0.3f,2f));
             }
             if (B != null) {
                 //StartCoroutine(B.playAnimation());
-                GameManager.main.StartCoroutine(B.playAnimation(1f));
+                GameManager.main.StartCoroutine(B.playAnimation(0.3f,2f));
 
             }
         } catch (Exception e) {
-            ;
+            Debug.LogWarning("Rammed without moving?");
+        }
+               
+        if(A == null) {
+            Debug.LogError("attacker, "+attacker+" has no animation?");
         }
         
         if(B == null) {
@@ -48,17 +61,30 @@ public class CombatResolution {
             }
         } else {
             while (!A.complete && !B.complete) {
+                if (GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
+                    ;
+                }
                 yield return null;
             }
         }
-
-
-
         
         target.life -= damageToTarget;
         attacker.life -= damageToAttacker;
+
+        if (target.life == 0) {
+            //target.sink();
+        } else {
+            target.updateFrontAfterCollision();
+        }
+
+        if(attacker.life == 0) {
+            //attacker.sink();
+        } else {
+            attacker.updateFrontAfterCollision();
+        }
+
         
-        // deal damage or something ...
+        
 
         resolved = true;
         yield return null;

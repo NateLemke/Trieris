@@ -8,34 +8,26 @@ public class GameLogic : MonoBehaviour {
     public static int PHASES = 4;
 
     private GameManager gameManager;
-    //private List<Ship> ships = new List<Ship>();
     private List<Ship> playerShips = new List<Ship>();
     private List<Ship> aiShips = new List<Ship>();
-    //private int index = 0;
 
-    // NEW STUFF
-    public ushort phaseIndex = 0;
+    public int phaseIndex { get; set; }
+    
+    public int TurnIndex { get { return turnIndex; } set { } }
+    private int turnIndex = 1;
 
     enum Phases { planning, phaseOne, phaseTwo, phaseThree };
-    bool readyNext = false;
-
+   
     Image[] actionImages = new Image[4];
 
-    private void Start() {
+    private void Awake() {
+        phaseIndex = 4;
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
         actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
         actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
     }
-
-    //public GameLogic(GameManager trieris,List<Ship> ships,List<Ship> playerShips,List<Ship> aiShips) {
-    //    this.gameManager = trieris;
-    //    this.ships = ships;
-    //    this.playerShips = playerShips;
-    //    this.aiShips = aiShips;
-    //}
-
 
     public void newExecuteTurn() {
         Debug.Log("Begin turn");
@@ -49,23 +41,29 @@ public class GameLogic : MonoBehaviour {
                 Debug.Log("ship not ready");
             }                
         }
+        if(AnimationManager.actionAnimations.Count != 0) {
+            ;
+        }
         
         phaseIndex = 0;
-        executePhase(phaseIndex);        
+        executePhase(phaseIndex);
     }
 
-    //[System.Obsolete]
-    public bool executePhase() {
-        //Debug.Log("begin phase " + phaseIndex);
-        //UIControl.main.devPhaseTrack(phaseIndex);
+    public bool executeNextPhase() {
+
         DebugControl.log("turn","--PHASE " + phaseIndex);
+        
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
+            phaseIndex = 4;
             gameManager.checkVictory();
-
+            turnIndex++;
+            AnimationManager.updateText();
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
+                s.catapultIndex = -1;
                 s.actions = new Ship.Action[4];
+                s.populateDefaultActions();
             }
 
             Image image;
@@ -80,6 +78,7 @@ public class GameLogic : MonoBehaviour {
             return false;
         } else {
             phaseIndex++;
+            AnimationManager.updateText();
             executePhase(phaseIndex);
             return true;
         }
@@ -88,74 +87,55 @@ public class GameLogic : MonoBehaviour {
     private void executePhase(int phase) {
         UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
-        // handle capture used to be here
+        //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getShips()) {
             if (ship.getCanAct()) {
                 try {
                     ship.doAction(phase);
                 } catch (ShipCrashedException e) {
-                    int newDirection = 0;
+                    
                     if (ship.team != gameManager.playerTeam) {
+                        int newDirection = 0;
                         newDirection = ship.getAI().setNewShipDirection(ship);
-                    } else {
-                        //newDirection = gameManager.promptPlayerDirection(e.getMessage());
-                    }
-                    ship.setFront(newDirection);
+                        ship.setFront(newDirection);
+                    }                   
                 }
             } else {
-                //Debug.Log("ship " + ship.getID() + " cannot act");
+                //Debug.Log("ship " + ship + " cannot act");
             }
         }
 
         handleCollisions();
-        updateShips();
         handleCatapults();
-        sinkShips();
-        StartCoroutine( AnimationManager.playAnimations());
+        
+        StartCoroutine( AnimationManager.playAnimations());        
+    }
+
+    public void postAnimation() {
         handleCapture();
     }
 
     private void handleCapture() {
         foreach (Ship ship in gameManager.getShips()) {
             Port port = ship.getNode().getPort();
+            int enemyShipNo = 0;
+            
             if (port != null && port.getTeam() != ship.team) {
-                //List<Ship> enemyShips = new List<Ship>();
-                //List<Ship> portShips = ship.getNode().getShips();
-                int enemyShipNo = 0;
-                int playerShipNo = 0;
-                foreach(Ship s in port.node.getShips())
+                foreach (Ship s in port.node.getShips())
                 {
                     if (s.team != ship.team)
                         enemyShipNo++;
                 }
-                //List<Ship> enemyShips = ship.getNode().getShips().stream()
-                //        .filter(target->target.getTeamColor() != ship.getTeamColor()).collect(Collectors.toList());
-                //if (enemyShips.Count == 0) {}
                 if (ship.team == gameManager.playerTeam && enemyShipNo == 0)
                 {
-                    /*Prompt Capture
-                    if (gameManager.promptPlayerCapture("Ship " + ship.getID() + " may capture the port.")) {
-                        ship.capturePort();
-                        int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");
-                        ship.setFront(direction);
-                    }
-                    */
-
-
-                    //ship.capturePort();
-
                     ship.needCaptureChoice = true;
+                    port.getGameObject().GetComponent<PortPrompt>().activateNotification(port, ship);
+                    //port.transform.gameObject.GetComponent<PortPrompt>().activateNotification();
                     Debug.Log(ship + " needs port capture choice");
-
-                    //int direction = gameManager.promptPlayerDirection("Set a direction for ship " + ship.getID() + " to face.");
-                    //ship.setFront(direction);
                 }
                 else if(enemyShipNo == 0)
                 {
-                    // commenting out 
-
-                    Debug.Log("Handle AI capture");
-
+                    // AI port capture
                     if (ship.getAI().decidePortCapture())
                     {
                         ship.capturePort();
@@ -174,13 +154,13 @@ public class GameLogic : MonoBehaviour {
     // Event Handler class, where I will either pass in the node of the
     // collision or the ship list at that node
     private void handleCollisions() {
+        
         foreach (Ship ship in gameManager.getShips()) {
+
             if (ship.getMoved()) {
                 DebugControl.log("position","ship " + ship.getID() + " at " +ship.getNode().ToString());
                 if (ship.getNode().getNumberOfShips() > 1) {
-                    //List<Ship> enemyShips = ship.getNode().getShips().stream()
-                    //        .filter(target->target.getTeamColor() != ship.getTeamColor())
-                    //        .collect(Collectors.toList());
+
                     List<Ship> enemyShips = new List<Ship>();
                     foreach(Ship nodeShip in ship.getNode().getShips()) {
                         if(nodeShip.team != ship.team) {
@@ -191,13 +171,13 @@ public class GameLogic : MonoBehaviour {
 
                     if (potentialCollisions.Count != 0) {
                         Ship chosenShip = null;
-                        //Debug.Log("ram happening");
 
-                        if (playerShips.Contains(ship)) {
-                            //temp collision decision
+                        if (ship.team == gameManager.playerTeam) {
+
+                            ship.needRammingChoice = true;
+
                             chosenShip = potentialCollisions[0];
 
-                            //chosenShip = gameManager.promptPlayerShips("Ship " + ship.getID() + "can collide with multiple ships.",potentialCollisions);
                         } else {
                             chosenShip = ship.getAI().selectShip(potentialCollisions);
                         }
@@ -230,9 +210,6 @@ public class GameLogic : MonoBehaviour {
             Node node = ship.getCatapultNode();
             if (node != null && node.getShips().Count > 0) {
 
-                //List<Ship> potentialTargets = node.getShips().stream()
-                //        .filter(target->target.getTeamColor() != ship.getTeamColor()).collect(Collectors.toList());
-
                 List<Ship> potentialTargets = new List<Ship>();
 
                 foreach(Ship s in node.getShips()) {
@@ -241,21 +218,23 @@ public class GameLogic : MonoBehaviour {
                     }
                 }
 
-
                 Ship chosenShip = null;
-                if (playerShips.Contains(ship)) {
+                if(potentialTargets.Count == 0) {
+                    continue;
+                }
+                else if(potentialTargets.Count == 1) {
+                    chosenShip = potentialTargets[0];
+                } else if (playerShips.Contains(ship)) {
                     if (potentialTargets.Count > 0) {
-                        // need to get player input later
-                        //chosenShip = gameManager.promptPlayerShips("Ship " + ship.getID() + " may attack multiple ships.",potentialTargets);
+
+                        // need player ship catapult choice
+                        ship.needCatapultChoice = true;
 
                         chosenShip = potentialTargets[0];
                     }
                 } else {
-                    if (potentialTargets.Count > 0) {
-                        chosenShip = ship.getAI().selectShip(potentialTargets);
-                    }
+                    chosenShip = ship.getAI().selectShip(potentialTargets);
                 }
-                Debug.Log("Game logic firing catapult");
                 ship.catapult(chosenShip);
             }
         }
@@ -270,17 +249,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
-            ship.getNode().getShips().Remove(ship);
             ship.sink();
-            gameManager.getShips().Remove(ship);
-            /*
-            if (aiShips.contains(ship)) {
-                aiShips.remove(ship);
-            }
-            if (playerShips.contains(ship)) {
-                playerShips.remove(ship);
-            }
-            */
         }
     }
 

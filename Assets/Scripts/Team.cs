@@ -117,6 +117,26 @@ public class Team
         }
     }
 
+    public Color getColorLight() {
+        switch (teamType) {
+            case Team.Type.black:
+            return new Color(0.75f,0.75f,0.75f);
+            case Team.Type.blue:
+            return Color.cyan;
+            case Team.Type.green:
+            return Color.green;
+            case Team.Type.orange:
+            return new Color(1f,0.75f,0.4f);
+            case Team.Type.red:
+            return new Color(1f,0.65f,0.65f);
+            case Team.Type.yellow:
+            return Color.yellow;
+            default:
+            Debug.LogError("Invalid team type");
+            return Color.white;
+        }
+    }
+
     public override string ToString() {
         return teamType.ToString();
     }

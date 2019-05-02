@@ -18,17 +18,20 @@ public class Ship : MonoBehaviour {
     // Combat Text
     public GameObject CBTprefab;
 
-    //private List<Action> actions = new List<Action>();
     public Action[] actions;
-    private Node node;
+    private Node node;    
 
-    // type TeamColor -> Color
-    //private Color teamColor;
-    
-    //public int life = MAX_HEALTH;
     private int momentum = 0;
     private int portRepairCount = 0;
-    private bool movedForward = false;
+    private bool movedForward { get { return movedForwardField; } set {
+            movedForwardField = value;
+            if(team.getTeamType() == Team.Type.green && id == 3) {
+                ;
+            }
+        }
+    }
+
+    private bool movedForwardField = false;
 
     public int fireDirection = -1;
 
@@ -41,15 +44,17 @@ public class Ship : MonoBehaviour {
     TrierisAI ai = null;
 
     // new variables
-    //public bool playingAnimation { get; set; }
-    delegate bool animateDelegate();
-    animateDelegate animate;
-    public AnimationCurve MoveCurve;
+
     //public bool crashed;
     public bool needRedirect = true;
+
     public bool needCaptureChoice;
-    //private 
-    private float animationSpeed = 0.7f;
+
+    public bool needRammingChoice;
+
+    public bool needCatapultChoice;
+
+
     private float animationStart;
     SpriteRenderer underlay;
     public Team team;
@@ -63,7 +68,7 @@ public class Ship : MonoBehaviour {
     }
 
     public int currentActionIndex;
-
+    public int catapultIndex; 
 
     private int lifeValue;
     public int life
@@ -83,35 +88,12 @@ public class Ship : MonoBehaviour {
             {
                 lifeValue = value;
             }
+            setHealthBar();
         }
     }
 
-    
-
-    // shouldn't use constructors with monobehavior game objects
-
-    //public Ship(Color teamColor,int id,Node node) {
-    //    this.teamColor = teamColor;
-    //    this.id = id;
-    //    this.node = node;
-    //    node.getShips().Add(this);
-
-    //    Debug.Log("hello from ship constructor!");
-
-    //    //for (int i = 0; i < 4; i++) {
-    //    //    actions.Add(null);
-    //    //}
-
-    //    // game object stuff
-    //    //GameObject go = new GameObject();        
-    //    //go.AddComponent<SpriteRenderer>();
-    //    //SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-    //    //sr.sprite = Resources.Load<Sprite>("blueShip");
-    //    //go.transform.position = node.getPosition();
-    //    //go.transform.localScale = new Vector3(2,2,2);
-    //    //Debug.Log("hello!");
-    //}
-
+    public GameObject redirectUI;
+        
     public void intialize(Team team,Node node) {
         this.team = team;
         team.ships.Add(this);
@@ -126,14 +108,11 @@ public class Ship : MonoBehaviour {
 
         populateDefaultActions();
 
-        this.GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
-
-        //actions[0] = new ReverseAction(1,this);
-        //actions[1] = new ReverseAction(1,this);
-        //actions[2] = new ReverseAction(1,this);
-        //actions[3] = new ReverseAction(1,this);
+        this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
 
         currentActionIndex = 0;
+        setHealthBar();
+        catapultIndex = -1;
     }
 
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
@@ -150,13 +129,11 @@ public class Ship : MonoBehaviour {
     }
 
     public void doAction(int index) {      //throws ShipCrashedException
-        //Debug.Log("do action ...");
         actions[index].act();
-
     }
 
     public  abstract class Action {
-        protected int catapultDirection = -1;
+        public int catapultDirection = -1;
         public bool reverseReady = false;
         public int actionIndex;
         // since java inner classes are different than c sharp nested classes
@@ -177,6 +154,11 @@ public class Ship : MonoBehaviour {
         }
 
         protected abstract void affectShip();      // throws ShipCrashedException
+
+        public void setCatapult(int i)
+        {
+            catapultDirection = i;
+        } 
 
     }
 
@@ -210,6 +192,9 @@ public class Ship : MonoBehaviour {
         }
 
         protected override void affectShip() {
+            if (ship.team.getTeamType() == Team.Type.green && ship.id == 3 ) {
+                ;
+            }
             ship.hold();
             if (catapultDirection == -1) {
                 ship.repair();
@@ -261,10 +246,6 @@ public class Ship : MonoBehaviour {
         return node;
     }
 
-    //public Color getTeamColor() {
-    //    return teamColor;
-    //}
-
     public int getLife() {
         return life;
     }
@@ -293,21 +274,10 @@ public class Ship : MonoBehaviour {
 
     public void ram(Ship target) {
         if (target != null) {
-            // debug from previous project
-            //if ((this.teamColor == TeamColor.BLUE && this.id == 1 || this.teamColor == TeamColor.BLACK && this.id == 2)) {
-            //    Debug.Log(teamColor + " 1 front: " + front + " target: " + target.front + " moved forward " + movedForward);
-            //}
+
             ramDamageAndAngle(target);
-            // debug from previous project
-            //if ((this.teamColor == TeamColor.BLUE && this.id == 1 || this.teamColor == TeamColor.BLACK && this.id == 2)) {
-            //    Debug.Log(teamColor + " 1 front: " + frontAfterCollision + " target: " + target.frontAfterCollision + " moved forward " + movedForward);
-            //}
+
             momentum = 0;
-
-            // pause the turn I guess
-            //Debug.Log("RAMED");
-
-            //playingAnimation = true;
         }
     }
 
@@ -318,9 +288,7 @@ public class Ship : MonoBehaviour {
             CatapultBullet bullet = Instantiate(go,Position,Quaternion.identity).GetComponent<CatapultBullet>();
             bullet.target = target;
             bullet.startPos = Position;
-            //Debug.Log("firing catapult");
         }
-
     }
 
     public void reset() {
@@ -338,7 +306,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void move(int direction) {                           //throws ShipCrashedException 
-        //Debug.Log("Begin")
+
         DebugControl.log("action","----moving ship");
         Node destNode = node.getAdjacentNode(direction);
         if (destNode == null) {
@@ -346,38 +314,30 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
+            //redirectUI.SetActive(true);
             return;
-            //GameManager.main.shipCrashed = true;
-            //throw new ShipCrashedException(this);
         }
+       
 
-        //new line
-        //endNode = node;
-
-        //startAnimation(forwardsAnimate);
-        //startAnimationCo(animateForwardsCo(node.getRealPos(),destNode.getRealPos()));
-
-
-        AnimationManager.actionAnimations.Add(this,new MovementAnimation(node,destNode,this));
-
-
+        Node startNode = node;
 
         node.getShips().Remove(this);
         node = destNode;
         node.getShips().Add(this);
+        if (AnimationManager.actionAnimations.ContainsKey(this)) {
+            ;
+        }
+        AnimationManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this));
+        ;
     }
 
 
     public void turn(int relativeDirection) {
         front = getRelativeDirection(relativeDirection);
         momentum = 0;
-        //Debug.Log("----Turning ship "+relativeDirection);
-
-        //startAnimationCo(animateRotate(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection)));
         AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
 
-
-
+        movedForward = false;
     }
 
     public void setFront(int direction) {
@@ -385,8 +345,8 @@ public class Ship : MonoBehaviour {
     }
 
     public void hold() {
-        //Debug.Log("holding...");
         momentum = 0;
+        movedForward = false;
     }
 
     public void speedup() {
@@ -414,13 +374,15 @@ public class Ship : MonoBehaviour {
             node.getShips().Remove(this);
         }
         node = null;
+        //team.ships.Remove(this);
+        //Destroy(this);
     }
 
     public void capturePort() {
         node.getPort().setTeam(team);
         canActAfterCollision = false;
         canAct = false;
-        
+        movedForward = false;
     }
 
     public void updateFrontAfterCollision() {
@@ -430,7 +392,6 @@ public class Ship : MonoBehaviour {
         }
         canAct = canActAfterCollision;
         frontAfterCollision = -1;
-        setSpriteRotation();
     }
 
     public void populateDefaultActions() {
@@ -444,7 +405,6 @@ public class Ship : MonoBehaviour {
     private Action getAction(int actionNum,int firingDirection) {       // throws InvalidActionException
         switch (actionNum) {
             case 1:
-            //Debug.Log("adding forwards action");
             return new ForwardAction(firingDirection,this,1);
             case 2:
             return new PortAction(firingDirection,this,2);
@@ -496,7 +456,7 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        AnimationManager.addRamming(this,target,momentum * 2);
+        addRammingAnimation(target,momentum * 2);
     }
 
     private void headOnRam(Ship target) {
@@ -507,7 +467,7 @@ public class Ship : MonoBehaviour {
         if (!target.movedForward) {
             this.life--;
         }
-        AnimationManager.addRamming(this,target,momentum);
+        addRammingAnimation(target,momentum);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
@@ -519,6 +479,12 @@ public class Ship : MonoBehaviour {
             this.life--;
         }
         AnimationManager.addRamming(this,target,momentum);
+        addRammingAnimation(target,momentum);
+    }
+    void addRammingAnimation(Ship target, int dmg) {
+        AnimationManager.involvedInRamming.Add(this);
+        AnimationManager.involvedInRamming.Add(target);
+        AnimationManager.addRamming(this,target,dmg);
     }
 
     public void setAI(TrierisAI ai) {
@@ -529,85 +495,24 @@ public class Ship : MonoBehaviour {
         return ai;
     }
 
-    /*
-    public static void main(String[] args) {
-
-        Node node1 = new Node(1, 1);
-        Node node2 = new Node(1, 2);
-        Node node3 = new Node(1, 2);
-        Node node4 = new Node(1, 2);
-        node1.setAdjacentNode(3, node3);
-        node2.setAdjacentNode(5, node3);
-        node3.setAdjacentNode(4, node4);
-
-        Ship ship1 = new Ship(TeamColor.ORANGE, 1, node1);
-        Ship ship2 = new Ship(TeamColor.BLACK, 1, node3);
-        ship1.setFront(3);
-        ship2.setFront(7);
-
-        ArrayList<Ship> ships = new ArrayList<Ship>();
-        ships.add(ship1);
-        ships.add(ship2);
-        Controller controller = new Controller(ships);
-
-        try {
-            ship1.setAction(0, 1, -1);
-            ship2.setAction(0, 4, -1);
-            ship1.setAction(1, 4, -1);
-            ship2.setAction(1, 4, -1);
-            ship1.setAction(2, 4, -1);
-            ship2.setAction(2, 4, -1);
-            ship1.setAction(3, 4, -1);
-            ship2.setAction(3, 4, -1);
-
-            controller.executeTurn();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(1);
-        ship1.printNodeShips(node1);
-        System.out.println(2);
-        ship1.printNodeShips(node2);
-        System.out.println(3);
-        ship1.printNodeShips(node3);
-        System.out.println(4);
-        ship1.printNodeShips(node4);
-
-    }
-    */
-
-    private void printNodeShips(Node node) {
-        foreach (Ship ship in node.getShips()) {
-            //System.out.println(ship.getTeamColor());
-            //System.out.println("Front" + ship.getFront());
-            //System.out.println("Life" + ship.getLife());
-            //System.out.println();
-        }
-    }
-
     public string toString() {
         return team.ToString() + " Ship " + id;
     }
 
-    // NEW STUFF
-
-    
+    private void Awake() {
+        underlay = transform.Find("underlay").GetComponent<SpriteRenderer>();
+        underlay.color = Color.clear;
+        redirectUI = transform.Find("ShipUI/Direction").gameObject;
+        redirectUI.SetActive(false);
+    }
 
     private void Start() {
-        underlay = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        underlay.color = Color.clear;
+        
     }
     
-    private void Update() {
-        //if (playingAnimation) {
-        //    playingAnimation = animate();
-        //}
+    private void Update() {  
 
         scaleToCamera();
-
-        //chooseDirection();
 
         try {
             if (team == GameManager.main.playerTeam) {
@@ -615,11 +520,9 @@ public class Ship : MonoBehaviour {
             }
         } catch(Exception e) {
             ;
-        }
+        }        
 
-        
-
-    canHold();
+        //canHold();
     }
 
     public void scaleToCamera()
@@ -657,55 +560,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public void canHold()
-    {
-    }
-
-    //private void startAnimation(animateDelegate a) {
-    //    Debug.Log("Begin animation");
-    //    animationStart = Time.time;
-    //    animate = a;
-    //    playingAnimation = true;
-    //}
-
-    //private void startAnimationCo(IEnumerator e) {
-    //    animationStart = Time.time;
-    //    playingAnimation = true;
-    //    StartCoroutine(e);
-    //}
-
-    //private bool forwardsAnimate() {
-    //    transform.position = Vector3.Lerp(startNode.getRealPos(),endNode.getRealPos(),Time.time - animationStart);
-    //    if(Time.time - animationStart > animationSpeed) {
-    //        Debug.Log("animation stop");
-    //        return false;
-    //    }
-    //    return true;
-    //}
-
-
-    IEnumerator animateForwardsCo(Vector3 startPos, Vector3 endPos) {
-
-        while(Time.time - animationStart < animationSpeed) {
-            transform.position = Vector3.Lerp(startPos,endPos,(Time.time - animationStart)/animationSpeed);
-            //Debug.Log("animating...");
-            yield return null;
-        }
-        DebugControl.log("animation","animation stop");
-        //playingAnimation = false;
-
-        yield return null;
-    }
-
-    IEnumerator animateRotate(Quaternion start, Quaternion end) {
-        while (Time.time - animationStart < animationSpeed) {
-            transform.rotation = Quaternion.Lerp(start,end,(Time.time - animationStart)/animationSpeed);
-            yield return null;
-        }
-        DebugControl.log("animation","animation stop");
-        //playingAnimation = false;
-
-    }
+    //public void canHold()
+    //{
+    //}    
 
     public void setSpriteRotation() {
         transform.eulerAngles = new Vector3(0,0,(front)*-45);
@@ -774,5 +631,16 @@ public class Ship : MonoBehaviour {
         temp.GetComponent<Text>().text = text;
         temp.GetComponent<Animator>().SetTrigger("Hit");
         Destroy(temp.gameObject, 2);
+    }
+
+    void setHealthBar() {
+        Image[] healthBoxes = transform.GetComponentsInChildren<Image>();
+        for(int i = 1; i <= 4; i++) {
+            healthBoxes[i].color = (i <= life) ? team.getColorLight() : Color.black;
+        }
+    }
+
+    public void setRedirectUI(bool b) {
+        redirectUI.SetActive(b);
     }
 }

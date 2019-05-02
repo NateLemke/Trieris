@@ -10,7 +10,6 @@ public class InputControl : MonoBehaviour {
     GameManager gameManager;
     UIControl uiControl;
 
-
     public float moveRate;
     public float topBound;
     public float bottomBound;
@@ -28,6 +27,7 @@ public class InputControl : MonoBehaviour {
 
     float shipSelectRadius = 0.2f;
 
+    public static bool fastAnimation = false;
 
     private void Awake() {
         mainCamera = GameObject.Find("Main Camera");
@@ -60,24 +60,24 @@ public class InputControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         cameraUpdate();
-        shipSelectUpdate();
-
+        
+        if (Input.GetKeyDown(KeyCode.F)) {
+            fastAnimation = !fastAnimation;
+        }
+        if (gameManager.playerTeam != null) {
+            shipSelectUpdate();
+        }
     }
 
     public void shipSelectUpdate() {
         Ship hover = null;
-
-        //Ship[] ships = gameManager.getPlayerShips();
-        ///Debug.Log("player team "+gameManager.playerTeam.getTeamType().ToString());
-        ///Debug.Log("length: "+ships.Length);
 
         foreach (Ship s in gameManager.getPlayerShips()) {
             if (Vector2.Distance(s.transform.position,mouseWorldPos()) < shipSelectRadius) {                
                 hover = s;
                 break;
             }
-        }
-        
+        }        
 
         if (Input.GetMouseButtonDown(0)) {
 
@@ -90,32 +90,24 @@ public class InputControl : MonoBehaviour {
                 DebugControl.log("select","selected ship "+hover.team.ToString()+" " + hover.getID());
             }
         }
-        foreach(Ship s in gameManager.getPlayerShips()) {
-            s.underlayUpdate(hover,uiControl.Selected);
-            if(s == uiControl.Selected)
-                s.shipUIOn();
-            else
-                s.shipUIOff();
-        }
     }
 
     public void cameraUpdate() {
         float input;
         cameraHeight = camera.orthographicSize * 2.0f;
         cameraWidth = cameraHeight * camera.aspect;
-        //zoom
-        if ((input = Input.mouseScrollDelta.y) != 0) {
+
+        if ((input = Input.mouseScrollDelta.y) != 0 && !gameManager.cameraLock) {
             cameraZoom(input);
         }
         
-        // move camera
         Vector3 move = new Vector3();
-        if ((input = Input.GetAxis("Horizontal")) != 0) {
+        if ((input = Input.GetAxis("Horizontal")) != 0 && !gameManager.cameraLock) {
             if((camera.transform.position.x + input) < (rightBound + camera.orthographicSize)
                 && (camera.transform.position.x + input) > (leftBound - camera.orthographicSize))
                 move.x = input;
         }
-        if ((input = Input.GetAxis("Vertical")) != 0) {
+        if ((input = Input.GetAxis("Vertical")) != 0 && !gameManager.cameraLock) {
             if ((camera.transform.position.y + input) < (topBound + camera.orthographicSize)
                 && (camera.transform.position.y + input) > (bottomBound - camera.orthographicSize))
                 move.y = input;
@@ -129,9 +121,7 @@ public class InputControl : MonoBehaviour {
         input *= zoomInputScale;
 
         float newExpo = ((zoomExponent + input) > maxZoomExpo) ? maxZoomExpo : zoomExponent + input;
-        zoomExponent = Mathf.Clamp(newExpo, -22f, maxZoomExpo);
-
-         
+        zoomExponent = Mathf.Clamp(newExpo, -22f, maxZoomExpo);         
 
         camera.orthographicSize = Mathf.Clamp(Mathf.Pow(zoomRate,zoomExponent), minCamSize, maxCamSize);
     }
@@ -145,26 +135,7 @@ public class InputControl : MonoBehaviour {
 
     public Vector2 mouseWorldPos() {
         return Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
-    }
-
-    //abstract class InputObject {
-    //    string inputCode;
-    //    public void run() {
-    //        if (inputCheck()) {
-    //            onInput();
-    //        }
-    //    }
-    //    public abstract bool inputCheck();
-    //    public abstract void onInput();
-    //}
-
-
-    //class KeyInput : InputObject {
-    //    public bool inputCheck() {
-    //        return 
-    //    }
-    //}
-    
+    }    
 }
 
 

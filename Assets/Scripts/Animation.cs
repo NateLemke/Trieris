@@ -4,10 +4,9 @@ using UnityEngine;
 
 public abstract class Animation 
 {
-    protected Ship ship;
-    //public static float ANIMATION_SPEED = 0.7f;
+    public Ship ship;
     protected float startTime;
     public bool complete = false;
 
-    public abstract IEnumerator playAnimation(float speed);
+    public abstract IEnumerator playAnimation(float speed,float delay);
 }
