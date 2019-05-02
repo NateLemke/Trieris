@@ -35,6 +35,7 @@ public class RotationAnimation : Animation {
                 yield return null;
             }
             complete = true;
+            ship.transform.rotation = endRotation;
             GameObject.Destroy(arrow);
         }
     }

@@ -50,9 +50,9 @@ public class CombatResolution {
         } catch (Exception e) {
             Debug.LogWarning("Rammed without moving?");
         }
-
+               
         if(A == null) {
-            Debug.LogError("attacker has no animation?");
+            Debug.LogError("attacker, "+attacker+" has no animation?");
         }
         
         if(B == null) {
@@ -71,8 +71,20 @@ public class CombatResolution {
         target.life -= damageToTarget;
         attacker.life -= damageToAttacker;
 
-        target.updateFrontAfterCollision();
-        attacker.updateFrontAfterCollision();
+        if (target.life == 0) {
+            //target.sink();
+        } else {
+            target.updateFrontAfterCollision();
+        }
+
+        if(attacker.life == 0) {
+            //attacker.sink();
+        } else {
+            attacker.updateFrontAfterCollision();
+        }
+
+        
+        
 
         resolved = true;
         yield return null;

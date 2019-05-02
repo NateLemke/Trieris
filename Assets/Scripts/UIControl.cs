@@ -8,18 +8,10 @@ public class UIControl : MonoBehaviour {
 
     GameManager gameManager;
     GameLogic gameLogic;
-    //public Sprite ship
 
-    //private int test = 99;
     Text animationText;
     Text redirectText;
-    //Button startTurn;
-    //Dropdown[] actions = new Dropdown[4];
-    //Text shipID;
-    //Dropdown teamSelect;
-    //Image teamColor;
 
-   // GameObject compass;
     GameObject debugMenu;
     GameObject DevUI;
     GameObject LogToggle;
@@ -48,10 +40,22 @@ public class UIControl : MonoBehaviour {
     Color attackClicked;
     Color arrowYellow;
 
+    public GameObject phase;
+    public GameObject subPhase;
+
     public GameObject optionsPanel;
     public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
+    private Ship selected;
+
+    private void Awake() {
+        gameManager = gameObject.GetComponent<GameManager>();
+        gameLogic = gameObject.GetComponent<GameLogic>();
+        optionsPanel = GameObject.Find("OverlayCanvas");
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
+        DebugControl.init();
+    }
 
     void Start() {
         main = this;
@@ -59,20 +63,7 @@ public class UIControl : MonoBehaviour {
         phaseTracker = GameObject.Find("PhaseTracker");
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
-        //startTurn = GameObject.Find("Go").GetComponent<Button>();
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        //shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
-        //for (int i = 0; i < actions.Length; i++) {
-        //    actions[i] = GameObject.Find("Phase" + (i + 1)).GetComponent<Dropdown>();
-        //}
-        //teamSelect = GameObject.Find("TeamChoose").GetComponent<Dropdown>();
-        //teamSelect.ClearOptions();
-
-        //foreach (Team t in gameManager.teams) {
-        //    teamSelect.options.Add(new Dropdown.OptionData() { text = t.getTeamType().ToString() });
-        //}
-        //teamColor = GameObject.Find("TeamColor").GetComponent<Image>();
-        //teamSelect.value = 1;
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -123,14 +114,13 @@ public class UIControl : MonoBehaviour {
         rammingNotice.SetActive(false);
 
         TeamSelectUI = GameObject.Find("TeamSelectPanel");
+
+        phase = GameObject.Find("Phase");
+        subPhase = GameObject.Find("SubPhase");
+        subPhase.SetActive(false);
     }
 
     void Update() {
-        //if(gameManager.animationPlaying || gameManager.needRedirect) {
-        //    startTurn.interactable = false;
-        //} else {
-        //    startTurn.interactable = true;
-        //}
 
         if (gameManager.animationPlaying) {
             animationText.text = "animation playing";
@@ -141,16 +131,13 @@ public class UIControl : MonoBehaviour {
         }
 
         if (gameManager.needRedirect) {
-            //compass.SetActive(true);
             redirectText.text = "need redirect";
             redirectText.color = Color.red;
             redirectNotice.SetActive(true);
         } else {
-            //compass.SetActive(false);
             redirectText.text = "no redirect";
             redirectText.color = Color.green;
             redirectNotice.SetActive(false);
-
         }
 
         if (gameManager.needCaptureChoice) {
@@ -175,23 +162,9 @@ public class UIControl : MonoBehaviour {
     }
 
     private void setSelection(Ship value) {
-        if(value == null) {
-            //for (int i = 0; i < actions.Length; i++) {
-            //    selected = value;
-            //    actions[i].interactable = false;
-            //    //compass.SetActive(false);
-            //    //shipID.text = "No Ship";
-            //}
-        } else {
+
+        if(value != null) {
             selected = value;
-            //compass.SetActive(true);
-            //shipID.text = "Ship " + (value.getID() + 1);
-            for (int i = 0; i < value.life; i++) {
-                //Debug.Log(i); 
-                //actions[i].interactable = false;                
-                //actions[i].value = value.actions[i].actionIndex -1;
-               // actions[i].interactable = true;
-            }
 
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
@@ -314,47 +287,29 @@ public class UIControl : MonoBehaviour {
 
     }
 
-    private Ship selected;
-
-    private void Awake() {
-        gameManager = gameObject.GetComponent<GameManager>();
-        gameLogic = gameObject.GetComponent<GameLogic>();
-        optionsPanel = GameObject.Find("OverlayCanvas");
-        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
-        DebugControl.init();
-    }
-
-    // Use this for initialization
-
-	
-	// Update is called once per frame
-
-
     public void redirect(int newDirection) {
         selected.redirect(newDirection);
-        //compass.SetActive(false);
     }
 
     public void testMove() {
 
         GameLogic gl = GameManager.main.gameLogic;
         if (GameManager.main.gameLogic.phaseIndex == 4) {
+            if(AnimationManager.playingAnimation || AnimationManager.actionAnimations.Count != 0) {
+                Debug.LogError("Animation manager not finished yet");
+            }
             gameLogic.newExecuteTurn();
         } else {
             Debug.Log("Phase not == 4");
         }
-        
-
     }
 
     public void setAction(int i) {
-        //Debug.Log("action "+i+" was " + selected.actions[i].actionIndex);
         selected.setAction(selected.currentActionIndex,i,-1);
         setActionImages(i);
         
         if(selected.currentActionIndex < (selected.life - 1))
             selected.currentActionIndex++;
-        //Debug.Log("action " + i + " is now " + selected.actions[i].actionIndex);
     }
 
     public void setSelected(Ship ship) {
@@ -370,33 +325,10 @@ public class UIControl : MonoBehaviour {
         debugMenu.SetActive(!debugMenu.activeSelf);
     }
 
-    public void setTeam() {
-        //if(teamSelect.value == 0) {
-        //    teamColor.color = Color.white;
-        //    gameManager.setPlayerTeam()
-        //}
-        Debug.Log("Player team set...");
-        //gameManager.setPlayerTeam((Team.Type)teamSelect.value);
-        //teamColor.color = gameManager.teams[teamSelect.value].getColor();
-
-        foreach(Ship ship in gameManager.playerTeam.ships) {
-            ship.needRedirect = true;
-        }
-    }
-
     public void setTeam(int i)
     {
-        Debug.Log("Player team set...");
-        gameManager.setPlayerTeam((Team.Type)i);
-        //teamColor.color = gameManager.teams[teamSelect.value].getColor();
-
-        foreach (Ship ship in gameManager.playerTeam.ships)
-        {
-            ship.needRedirect = true;
-        }
-
-        gameManager.cameraLock = false;
-        TeamSelectUI.SetActive(false);
+        TeamSelectUI.SetActive(false);        
+        gameManager.setPlayerTeam(i);       
     }
 
     public void toggleDevUI() {

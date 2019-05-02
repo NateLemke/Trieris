@@ -8,13 +8,8 @@ public class GameManager : MonoBehaviour {
 
     private Board board;
     public GameLogic gameLogic;
-    //private PlayerPlanningBoard planBoard;
     private List<Ship> ships = new List<Ship>();
-    //private TrierisUIInterface trierisUI;
-    //public List<Ship> playerShips;
-    //List<Ship> allAIShips = new List<Ship>();
     private List<TrierisAI> aiList;
-    //List<Ship> aiShips = new List<Ship>();
     private bool gameOver = false;
 
     // for moving and flipping the board
@@ -22,12 +17,12 @@ public class GameManager : MonoBehaviour {
     private int boardOffsetY;
     private bool fipBoard;
 
-    // other new variables
-    //public bool playingAnimation { get; set; }
     public bool processingTurn { get; set; }
     public bool animationPlaying = false;
     public bool needRedirect = false;
     public bool needCaptureChoice = false;
+    public bool needCatapultChoice = false;
+    public bool needRammingChoice = false;
     public bool shipCrashed;
     public static GameManager main;
     public List<Team> teams = new List<Team>();
@@ -46,97 +41,51 @@ public class GameManager : MonoBehaviour {
         board.CreateGridVisuals();
 
         // spawn teams, ships and ports
-        foreach (Team.Type teamType in (Team.Type[])Enum.GetValues(typeof(Team.Type))) {
-            teams.Add(new Team(teamType));
-        }
-
-        // set player's team to 0 by default
-        playerTeam = teams[0];
+        createTeams();
 
         cameraLock = true;
-    }
-
-    // SHOULDNT HAVE TO USE THIS CONSTRUCTOR
-    // having constructors for a monobehavior object seems to mess things up
-    //public GameManager() {
-    //    board = new Board();
-    //    ships = board.getAllShips();
-    //}
+    }   
 
     private void Start() {
-
-        // set player ships and board
-        //TeamColor playerColor = trierisUI.promptPlayerTeam();
-
-        //planBoard = new PlayerPlanningBoard(playerShips);
-
-        // set ai ships
-        // we make an AI for each team, and simply skip the AI's control for the player's team
-        // this will allow us to change the player's team duing the game which will be useful for debugging and testing
-        aiList = new List<TrierisAI>();
-        for (int i = 0; i < teams.Count; i++) {
-            aiList.Add(new TrierisAI(teams[i]));
-        }
-
-        foreach (Team t in teams) {
-            if (t == playerTeam) {
-                continue;
-                Debug.LogError("player team is not ai!");
-            }
-            foreach (Ship ship in t.ships) {
-
-                int direction = ship.getAI().setNewShipDirection(ship);
-                ship.setFront(direction);
-                ship.needRedirect = false;
-                //Debug.Log("hello!");
-                ship.setSpriteRotation();
-            }
-        }
-
-
-        // set GameLogic
+        createAIs();
         gameLogic = GetComponent<GameLogic>();
-        revealRedirects();
+    }        
+
+    private void Update() {        
+
+        checkForChoices();
+        checkForExecuteNextPhase();
     }
 
-    private void Update() {
-
-        //AnimationManager.focusCamera();
-
+    public void checkForRedirects() {
         foreach (Ship ship in ships) {
             if (needRedirect = ship.needRedirect) {
-                //Debug.Log(ship+ "needs redirect")
                 break;
+
             }
         }
-
-        foreach (Ship ship in ships) {
-            if(needCaptureChoice = ship.needCaptureChoice) {
-                break;
-            }
-        }
-
-        if (processingTurn) {
-            animationPlaying = AnimationManager.playingAnimation;
-            //needRedirect = false;
-            
-            if (!animationPlaying && !needRedirect && !needCaptureChoice) {
-                processingTurn = gameLogic.executeNewPhase();
-            }
-        }
-
-        //Node n1 = board.getNodeAt(7,7);
-        //AnimationManager.NodePositions(3,n1,Color.red);
-
-        //Node n2 = board.getNodeAt(9,9);
-        //AnimationManager.NodePositions(5,n2,Color.blue);
-
     }
 
+    public void checkForCaptureChoice() {
+        foreach (Ship ship in ships) {
+            if (needCaptureChoice = ship.needCaptureChoice) {
+                break;
+            }
+        }
+    }
 
-    //public void setUI(TrierisUIInterface ui) {
-    //    this.trierisUI = ui;
-    //}
+    public void checkForChoices() {
+        checkForRedirects();
+        checkForCaptureChoice();
+    }
+
+    public void checkForExecuteNextPhase() {
+        if (processingTurn) {
+            if (!AnimationManager.playingAnimation && !needRedirect && !needCaptureChoice) {
+                processingTurn = gameLogic.executeNextPhase();
+            }
+        }
+    }
 
     public List<Ship> getPlayerShips() {
         return playerTeam.ships;
@@ -154,13 +103,6 @@ public class GameManager : MonoBehaviour {
 
     public List<TrierisAI> getAllAi() {
         List<TrierisAI> r = new List<TrierisAI>();
-        //for (int i = 0; i < teams.Count; i++) {
-        //    if (i != (int)playerTeam.getTeamType()) {
-        //        foreach(Ship s in teams[i].ships) {
-        //            r.Add(s.getAI());
-        //        }
-        //    }
-        //}
         foreach(Team t in teams) {
             if(t != playerTeam) {
                 foreach (Ship s in t.ships) {
@@ -171,25 +113,11 @@ public class GameManager : MonoBehaviour {
         return r;
     }
 
-    //public TrierisUIInterface getUI() {
-    //    return trierisUI;
-    //}
-
-
     public Board getBoard() {
         return board;
     }
 
-    //public void setShipAction(int shipIndex,int actionIndex,int actionType,int catapultDirection) {         // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
-    //    planBoard.setShipAction(shipIndex, actionIndex, actionType, catapultDirection);
-    //}
-
-    public bool executeTurn() {
-        //if (!gameOver && gameLogic.executeTurn()) {
-        //    trierisUI.updateMapDisplay();
-        //    return true;
-        //}
-        //return false;
+    public bool executeTurn() { 
         gameLogic.newExecuteTurn();
         return true;
     }
@@ -202,25 +130,9 @@ public class GameManager : MonoBehaviour {
                     continue;
                 }
                 ai.setNextTurn();
-                //try {
-                //    ai.setNextTurn();
-                //} catch (InvalidActionIndexException | CannotReverseException | InvalidActionException e) {
-                //e.printStackTrace();
             }
         }    
     }
-
-    //public Ship promptPlayerShips(string message,List<Ship> shipChoices) {
-    //    if (shipChoices.Count == 1) {
-    //        return shipChoices[0];
-    //    }
-    //    //Ship result = trierisUI.promptPlayerShips(message,shipChoices);
-    //    return result == null ? shipChoices[0] : result;
-    //}
-
-    //public int promptPlayerDirection(string message) {
-    //    //return trierisUI.promptPlayerDirection(message);
-    //}
 
     public bool promptPlayerCapture(string message) {
         //return trierisUI.promptPlayerCapture(message);
@@ -246,26 +158,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void victory(Team t) {
-        //trierisUI.victory(color);
         this.gameOver = true;
     }
-
-    //public void promptInitialFace() {
-    //    foreach(Ship ship in getPlayerShips()) {
-    //        //int direction = trierisUI.promptPlayerDirection("Choose ship " + ship.getID() + "'s initial direction.");
-    //        ship.setFront(direction);
-    //    }
-    //    /*
-    //    for (TrierisAI ai : aiList) {
-    //        for (Ship ship : ai.getShips()) {
-    //            int direction = ai.setNewShipDirection(ship);
-    //            ship.setFront(direction);
-    //        }
-    //    }
-    //    */
-    //}
-
-    // N E W   S T U F F
 
     public Ship spawnShip(Node node,Team team) {
         GameObject parent = GameObject.Find("Ships");
@@ -301,9 +195,7 @@ public class GameManager : MonoBehaviour {
         return teams[i];
     }
 
-    public void setPlayerTeam(Team.Type t) {
-        playerTeam = getTeam(t);
-    }
+    
 
     private void OnDrawGizmos() {
 
@@ -347,7 +239,55 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void setPlayerTeam() {
+
+
+    public void setPlayerTeam(int i) {
+        playerTeam = teams[i];        
+        foreach (Ship ship in playerTeam.ships) {
+            ship.needRedirect = true;
+        }
         revealRedirects();
+        setAIDirections();
+        cameraLock = false;
+        GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
     }
+
+    void setAIDirections() {
+        foreach (Team t in teams) {
+            if (t == playerTeam) {
+                continue;
+                Debug.LogError("player team is not ai!");
+            }
+            foreach (Ship ship in t.ships) {
+
+                int direction = ship.getAI().setNewShipDirection(ship);
+                ship.setFront(direction);
+                ship.needRedirect = false;
+                ship.setSpriteRotation();
+            }
+        }
+    }
+
+    public void createTeams() {
+        foreach (Team.Type teamType in (Team.Type[])Enum.GetValues(typeof(Team.Type))) {
+            teams.Add(new Team(teamType));
+        }
+    }
+
+    public void createPorts() {
+
+    }
+
+    public void createShips() {
+
+    }
+
+    void createAIs() {
+        aiList = new List<TrierisAI>();
+        for (int i = 0; i < teams.Count; i++) {
+            aiList.Add(new TrierisAI(teams[i]));
+        }
+    }
+
+    
 }

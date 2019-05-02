@@ -182,7 +182,13 @@ public class TrierisAI {
         System.Random rand = new System.Random();
     
         int shipIndex = rand.Next(enemyShips.Count);
-        return enemyShips[shipIndex];
+
+        try {
+            return enemyShips[shipIndex];
+        } catch (ArgumentOutOfRangeException e) {
+            Debug.LogError("random.next is exclucsive max so Im not sure how this happened?");
+        }
+        return null;
     }
 
     public int setNewShipDirection(Ship ship) {

@@ -27,7 +27,7 @@ public static class DebugControl {
             logTypes.Add(s,false);
             GameObject load = Resources.Load<GameObject>("LogToggle");
             GameObject toggle = GameObject.Instantiate(load,grid.transform);
-            toggle.transform.parent = grid.transform;
+            toggle.transform.SetParent(grid.transform,false);
             toggle.transform.GetChild(1).GetComponent<Text>().text = "log " + s;
             Toggle t = toggle.GetComponent<Toggle>();
             t.isOn = false;

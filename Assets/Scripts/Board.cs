@@ -68,16 +68,7 @@ public class Board{
     }    
 
     private void setIsland() {
-        //StreamReader reader = new StreamReader("Assets/Resources/WorldData/island.txt");
-        //string s;
-        //while ((s = reader.ReadLine()) != null) {
-        //    //Debug.Log(s);
-        //    string[] coordinates = s.Split(',');
-        //    int x = int.Parse(coordinates[0]);
-        //    int y = int.Parse(coordinates[1]);
-        //    getNodeAt(x,y).setIsland(true);
-        //}
-        //AssetDatabase.Refresh();
+
         TextAsset islandsFile = Resources.Load<TextAsset>("worldData/island");
 
         string islandsText = islandsFile.text;
@@ -88,56 +79,14 @@ public class Board{
             int y = int.Parse(coordinates[1]);
             getNodeAt(x,y).setIsland(true);
         }
-
-
-
-        //reader.Close();
     }
 
     private void setPorts() {
-        //for (TeamColor teamColor : TeamColor.values()) {
-        //    setPort(teamColor.portFile,teamColor);
-        //}
+
     }
 
     private void setPort(String file,TeamColor tColor) {
-        //InputStreamReader fReader;
-        //fReader = new InputStreamReader(getClass().getResourceAsStream(file));
-        //Scanner scanner = new Scanner(fReader);
-        //while (scanner.hasNext()) {
-        //    Port port = null;
-        //    String line = scanner.nextLine();
-        //    String[] coordinates = line.split(",");
-        //    int x = Integer.parseInt(coordinates[0]);
-        //    int y = Integer.parseInt(coordinates[1]);
-        //    int z = Integer.parseInt(coordinates[2]);
-        //    if (z == 0) {
-        //        port = new Port(false,tColor);
-        //        getNodeAt(x,y).setPort(port);
-        //    } else if (z == 1) {
-        //        port = new Port(true,tColor);
-        //        getNodeAt(x,y).setPort(port);
-        //    }
-        //    ports.add(port);
-        //    portNodes.add(getNodeAt(x,y));
-        //}
-        //scanner.close();
-    }
 
-    private void setAllShips() {
-        //HashMap<TeamColor,Integer> teamShipCount = new HashMap<>();
-        //for (int i = 0; i < 6; i++) {
-        //    teamShipCount.put(TeamColor.values()[i],0);
-        //}
-
-        //for (Node node : getAllNodes()) {
-        //    if (node.getPort() != null) {
-        //        TeamColor key = node.getPort().getTeamColor();
-        //        teamShipCount.put(key,teamShipCount.get(key) + 1);
-        //        int shipID = teamShipCount.get(key);
-        //        ships.add(new Ship(key,shipID,node));
-        //    }
-        //}
     }
 
     private void setAdjacentNodes() {
@@ -161,27 +110,6 @@ public class Board{
                 }
             }
         }
-
-
-        //StreamReader reader = new StreamReader("Assets/Resources/WorldData/adjacentNodes.txt");
-        //string s;
-        //while ((s = reader.ReadLine()) != null) {
-        //    string[] delim = s.Split(':');
-        //    string[] coordinates = delim[0].Split(',');
-        //    string[] adjacentNodes = delim[1].Split(',');
-        //    int x = int.Parse(coordinates[0]);
-        //    int y = int.Parse(coordinates[1]);
-        //    Node node = getNodeAt(x,y);
-        //    for (int i = 0; i < adjacentNodes.Length; i++) {
-        //        if (int.Parse(adjacentNodes[i]) == 1) {
-        //            int xDiff = Direction.DIRECTIONS[i][1];
-        //            int yDiff = Direction.DIRECTIONS[i][2];
-        //            Node adjacentNode = getNodeAt(node.getX() + xDiff,node.getY() + yDiff);
-        //            node.setAdjacentNode(i,adjacentNode);
-        //        }
-        //    }
-        //}
-        //reader.Close();
     }
 
     public void CreateGridVisuals() {
