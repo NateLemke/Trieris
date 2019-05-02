@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour {
 
     public void checkForExecuteNextPhase() {
         if (processingTurn) {
-            if (!AnimationManager.playingAnimation && !needRedirect && !needCaptureChoice) {
+            if (!PhaseManager.playingAnimation && !needRedirect && !needCaptureChoice) {
                 processingTurn = gameLogic.executeNextPhase();
             }
         }
