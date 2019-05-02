@@ -147,7 +147,7 @@ public class GameLogic : MonoBehaviour {
                     //ship.capturePort();
 
                     ship.needCaptureChoice = true;
-                    port.getGameObject().GetComponent<PortPrompt>().activateNotification();
+                    port.getGameObject().GetComponent<PortPrompt>().activateNotification(port, ship);
                     //port.transform.gameObject.GetComponent<PortPrompt>().activateNotification();
                     Debug.Log(ship + " needs port capture choice");
 

@@ -5,8 +5,10 @@ using UnityEngine;
 public class PortPrompt : MonoBehaviour
 {
 
-    GameObject portPromptPanel;
-    GameObject portNotification;
+    private GameObject portPromptPanel;
+    private GameObject portNotification;
+    private Port thisPort;
+    private Ship currentShip;
 
     void Start()
     {
@@ -26,11 +28,19 @@ public class PortPrompt : MonoBehaviour
     {
         if(Input.GetMouseButton(0) && portPromptPanel.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(portPromptPanel.GetComponent<RectTransform>(), Input.mousePosition, Camera.main))
         {
-            activateNotification();
+            notify();
         }
     }
 
-    public void activateNotification()
+    public void activateNotification(Port inPort, Ship inShip)
+    {
+        thisPort = inPort;
+        currentShip = inShip;
+
+        notify();
+    }
+
+    public void notify()
     {
         portNotification.SetActive(true);
         portPromptPanel.SetActive(false);
@@ -38,12 +48,15 @@ public class PortPrompt : MonoBehaviour
 
     public void accept()
     {
-        
+        thisPort.setTeam(currentShip.team);
+        currentShip.needCaptureChoice = false;
+        portPromptPanel.SetActive(false);
     }
 
     public void decline()
     {
-
+        currentShip.needCaptureChoice = false;
+        portPromptPanel.SetActive(false);
     }
 
     void Update()
