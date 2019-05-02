@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// was called Controller 
 public class GameLogic : MonoBehaviour {
 
     public static int PHASES = 4;
@@ -41,7 +42,7 @@ public class GameLogic : MonoBehaviour {
                 Debug.Log("ship not ready");
             }                
         }
-        if(AnimationManager.actionAnimations.Count != 0) {
+        if(PhaseManager.actionAnimations.Count != 0) {
             ;
         }
         
@@ -56,9 +57,10 @@ public class GameLogic : MonoBehaviour {
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
             phaseIndex = 4;
+            // reset
             gameManager.checkVictory();
             turnIndex++;
-            AnimationManager.updateText();
+            PhaseManager.updateText();
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.catapultIndex = -1;
@@ -78,7 +80,7 @@ public class GameLogic : MonoBehaviour {
             return false;
         } else {
             phaseIndex++;
-            AnimationManager.updateText();
+            PhaseManager.updateText();
             executePhase(phaseIndex);
             return true;
         }
@@ -108,7 +110,7 @@ public class GameLogic : MonoBehaviour {
         handleCollisions();
         handleCatapults();
         
-        StartCoroutine( AnimationManager.playAnimations());        
+        StartCoroutine( PhaseManager.playAnimations());        
     }
 
     public void postAnimation() {

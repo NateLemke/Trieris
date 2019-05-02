@@ -27,14 +27,14 @@ public class CombatResolution {
         //}
         Animation A = null;
         try {
-            A = AnimationManager.actionAnimations[attacker];
+            A = PhaseManager.actionAnimations[attacker];
         } catch (Exception e) {
             ;
         }
         
         Animation B = null;
-        if (AnimationManager.actionAnimations.ContainsKey(target)) {
-            B = AnimationManager.actionAnimations[target];
+        if (PhaseManager.actionAnimations.ContainsKey(target)) {
+            B = PhaseManager.actionAnimations[target];
         }
 
         try {

@@ -4,11 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public static class AnimationManager 
+public static class PhaseManager 
 {
     public static HashSet<Ship> involvedInRamming = new HashSet<Ship>();
     public static Dictionary<Ship,Animation> actionAnimations = new Dictionary<Ship,Animation>();
-
+    public static List<SinkAnimation> sinkAnimations = new List<SinkAnimation>();
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
 
@@ -28,8 +28,10 @@ public static class AnimationManager
         yield return playBasicActions();
         yield return playRammingActions();
         yield return rammingChoices();
+        yield return sinkShips();
         yield return resolveCatapults();
         yield return catapultChoices();
+        yield return sinkShips();
         yield return portCapture();
         yield return resolveRedirects();
         
@@ -77,6 +79,12 @@ public static class AnimationManager
     public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
         rammingResolutions.Add(new CombatResolution(attacker,target,damageToTarget,damageToAttacker));
     }
+
+    public static void addCatapult() {
+
+    }
+
+    //public static 
 
     public static Vector2 shipNodePos(Ship s,Node n) {
         
@@ -151,6 +159,7 @@ public static class AnimationManager
         Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
     }
 
+    
     public static IEnumerator focus(Vector2 v, float margin, float speed) {
         Vector2[] bv = getBoardView();
         //margin = bv[1].y * margin;
@@ -177,18 +186,38 @@ public static class AnimationManager
             yield break;
         }
         setSubphaseText("choose ramming targets");
+        while (GameManager.main.needRammingChoice) {
+            yield return null;
+        }
     }
 
     public static IEnumerator resolveCatapults() {
-        yield break;
-        setSubphaseText("resolving catapults");
+        if(catapultResolutions.Count > 0) {
+            setSubphaseText("resolving catapults");
+            foreach(CombatResolution cr in catapultResolutions) {
+                yield return cr.resolve();
+            }
+        }        
     }
 
     public static IEnumerator catapultChoices() {
         if (!GameManager.main.needCatapultChoice) {
             yield break;
         }
-        
+        setSubphaseText("chose catapult targets");
+        while (GameManager.main.needCatapultChoice) {
+            yield return null;
+        }
+    }
+
+    public static IEnumerator sinkShips() {
+        if(sinkAnimations.Count > 0) {
+            setSubphaseText("sinking ships");
+            foreach (SinkAnimation a in sinkAnimations) {
+                yield return a.playAnimation(0.1f,0.1f);
+            }
+            sinkAnimations.Clear();
+        }       
     }
 
     public static IEnumerator portCapture() {
@@ -196,6 +225,9 @@ public static class AnimationManager
             yield break;
         }
         setSubphaseText("choose port capture");
+        while (GameManager.main.needCaptureChoice) {
+            yield return null;
+        }
     }
 
     public static IEnumerator resolveRedirects() {
@@ -203,6 +235,9 @@ public static class AnimationManager
             yield break;
         }
         setSubphaseText("choose redirects");
+        while (GameManager.main.needRedirect) {
+            yield return null;
+        }        
     }
 
     public static void setSubphaseText(string s) {
@@ -223,6 +258,10 @@ public static class AnimationManager
         }
 
         
+    }
+
+    static void clearAnimationLists() {
+        sinkAnimations.Clear();
     }
 
 }
