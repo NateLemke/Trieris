@@ -106,7 +106,7 @@ public class UIControl : MonoBehaviour {
         shipTabs[4] = GameObject.Find("ShipTab5");
 
 
-        defaultGreen = actionPanels[0].GetComponent<Button>().colors.normalColor;
+        defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
         attackClicked = attackPanels[0].colors.pressedColor;
         arrowYellow = attackArrows[0].colors.normalColor;
@@ -508,18 +508,14 @@ public class UIControl : MonoBehaviour {
 
     private void setDamaged()
     {
-        Button b = actionPanels[selected.currentActionIndex].GetComponent<Button>();
-        ColorBlock cb = b.colors;
-        cb.normalColor = new Color(1, 0, 0, 1);
-        b.colors = cb;
+        Image i = actionPanels[selected.currentActionIndex].GetComponent<Image>();
+        i.color = new Color(1, 0, 0, 1);
     }
 
     private void setUndamaged()
     {
-        Button b = actionPanels[selected.currentActionIndex].GetComponent<Button>();
-        ColorBlock cb = b.colors;
-        cb.normalColor = defaultGreen;
-        b.colors = cb;
+        Image i = actionPanels[selected.currentActionIndex].GetComponent<Image>();
+        i.color = defaultGreen;
     }
 
     public void setCatapultIndex(int i)
