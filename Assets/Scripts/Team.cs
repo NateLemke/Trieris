@@ -71,6 +71,7 @@ public class Team
             //Debug.Log("Making new port!");
             Port p = new Port(new Vector2Int(x,y),this,isCapital);
             GameManager.main.getBoard().getNodeAt(x,y).setPort(p);
+            GameManager.main.getBoard().ports.Add(p);
         }
 
         //StreamReader reader = new StreamReader("Assets/Resources/WorldData/"+ teamType.ToString() + "Ports.txt");

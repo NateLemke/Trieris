@@ -11,8 +11,8 @@ public class Board{
     private static Color gridColor = new Color(0.69f,0.91f,0.922f);
     public const int ROW_OF_NODES = 16;
     public const int COLUMN_OF_NODES = 21;
-    private List<Port> ports = new List<Port>();
-    private List<Ship> ships = new List<Ship>();
+    public List<Port> ports = new List<Port>();
+    //private List<Ship> ships = new List<Ship>();
     private List<Node> portNodes = new List<Node>();
 
     private Node[,] node;
@@ -26,9 +26,9 @@ public class Board{
         setAdjacentNodes();
     }
 
-    public List<Ship> getAllShips() {
-        return ships;
-    }
+    //public List<Ship> getAllShips() {
+    //    return ships;
+    //}
 
     public List<Port> getAllPorts() {
         return ports;
