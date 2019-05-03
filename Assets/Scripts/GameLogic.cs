@@ -57,7 +57,7 @@ public class GameLogic : MonoBehaviour {
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
             phaseIndex = 4;
-            // reset
+            resetShips();
             gameManager.checkVictory();
             turnIndex++;
             PhaseManager.updateText();
@@ -144,6 +144,7 @@ public class GameLogic : MonoBehaviour {
                         ship.capturePort();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
+                        //ship.canActAfterCollision = true;
                     }
                 }
             }
@@ -204,6 +205,7 @@ public class GameLogic : MonoBehaviour {
     private void updateShips() {
         foreach (Ship ship in gameManager.getAllShips()) {
             ship.updateFrontAfterCollision();
+            Debug.Log(ship.name + " " + ship.getCanAct());
         }
     }
 
@@ -259,7 +261,9 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void resetShips() {
-        foreach (Ship ship in gameManager.getAllShips()) {
+        foreach (Ship ship in gameManager.getShips()) {
+            if (ship == null)
+                continue;
             ship.reset();
         }
     }
