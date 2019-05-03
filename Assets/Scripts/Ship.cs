@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -324,10 +325,10 @@ public class Ship : MonoBehaviour {
         node.getShips().Remove(this);
         node = destNode;
         node.getShips().Add(this);
-        if (AnimationManager.actionAnimations.ContainsKey(this)) {
+        if (PhaseManager.actionAnimations.ContainsKey(this)) {
             ;
         }
-        AnimationManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this));
+        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this));
         ;
     }
 
@@ -335,7 +336,7 @@ public class Ship : MonoBehaviour {
     public void turn(int relativeDirection) {
         front = getRelativeDirection(relativeDirection);
         momentum = 0;
-        AnimationManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
+        PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
 
         movedForward = false;
     }
@@ -478,13 +479,13 @@ public class Ship : MonoBehaviour {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
             this.life--;
         }
-        AnimationManager.addRamming(this,target,momentum);
+        PhaseManager.addRamming(this,target,momentum);
         addRammingAnimation(target,momentum);
     }
     void addRammingAnimation(Ship target, int dmg) {
-        AnimationManager.involvedInRamming.Add(this);
-        AnimationManager.involvedInRamming.Add(target);
-        AnimationManager.addRamming(this,target,dmg);
+        PhaseManager.involvedInRamming.Add(this);
+        PhaseManager.involvedInRamming.Add(target);
+        PhaseManager.addRamming(this,target,dmg);
     }
 
     public void setAI(TrierisAI ai) {
@@ -609,14 +610,29 @@ public class Ship : MonoBehaviour {
     private void OnDrawGizmos() {
 
 
+        Handles.color = Color.magenta;
+
         if (needRedirect) {
-            Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
+            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+
+            //Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
         }
 
         if (needCaptureChoice) {
-            Gizmos.DrawIcon(transform.position + new Vector3(0.25f,0),"needPortCapture.png",true);
+            //Gizmos.DrawIcon(transform.position + new Vector3(0.25f,0),"needPortCapture.png",true);
+            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
         }
+
+        if (needRammingChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
+        }
+
+        if (needCatapultChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+        }       
     }
+
+
 
     // Initiates Combat Text
     void InitCBT(string text)

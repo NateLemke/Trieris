@@ -22,7 +22,7 @@ public class RotationAnimation : Animation {
             delay = 0.03f;
         }
         Vector3 pos = ship.Position;
-        yield return AnimationManager.focus(pos,0.7f,0.3f);
+        yield return PhaseManager.focus(pos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
         GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);
         arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();

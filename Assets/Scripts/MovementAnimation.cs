@@ -14,7 +14,7 @@ public class MovementAnimation : Animation {
         endNode = end;
         ship = s;
 
-        endPos = AnimationManager.shipNodePos(ship,endNode); 
+        endPos = PhaseManager.shipNodePos(ship,endNode); 
     }
 
     public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
@@ -27,7 +27,7 @@ public class MovementAnimation : Animation {
             delay = 0.03f;
         }
         Vector3 arrowPos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
-        yield return AnimationManager.focus(arrowPos,0.7f,0.3f);
+        yield return PhaseManager.focus(arrowPos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
         GameObject arrow = GameObject.Instantiate(prefab,arrowPos,ship.transform.rotation);
         arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();
@@ -43,8 +43,8 @@ public class MovementAnimation : Animation {
             ship.transform.position = endPos;
             GameObject.Destroy(arrow);
             foreach(Ship s in endNode.getShips()) {
-                if(AnimationManager.actionAnimations.ContainsKey(s) && !(AnimationManager.actionAnimations[s] is MovementAnimation && !AnimationManager.actionAnimations[s].complete)) {
-                    s.transform.position = AnimationManager.shipNodePos(s,endNode);
+                if(PhaseManager.actionAnimations.ContainsKey(s) && !(PhaseManager.actionAnimations[s] is MovementAnimation && !PhaseManager.actionAnimations[s].complete)) {
+                    s.transform.position = PhaseManager.shipNodePos(s,endNode);
                 }
                 
             }

@@ -297,7 +297,7 @@ public class UIControl : MonoBehaviour {
 
         GameLogic gl = GameManager.main.gameLogic;
         if (GameManager.main.gameLogic.phaseIndex == 4) {
-            if(AnimationManager.playingAnimation || AnimationManager.actionAnimations.Count != 0) {
+            if(PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0) {
                 Debug.LogError("Animation manager not finished yet");
             }
             gameLogic.newExecuteTurn();
