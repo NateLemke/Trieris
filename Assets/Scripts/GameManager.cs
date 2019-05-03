@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     private Board board;
     public GameLogic gameLogic;
    // private List<Ship> ships = new List<Ship>();
+    public UIControl uiControl;
     private List<TrierisAI> aiList;
     private bool gameOver = false;
 
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour {
     private void Start() {
         createAIs();
         gameLogic = GetComponent<GameLogic>();
+        uiControl = GetComponent<UIControl>();
     }        
 
     private void Update() {        
@@ -262,6 +264,7 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+        uiControl.updatePlayerScore();
     }
 
     void setAIDirections() {

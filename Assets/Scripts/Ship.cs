@@ -102,6 +102,7 @@ public class Ship : MonoBehaviour {
         this.life = MAX_HEALTH;
         
         this.node = node;
+        node.getShips().Add(this);
         gameObject.transform.position = node.getRealPos();
 
         actions = new Action[4];
@@ -285,10 +286,7 @@ public class Ship : MonoBehaviour {
     public void catapult(Ship target) {
         if (target != null) {
             target.life -= 1;
-            GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
-            CatapultBullet bullet = Instantiate(go,Position,Quaternion.identity).GetComponent<CatapultBullet>();
-            bullet.target = target;
-            bullet.startPos = Position;
+            
         }
     }
 
@@ -384,6 +382,9 @@ public class Ship : MonoBehaviour {
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
+        if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
+            GameManager.main.uiControl.updatePlayerScore();
+        }
     }
 
     public void updateFrontAfterCollision() {
