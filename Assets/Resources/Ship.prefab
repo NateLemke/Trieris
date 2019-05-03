@@ -3463,16 +3463,13 @@ MonoBehaviour:
   CBTprefab: {fileID: 8248026384413463085}
   fireDirection: -1
   canActAfterCollision: 1
-  MoveCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   needRedirect: 0
   needCaptureChoice: 0
+  needRammingChoice: 0
+  needCatapultChoice: 0
   currentActionIndex: 0
   catapultIndex: 0
+  redirectUI: {fileID: 0}
 --- !u!212 &3003996913175009880
 SpriteRenderer:
   m_ObjectHideFlags: 0

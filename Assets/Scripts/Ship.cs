@@ -295,14 +295,14 @@ public class Ship : MonoBehaviour {
         Debug.Log("resetting...");
         canAct = true;
         portRepairCount = 0;
-        momentum = 0;
+        //momentum = 0;
         movedForward = false;
         frontAfterCollision = -1;
         canActAfterCollision = true;
         fireDirection = -1;
-        for (int i = 0; i < 4; i++) {
-            actions[i] = null;
-        }
+        //for (int i = 0; i < 4; i++) {
+            //actions[i] = null;
+        //}
     }
 
     public void move(int direction) {                           //throws ShipCrashedException 
@@ -356,7 +356,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void repair() {
-        if (node.getPort() != null && life < MAX_HEALTH) {
+        if (node.getPort() != null && node.getPort().getTeam() == team && life < MAX_HEALTH) {
             if (node.getPort().getCapital() && node.getPort().getTeam() == team) {
                 life++;
             } else {
