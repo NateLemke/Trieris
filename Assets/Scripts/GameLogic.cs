@@ -9,8 +9,8 @@ public class GameLogic : MonoBehaviour {
     public static int PHASES = 4;
 
     private GameManager gameManager;
-    private List<Ship> playerShips = new List<Ship>();
-    private List<Ship> aiShips = new List<Ship>();
+    //private List<Ship> playerShips = new List<Ship>();
+    //private List<Ship> aiShips = new List<Ship>();
 
     public int phaseIndex { get; set; }
     
@@ -90,7 +90,7 @@ public class GameLogic : MonoBehaviour {
         UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
                 try {
                     ship.doAction(phase);
@@ -118,7 +118,7 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void handleCapture() {
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             Port port = ship.getNode().getPort();
             int enemyShipNo = 0;
             
@@ -157,7 +157,7 @@ public class GameLogic : MonoBehaviour {
     // collision or the ship list at that node
     private void handleCollisions() {
         
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
 
             if (ship.getMoved()) {
                 DebugControl.log("position","ship " + ship.getID() + " at " +ship.getNode().ToString());
@@ -201,14 +201,14 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void updateShips() {
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             ship.updateFrontAfterCollision();
         }
     }
 
     // Detects catapults by checking each ships hasFired()
     private void handleCatapults() {
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             Node node = ship.getCatapultNode();
             if (node != null && node.getShips().Count > 0) {
 
@@ -226,7 +226,7 @@ public class GameLogic : MonoBehaviour {
                 }
                 else if(potentialTargets.Count == 1) {
                     chosenShip = potentialTargets[0];
-                } else if (playerShips.Contains(ship)) {
+                } else if (GameManager.main.getPlayerShips().Contains(ship)) {
                     if (potentialTargets.Count > 0) {
 
                         // need player ship catapult choice
@@ -245,7 +245,7 @@ public class GameLogic : MonoBehaviour {
     // 'Sinks' ships by removing them from the lists of ships
     private void sinkShips() {
         List<Ship> sunkShips = new List<Ship>();
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getLife() <= 0) {
                 sunkShips.Add(ship);
             }
@@ -256,7 +256,7 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void resetShips() {
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             ship.reset();
         }
     }
