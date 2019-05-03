@@ -27,9 +27,10 @@ public class UIControl : MonoBehaviour {
     GameObject TeamSelectUI;
 
     Image[] actionImages = new Image[4];
-    Button[] actionPanels = new Button[4];
+    GameObject[] actionPanels = new GameObject[4];
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
+    GameObject[] shipTabs = new GameObject[5];
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -78,10 +79,10 @@ public class UIControl : MonoBehaviour {
         actionImages[2] = GameObject.Find("ActionImage3").GetComponent<Image>();
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
 
-        actionPanels[0] = GameObject.Find("PanelAction1").GetComponent<Button>();
-        actionPanels[1] = GameObject.Find("PanelAction2").GetComponent<Button>();
-        actionPanels[2] = GameObject.Find("PanelAction3").GetComponent<Button>();
-        actionPanels[3] = GameObject.Find("PanelAction4").GetComponent<Button>();
+        actionPanels[0] = GameObject.Find("PanelAction1");
+        actionPanels[1] = GameObject.Find("PanelAction2");
+        actionPanels[2] = GameObject.Find("PanelAction3");
+        actionPanels[3] = GameObject.Find("PanelAction4");
 
         attackPanels[0] = GameObject.Find("PanelAttack1").GetComponent<Button>();
         attackPanels[1] = GameObject.Find("PanelAttack2").GetComponent<Button>();
@@ -98,7 +99,14 @@ public class UIControl : MonoBehaviour {
         attackArrows[7] = GameObject.Find("ArrowNW").GetComponent<Button>();
         attackArrows[8] = GameObject.Find("Middle").GetComponent<Button>();
 
-        defaultGreen = actionPanels[0].colors.normalColor;
+        shipTabs[0] = GameObject.Find("ShipTab1");
+        shipTabs[1] = GameObject.Find("ShipTab2");
+        shipTabs[2] = GameObject.Find("ShipTab3");
+        shipTabs[3] = GameObject.Find("ShipTab4");
+        shipTabs[4] = GameObject.Find("ShipTab5");
+
+
+        defaultGreen = actionPanels[0].GetComponent<Button>().colors.normalColor;
         attackUnclicked = attackPanels[0].colors.normalColor;
         attackClicked = attackPanels[0].colors.pressedColor;
         arrowYellow = attackArrows[0].colors.normalColor;
@@ -212,6 +220,32 @@ public class UIControl : MonoBehaviour {
                     attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
                 }
             }
+
+            foreach (GameObject go in shipTabs)
+            {
+                Outline o = go.GetComponent<Outline>();
+                Color c = o.effectColor;
+                c.a = 0;
+                o.effectColor = c;
+            }
+
+            Outline selectedOutline = shipTabs[value.getID()].GetComponent<Outline>();
+            Color color = selectedOutline.effectColor;
+            color.a = 255;
+            selectedOutline.effectColor = color;
+
+            foreach (GameObject go in actionPanels)
+            {
+                Outline o = go.GetComponent<Outline>();
+                Color c = o.effectColor;
+                c.a = 0;
+                o.effectColor = c;
+            }
+
+            Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+            Color currentPanelColor = currentPanel.effectColor;
+            currentPanelColor.a = 255;
+            currentPanel.effectColor = color;
         }
         
     }
@@ -285,6 +319,32 @@ public class UIControl : MonoBehaviour {
                     attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
                 }
             }
+
+            foreach(GameObject go in shipTabs)
+            {
+                Outline o = go.GetComponent<Outline>();
+                Color c = o.effectColor;
+                c.a = 0;
+                o.effectColor = c;
+            }
+
+            Outline selectedOutline = shipTabs[value].GetComponent<Outline>();
+            Color color = selectedOutline.effectColor;
+            color.a = 255;
+            selectedOutline.effectColor = color;
+
+            foreach (GameObject go in actionPanels)
+            {
+                Outline o = go.GetComponent<Outline>();
+                Color c = o.effectColor;
+                c.a = 0;
+                o.effectColor = c;
+            }
+
+            Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+            Color currentPanelColor = currentPanel.effectColor;
+            currentPanelColor.a = 255;
+            currentPanel.effectColor = color;
         }
 
     }
@@ -311,7 +371,19 @@ public class UIControl : MonoBehaviour {
         setActionImages(i);
         
         if(selected.currentActionIndex < (selected.life - 1))
+        {
+            Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+            Color color = selectedOutline.effectColor;
+            color.a = 0;
+            selectedOutline.effectColor = color;
+
             selected.currentActionIndex++;
+
+            selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+            color.a = 255;
+            selectedOutline.effectColor = color;
+        }
+            
     }
 
     public void setSelected(Ship ship) {
@@ -340,7 +412,17 @@ public class UIControl : MonoBehaviour {
 
     public void setCurrentActionIndex(int i)
     {
+        Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+        Color color = selectedOutline.effectColor;
+        color.a = 0;
+        selectedOutline.effectColor = color;
+
         selected.currentActionIndex = i;
+
+        selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+        color.a = 255;
+        selectedOutline.effectColor = color;
+   
     }
 
     public void setActionImages(int i)
@@ -361,7 +443,7 @@ public class UIControl : MonoBehaviour {
                 image.sprite = curvedArrow;
                 tempCol.a = 255;
                 image.color = tempCol;
-                image.transform.eulerAngles = new Vector3(0, 180, 100);
+                image.transform.eulerAngles = new Vector3(0, 180, -10);
                 //image.rectTransform.Rotate(new Vector3(0, 180, 100));
                 break;
 
@@ -369,7 +451,7 @@ public class UIControl : MonoBehaviour {
                 image.sprite = curvedArrow;
                 tempCol.a = 255;
                 image.color = tempCol;
-                image.transform.eulerAngles = new Vector3(0, 0, 100);
+                image.transform.eulerAngles = new Vector3(0, 0, -10);
                 //image.rectTransform.Rotate(new Vector3(0, 0, 100));
                 break;
 
@@ -426,7 +508,7 @@ public class UIControl : MonoBehaviour {
 
     private void setDamaged()
     {
-        Button b = actionPanels[selected.currentActionIndex];
+        Button b = actionPanels[selected.currentActionIndex].GetComponent<Button>();
         ColorBlock cb = b.colors;
         cb.normalColor = new Color(1, 0, 0, 1);
         b.colors = cb;
@@ -434,7 +516,7 @@ public class UIControl : MonoBehaviour {
 
     private void setUndamaged()
     {
-        Button b = actionPanels[selected.currentActionIndex];
+        Button b = actionPanels[selected.currentActionIndex].GetComponent<Button>();
         ColorBlock cb = b.colors;
         cb.normalColor = defaultGreen;
         b.colors = cb;
