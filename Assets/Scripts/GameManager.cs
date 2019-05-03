@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 
     private Board board;
     public GameLogic gameLogic;
-    private List<Ship> ships = new List<Ship>();
+   // private List<Ship> ships = new List<Ship>();
     private List<TrierisAI> aiList;
     private bool gameOver = false;
 
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void checkForRedirects() {
-        foreach (Ship ship in ships) {
+        foreach (Ship ship in getAllShips()) {
             if (needRedirect = ship.needRedirect) {
                 break;
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void checkForCaptureChoice() {
-        foreach (Ship ship in ships) {
+        foreach (Ship ship in getAllShips()) {
             if (needCaptureChoice = ship.needCaptureChoice) {
                 break;
             }
@@ -81,10 +81,22 @@ public class GameManager : MonoBehaviour {
 
     public void checkForExecuteNextPhase() {
         if (processingTurn) {
-            if (!AnimationManager.playingAnimation && !needRedirect && !needCaptureChoice) {
+            if (!PhaseManager.playingAnimation && !needRedirect && !needCaptureChoice) {
                 processingTurn = gameLogic.executeNextPhase();
             }
         }
+    }
+
+    public List<Ship> getAllShips() {
+
+        List<Ship> r = new List<Ship>(); 
+
+        foreach(Team t in teams) {
+            r.AddRange(t.ships);
+
+        }
+
+        return r;
     }
 
     public List<Ship> getPlayerShips() {
@@ -172,16 +184,16 @@ public class GameManager : MonoBehaviour {
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
         //Debug.Log("can act: "+ship.getCanActa());
-        ships.Add(ship);
+        //ships.Add(ship);
         ship.intialize(team,node);
         ship.name = team.getTeamType().ToString() + " ship " + ship.getID();
 
         return ship;
     }
 
-    public List<Ship> getShips() {
-        return ships;
-    }
+    //public List<Ship> getShips() {
+    //    return ships;
+    //}
 
     public Team getTeam (Team.Type t) {
         return teams[(int)t];

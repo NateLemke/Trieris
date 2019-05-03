@@ -50,6 +50,8 @@ public class PortPrompt : MonoBehaviour
     {
         thisPort.setTeam(currentShip.team);
         currentShip.needCaptureChoice = false;
+        currentShip.needRedirect = true;
+        currentShip.setRedirectUI(true);
         portPromptPanel.SetActive(false);
     }
 
