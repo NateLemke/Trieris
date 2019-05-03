@@ -31,6 +31,7 @@ public class UIControl : MonoBehaviour {
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
+    Image[,] bottomIcons = new Image[6,5];
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -41,6 +42,7 @@ public class UIControl : MonoBehaviour {
     Color attackUnclicked;
     Color attackClicked;
     Color arrowYellow;
+    Color greyedOut;
 
     public GameObject phase;
     public GameObject subPhase;
@@ -105,11 +107,48 @@ public class UIControl : MonoBehaviour {
         shipTabs[3] = GameObject.Find("ShipTab4");
         shipTabs[4] = GameObject.Find("ShipTab5");
 
+        bottomIcons[0, 0] = GameObject.Find("BottomRed1").GetComponent<Image>();
+        bottomIcons[0, 1] = GameObject.Find("BottomRed2").GetComponent<Image>();
+        bottomIcons[0, 2] = GameObject.Find("BottomRed3").GetComponent<Image>();
+        bottomIcons[0, 3] = GameObject.Find("BottomRed4").GetComponent<Image>();
+        bottomIcons[0, 4] = GameObject.Find("BottomRed5").GetComponent<Image>();
+
+        bottomIcons[1, 0] = GameObject.Find("BottomOrange1").GetComponent<Image>();
+        bottomIcons[1, 1] = GameObject.Find("BottomOrange2").GetComponent<Image>();
+        bottomIcons[1, 2] = GameObject.Find("BottomOrange3").GetComponent<Image>();
+        bottomIcons[1, 3] = GameObject.Find("BottomOrange4").GetComponent<Image>();
+        bottomIcons[1, 4] = GameObject.Find("BottomOrange5").GetComponent<Image>();
+
+        bottomIcons[2, 0] = GameObject.Find("BottomYellow1").GetComponent<Image>();
+        bottomIcons[2, 1] = GameObject.Find("BottomYellow2").GetComponent<Image>();
+        bottomIcons[2, 2] = GameObject.Find("BottomYellow3").GetComponent<Image>();
+        bottomIcons[2, 3] = GameObject.Find("BottomYellow4").GetComponent<Image>();
+        bottomIcons[2, 4] = GameObject.Find("BottomYellow5").GetComponent<Image>();
+
+        bottomIcons[3, 0] = GameObject.Find("BottomGreen1").GetComponent<Image>();
+        bottomIcons[3, 1] = GameObject.Find("BottomGreen2").GetComponent<Image>();
+        bottomIcons[3, 2] = GameObject.Find("BottomGreen3").GetComponent<Image>();
+        bottomIcons[3, 3] = GameObject.Find("BottomGreen4").GetComponent<Image>();
+        bottomIcons[3, 4] = GameObject.Find("BottomGreen5").GetComponent<Image>();
+
+        bottomIcons[4, 0] = GameObject.Find("BottomBlue1").GetComponent<Image>();
+        bottomIcons[4, 1] = GameObject.Find("BottomBlue2").GetComponent<Image>();
+        bottomIcons[4, 2] = GameObject.Find("BottomBlue3").GetComponent<Image>();
+        bottomIcons[4, 3] = GameObject.Find("BottomBlue4").GetComponent<Image>();
+        bottomIcons[4, 4] = GameObject.Find("BottomBlue5").GetComponent<Image>();
+
+        bottomIcons[5, 0] = GameObject.Find("BottomBlack1").GetComponent<Image>();
+        bottomIcons[5, 1] = GameObject.Find("BottomBlack2").GetComponent<Image>();
+        bottomIcons[5, 2] = GameObject.Find("BottomBlack3").GetComponent<Image>();
+        bottomIcons[5, 3] = GameObject.Find("BottomBlack4").GetComponent<Image>();
+        bottomIcons[5, 4] = GameObject.Find("BottomBlack5").GetComponent<Image>();
+
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
         attackClicked = attackPanels[0].colors.pressedColor;
         arrowYellow = attackArrows[0].colors.normalColor;
+        greyedOut = new Color(50, 50, 50, 255);
 
         straightArrow = Resources.Load("StraightArrow",typeof(Sprite)) as Sprite;
         curvedArrow = Resources.Load("CurvedArrow",typeof(Sprite)) as Sprite;
@@ -558,6 +597,11 @@ public class UIControl : MonoBehaviour {
 
             selected.actions[selected.catapultIndex].setCatapult(i);
         }
+    }
+
+    public void setDead(int teamNo, int shipNo)
+    {
+        bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
     }
 }
 

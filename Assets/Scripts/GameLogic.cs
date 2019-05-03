@@ -253,6 +253,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
+            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }
