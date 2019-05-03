@@ -261,7 +261,7 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void resetShips() {
-        foreach (Ship ship in gameManager.getShips()) {
+        foreach (Ship ship in gameManager.getAllShips()) {
             if (ship == null)
                 continue;
             ship.reset();
