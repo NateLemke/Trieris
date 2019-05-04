@@ -129,7 +129,6 @@ public static class PhaseManager
     
     public static IEnumerator focus(Vector2 v, float margin, float speed) {
         Vector2[] bv = getBoardView();
-        //Vector2 boardViewCenter = 
         //margin = bv[1].y * margin;
         margin = 0;
         if(v.x < bv[0].x + margin || v.x > bv[0].x + bv[1].x - margin || v.y < bv[0].y + margin || v.y > bv[0].y + bv[1].y - margin) {
