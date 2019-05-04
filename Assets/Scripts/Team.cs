@@ -129,7 +129,7 @@ public class Team
             case Team.Type.orange:
             return new Color(1f,0.75f,0.4f);
             case Team.Type.red:
-            return new Color(1f,0.65f,0.65f);
+            return new Color(1f,0.6f,0.6f);
             case Team.Type.yellow:
             return Color.yellow;
             default:

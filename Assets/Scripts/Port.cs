@@ -40,7 +40,7 @@ public class Port {
         capital = isCaptial;
         node = GameManager.main.getBoard().getNodeAt(p);
         go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
-
+        go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
         go.transform.position = node.getRealPos();
         spriteRenderer = go.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = capital ? t.getcaptialSprite() : t.getPortSprite();

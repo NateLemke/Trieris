@@ -111,7 +111,7 @@ public class Ship : MonoBehaviour {
         populateDefaultActions();
 
         this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
-
+        transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColorLight();
         currentActionIndex = 0;
         setHealthBar();
         catapultIndex = -1;
