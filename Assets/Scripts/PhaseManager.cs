@@ -11,7 +11,7 @@ public static class PhaseManager
     public static List<SinkAnimation> sinkAnimations = new List<SinkAnimation>();
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
-
+    public static List<PortCaptureAnimation> captureAnimations = new List<PortCaptureAnimation>();
     
 
     public static bool movingCamera = false;
@@ -32,12 +32,15 @@ public static class PhaseManager
         yield return catapultChoices();
         yield return resolveCatapults();        
         yield return sinkShips();
-        yield return portCapture();
+        yield return resolvePortCapture();
+        yield return portCaptureChoice();
+
         yield return resolveRedirects();
         
         actionAnimations.Clear();
         rammingResolutions.Clear();
         involvedInRamming.Clear();
+        captureAnimations.Clear();
         playingAnimation = false;
         GameManager.main.gameLogic.postAnimation();
         
@@ -224,13 +227,27 @@ public static class PhaseManager
         }       
     }
 
-    public static IEnumerator portCapture() {
+    public static IEnumerator portCaptureChoice() {
+        
+
+
         if (!GameManager.main.needCaptureChoice) {
             yield break;
         }
         setSubphaseText("choose port capture");
         while (GameManager.main.needCaptureChoice) {
             yield return null;
+        }
+    }
+
+    public static IEnumerator resolvePortCapture() {
+        if (captureAnimations.Count == 0) {
+            yield break;
+        }
+        setSubphaseText("port capture");
+        foreach (PortCaptureAnimation ca in captureAnimations) {
+            
+            yield return ca.playAnimation(1f,0.6f);
         }
     }
 
@@ -278,6 +295,10 @@ public static class PhaseManager
 
     public static void addCatapultAnimation(Ship attacker, Ship target) {
         catapultResolutions.Add(new CatapultResolution(attacker,target,1));
+    }
+
+    public static void addCaptureAnimation(Ship s) {
+        captureAnimations.Add(new PortCaptureAnimation(s));
     }
 }
 

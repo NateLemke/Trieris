@@ -378,13 +378,14 @@ public class Ship : MonoBehaviour {
     }
 
     public void capturePort() {
-        node.getPort().setTeam(team);
+        
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
         if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
             GameManager.main.uiControl.updatePlayerScore();
         }
+        PhaseManager.addCaptureAnimation(this);
     }
 
     public void updateFrontAfterCollision() {
