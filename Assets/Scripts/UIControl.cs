@@ -602,6 +602,14 @@ public class UIControl : MonoBehaviour {
     public void setDead(int teamNo, int shipNo)
     {
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
+    public void updatePlayerScore() {
+        int score = 0;
+        foreach(Port p in GameManager.main.getBoard().getAllPorts()) {
+            if(p.Team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
+                score++;
+            }
+        }
+        GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = score + "/12\nports";
     }
 }
 

@@ -102,6 +102,7 @@ public class Ship : MonoBehaviour {
         this.life = MAX_HEALTH;
         
         this.node = node;
+        node.getShips().Add(this);
         gameObject.transform.position = node.getRealPos();
 
         actions = new Action[4];
@@ -110,7 +111,7 @@ public class Ship : MonoBehaviour {
         populateDefaultActions();
 
         this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
-
+        transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColorLight();
         currentActionIndex = 0;
         setHealthBar();
         catapultIndex = -1;
@@ -285,10 +286,7 @@ public class Ship : MonoBehaviour {
     public void catapult(Ship target) {
         if (target != null) {
             target.life -= 1;
-            GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
-            CatapultBullet bullet = Instantiate(go,Position,Quaternion.identity).GetComponent<CatapultBullet>();
-            bullet.target = target;
-            bullet.startPos = Position;
+            
         }
     }
 
@@ -296,14 +294,14 @@ public class Ship : MonoBehaviour {
         Debug.Log("resetting...");
         canAct = true;
         portRepairCount = 0;
-        momentum = 0;
+        //momentum = 0;
         movedForward = false;
         frontAfterCollision = -1;
         canActAfterCollision = true;
         fireDirection = -1;
-        for (int i = 0; i < 4; i++) {
-            actions[i] = null;
-        }
+        //for (int i = 0; i < 4; i++) {
+            //actions[i] = null;
+        //}
     }
 
     public void move(int direction) {                           //throws ShipCrashedException 
@@ -357,7 +355,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void repair() {
-        if (node.getPort() != null && life < MAX_HEALTH) {
+        if (node.getPort() != null && node.getPort().getTeam() == team && life < MAX_HEALTH) {
             if (node.getPort().getCapital() && node.getPort().getTeam() == team) {
                 life++;
             } else {
@@ -380,10 +378,14 @@ public class Ship : MonoBehaviour {
     }
 
     public void capturePort() {
-        node.getPort().setTeam(team);
+        
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
+        if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
+            GameManager.main.uiControl.updatePlayerScore();
+        }
+        PhaseManager.addCaptureAnimation(this);
     }
 
     public void updateFrontAfterCollision() {
@@ -433,6 +435,8 @@ public class Ship : MonoBehaviour {
 
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
+
+        Debug.Log(name + " rammed " + target.name);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
             broadsideRam(target);
@@ -449,7 +453,7 @@ public class Ship : MonoBehaviour {
         } else {
             glancingRam(target,0);
         }
-
+        Debug.Log("Ram Complete");
     }
 
     private void broadsideRam(Ship target) {

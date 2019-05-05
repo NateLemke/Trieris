@@ -57,7 +57,7 @@ public class GameLogic : MonoBehaviour {
         if (phaseIndex >= 3) {
             UIControl.main.devPhaseTrack(4);
             phaseIndex = 4;
-            // reset
+            resetShips();
             gameManager.checkVictory();
             turnIndex++;
             PhaseManager.updateText();
@@ -92,16 +92,26 @@ public class GameLogic : MonoBehaviour {
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
+                ship.doAction(phase);
+                if (ship.needRedirect && ship.team != gameManager.playerTeam)
+                {
+                    int newDirection = 0;
+                    newDirection = ship.getAI().setNewShipDirection(ship);
+                    ship.hold();
+                    ship.setFront(newDirection);
+                }
+
+                /*
                 try {
                     ship.doAction(phase);
                 } catch (ShipCrashedException e) {
-                    
                     if (ship.team != gameManager.playerTeam) {
                         int newDirection = 0;
                         newDirection = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(newDirection);
                     }                   
                 }
+                */
             } else {
                 //Debug.Log("ship " + ship + " cannot act");
             }
@@ -144,6 +154,7 @@ public class GameLogic : MonoBehaviour {
                         ship.capturePort();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
+                        //ship.canActAfterCollision = true;
                     }
                 }
             }
@@ -204,6 +215,7 @@ public class GameLogic : MonoBehaviour {
     private void updateShips() {
         foreach (Ship ship in gameManager.getAllShips()) {
             ship.updateFrontAfterCollision();
+            Debug.Log(ship.name + " " + ship.getCanAct());
         }
     }
 
@@ -261,6 +273,8 @@ public class GameLogic : MonoBehaviour {
 
     private void resetShips() {
         foreach (Ship ship in gameManager.getAllShips()) {
+            if (ship == null)
+                continue;
             ship.reset();
         }
     }
