@@ -100,6 +100,7 @@ public class GameLogic : MonoBehaviour {
                         int newDirection = 0;
                         newDirection = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(newDirection);
+                        ship.setSpriteRotation();
                     }                   
                 }
             } else {
@@ -144,6 +145,7 @@ public class GameLogic : MonoBehaviour {
                         ship.capturePort();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
+                        ship.setSpriteRotation();
                         //ship.canActAfterCollision = true;
                     }
                 }

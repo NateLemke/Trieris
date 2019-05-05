@@ -25,9 +25,11 @@ public static class PhaseManager
         playingAnimation = true;
 
         updateText();
+
         yield return playBasicActions();
+        yield return sinkShips();
         yield return rammingChoices();
-        yield return playRammingActions();        
+        yield return playRammingActions();
         yield return sinkShips();
         yield return catapultChoices();
         yield return resolveCatapults();        
@@ -185,14 +187,6 @@ public static class PhaseManager
 
         for (int i = 0; i < rammingResolutions.Count; i++) {
             yield return rammingResolutions[i].resolve();
-            //Ship target = rammingResolutions[i].target;
-            //Ship attacker = rammingResolutions[i].attacker;
-            //for (int j = 0; j < rammingResolutions.Count; j++) {
-            //    if (rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
-            //        rammingResolutions[j].resolve();
-            //        break;
-            //    }
-            //}
         }
 
         yield return null;
