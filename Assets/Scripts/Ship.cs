@@ -434,6 +434,8 @@ public class Ship : MonoBehaviour {
 
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
+
+        Debug.Log(name + " rammed " + target.name);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
             broadsideRam(target);
@@ -450,7 +452,7 @@ public class Ship : MonoBehaviour {
         } else {
             glancingRam(target,0);
         }
-
+        Debug.Log("Ram Complete");
     }
 
     private void broadsideRam(Ship target) {
