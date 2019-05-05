@@ -663,4 +663,9 @@ public class Ship : MonoBehaviour {
     public void setRedirectUI(bool b) {
         redirectUI.SetActive(b);
     }
+
+    public void selectThisShip()
+    {
+        GameObject.Find("GameManager").GetComponent<UIControl>().Selected = this;
+    }
 }

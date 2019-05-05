@@ -172,7 +172,7 @@ public class UIControl : MonoBehaviour {
     }
 
     private void setSelection(Ship value) {
-
+        Debug.Log("hello");
         if(value != null) {
             selected = value;
             shipID.text = "Ship " + (value.getID() + 1);
