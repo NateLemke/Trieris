@@ -26,6 +26,7 @@ public static class PhaseManager
 
         updateText();
         yield return playBasicActions();
+        yield return sinkShips();
         yield return rammingChoices();
         yield return playRammingActions();        
         yield return sinkShips();
