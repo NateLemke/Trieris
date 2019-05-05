@@ -92,10 +92,19 @@ public class GameLogic : MonoBehaviour {
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
+                ship.doAction(phase);
+                if (ship.needRedirect && ship.team != gameManager.playerTeam)
+                {
+                    int newDirection = 0;
+                    newDirection = ship.getAI().setNewShipDirection(ship);
+                    ship.hold();
+                    ship.setFront(newDirection);
+                }
+
+                /*
                 try {
                     ship.doAction(phase);
                 } catch (ShipCrashedException e) {
-                    
                     if (ship.team != gameManager.playerTeam) {
                         int newDirection = 0;
                         newDirection = ship.getAI().setNewShipDirection(ship);
@@ -103,6 +112,7 @@ public class GameLogic : MonoBehaviour {
                         ship.setSpriteRotation();
                     }                   
                 }
+                */
             } else {
                 //Debug.Log("ship " + ship + " cannot act");
             }
