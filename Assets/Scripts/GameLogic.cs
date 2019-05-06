@@ -152,6 +152,7 @@ public class GameLogic : MonoBehaviour {
                     if (ship.getAI().decidePortCapture())
                     {
                         ship.capturePort();
+                        gameManager.uiControl.updatePortsUI();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
                         //ship.canActAfterCollision = true;
@@ -265,6 +266,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
+            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }
