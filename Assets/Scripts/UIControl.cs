@@ -12,7 +12,6 @@ public class UIControl : MonoBehaviour
 
     Text animationText;
     Text redirectText;
-    Text shipID;
 
     GameObject debugMenu;
     GameObject DevUI;
@@ -33,6 +32,7 @@ public class UIControl : MonoBehaviour
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
     Image[,] bottomIcons = new Image[6, 5];
+    Text[] portTexts = new Text[6];
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -71,7 +71,6 @@ public class UIControl : MonoBehaviour
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -145,6 +144,13 @@ public class UIControl : MonoBehaviour
         bottomIcons[5, 2] = GameObject.Find("BottomBlack3").GetComponent<Image>();
         bottomIcons[5, 3] = GameObject.Find("BottomBlack4").GetComponent<Image>();
         bottomIcons[5, 4] = GameObject.Find("BottomBlack5").GetComponent<Image>();
+
+        portTexts[0] = GameObject.Find("BottomPortsRed").GetComponent<Text>();
+        portTexts[1] = GameObject.Find("BottomPortsOrange").GetComponent<Text>();
+        portTexts[2] = GameObject.Find("BottomPortsYellow").GetComponent<Text>();
+        portTexts[3] = GameObject.Find("BottomPortsGreen").GetComponent<Text>();
+        portTexts[4] = GameObject.Find("BottomPortsBlue").GetComponent<Text>();
+        portTexts[5] = GameObject.Find("BottomPortsBlack").GetComponent<Text>();
 
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
@@ -230,7 +236,6 @@ public class UIControl : MonoBehaviour
         if (value != null)
         {
             selected = value;
-            shipID.text = "Ship " + (value.getID() + 1);
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
@@ -321,7 +326,6 @@ public class UIControl : MonoBehaviour
         {
             selected = gameManager.getPlayerShips()[value];
             //compass.SetActive(true);
-            shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
             for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
             {
                 //Debug.Log(i); 
@@ -637,17 +641,21 @@ public class UIControl : MonoBehaviour
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
     }
 
-    public void updatePlayerScore()
+    public void updatePortsUI()
     {
-        int score = 0;
+        int[] scores = new int[6];
+
         foreach (Port p in GameManager.main.getBoard().getAllPorts())
         {
-            if (p.Team.getTeamType() == GameManager.main.playerTeam.getTeamType())
-            {
-                score++;
-            }
+            scores[(int)p.Team.getTeamType()]++;
         }
-        GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = score + "/12\nports";
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (i == 3)
+                GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = scores[i] + "/12\nports";
+            portTexts[i].text = scores[i] + " / 12";
+        }
     }
 }
 

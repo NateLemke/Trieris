@@ -383,7 +383,7 @@ public class Ship : MonoBehaviour {
         canAct = false;
         movedForward = false;
         if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
-            GameManager.main.uiControl.updatePlayerScore();
+            //GameManager.main.uiControl.updatePlayerScore();
         }
         PhaseManager.addCaptureAnimation(this);
     }

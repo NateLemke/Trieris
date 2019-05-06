@@ -152,6 +152,7 @@ public class GameLogic : MonoBehaviour {
                     if (ship.getAI().decidePortCapture())
                     {
                         ship.capturePort();
+                        gameManager.uiControl.updatePortsUI();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
                         //ship.canActAfterCollision = true;
