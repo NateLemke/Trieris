@@ -230,11 +230,8 @@ public class UIControl : MonoBehaviour
 
     }
 
-    private void setSelection(Ship value)
-    {
-
-        if (value != null)
-        {
+    private void setSelection(Ship value) {
+        if(value != null) {
             selected = value;
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)

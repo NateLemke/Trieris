@@ -18,10 +18,21 @@ public class Node{
     private Port port;
     private List<Ship> ships = new List<Ship>();
     private bool island;
+    private GameObject thisNode;
     
 
     public Node() {
         setColor(Color.black);
+    }
+
+    public void setGameObject(GameObject input)
+    {
+        thisNode = input;
+    }
+
+    public GameObject getGameObject()
+    {
+        return thisNode;
     }
 
     public Node(int x,int y) {
@@ -102,5 +113,15 @@ public class Node{
 
     public int getNumberOfShips() {
         return ships.Count;
+    }
+
+    public void activateNotification()
+    {
+        thisNode.transform.Find("TargetNeededNotification").gameObject.SetActive(true);
+    }
+
+    public void expand()
+    {
+
     }
 }
