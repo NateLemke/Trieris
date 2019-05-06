@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIControl : MonoBehaviour {
+public class UIControl : MonoBehaviour
+{
 
     GameManager gameManager;
     GameLogic gameLogic;
@@ -31,7 +32,7 @@ public class UIControl : MonoBehaviour {
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
-    Image[,] bottomIcons = new Image[6,5];
+    Image[,] bottomIcons = new Image[6, 5];
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -53,7 +54,8 @@ public class UIControl : MonoBehaviour {
     public Ship Selected { get { return selected; } set { setSelection(value); } }
     private Ship selected;
 
-    private void Awake() {
+    private void Awake()
+    {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
         optionsPanel = GameObject.Find("OverlayCanvas");
@@ -61,7 +63,8 @@ public class UIControl : MonoBehaviour {
         DebugControl.init();
     }
 
-    void Start() {
+    void Start()
+    {
         main = this;
         captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
         phaseTracker = GameObject.Find("PhaseTracker");
@@ -150,9 +153,9 @@ public class UIControl : MonoBehaviour {
         arrowYellow = attackArrows[0].colors.normalColor;
         greyedOut = new Color(50, 50, 50, 255);
 
-        straightArrow = Resources.Load("StraightArrow",typeof(Sprite)) as Sprite;
-        curvedArrow = Resources.Load("CurvedArrow",typeof(Sprite)) as Sprite;
-        holdSprite = Resources.Load("StopSymbol",typeof(Sprite)) as Sprite;
+        straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
+        curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
+        holdSprite = Resources.Load("StopSymbol", typeof(Sprite)) as Sprite;
 
         victoryTracker = GameObject.Find("VictoryCounter").GetComponentInChildren<Text>();
         turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
@@ -169,31 +172,41 @@ public class UIControl : MonoBehaviour {
         subPhase.SetActive(false);
     }
 
-    void Update() {
+    void Update()
+    {
 
-        if (gameManager.animationPlaying) {
+        if (gameManager.animationPlaying)
+        {
             animationText.text = "animation playing";
             animationText.color = Color.red;
-        } else {
+        }
+        else
+        {
             animationText.text = "no animation";
             animationText.color = Color.green;
         }
 
-        if (gameManager.needRedirect) {
+        if (gameManager.needRedirect)
+        {
             redirectText.text = "need redirect";
             redirectText.color = Color.red;
             redirectNotice.SetActive(true);
-        } else {
+        }
+        else
+        {
             redirectText.text = "no redirect";
             redirectText.color = Color.green;
             redirectNotice.SetActive(false);
         }
 
-        if (gameManager.needCaptureChoice) {
+        if (gameManager.needCaptureChoice)
+        {
             captureTracker.text = "need capture";
             captureTracker.color = Color.red;
             captureNotice.SetActive(true);
-        } else {
+        }
+        else
+        {
             captureTracker.text = "no capture";
             captureTracker.color = Color.green;
             captureNotice.SetActive(false);
@@ -201,7 +214,8 @@ public class UIControl : MonoBehaviour {
         string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
         turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
 
-        if (Input.GetKeyDown("escape")) {
+        if (Input.GetKeyDown("escape"))
+        {
             if (!optionsPanel.active)
                 optionsPanel.SetActive(true);
             else
@@ -210,9 +224,11 @@ public class UIControl : MonoBehaviour {
 
     }
 
-    private void setSelection(Ship value) {
+    private void setSelection(Ship value)
+    {
 
-        if(value != null) {
+        if (value != null)
+        {
             selected = value;
             shipID.text = "Ship " + (value.getID() + 1);
             selected.currentActionIndex = 0;
@@ -286,7 +302,7 @@ public class UIControl : MonoBehaviour {
             currentPanelColor.a = 255;
             currentPanel.effectColor = color;
         }
-        
+
     }
 
     public void setSelection(int value)
@@ -331,7 +347,7 @@ public class UIControl : MonoBehaviour {
             }
             selected.currentActionIndex = 0;
 
-            foreach(Button b in attackPanels)
+            foreach (Button b in attackPanels)
             {
                 ColorBlock cb = b.colors;
                 cb.normalColor = attackUnclicked;
@@ -345,7 +361,7 @@ public class UIControl : MonoBehaviour {
                 b.colors = cb;
             }
 
-            if(selected.catapultIndex >= 0)
+            if (selected.catapultIndex >= 0)
             {
                 ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
                 colBlock.normalColor = attackClicked;
@@ -359,7 +375,7 @@ public class UIControl : MonoBehaviour {
                 }
             }
 
-            foreach(GameObject go in shipTabs)
+            foreach (GameObject go in shipTabs)
             {
                 Outline o = go.GetComponent<Outline>();
                 Color c = o.effectColor;
@@ -388,28 +404,35 @@ public class UIControl : MonoBehaviour {
 
     }
 
-    public void redirect(int newDirection) {
+    public void redirect(int newDirection)
+    {
         selected.redirect(newDirection);
     }
 
-    public void testMove() {
+    public void testMove()
+    {
 
         GameLogic gl = GameManager.main.gameLogic;
-        if (GameManager.main.gameLogic.phaseIndex == 4) {
-            if(PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0) {
+        if (GameManager.main.gameLogic.phaseIndex == 4)
+        {
+            if (PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0)
+            {
                 Debug.LogError("Animation manager not finished yet");
             }
             gameLogic.newExecuteTurn();
-        } else {
+        }
+        else
+        {
             Debug.Log("Phase not == 4");
         }
     }
 
-    public void setAction(int i) {
-        selected.setAction(selected.currentActionIndex,i,-1);
+    public void setAction(int i)
+    {
+        selected.setAction(selected.currentActionIndex, i, -1);
         setActionImages(i);
-        
-        if(selected.currentActionIndex < (selected.life - 1))
+
+        if (selected.currentActionIndex < (selected.life - 1))
         {
             Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
             Color color = selectedOutline.effectColor;
@@ -422,29 +445,35 @@ public class UIControl : MonoBehaviour {
             color.a = 255;
             selectedOutline.effectColor = color;
         }
-            
+
     }
 
-    public void setSelected(Ship ship) {
-        if (ship == null) {
+    public void setSelected(Ship ship)
+    {
+        if (ship == null)
+        {
             selection.SetActive(false);
-        } else {
+        }
+        else
+        {
             selection.transform.position = ship.transform.position;
             selection.SetActive(true);
         }
     }
 
-    public void toggleDebugMenu() {
+    public void toggleDebugMenu()
+    {
         debugMenu.SetActive(!debugMenu.activeSelf);
     }
 
     public void setTeam(int i)
     {
-        TeamSelectUI.SetActive(false);        
-        gameManager.setPlayerTeam(i);       
+        TeamSelectUI.SetActive(false);
+        gameManager.setPlayerTeam(i);
     }
 
-    public void toggleDevUI() {
+    public void toggleDevUI()
+    {
         DevUI.SetActive(!DevUI.activeSelf);
         LogToggle.SetActive(!LogToggle.activeSelf);
     }
@@ -461,7 +490,7 @@ public class UIControl : MonoBehaviour {
         selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
         color.a = 255;
         selectedOutline.effectColor = color;
-   
+
     }
 
     public void setActionImages(int i)
@@ -517,29 +546,33 @@ public class UIControl : MonoBehaviour {
         }
     }
 
-    public void devPhaseTrack(int i) {
-        if(phaseTracker.activeSelf) {
+    public void devPhaseTrack(int i)
+    {
+        if (phaseTracker.activeSelf)
+        {
             phaseTracker.GetComponentInChildren<Text>().text = "Phase " + (i + 1);
-            Image phaseImg = phaseTracker.GetComponent<Image>(); 
-            switch (i) {
+            Image phaseImg = phaseTracker.GetComponent<Image>();
+            switch (i)
+            {
                 case 0:
-                phaseImg.color = Color.blue; break;
+                    phaseImg.color = Color.blue; break;
                 case 1:
-                phaseImg.color = Color.green; break;
+                    phaseImg.color = Color.green; break;
                 case 2:
-                phaseImg.color = Color.yellow; break;
+                    phaseImg.color = Color.yellow; break;
                 case 3:
-                phaseImg.color = Color.red; break;
+                    phaseImg.color = Color.red; break;
                 case 4:
-                phaseImg.color = Color.black;
-                phaseTracker.GetComponentInChildren<Text>().text = "planning phase";break;
+                    phaseImg.color = Color.black;
+                    phaseTracker.GetComponentInChildren<Text>().text = "planning phase"; break;
             }
         }
     }
 
-    public static void postNotice(string s, float time) {
+    public static void postNotice(string s, float time)
+    {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TempText");
-        GameObject go = Instantiate(prefab,GameObject.Find("NoticeHolder").transform);
+        GameObject go = Instantiate(prefab, GameObject.Find("NoticeHolder").transform);
         go.GetComponent<TempText>().lifetime = time;
         go.GetComponent<Text>().text = s;
         //Debug.Break();
@@ -559,7 +592,7 @@ public class UIControl : MonoBehaviour {
 
     public void setCatapultIndex(int i)
     {
-        foreach(Button b in attackPanels)
+        foreach (Button b in attackPanels)
         {
             ColorBlock cb = b.colors;
             cb.normalColor = attackUnclicked;
@@ -584,8 +617,8 @@ public class UIControl : MonoBehaviour {
 
         if (selected.catapultIndex >= 0 && selected != null)
         {
-            
-            
+
+
             ColorBlock colBlock = attackArrows[i].colors;
             colBlock.normalColor = attackClicked;
             attackArrows[i].colors = colBlock;
@@ -602,6 +635,19 @@ public class UIControl : MonoBehaviour {
     public void setDead(int teamNo, int shipNo)
     {
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
+    }
+
+    public void updatePlayerScore()
+    {
+        int score = 0;
+        foreach (Port p in GameManager.main.getBoard().getAllPorts())
+        {
+            if (p.Team.getTeamType() == GameManager.main.playerTeam.getTeamType())
+            {
+                score++;
+            }
+        }
+        GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = score + "/12\nports";
     }
 }
 

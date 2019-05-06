@@ -71,6 +71,7 @@ public class Team
             //Debug.Log("Making new port!");
             Port p = new Port(new Vector2Int(x,y),this,isCapital);
             GameManager.main.getBoard().getNodeAt(x,y).setPort(p);
+            GameManager.main.getBoard().ports.Add(p);
         }
 
         //StreamReader reader = new StreamReader("Assets/Resources/WorldData/"+ teamType.ToString() + "Ports.txt");
@@ -128,7 +129,7 @@ public class Team
             case Team.Type.orange:
             return new Color(1f,0.75f,0.4f);
             case Team.Type.red:
-            return new Color(1f,0.65f,0.65f);
+            return new Color(1f,0.6f,0.6f);
             case Team.Type.yellow:
             return Color.yellow;
             default:

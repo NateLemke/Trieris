@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour {
 
     private Board board;
     public GameLogic gameLogic;
-    public UIControl uiControl;
    // private List<Ship> ships = new List<Ship>();
+    public UIControl uiControl;
     private List<TrierisAI> aiList;
     private bool gameOver = false;
 
@@ -116,15 +116,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public List<TrierisAI> getAllAi() {
-        List<TrierisAI> r = new List<TrierisAI>();
-        foreach(Team t in teams) {
-            if(t != playerTeam) {
-                foreach (Ship s in t.ships) {
-                    r.Add(s.getAI());
-                }
-            }
-        }
-        return r;
+        return aiList;
     }
 
     public Board getBoard() {
@@ -181,7 +173,7 @@ public class GameManager : MonoBehaviour {
             parent = Instantiate(new GameObject());
             parent.name = "Ships";
         }
-        GameObject shipPrefab = Resources.Load("Ship2") as GameObject;
+        GameObject shipPrefab = Resources.Load("Prefabs/Ship2") as GameObject;
         GameObject spawn = Instantiate(shipPrefab,node.getPosition(),Quaternion.identity);
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
@@ -253,8 +245,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-
-
     public void setPlayerTeam(int i) {
         playerTeam = teams[i];        
         foreach (Ship ship in playerTeam.ships) {
@@ -264,15 +254,16 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+        uiControl.updatePlayerScore();
     }
 
     void setAIDirections() {
-        foreach (Team t in teams) {
-            if (t == playerTeam) {
-                continue;
-                Debug.LogError("player team is not ai!");
+        foreach (TrierisAI ai in getAllAi()) {
+            if (ai.GetTeam() == playerTeam) {
+                //Debug.LogError("player team is not ai!");
+                continue;                
             }
-            foreach (Ship ship in t.ships) {
+            foreach (Ship ship in ai.GetTeam().ships) {
 
                 int direction = ship.getAI().setNewShipDirection(ship);
                 ship.setFront(direction);

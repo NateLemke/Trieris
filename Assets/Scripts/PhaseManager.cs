@@ -11,7 +11,7 @@ public static class PhaseManager
     public static List<SinkAnimation> sinkAnimations = new List<SinkAnimation>();
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
-
+    public static List<PortCaptureAnimation> captureAnimations = new List<PortCaptureAnimation>();
     
 
     public static bool movingCamera = false;
@@ -26,58 +26,29 @@ public static class PhaseManager
 
         updateText();
         yield return playBasicActions();
-        yield return playRammingActions();
+        yield return sinkShips();
         yield return rammingChoices();
+        yield return playRammingActions();        
         yield return sinkShips();
-        yield return resolveCatapults();
         yield return catapultChoices();
+        yield return resolveCatapults();        
         yield return sinkShips();
-        yield return portCapture();
+        yield return resolvePortCapture();
+        yield return portCaptureChoice();
+
         yield return resolveRedirects();
         
         actionAnimations.Clear();
         rammingResolutions.Clear();
         involvedInRamming.Clear();
+        captureAnimations.Clear();
         playingAnimation = false;
         GameManager.main.gameLogic.postAnimation();
         
     }
-
-    static IEnumerator playRammingActions() {
-        rammingResolutions.Sort(new RammingSorter());
-        setSubphaseText("resolving ramming");
-
-        for (int i = 0; i < rammingResolutions.Count;i++) {
-            yield return rammingResolutions[i].resolve();
-            Ship target = rammingResolutions[i].target;
-            Ship attacker = rammingResolutions[i].attacker;
-            for (int j = 0; j < rammingResolutions.Count; j++) {
-                if(rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
-                    rammingResolutions[j].resolve();
-                    break;
-                }
-            }
-        }
-
-        yield return null;
-    }
-
-    static IEnumerator playBasicActions() {
-        setSubphaseText("resolving actions");
-        List<Animation> anims = actionAnimations.Values.ToList();
         
-        foreach(Animation a in anims) {
-            if (involvedInRamming.Contains(a.ship)) {
-                continue;
-            }
-            yield return a.playAnimation(0.3f,0.5f);
-        }
-
-        yield return null;
-    }
-
     public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
-        rammingResolutions.Add(new CombatResolution(attacker,target,damageToTarget,damageToAttacker));
+        rammingResolutions.Add(new RammingResolution(attacker,target,damageToTarget,damageToAttacker));
     }
 
     public static void addCatapult() {
@@ -180,6 +151,21 @@ public static class PhaseManager
         }
         movingCamera = false;
     }
+    
+    static IEnumerator playBasicActions() {
+        setSubphaseText("resolving actions");
+        List<Animation> anims = actionAnimations.Values.ToList();
+
+        foreach (Animation a in anims) {
+            if (involvedInRamming.Contains(a.ship)) {
+                continue;
+            }
+
+            yield return a.playAnimation(0.3f,0.5f);
+        }
+
+        yield return null;
+    }
 
     public static IEnumerator rammingChoices() {
         if (!GameManager.main.needRammingChoice) {
@@ -191,13 +177,26 @@ public static class PhaseManager
         }
     }
 
-    public static IEnumerator resolveCatapults() {
-        if(catapultResolutions.Count > 0) {
-            setSubphaseText("resolving catapults");
-            foreach(CombatResolution cr in catapultResolutions) {
-                yield return cr.resolve();
-            }
-        }        
+    static IEnumerator playRammingActions() {
+        if(rammingResolutions.Count == 0) {
+            yield break;
+        }
+        rammingResolutions.Sort(new RammingSorter());
+        setSubphaseText("resolving ramming");
+
+        for (int i = 0; i < rammingResolutions.Count; i++) {
+            yield return rammingResolutions[i].resolve();
+            //Ship target = rammingResolutions[i].target;
+            //Ship attacker = rammingResolutions[i].attacker;
+            //for (int j = 0; j < rammingResolutions.Count; j++) {
+            //    if (rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
+            //        rammingResolutions[j].resolve();
+            //        break;
+            //    }
+            //}
+        }
+
+        yield return null;
     }
 
     public static IEnumerator catapultChoices() {
@@ -210,6 +209,15 @@ public static class PhaseManager
         }
     }
 
+    public static IEnumerator resolveCatapults() {
+        if(catapultResolutions.Count > 0) {
+            setSubphaseText("resolving catapults");
+            foreach(CombatResolution cr in catapultResolutions) {
+                yield return cr.resolve();
+            }
+        }        
+    }    
+
     public static IEnumerator sinkShips() {
         if(sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
@@ -220,13 +228,27 @@ public static class PhaseManager
         }       
     }
 
-    public static IEnumerator portCapture() {
+    public static IEnumerator portCaptureChoice() {
+        
+
+
         if (!GameManager.main.needCaptureChoice) {
             yield break;
         }
         setSubphaseText("choose port capture");
         while (GameManager.main.needCaptureChoice) {
             yield return null;
+        }
+    }
+
+    public static IEnumerator resolvePortCapture() {
+        if (captureAnimations.Count == 0) {
+            yield break;
+        }
+        setSubphaseText("port capture");
+        foreach (PortCaptureAnimation ca in captureAnimations) {
+            
+            yield return ca.playAnimation(1f,0.6f);
         }
     }
 
@@ -272,6 +294,13 @@ public static class PhaseManager
         }
     }
 
+    public static void addCatapultAnimation(Ship attacker, Ship target) {
+        catapultResolutions.Add(new CatapultResolution(attacker,target,1));
+    }
+
+    public static void addCaptureAnimation(Ship s) {
+        captureAnimations.Add(new PortCaptureAnimation(s));
+    }
 }
 
 class RammingSorter : IComparer<CombatResolution> {
