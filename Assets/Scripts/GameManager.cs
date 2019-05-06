@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour {
 
     private Board board;
     public GameLogic gameLogic;
-    public UIControl uiControl;
    // private List<Ship> ships = new List<Ship>();
     public UIControl uiControl;
     private List<TrierisAI> aiList;
