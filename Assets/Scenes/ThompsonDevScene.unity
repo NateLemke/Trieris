@@ -4312,7 +4312,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 0.82
-  m_Text: "0/12 \nports"
+  m_Text: "5/12 \nports"
 --- !u!222 &627500964
 CanvasRenderer:
   m_ObjectHideFlags: 0
