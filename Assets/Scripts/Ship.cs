@@ -278,7 +278,7 @@ public class Ship : MonoBehaviour {
         if (target != null) {
 
             ramDamageAndAngle(target);
-
+            canAct = canActAfterCollision;
             momentum = 0;
         }
     }
@@ -355,13 +355,15 @@ public class Ship : MonoBehaviour {
     }
 
     public void repair() {
-        if (node.getPort() != null && node.getPort().getTeam() == team && life < MAX_HEALTH) {
+        if (node.getPort() != null && node.getPort().getTeam() == team) {
             if (node.getPort().getCapital() && node.getPort().getTeam() == team) {
-                life++;
+                if (life < MAX_HEALTH)
+                    life++;
             } else {
                 portRepairCount++;
                 if (portRepairCount == life) {
-                    life++;
+                    if (life < MAX_HEALTH)
+                        life++;
                     portRepairCount = 0;
                 }
             }
@@ -435,8 +437,8 @@ public class Ship : MonoBehaviour {
 
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
-
         Debug.Log(name + " rammed " + target.name);
+        disableCatapults(target);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
             broadsideRam(target);
@@ -453,7 +455,14 @@ public class Ship : MonoBehaviour {
         } else {
             glancingRam(target,0);
         }
-        Debug.Log("Ram Complete");
+    }
+
+    private void disableCatapults(Ship target)
+    {
+        foreach(Action action in actions)
+            action.setCatapult(-1);
+        foreach (Action action in target.actions)
+            action.setCatapult(-1);
     }
 
     private void broadsideRam(Ship target) {
@@ -469,7 +478,7 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        if (!target.movedForward) {
+        if (target.movedForward) {
             this.life--;
         }
         addRammingAnimation(target,momentum);

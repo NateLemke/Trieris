@@ -189,7 +189,7 @@ public class GameLogic : MonoBehaviour {
                         if (ship.team == gameManager.playerTeam) {
 
                             ship.needRammingChoice = true;
-
+                            ship.getNode().activateNotification();
                             chosenShip = potentialCollisions[0];
 
                         } else {
