@@ -310,6 +310,7 @@ public class Ship : MonoBehaviour {
         Node destNode = node.getAdjacentNode(direction);
         if (destNode == null) {
             life--;
+            canAct = false;
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
@@ -478,7 +479,7 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        if (target.movedForward) {
+        if (!target.movedForward) {
             this.life--;
         }
         addRammingAnimation(target,momentum);
@@ -627,6 +628,13 @@ public class Ship : MonoBehaviour {
 
         if (needRedirect) {
             Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+
+            //Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
+        }
+
+        if (canAct)
+        {
+            Handles.Label(transform.position + new Vector3(0, -0.5f), "Can Act");
 
             //Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
         }

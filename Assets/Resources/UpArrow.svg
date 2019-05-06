@@ -16,7 +16,7 @@
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
    sodipodi:docname="UpArrow.svg"
-   inkscape:export-filename="C:\Users\Adam\Pictures\UpArrow.png"
+   inkscape:export-filename="C:\Users\aking\Documents\UnityProjects\COMP-4900-Trieris\Assets\Resources\UpArrow.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -30,16 +30,16 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
      inkscape:cx="145.01319"
-     inkscape:cy="687.11276"
+     inkscape:cy="882.19847"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:snap-object-midpoints="true"
      inkscape:snap-global="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1137"
-     inkscape:window-x="1672"
-     inkscape:window-y="-8"
+     inkscape:window-height="986"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -62,5 +62,11 @@
        d="M 134.28516 8.5371094 L 70.082031 119.73828 L 5.8808594 230.93945 L 64.285156 230.93945 L 64.285156 402.80469 L 204.28516 402.80469 L 204.28516 230.93945 L 262.68945 230.93945 L 198.48633 119.73828 L 134.28516 8.5371094 z M 134.28711 32.794922 L 187.77344 125.43945 L 241.26172 218.08203 L 191.42969 218.08203 L 191.42969 390.51953 L 77.142578 390.51953 L 77.142578 218.08203 L 27.310547 218.08203 L 80.798828 125.43945 L 134.28711 32.794922 z "
        transform="scale(0.26458333)"
        id="path3715" />
+    <path
+       style="fill:#ffffff;stroke-width:1.42857146"
+       d="m 78.441761,304.15417 v -86.3956 l -24.837504,-0.39012 -24.837505,-0.3901 51.856278,-89.80448 c 28.52095,-49.392471 52.39426,-90.329492 53.05179,-90.971161 0.65753,-0.641669 24.80049,39.77035 53.65103,89.804491 l 52.45551,90.97115 -24.24123,0.39088 -24.24123,0.39088 v 86.39483 86.39484 H 134.87033 78.441761 Z"
+       id="path22"
+       inkscape:connector-curvature="0"
+       transform="scale(0.26458333)" />
   </g>
 </svg>
