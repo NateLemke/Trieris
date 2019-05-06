@@ -35,6 +35,7 @@ public class PortCaptureAnimation : Animation {
         ship.getNode().getPort().setTeam(ship.team);
         yield return new WaitForSeconds(delay);
         GameObject.Destroy(animObj);
+        GameManager.main.uiControl.updatePortsUI();
         yield return new WaitForSeconds(delay/2);
     }
 }
