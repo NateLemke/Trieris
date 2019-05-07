@@ -697,6 +697,8 @@ public class Ship : MonoBehaviour {
     public void disableIcon() {
         icon.gameObject.SetActive(false);
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
+    }
+
     public void selectThisShip()
     {
         GameObject.Find("GameManager").GetComponent<UIControl>().Selected = this;
