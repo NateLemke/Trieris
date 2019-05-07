@@ -20,28 +20,51 @@ public static class PhaseManager
 
     public static float nodeMultiShipScale = 0.3f;
 
+    delegate IEnumerator subPhase();
+
+    static subPhase[] subPhaseOrder = {
+        playBasicActions ,
+        sinkShips,
+        rammingChoices,
+        playRammingActions,
+        sinkShips,
+        catapultChoices,
+        resolveCatapults,
+        sinkShips,
+        resolvePortCapture,
+        portCaptureChoice,
+        resolveRedirects,
+    };
+
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
 
         updateText();
-        yield return playBasicActions();
-        yield return sinkShips();
-        yield return rammingChoices();
-        yield return playRammingActions();        
-        yield return sinkShips();
-        yield return catapultChoices();
-        yield return resolveCatapults();        
-        yield return sinkShips();
-        yield return resolvePortCapture();
-        yield return portCaptureChoice();
 
-        yield return resolveRedirects();
+        foreach(subPhase s in subPhaseOrder) {
+            yield return s();
+            nextSubPhase();
+        }
+
+        //yield return playBasicActions();
+        //yield return sinkShips();
+        //yield return rammingChoices();
+        //yield return playRammingActions();
+        //yield return sinkShips();
+        //yield return catapultChoices();
+        //yield return resolveCatapults();        
+        //yield return sinkShips();
+        //yield return resolvePortCapture();
+        //yield return portCaptureChoice();
+        //yield return resolveRedirects();
         
         actionAnimations.Clear();
         rammingResolutions.Clear();
         involvedInRamming.Clear();
         captureAnimations.Clear();
+        catapultResolutions.Clear();
+
         playingAnimation = false;
         GameManager.main.gameLogic.postAnimation();
         
@@ -125,10 +148,10 @@ public static class PhaseManager
         return r;
     }
 
-    public static void focusCamera() {
-        Vector2[] bv = getBoardView();
-        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
-    }
+    //public static void focusCamera() {
+    //    Vector2[] bv = getBoardView();
+    //    Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+    //}
 
     
     public static IEnumerator focus(Vector2 v, float margin, float speed) {
@@ -161,7 +184,7 @@ public static class PhaseManager
                 continue;
             }
 
-            yield return a.playAnimation(0.3f,0.5f);
+            yield return a.playAnimation(SpeedManager.ActionDelay,SpeedManager.ActionSpeed);
         }
 
         yield return null;
@@ -186,14 +209,6 @@ public static class PhaseManager
 
         for (int i = 0; i < rammingResolutions.Count; i++) {
             yield return rammingResolutions[i].resolve();
-            //Ship target = rammingResolutions[i].target;
-            //Ship attacker = rammingResolutions[i].attacker;
-            //for (int j = 0; j < rammingResolutions.Count; j++) {
-            //    if (rammingResolutions[j].target == attacker && rammingResolutions[j].attacker == target) {
-            //        rammingResolutions[j].resolve();
-            //        break;
-            //    }
-            //}
         }
 
         yield return null;
@@ -219,19 +234,27 @@ public static class PhaseManager
     }    
 
     public static IEnumerator sinkShips() {
-        if(sinkAnimations.Count > 0) {
+        tempPopulateSinkAnimation();
+
+        if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
             foreach (SinkAnimation a in sinkAnimations) {
                 yield return a.playAnimation(0.1f,0.1f);
             }
             sinkAnimations.Clear();
-        }       
+        }
+
+    }
+
+    public static void tempPopulateSinkAnimation() {
+        foreach(Ship s in GameManager.main.getAllShips()) {
+            if(s.life == 0) {
+                sinkAnimations.Add(new SinkAnimation(s));
+            }
+        }
     }
 
     public static IEnumerator portCaptureChoice() {
-        
-
-
         if (!GameManager.main.needCaptureChoice) {
             yield break;
         }
@@ -248,7 +271,7 @@ public static class PhaseManager
         setSubphaseText("port capture");
         foreach (PortCaptureAnimation ca in captureAnimations) {
             
-            yield return ca.playAnimation(1f,0.6f);
+            yield return ca.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed);
         }
     }
 
@@ -277,9 +300,7 @@ public static class PhaseManager
         } else {
             phaseObj.SetActive(true);
             phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase+1);
-        }
-
-        
+        }        
     }
 
     static void clearAnimationLists() {
@@ -300,6 +321,10 @@ public static class PhaseManager
 
     public static void addCaptureAnimation(Ship s) {
         captureAnimations.Add(new PortCaptureAnimation(s));
+    }
+
+    public static void nextSubPhase() {
+        SpeedManager.endSubPhaseSkip();
     }
 }
 

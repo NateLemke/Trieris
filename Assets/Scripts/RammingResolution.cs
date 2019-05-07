@@ -14,9 +14,9 @@ public class RammingResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
-        //if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
-        //    ;
-        //}
+        attacker.setIcon(Sprites.main.AttackIcon);
+        target.setIcon(Sprites.main.AttackIcon);
+
         Animation A = null;
         try {
             A = PhaseManager.actionAnimations[attacker];
@@ -30,20 +30,21 @@ public class RammingResolution : CombatResolution
         }
 
         if(B != null && B.GetType() == typeof(RotationAnimation)) {
-            yield return B.playAnimation(0.3f,2f);
+            yield return B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed);
         }
 
         try {
             if (A != null) {
                 //StartCoroutine(A.playAnimation());
-                GameManager.main.StartCoroutine(A.playAnimation(0.3f,2f));
-            }
-            if (B != null) {
-                //StartCoroutine(B.playAnimation());
-                GameManager.main.StartCoroutine(B.playAnimation(0.3f,2f));
-            }
+                GameManager.main.StartCoroutine(A.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
+            }            
         } catch (Exception e) {
             Debug.LogError("Rammed without moving?");
+        }
+
+        if (B != null) {
+            //StartCoroutine(B.playAnimation());
+            GameManager.main.StartCoroutine(B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
         }
 
         if (A == null) {
@@ -55,10 +56,7 @@ public class RammingResolution : CombatResolution
                 yield return null;
             }
         } else {
-            while (!A.complete && !B.complete) {
-                if (GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
-                    ;
-                }
+            while (!A.complete || !B.complete) {
                 yield return null;
             }
         }
@@ -72,6 +70,10 @@ public class RammingResolution : CombatResolution
         target.setSpriteRotation();
         attacker.setSpriteRotation();
 
+        target.disableIcon();
+        attacker.disableIcon();
+
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         resolved = true;
         yield return null;

@@ -91,6 +91,7 @@ public class Port {
     public void setTeam(Team t) {
         team = t;
         setSprite(team);
+        go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
     }
 
     public void setColor(Color color) {

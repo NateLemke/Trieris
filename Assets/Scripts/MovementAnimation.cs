@@ -20,12 +20,8 @@ public class MovementAnimation : Animation {
     public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
         if (complete) {
             yield break;
-        }
-        
-        if (Input.GetKey(KeyCode.Space) || InputControl.fastAnimation) {
-            speed = 0.03f;
-            delay = 0.03f;
-        }
+        }        
+
         Vector3 arrowPos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
         yield return PhaseManager.focus(arrowPos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");

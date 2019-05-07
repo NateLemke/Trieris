@@ -17,10 +17,7 @@ public class RotationAnimation : Animation {
         if (complete) {
             yield break;
         }
-        if (Input.GetKey(KeyCode.Space) || InputControl.fastAnimation) {
-            speed = 0.03f;
-            delay = 0.03f;
-        }
+        
         Vector3 pos = ship.Position;
         yield return PhaseManager.focus(pos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");

@@ -9,6 +9,13 @@ public class SinkAnimation : Animation {
     }
 
     public override IEnumerator playAnimation(float speed,float delay) {
+
+        PhaseManager.focus(ship.Position,0f,0.5f);
+
+        ship.setIcon(Sprites.main.SinkIcon);
+        yield return new WaitForSeconds(1f);
+        ship.disableIcon();
+        yield return new WaitForSeconds(0.3f);
         yield return null;
     }
 }
