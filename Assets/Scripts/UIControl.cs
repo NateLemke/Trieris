@@ -47,8 +47,7 @@ public class UIControl : MonoBehaviour
 
     public GameObject phase;
     public GameObject subPhase;
-
-    public GameObject optionsPanel;
+    
     public static UIControl main;
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
@@ -58,8 +57,6 @@ public class UIControl : MonoBehaviour
     {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
-        optionsPanel = GameObject.Find("OverlayCanvas");
-        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
         DebugControl.init();
     }
 
@@ -220,13 +217,6 @@ public class UIControl : MonoBehaviour
         string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
         turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
 
-        if (Input.GetKeyDown("escape"))
-        {
-            if (!optionsPanel.active)
-                optionsPanel.SetActive(true);
-            else
-                optionsPanel.SetActive(false);
-        }
 
     }
 

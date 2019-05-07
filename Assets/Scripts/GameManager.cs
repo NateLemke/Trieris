@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
 
     public bool cameraLock;
     
+    public static int PortsCaptured { get; set; }
 
     private void Awake() {
         lineRenderer = GetComponent<LineRenderer>();
