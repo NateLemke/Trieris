@@ -15,4 +15,11 @@ public class OptionsMenu : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void RuleBookButton()
+    {
+        string Path = Application.dataPath;
+
+        Debug.Log("Path: " + Path);
+    }
 }

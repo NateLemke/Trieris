@@ -17,4 +17,11 @@ public class StartMenu : MonoBehaviour
         //For Build Closing
         Application.Quit();
     }
+
+    public void RuleBookButton()
+    {
+        string Path = Application.dataPath;
+
+        Debug.Log("Path: " + Path);
+    }
 }
