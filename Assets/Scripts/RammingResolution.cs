@@ -14,9 +14,9 @@ public class RammingResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
-        //if(GameManager.main.gameLogic.phaseIndex == 3 && attacker.team.getTeamType() == Team.Type.black) {
-        //    ;
-        //}
+        attacker.setIcon(Sprites.main.AttackIcon);
+        target.setIcon(Sprites.main.AttackIcon);
+
         Animation A = null;
         try {
             A = PhaseManager.actionAnimations[attacker];
@@ -70,6 +70,10 @@ public class RammingResolution : CombatResolution
         target.setSpriteRotation();
         attacker.setSpriteRotation();
 
+        target.disableIcon();
+        attacker.disableIcon();
+
+        yield return new WaitForSeconds(0.4f);
 
         resolved = true;
         yield return null;

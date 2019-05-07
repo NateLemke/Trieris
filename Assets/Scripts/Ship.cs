@@ -55,9 +55,10 @@ public class Ship : MonoBehaviour {
 
     public bool needCatapultChoice;
 
+    public Image icon;
 
     private float animationStart;
-    SpriteRenderer underlay;
+    //SpriteRenderer underlay;
     public Team team;
     public Vector3 Position {
         get {
@@ -115,6 +116,10 @@ public class Ship : MonoBehaviour {
         currentActionIndex = 0;
         setHealthBar();
         catapultIndex = -1;
+
+        icon = transform.Find("ShipUI/NonRotation/Icon").GetComponent<Image>();
+        icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
+        icon.gameObject.SetActive(false);
     }
 
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
@@ -285,13 +290,13 @@ public class Ship : MonoBehaviour {
 
     public void catapult(Ship target) {
         if (target != null) {
-            target.life -= 1;
-            
+            //target.life -= 1;
+            PhaseManager.addCatapultAnimation(this,target);
         }
     }
 
     public void reset() {
-        Debug.Log("resetting...");
+        //Debug.Log("resetting...");
         canAct = true;
         portRepairCount = 0;
         //momentum = 0;
@@ -505,8 +510,8 @@ public class Ship : MonoBehaviour {
     }
 
     private void Awake() {
-        underlay = transform.Find("underlay").GetComponent<SpriteRenderer>();
-        underlay.color = Color.clear;
+        //underlay = transform.Find("underlay").GetComponent<SpriteRenderer>();
+        //underlay.color = Color.clear;
         redirectUI = transform.Find("ShipUI/Direction").gameObject;
         redirectUI.SetActive(false);
     }
@@ -598,7 +603,7 @@ public class Ship : MonoBehaviour {
         } else {
             c = Color.clear;
         }
-        underlay.color = c;
+        //underlay.color = c;
     }
 
     public void shipUIOn()
@@ -612,18 +617,14 @@ public class Ship : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-
-
+        
         Handles.color = Color.magenta;
 
         if (needRedirect) {
             Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
-
-            //Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
         }
 
         if (needCaptureChoice) {
-            //Gizmos.DrawIcon(transform.position + new Vector3(0.25f,0),"needPortCapture.png",true);
             Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
         }
 
@@ -635,8 +636,6 @@ public class Ship : MonoBehaviour {
             Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
         }       
     }
-
-
 
     // Initiates Combat Text
     void InitCBT(string text)
@@ -654,7 +653,8 @@ public class Ship : MonoBehaviour {
     }
 
     void setHealthBar() {
-        Image[] healthBoxes = transform.GetComponentsInChildren<Image>();
+        GameObject healthBar = transform.Find("ShipUI/NonRotation/NewHealthBar").gameObject;
+        Image[] healthBoxes = healthBar.transform.GetComponentsInChildren<Image>();
         for(int i = 1; i <= 4; i++) {
             healthBoxes[i].color = (i <= life) ? team.getColorLight() : Color.black;
         }
@@ -662,5 +662,22 @@ public class Ship : MonoBehaviour {
 
     public void setRedirectUI(bool b) {
         redirectUI.SetActive(b);
+    }
+
+    public void setIconString(String s) {
+        icon.gameObject.SetActive(true);
+        icon.GetComponentInChildren<Text>().gameObject.SetActive(true);
+        icon.sprite = Sprites.main.EmtpyIcon;
+        icon.GetComponentInChildren<Text>().text = s;
+    }
+
+    public void setIcon(Sprite sprite) {
+        icon.gameObject.SetActive(true);
+        icon.sprite = sprite;        
+    }
+
+    public void disableIcon() {
+        icon.gameObject.SetActive(false);
+        icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
     }
 }

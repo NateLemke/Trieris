@@ -43,6 +43,7 @@ public static class PhaseManager
         rammingResolutions.Clear();
         involvedInRamming.Clear();
         captureAnimations.Clear();
+        catapultResolutions.Clear();
         playingAnimation = false;
         GameManager.main.gameLogic.postAnimation();
         
@@ -126,10 +127,10 @@ public static class PhaseManager
         return r;
     }
 
-    public static void focusCamera() {
-        Vector2[] bv = getBoardView();
-        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
-    }
+    //public static void focusCamera() {
+    //    Vector2[] bv = getBoardView();
+    //    Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+    //}
 
     
     public static IEnumerator focus(Vector2 v, float margin, float speed) {
@@ -212,13 +213,24 @@ public static class PhaseManager
     }    
 
     public static IEnumerator sinkShips() {
-        if(sinkAnimations.Count > 0) {
+        tempPopulateSinkAnimation();
+
+        if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
             foreach (SinkAnimation a in sinkAnimations) {
                 yield return a.playAnimation(0.1f,0.1f);
             }
             sinkAnimations.Clear();
-        }       
+        }
+
+    }
+
+    public static void tempPopulateSinkAnimation() {
+        foreach(Ship s in GameManager.main.getAllShips()) {
+            if(s.life == 0) {
+                sinkAnimations.Add(new SinkAnimation(s));
+            }
+        }
     }
 
     public static IEnumerator portCaptureChoice() {

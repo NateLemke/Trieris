@@ -11,6 +11,15 @@ public class CatapultResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
+        if(target == null || attacker == null) {
+            yield break;
+        }
+
+        attacker.setIcon(Sprites.main.AttackIcon);
+        target.setIcon(Sprites.main.TargetIcon);
+
+        yield return new WaitForSeconds(2.5f);
+
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
         CatapultBullet bullet = GameObject.Instantiate(go,attacker.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
         bullet.target = target;
@@ -19,12 +28,17 @@ public class CatapultResolution : CombatResolution
         Vector2 focusPos = attacker.Position + (attacker.Position - target.Position) / 2;
         yield return PhaseManager.focus(focusPos,0f,0.3f);
 
-        while (bullet.gameObject != null) {
+        while (bullet != null) {
 
             yield return null;
         }
 
         target.life -= damageToTarget;
+
+        yield return new WaitForSeconds(2.5f);
+
+        attacker.disableIcon();
+        target.disableIcon();
 
         resolved = true;
         yield return null;
