@@ -129,6 +129,7 @@ public class Board{
                     node.transform.parent = parent.transform;
                     node.transform.position = n.getRealPos();
                     node.GetComponent<SpriteRenderer>().color = gridColor;
+                    n.setGameObject(node);
 
                     Node[] adjacents = n.getAdjacentNodes();
                     for (int i = 0; i < adjacents.Length; i++) {

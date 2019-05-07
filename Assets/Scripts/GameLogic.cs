@@ -191,7 +191,7 @@ public class GameLogic : MonoBehaviour {
                         if (ship.team == gameManager.playerTeam) {
 
                             ship.needRammingChoice = true;
-
+                            //ship.getNode().activateNotification();
                             chosenShip = potentialCollisions[0];
 
                         } else {
@@ -267,6 +267,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
+            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }

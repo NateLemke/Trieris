@@ -254,7 +254,7 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-        uiControl.updatePlayerScore();
+        //uiControl.updatePlayerScore();
     }
 
     void setAIDirections() {

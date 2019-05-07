@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIControl : MonoBehaviour {
+public class UIControl : MonoBehaviour
+{
 
     GameManager gameManager;
     GameLogic gameLogic;
 
     Text animationText;
     Text redirectText;
-    Text shipID;
 
     GameObject debugMenu;
     GameObject DevUI;
@@ -31,6 +31,9 @@ public class UIControl : MonoBehaviour {
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
+    Image[,] bottomIcons = new Image[6, 5];
+    Text[] portTexts = new Text[6];
+    Text phaseText;
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -41,6 +44,7 @@ public class UIControl : MonoBehaviour {
     Color attackUnclicked;
     Color attackClicked;
     Color arrowYellow;
+    Color greyedOut;
 
     public GameObject phase;
     public GameObject subPhase;
@@ -51,7 +55,8 @@ public class UIControl : MonoBehaviour {
     public Ship Selected { get { return selected; } set { setSelection(value); } }
     private Ship selected;
 
-    private void Awake() {
+    private void Awake()
+    {
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
         optionsPanel = GameObject.Find("OverlayCanvas");
@@ -59,14 +64,14 @@ public class UIControl : MonoBehaviour {
         DebugControl.init();
     }
 
-    void Start() {
+    void Start()
+    {
         main = this;
         captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
         phaseTracker = GameObject.Find("PhaseTracker");
         animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
         redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
         debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-        shipID = GameObject.Find("ShipLabel").GetComponent<Text>();
 
         Selected = null;
         DevUI = GameObject.Find("DevUI");
@@ -105,15 +110,60 @@ public class UIControl : MonoBehaviour {
         shipTabs[3] = GameObject.Find("ShipTab4");
         shipTabs[4] = GameObject.Find("ShipTab5");
 
+        bottomIcons[0, 0] = GameObject.Find("BottomRed1").GetComponent<Image>();
+        bottomIcons[0, 1] = GameObject.Find("BottomRed2").GetComponent<Image>();
+        bottomIcons[0, 2] = GameObject.Find("BottomRed3").GetComponent<Image>();
+        bottomIcons[0, 3] = GameObject.Find("BottomRed4").GetComponent<Image>();
+        bottomIcons[0, 4] = GameObject.Find("BottomRed5").GetComponent<Image>();
+
+        bottomIcons[1, 0] = GameObject.Find("BottomOrange1").GetComponent<Image>();
+        bottomIcons[1, 1] = GameObject.Find("BottomOrange2").GetComponent<Image>();
+        bottomIcons[1, 2] = GameObject.Find("BottomOrange3").GetComponent<Image>();
+        bottomIcons[1, 3] = GameObject.Find("BottomOrange4").GetComponent<Image>();
+        bottomIcons[1, 4] = GameObject.Find("BottomOrange5").GetComponent<Image>();
+
+        bottomIcons[2, 0] = GameObject.Find("BottomYellow1").GetComponent<Image>();
+        bottomIcons[2, 1] = GameObject.Find("BottomYellow2").GetComponent<Image>();
+        bottomIcons[2, 2] = GameObject.Find("BottomYellow3").GetComponent<Image>();
+        bottomIcons[2, 3] = GameObject.Find("BottomYellow4").GetComponent<Image>();
+        bottomIcons[2, 4] = GameObject.Find("BottomYellow5").GetComponent<Image>();
+
+        bottomIcons[3, 0] = GameObject.Find("BottomGreen1").GetComponent<Image>();
+        bottomIcons[3, 1] = GameObject.Find("BottomGreen2").GetComponent<Image>();
+        bottomIcons[3, 2] = GameObject.Find("BottomGreen3").GetComponent<Image>();
+        bottomIcons[3, 3] = GameObject.Find("BottomGreen4").GetComponent<Image>();
+        bottomIcons[3, 4] = GameObject.Find("BottomGreen5").GetComponent<Image>();
+
+        bottomIcons[4, 0] = GameObject.Find("BottomBlue1").GetComponent<Image>();
+        bottomIcons[4, 1] = GameObject.Find("BottomBlue2").GetComponent<Image>();
+        bottomIcons[4, 2] = GameObject.Find("BottomBlue3").GetComponent<Image>();
+        bottomIcons[4, 3] = GameObject.Find("BottomBlue4").GetComponent<Image>();
+        bottomIcons[4, 4] = GameObject.Find("BottomBlue5").GetComponent<Image>();
+
+        bottomIcons[5, 0] = GameObject.Find("BottomBlack1").GetComponent<Image>();
+        bottomIcons[5, 1] = GameObject.Find("BottomBlack2").GetComponent<Image>();
+        bottomIcons[5, 2] = GameObject.Find("BottomBlack3").GetComponent<Image>();
+        bottomIcons[5, 3] = GameObject.Find("BottomBlack4").GetComponent<Image>();
+        bottomIcons[5, 4] = GameObject.Find("BottomBlack5").GetComponent<Image>();
+
+        portTexts[0] = GameObject.Find("BottomPortsRed").GetComponent<Text>();
+        portTexts[1] = GameObject.Find("BottomPortsOrange").GetComponent<Text>();
+        portTexts[2] = GameObject.Find("BottomPortsYellow").GetComponent<Text>();
+        portTexts[3] = GameObject.Find("BottomPortsGreen").GetComponent<Text>();
+        portTexts[4] = GameObject.Find("BottomPortsBlue").GetComponent<Text>();
+        portTexts[5] = GameObject.Find("BottomPortsBlack").GetComponent<Text>();
+
+        phaseText = GameObject.Find("GoText").GetComponent<Text>();
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
         attackClicked = attackPanels[0].colors.pressedColor;
         arrowYellow = attackArrows[0].colors.normalColor;
+        greyedOut = new Color(50, 50, 50, 255);
 
-        straightArrow = Resources.Load("StraightArrow",typeof(Sprite)) as Sprite;
-        curvedArrow = Resources.Load("CurvedArrow",typeof(Sprite)) as Sprite;
-        holdSprite = Resources.Load("StopSymbol",typeof(Sprite)) as Sprite;
+        straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
+        curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
+        holdSprite = Resources.Load("StopSymbol", typeof(Sprite)) as Sprite;
 
         victoryTracker = GameObject.Find("VictoryCounter").GetComponentInChildren<Text>();
         turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
@@ -130,38 +180,52 @@ public class UIControl : MonoBehaviour {
         subPhase.SetActive(false);
     }
 
-    void Update() {
+    void Update()
+    {
 
-        if (gameManager.animationPlaying) {
+        if (gameManager.animationPlaying)
+        {
             animationText.text = "animation playing";
             animationText.color = Color.red;
-        } else {
+        }
+        else
+        {
             animationText.text = "no animation";
             animationText.color = Color.green;
         }
 
-        if (gameManager.needRedirect) {
+        if (gameManager.needRedirect)
+        {
             redirectText.text = "need redirect";
             redirectText.color = Color.red;
             redirectNotice.SetActive(true);
-        } else {
+        }
+        else
+        {
             redirectText.text = "no redirect";
             redirectText.color = Color.green;
             redirectNotice.SetActive(false);
         }
 
-        if (gameManager.needCaptureChoice) {
+        if (gameManager.needCaptureChoice)
+        {
             captureTracker.text = "need capture";
             captureTracker.color = Color.red;
             captureNotice.SetActive(true);
-        } else {
+        }
+        else
+        {
             captureTracker.text = "no capture";
             captureTracker.color = Color.green;
             captureNotice.SetActive(false);
         }
         turnPhase.text = "Turn: " + gameLogic.TurnIndex;
 
-        if (Input.GetKeyDown("escape")) {
+        s = (gameLogic.phaseIndex == 4) ? "START TURN" : "PHASE " + (gameLogic.phaseIndex + 1);
+        phaseText.text = s;
+
+        if (Input.GetKeyDown("escape"))
+        {
             if (!optionsPanel.active)
                 optionsPanel.SetActive(true);
             else
@@ -171,10 +235,8 @@ public class UIControl : MonoBehaviour {
     }
 
     private void setSelection(Ship value) {
-
         if(value != null) {
             selected = value;
-            shipID.text = "Ship " + (value.getID() + 1);
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
@@ -246,7 +308,7 @@ public class UIControl : MonoBehaviour {
             currentPanelColor.a = 255;
             currentPanel.effectColor = color;
         }
-        
+
     }
 
     public void setSelection(int value)
@@ -265,7 +327,6 @@ public class UIControl : MonoBehaviour {
         {
             selected = gameManager.getPlayerShips()[value];
             //compass.SetActive(true);
-            shipID.text = "Ship " + (gameManager.getPlayerShips()[value].getID() + 1);
             for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
             {
                 //Debug.Log(i); 
@@ -291,7 +352,7 @@ public class UIControl : MonoBehaviour {
             }
             selected.currentActionIndex = 0;
 
-            foreach(Button b in attackPanels)
+            foreach (Button b in attackPanels)
             {
                 ColorBlock cb = b.colors;
                 cb.normalColor = attackUnclicked;
@@ -305,7 +366,7 @@ public class UIControl : MonoBehaviour {
                 b.colors = cb;
             }
 
-            if(selected.catapultIndex >= 0)
+            if (selected.catapultIndex >= 0)
             {
                 ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
                 colBlock.normalColor = attackClicked;
@@ -319,7 +380,7 @@ public class UIControl : MonoBehaviour {
                 }
             }
 
-            foreach(GameObject go in shipTabs)
+            foreach (GameObject go in shipTabs)
             {
                 Outline o = go.GetComponent<Outline>();
                 Color c = o.effectColor;
@@ -348,28 +409,35 @@ public class UIControl : MonoBehaviour {
 
     }
 
-    public void redirect(int newDirection) {
+    public void redirect(int newDirection)
+    {
         selected.redirect(newDirection);
     }
 
-    public void testMove() {
+    public void testMove()
+    {
 
         GameLogic gl = GameManager.main.gameLogic;
-        if (GameManager.main.gameLogic.phaseIndex == 4) {
-            if(PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0) {
+        if (GameManager.main.gameLogic.phaseIndex == 4)
+        {
+            if (PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0)
+            {
                 Debug.LogError("Animation manager not finished yet");
             }
             gameLogic.newExecuteTurn();
-        } else {
+        }
+        else
+        {
             Debug.Log("Phase not == 4");
         }
     }
 
-    public void setAction(int i) {
-        selected.setAction(selected.currentActionIndex,i,-1);
+    public void setAction(int i)
+    {
+        selected.setAction(selected.currentActionIndex, i, -1);
         setActionImages(i);
-        
-        if(selected.currentActionIndex < (selected.life - 1))
+
+        if (selected.currentActionIndex < (selected.life - 1))
         {
             Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
             Color color = selectedOutline.effectColor;
@@ -382,29 +450,35 @@ public class UIControl : MonoBehaviour {
             color.a = 255;
             selectedOutline.effectColor = color;
         }
-            
+
     }
 
-    public void setSelected(Ship ship) {
-        if (ship == null) {
+    public void setSelected(Ship ship)
+    {
+        if (ship == null)
+        {
             selection.SetActive(false);
-        } else {
+        }
+        else
+        {
             selection.transform.position = ship.transform.position;
             selection.SetActive(true);
         }
     }
 
-    public void toggleDebugMenu() {
+    public void toggleDebugMenu()
+    {
         debugMenu.SetActive(!debugMenu.activeSelf);
     }
 
     public void setTeam(int i)
     {
-        TeamSelectUI.SetActive(false);        
-        gameManager.setPlayerTeam(i);       
+        TeamSelectUI.SetActive(false);
+        gameManager.setPlayerTeam(i);
     }
 
-    public void toggleDevUI() {
+    public void toggleDevUI()
+    {
         DevUI.SetActive(!DevUI.activeSelf);
         LogToggle.SetActive(!LogToggle.activeSelf);
     }
@@ -421,7 +495,7 @@ public class UIControl : MonoBehaviour {
         selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
         color.a = 255;
         selectedOutline.effectColor = color;
-   
+
     }
 
     public void setActionImages(int i)
@@ -477,29 +551,33 @@ public class UIControl : MonoBehaviour {
         }
     }
 
-    public void devPhaseTrack(int i) {
-        if(phaseTracker.activeSelf) {
+    public void devPhaseTrack(int i)
+    {
+        if (phaseTracker.activeSelf)
+        {
             phaseTracker.GetComponentInChildren<Text>().text = "Phase " + (i + 1);
-            Image phaseImg = phaseTracker.GetComponent<Image>(); 
-            switch (i) {
+            Image phaseImg = phaseTracker.GetComponent<Image>();
+            switch (i)
+            {
                 case 0:
-                phaseImg.color = Color.blue; break;
+                    phaseImg.color = Color.blue; break;
                 case 1:
-                phaseImg.color = Color.green; break;
+                    phaseImg.color = Color.green; break;
                 case 2:
-                phaseImg.color = Color.yellow; break;
+                    phaseImg.color = Color.yellow; break;
                 case 3:
-                phaseImg.color = Color.red; break;
+                    phaseImg.color = Color.red; break;
                 case 4:
-                phaseImg.color = Color.black;
-                phaseTracker.GetComponentInChildren<Text>().text = "planning phase";break;
+                    phaseImg.color = Color.black;
+                    phaseTracker.GetComponentInChildren<Text>().text = "planning phase"; break;
             }
         }
     }
 
-    public static void postNotice(string s, float time) {
+    public static void postNotice(string s, float time)
+    {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TempText");
-        GameObject go = Instantiate(prefab,GameObject.Find("NoticeHolder").transform);
+        GameObject go = Instantiate(prefab, GameObject.Find("NoticeHolder").transform);
         go.GetComponent<TempText>().lifetime = time;
         go.GetComponent<Text>().text = s;
         //Debug.Break();
@@ -519,7 +597,7 @@ public class UIControl : MonoBehaviour {
 
     public void setCatapultIndex(int i)
     {
-        foreach(Button b in attackPanels)
+        foreach (Button b in attackPanels)
         {
             ColorBlock cb = b.colors;
             cb.normalColor = attackUnclicked;
@@ -544,8 +622,8 @@ public class UIControl : MonoBehaviour {
 
         if (selected.catapultIndex >= 0 && selected != null)
         {
-            
-            
+
+
             ColorBlock colBlock = attackArrows[i].colors;
             colBlock.normalColor = attackClicked;
             attackArrows[i].colors = colBlock;
@@ -559,14 +637,26 @@ public class UIControl : MonoBehaviour {
         }
     }
 
-    public void updatePlayerScore() {
-        int score = 0;
-        foreach(Port p in GameManager.main.getBoard().getAllPorts()) {
-            if(p.Team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
-                score++;
-            }
+    public void setDead(int teamNo, int shipNo)
+    {
+        bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
+    }
+
+    public void updatePortsUI()
+    {
+        int[] scores = new int[6];
+
+        foreach (Port p in GameManager.main.getBoard().getAllPorts())
+        {
+            scores[(int)p.Team.getTeamType()]++;
         }
-        GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = score + "/12\nports";
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (i == 3)
+                GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = scores[i] + "/12\nports";
+            portTexts[i].text = scores[i] + " / 12";
+        }
     }
 }
 
