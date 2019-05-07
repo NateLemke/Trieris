@@ -18,7 +18,7 @@ public class CatapultResolution : CombatResolution
         attacker.setIcon(Sprites.main.AttackIcon);
         target.setIcon(Sprites.main.TargetIcon);
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
         CatapultBullet bullet = GameObject.Instantiate(go,attacker.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
@@ -35,7 +35,7 @@ public class CatapultResolution : CombatResolution
 
         target.life -= damageToTarget;
 
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         attacker.disableIcon();
         target.disableIcon();

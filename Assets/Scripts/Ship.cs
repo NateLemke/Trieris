@@ -377,6 +377,7 @@ public class Ship : MonoBehaviour {
         if (node != null) {
             node.getShips().Remove(this);
         }
+        PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
         node = null;
         team.ships.Remove(this);
         Destroy(this.gameObject);
@@ -678,6 +679,6 @@ public class Ship : MonoBehaviour {
 
     public void disableIcon() {
         icon.gameObject.SetActive(false);
-        icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
+        icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
     }
 }

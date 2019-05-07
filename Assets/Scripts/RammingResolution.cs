@@ -30,13 +30,13 @@ public class RammingResolution : CombatResolution
         }
 
         if(B != null && B.GetType() == typeof(RotationAnimation)) {
-            yield return B.playAnimation(0.3f,2f);
+            yield return B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed);
         }
 
         try {
             if (A != null) {
                 //StartCoroutine(A.playAnimation());
-                GameManager.main.StartCoroutine(A.playAnimation(0.3f,2f));
+                GameManager.main.StartCoroutine(A.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
             }            
         } catch (Exception e) {
             Debug.LogError("Rammed without moving?");
@@ -44,7 +44,7 @@ public class RammingResolution : CombatResolution
 
         if (B != null) {
             //StartCoroutine(B.playAnimation());
-            GameManager.main.StartCoroutine(B.playAnimation(0.3f,2f));
+            GameManager.main.StartCoroutine(B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
         }
 
         if (A == null) {
@@ -73,7 +73,7 @@ public class RammingResolution : CombatResolution
         target.disableIcon();
         attacker.disableIcon();
 
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         resolved = true;
         yield return null;

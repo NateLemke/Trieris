@@ -62,7 +62,10 @@ public class InputControl : MonoBehaviour {
         cameraUpdate();
         
         if (Input.GetKeyDown(KeyCode.F)) {
-            fastAnimation = !fastAnimation;
+            SpeedManager.toggleFastAnimations();
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            SpeedManager.skipSubPhase();
         }
         if (gameManager.playerTeam != null) {
             shipSelectUpdate();

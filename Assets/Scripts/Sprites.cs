@@ -20,6 +20,30 @@ public class Sprites : MonoBehaviour {
     private Sprite sinkIcon;
     public Sprite SinkIcon { get { return sinkIcon; } }
 
+    [SerializeField]
+    private Sprite redPort;
+    public Sprite RedPort { get { return redPort; } }
+
+    [SerializeField]
+    private Sprite orangePort;
+    public Sprite OrangePort { get { return orangePort; } }
+
+    [SerializeField]
+    private Sprite yellowPort;
+    public Sprite YellowPort { get { return yellowPort; } }
+
+    [SerializeField]
+    private Sprite greenPort;
+    public Sprite GreenPort { get { return greenPort; } }
+
+    [SerializeField]
+    private Sprite bluePort;
+    public Sprite BluePort { get { return bluePort; } }
+
+    [SerializeField]
+    private Sprite blackPort;
+    public Sprite BlackPort { get { return blackPort; } }
+
     public static Sprites main;
 
     void Start() {
