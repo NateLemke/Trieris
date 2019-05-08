@@ -684,8 +684,9 @@ public class Ship : MonoBehaviour {
 
     public void setIconString(String s) {
         icon.gameObject.SetActive(true);
-        icon.GetComponentInChildren<Text>().gameObject.SetActive(true);
+        icon.GetComponentInChildren<Text>(true).gameObject.SetActive(true);
         icon.sprite = Sprites.main.EmtpyIcon;
+        icon.color = team.getColorLight();
         icon.GetComponentInChildren<Text>().text = s;
     }
 
@@ -702,5 +703,26 @@ public class Ship : MonoBehaviour {
     public void selectThisShip()
     {
         GameObject.Find("GameManager").GetComponent<UIControl>().Selected = this;
+    }
+
+    public string getNumeralID() {
+        return getNumeral(this.id + 1);
+    }
+
+    public static string getNumeral(int i) {
+        switch (i) {
+            case 1:
+            return "I";
+            case 2:
+            return "II"; 
+            case 3:
+            return "III"; 
+            case 4:
+            return "IV"; 
+            case 5:
+            return "V"; 
+            default:
+            return null;
+        }
     }
 }

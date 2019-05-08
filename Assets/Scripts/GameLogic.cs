@@ -55,7 +55,7 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
-            UIControl.main.devPhaseTrack(4);
+            //UIControl.main.devPhaseTrack(4);
             phaseIndex = 4;
             resetShips();
             gameManager.checkVictory();
@@ -87,7 +87,7 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void executePhase(int phase) {
-        UIControl.main.devPhaseTrack(phaseIndex);
+        //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
@@ -99,6 +99,8 @@ public class GameLogic : MonoBehaviour {
                     newDirection = ship.getAI().setNewShipDirection(ship);
                     ship.hold();
                     ship.setFront(newDirection);
+                    ship.setSpriteRotation();
+
                 }
 
                 /*
@@ -156,6 +158,7 @@ public class GameLogic : MonoBehaviour {
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
                         ship.setSpriteRotation();
+
                         //ship.canActAfterCollision = true;
                     }
                 }

@@ -9,6 +9,9 @@ public class SinkAnimation : Animation {
     }
 
     public override IEnumerator playAnimation(float speed,float delay) {
+        if(ship == null) {
+            yield break;
+        }
 
         PhaseManager.focus(ship.Position,0f,0.5f);
 
