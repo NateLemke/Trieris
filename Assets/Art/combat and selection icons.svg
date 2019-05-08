@@ -36,9 +36,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="527.78184"
-     inkscape:cy="554.61046"
+     inkscape:zoom="2"
+     inkscape:cx="162.18056"
+     inkscape:cy="828.3574"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -63,7 +63,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -330,5 +330,27 @@
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="55.58091"
        inkscape:export-ydpi="55.58091" />
+    <circle
+       style="opacity:1;fill:#ffffff;fill-opacity:0;stroke:#ffffff;stroke-width:2.54099989;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       id="path4510-8"
+       cx="68.919846"
+       cy="74.461235"
+       r="11.472285"
+       inkscape:export-xdpi="117.38991"
+       inkscape:export-ydpi="117.38991" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:6.09458447;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 51.691615,73.096583 v 2.729285 h 12.181789 v -2.729285 z m 22.2802,0 v 2.729285 h 12.449072 v -2.729285 z"
+       id="rect4512-0"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="117.38991"
+       inkscape:export-ydpi="117.38991" />
+    <path
+       style="opacity:1;fill:#fefefe;fill-opacity:1;stroke:none;stroke-width:6.62022018;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 67.388705,57.061234 v 12.607382 h 3.069656 V 57.061234 Z m 0,21.750386 V 93.4971 h 3.069656 V 78.81162 Z"
+       id="rect4514-6"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="117.38991"
+       inkscape:export-ydpi="117.38991" />
   </g>
 </svg>
