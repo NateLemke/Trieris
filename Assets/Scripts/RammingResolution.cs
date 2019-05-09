@@ -6,27 +6,27 @@ using UnityEngine;
 public class RammingResolution : CombatResolution
 {
 
-    protected int damageToAttacker;
+    public int damageToA;
 
-    public RammingResolution(Ship a,Ship t,int dmgT,int dmgA) : base(a,t,dmgT) {
-        damageToAttacker = dmgA;
+    public RammingResolution(Ship a,Ship b,int dmgB) : base(a,b,dmgB) {
+
     }
 
     public override IEnumerator resolve() {
 
-        attacker.setIcon(Sprites.main.AttackIcon);
-        target.setIcon(Sprites.main.AttackIcon);
+        shipA.setIcon(Sprites.main.AttackIcon);
+        shipB.setIcon(Sprites.main.AttackIcon);
 
         Animation A = null;
         try {
-            A = PhaseManager.actionAnimations[attacker];
+            A = PhaseManager.actionAnimations[shipA];
         } catch (Exception e) {
             Debug.LogError("no action animation for attacker");
         }
 
         Animation B = null;
-        if (PhaseManager.actionAnimations.ContainsKey(target)) {
-            B = PhaseManager.actionAnimations[target];
+        if (PhaseManager.actionAnimations.ContainsKey(shipB)) {
+            B = PhaseManager.actionAnimations[shipB];
         }
 
         if(B != null && B.GetType() == typeof(RotationAnimation)) {
@@ -48,7 +48,7 @@ public class RammingResolution : CombatResolution
         }
 
         if (A == null) {
-            Debug.LogError("attacker, " + attacker + " has no animation?");
+            Debug.LogError("attacker, " + shipA + " has no animation?");
         }
 
         if (B == null) {
@@ -61,19 +61,20 @@ public class RammingResolution : CombatResolution
             }
         }
 
+        
         InitRammingAnimation();
 
-        target.life -= damageToTarget;
-        attacker.life -= damageToAttacker;
+        shipB.life -= damageToB;
+        shipA.life -= damageToA;
 
-        target.updateFrontAfterCollision();
-        attacker.updateFrontAfterCollision();
+        shipB.updateFrontAfterCollision();
+        shipA.updateFrontAfterCollision();
 
-        target.setSpriteRotation();
-        attacker.setSpriteRotation();
+        shipB.setSpriteRotation();
+        shipA.setSpriteRotation();
 
-        target.disableIcon();
-        attacker.disableIcon();
+        shipB.disableIcon();
+        shipA.disableIcon();
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
 

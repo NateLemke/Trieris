@@ -186,7 +186,7 @@ public class TrierisAI {
         try {
             return enemyShips[shipIndex];
         } catch (ArgumentOutOfRangeException e) {
-            Debug.LogError("random.next is exclucsive max so Im not sure how this happened?");
+            Debug.LogError("random.next is exclusive max so Im not sure how this happened?");
         }
         return null;
     }
@@ -202,15 +202,22 @@ public class TrierisAI {
         NodePath newShipPath = new NodePath(ship.getNode(),temp,ship.getFront());
         temp.AddRange(shortestPathToPort(newShipPath).getActionsList());
         int index = 0;
-        while (temp[index] != 1) {
-            if (temp[index] == 2) {
-                shipDirection--;
+
+        try {
+            while (temp[index] != 1) {
+                if (temp[index] == 2) {
+                    shipDirection--;
+                }
+                if (temp[index] == 3) {
+                    shipDirection++;
+                }
+                index++;
             }
-            if (temp[index] == 3) {
-                shipDirection++;
-            }
-            index++;
+        } catch (ArgumentOutOfRangeException e) {
+            Debug.LogError("ArgumentOutOfRangeException for AI ship"+ship);
         }
+
+        
         return shipDirection % 8;
     }
 

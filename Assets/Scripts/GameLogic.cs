@@ -62,7 +62,7 @@ public class GameLogic : MonoBehaviour {
             resetShips();
             gameManager.checkVictory();
             turnIndex++;
-            PhaseManager.updateText();
+            //PhaseManager.updateText();
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.catapultIndex = -1;

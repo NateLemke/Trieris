@@ -344,10 +344,12 @@ public class Ship : MonoBehaviour {
         node.getShips().Remove(this);
         node = destNode;
         node.getShips().Add(this);
-        if (PhaseManager.actionAnimations.ContainsKey(this)) {
-            ;
-        }
-        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this));
+        //if (PhaseManager.actionAnimations.ContainsKey(this)) {
+        //    ;
+        //}
+        bool reverse = direction == getRelativeDirection(-4);
+
+        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,reverse));
         ;
     }
 
@@ -355,7 +357,8 @@ public class Ship : MonoBehaviour {
     public void turn(int relativeDirection) {
         front = getRelativeDirection(relativeDirection);
         momentum = 0;
-        PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this));
+        bool portTurn = (relativeDirection == -1);
+        PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this,portTurn));
 
         movedForward = false;
     }
@@ -492,7 +495,7 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        addRammingAnimation(target,momentum * 2);
+        PhaseManager.addRammingResolution(this,target,momentum * 2);
     }
 
     private void headOnRam(Ship target) {
@@ -503,7 +506,7 @@ public class Ship : MonoBehaviour {
         if (!target.movedForward) {
             this.life--;
         }
-        addRammingAnimation(target,momentum);
+        PhaseManager.addRammingResolution(this,target,momentum);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
@@ -514,14 +517,15 @@ public class Ship : MonoBehaviour {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
             this.life--;
         }
-        PhaseManager.addRamming(this,target,momentum);
-        addRammingAnimation(target,momentum);
+        PhaseManager.addRammingResolution(this,target,momentum);
+        //PhaseManager.addRamming(this,target,momentum);
+        //addRammingAnimation(target,momentum);
     }
-    void addRammingAnimation(Ship target, int dmg) {
-        PhaseManager.involvedInRamming.Add(this);
-        PhaseManager.involvedInRamming.Add(target);
-        PhaseManager.addRamming(this,target,dmg);
-    }
+    //void addRammingAnimation(Ship target, int dmg) {
+    //    PhaseManager.involvedInRamming.Add(this);
+    //    PhaseManager.involvedInRamming.Add(target);
+    //    PhaseManager.addRamming(this,target,dmg);
+    //}
 
     public void setAI(TrierisAI ai) {
         this.ai = ai;

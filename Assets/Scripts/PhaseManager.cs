@@ -27,7 +27,7 @@ public static class PhaseManager
         playBasicActions ,
         sinkShips,
         rammingChoices,
-        playRammingActions,
+        resolveRamming,
         sinkShips,
         catapultChoices,
         resolveCatapults,
@@ -75,9 +75,9 @@ public static class PhaseManager
         
     }
         
-    public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
-        rammingResolutions.Add(new RammingResolution(attacker,target,damageToTarget,damageToAttacker));
-    }
+    //public static void addRamming(Ship attacker, Ship target, int damageToTarget, int damageToAttacker = 0) {
+    //    rammingResolutions.Add(new RammingResolution(attacker,target,damageToTarget,damageToAttacker));
+    //}
 
     public static void addCatapult() {
 
@@ -206,7 +206,7 @@ public static class PhaseManager
         }
     }
 
-    static IEnumerator playRammingActions() {
+    static IEnumerator resolveRamming() {
         if(rammingResolutions.Count == 0) {
             yield break;
         }
@@ -325,7 +325,7 @@ public static class PhaseManager
 
     static void removeShipFromCatapultAnimations(Ship s) {
         foreach(CombatResolution cr in catapultResolutions) {
-            if( cr.attacker == s) {
+            if( cr.shipA == s) {
                 catapultResolutions.Remove(cr);
             }
         }
@@ -369,16 +369,30 @@ public static class PhaseManager
         subPhaseIndex++;
     }
     
-    
+    public static void addRammingResolution(Ship attacker, Ship target, int damage) {
+        bool foundPair = false;
+        foreach (RammingResolution rr in rammingResolutions) {
+            if(rr.shipA == target && rr.shipB == attacker) {
+                rr.damageToA = damage;
+                foundPair = true;
+                break;
+            }
+        }
+        if (!foundPair) {
+            involvedInRamming.Add(attacker);
+            involvedInRamming.Add(target);
+            rammingResolutions.Add(new RammingResolution(attacker,target,damage));
+        }
+    }
 
 }
 
 class RammingSorter : IComparer<CombatResolution> {
     public int Compare(CombatResolution x,CombatResolution y) {
-        if (x.attacker.Position.x < y.attacker.Position.x) {
+        if (x.shipA.Position.x < y.shipA.Position.x) {
             return -1;
         } else {
-            return (x.attacker.Position.y < y.attacker.Position.y) ? 1 : -1;
+            return (x.shipA.Position.y < y.shipA.Position.y) ? 1 : -1;
         }
     }
 }
