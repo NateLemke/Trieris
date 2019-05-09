@@ -85,6 +85,13 @@ public class InputControl : MonoBehaviour {
             else
                 optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
         }
+
+        if (Input.GetKeyDown("`"))
+        {
+            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
+            gameOverObj.GetComponent<GameOver>().Initialize("Victory");
+        }
     }
 
     public void shipSelectUpdate() {

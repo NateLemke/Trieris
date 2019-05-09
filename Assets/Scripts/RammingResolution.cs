@@ -61,6 +61,9 @@ public class RammingResolution : CombatResolution
             }
         }
 
+        
+        InitRammingAnimation();
+
         shipB.life -= damageToB;
         shipA.life -= damageToA;
 
@@ -77,6 +80,11 @@ public class RammingResolution : CombatResolution
 
         resolved = true;
         yield return null;
+    }
+
+    public void InitRammingAnimation()
+    {
+        attacker.GetComponent<Animator>().SetTrigger("Collision");
     }
 
 }

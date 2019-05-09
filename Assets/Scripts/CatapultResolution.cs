@@ -25,6 +25,9 @@ public class CatapultResolution : CombatResolution
         bullet.target = shipB;
         bullet.startPos = shipA.transform.position;
 
+        
+        InitCatapultAnimation();
+
         Vector2 focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
         yield return PhaseManager.focus(focusPos,0f,0.3f);
 
@@ -42,5 +45,10 @@ public class CatapultResolution : CombatResolution
 
         resolved = true;
         yield return null;
+    }
+
+    public void InitCatapultAnimation()
+    {
+        attacker.GetComponent<Animator>().SetTrigger("Catapult");
     }
 }
