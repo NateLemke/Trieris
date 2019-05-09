@@ -84,7 +84,8 @@ public class RammingResolution : CombatResolution
 
     public void InitRammingAnimation()
     {
-        attacker.GetComponent<Animator>().SetTrigger("Collision");
+        shipA.GetComponent<Animator>().SetTrigger("Collision");
+        shipB.GetComponent<Animator>().SetTrigger("Collision");
     }
 
 }
