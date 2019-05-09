@@ -23,7 +23,7 @@ public class RotationAnimation : Animation {
         Vector3 pos = ship.Position;
         yield return PhaseManager.focus(pos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
-        GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);
+        GameObject arrow = GameObject.Instantiate(prefab,ship.transform);
         if (portTurn) {
             arrow.transform.localScale = new Vector3(-1,1,1);
         }

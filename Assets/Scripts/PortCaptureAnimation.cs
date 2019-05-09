@@ -10,6 +10,11 @@ public class PortCaptureAnimation : Animation {
     }
 
     public override IEnumerator playAnimation(float speed,float delay) {
+
+        if(ship == null) {
+            yield break;
+        }
+
         yield return PhaseManager.focus(ship.Position,0f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
         GameObject animObj = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
