@@ -94,6 +94,7 @@ public class GameLogic : MonoBehaviour {
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
+                checkAdjHRam(ship,phase);
                 ship.doAction(phase);
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
@@ -128,6 +129,25 @@ public class GameLogic : MonoBehaviour {
         StartCoroutine( PhaseManager.playAnimations());        
     }
 
+    /// <summary>
+    /// Check for node adjacent head-on rams
+    /// </summary>
+    /// <param name="ship"></param>
+    /// <param name="phase"></param>
+    public void checkAdjHRam(Ship ship, int phase)
+    {
+        if (ship.actions[phase].GetType().Name == "ForwardAction")
+        {
+            Node nextNode = ship.getNode().getAdjacentNode(ship.getFront());
+            foreach(Ship s in nextNode.getShips())
+            {
+                if(Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+                {
+                    ship.ram(s);
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// Final check for port capture and ship sinking. Also determines if a win or lose state is reached.
@@ -232,9 +252,9 @@ public class GameLogic : MonoBehaviour {
 
                     if (potentialCollisions.Count != 0) {
                         Ship chosenShip = null;
-
                         if (ship.team == gameManager.playerTeam) {
 
+                            Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
                             ship.needRammingChoice = true;
                             //ship.getNode().activateNotification();
                             chosenShip = potentialCollisions[0];
