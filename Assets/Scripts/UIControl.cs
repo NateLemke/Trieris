@@ -38,6 +38,7 @@ public class UIControl : MonoBehaviour
     Sprite straightArrow;
     Sprite curvedArrow;
     Sprite holdSprite;
+    Sprite emptySprite;
     GameObject selection;
 
     Color defaultGreen;
@@ -91,10 +92,10 @@ public class UIControl : MonoBehaviour
         actionPanels[2] = GameObject.Find("PanelAction3");
         actionPanels[3] = GameObject.Find("PanelAction4");
 
-        attackPanels[0] = GameObject.Find("PanelAttack1").GetComponent<Button>();
-        attackPanels[1] = GameObject.Find("PanelAttack2").GetComponent<Button>();
-        attackPanels[2] = GameObject.Find("PanelAttack3").GetComponent<Button>();
-        attackPanels[3] = GameObject.Find("PanelAttack4").GetComponent<Button>();
+        attackPanels[0] = GameObject.Find("AttackCrosshair1").GetComponent<Button>();
+        attackPanels[1] = GameObject.Find("AttackCrosshair2").GetComponent<Button>();
+        attackPanels[2] = GameObject.Find("AttackCrosshair3").GetComponent<Button>();
+        attackPanels[3] = GameObject.Find("AttackCrosshair4").GetComponent<Button>();
 
         attackArrows[0] = GameObject.Find("ArrowN").GetComponent<Button>();
         attackArrows[1] = GameObject.Find("ArrowNE").GetComponent<Button>();
@@ -165,7 +166,8 @@ public class UIControl : MonoBehaviour
 
         straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
         curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
-        holdSprite = Resources.Load("StopSymbol", typeof(Sprite)) as Sprite;
+        holdSprite = Resources.Load("holdicon", typeof(Sprite)) as Sprite;
+        emptySprite = Resources.Load("setaction", typeof(Sprite)) as Sprite;
 
         victoryTracker = GameObject.Find("VictoryCounter").GetComponentInChildren<Text>();
         turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
@@ -539,6 +541,12 @@ public class UIControl : MonoBehaviour
                 //image.rectTransform.Rotate(new Vector3(0, 0, 90));
                 break;
 
+            case 6:
+                image.sprite = emptySprite;
+                tempCol.a = 255;
+                image.color = tempCol;
+                image.transform.eulerAngles = new Vector3(0, 0, 0);
+                break;
             default:
                 image.sprite = null;
                 tempCol.a = 0;
