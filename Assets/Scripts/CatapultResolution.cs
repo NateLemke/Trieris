@@ -49,6 +49,6 @@ public class CatapultResolution : CombatResolution
 
     public void InitCatapultAnimation()
     {
-        attacker.GetComponent<Animator>().SetTrigger("Catapult");
+        shipA.GetComponent<Animator>().SetTrigger("Catapult");
     }
 }
