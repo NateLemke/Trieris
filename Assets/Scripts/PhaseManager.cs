@@ -12,7 +12,8 @@ public static class PhaseManager
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
     public static List<PortCaptureAnimation> captureAnimations = new List<PortCaptureAnimation>();
-    
+
+    static int subPhaseIndex = 0;
 
     public static bool movingCamera = false;
 
@@ -39,7 +40,10 @@ public static class PhaseManager
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
+        subPhaseIndex = 0;
+        yield return null;
 
+        subPhaseProgress();
         updateText();
 
         foreach(subPhase s in subPhaseOrder) {
@@ -192,6 +196,7 @@ public static class PhaseManager
     }
 
     public static IEnumerator rammingChoices() {
+        subPhaseProgress();
         if (!GameManager.main.needRammingChoice) {
             yield break;
         }
@@ -216,6 +221,7 @@ public static class PhaseManager
     }
 
     public static IEnumerator catapultChoices() {
+        subPhaseProgress();
         if (!GameManager.main.needCatapultChoice) {
             yield break;
         }
@@ -253,19 +259,10 @@ public static class PhaseManager
                 sinkAnimations.Add(new SinkAnimation(s));
             }
         }
-    }
-
-    public static IEnumerator portCaptureChoice() {
-        if (!GameManager.main.needCaptureChoice) {
-            yield break;
-        }
-        setSubphaseText("choose port capture");
-        while (GameManager.main.needCaptureChoice) {
-            yield return null;
-        }
-    }
+    }   
 
     public static IEnumerator resolvePortCapture() {
+        subPhaseProgress();
         if (captureAnimations.Count == 0) {
             yield break;
         }
@@ -273,6 +270,17 @@ public static class PhaseManager
         foreach (PortCaptureAnimation ca in captureAnimations) {
             
             yield return ca.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed);
+        }
+    }
+
+    public static IEnumerator portCaptureChoice() {
+        
+        if (!GameManager.main.needCaptureChoice) {
+            yield break;
+        }
+        setSubphaseText("choose port capture");
+        while (GameManager.main.needCaptureChoice) {
+            yield return null;
         }
     }
 
@@ -286,8 +294,20 @@ public static class PhaseManager
         }        
     }
 
+    public static void EnablePhaseUI() {
+        UIControl.main.phaseAnnouncer.SetActive(true);
+        //UIControl.main.subPhase.SetActive(true);
+        //UIControl.main.subPhaseProgress.SetActive(true);
+    }
+
+    public static void DisablePhaseUI() {
+        UIControl.main.phaseAnnouncer.SetActive(false);
+        //UIControl.main.subPhase.SetActive(false);
+        //UIControl.main.subPhaseProgress.SetActive(false);
+    }
+
     public static void setSubphaseText(string s) {
-        UIControl.main.subPhase.SetActive(true);
+        
         UIControl.main.subPhase.GetComponentInChildren<Text>().text = s;
     }
 
@@ -295,13 +315,8 @@ public static class PhaseManager
         int phase = GameManager.main.gameLogic.phaseIndex;
         
         GameObject phaseObj = UIControl.main.phase;
-        if (phase == 4) {
-            phaseObj.SetActive(false);
-            UIControl.main.subPhase.SetActive(false);
-        } else {
-            phaseObj.SetActive(true);
-            phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase+1);
-        }        
+        phaseObj.SetActive(true);
+        phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase + 1);
     }
 
     static void clearAnimationLists() {
@@ -327,6 +342,35 @@ public static class PhaseManager
     public static void nextSubPhase() {
         SpeedManager.endSubPhaseSkip();
     }
+
+    public static void subPhaseProgress() {
+
+        GameObject outline = GameObject.Find("subphaseoutline");
+        GameObject subPhaseIcon = null;
+        
+        switch (subPhaseIndex) {
+            case 0:
+            subPhaseIcon = GameObject.Find("actionphase"); break;
+            case 1:
+            subPhaseIcon = GameObject.Find("rammingphase"); break;
+            case 2:
+            subPhaseIcon = GameObject.Find("catapultphase"); break;
+            case 3:
+            subPhaseIcon = GameObject.Find("capturephase"); break;
+            default:
+            subPhaseIcon = null;break;
+        }
+        if(subPhaseIcon == null) {
+            Debug.LogError("no valid subphase icon found");
+        }
+
+
+        outline.transform.position = subPhaseIcon.transform.position;
+        subPhaseIndex++;
+    }
+    
+    
+
 }
 
 class RammingSorter : IComparer<CombatResolution> {
