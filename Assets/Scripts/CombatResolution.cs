@@ -5,17 +5,17 @@ using UnityEngine;
 
 public abstract class CombatResolution {
 
-    public Ship attacker;
-    public Ship target;
+    public Ship shipA;
+    public Ship shipB;
 
-    protected int damageToTarget;
+    public int damageToB;
 
     protected bool resolved;
 
-    public CombatResolution(Ship a, Ship t, int dmgT) {
-        attacker = a;
-        target = t;
-        damageToTarget = dmgT;
+    public CombatResolution(Ship a, Ship b, int dmgB) {
+        shipA = a;
+        shipB = b;
+        damageToB = dmgB;
     }
 
     public abstract IEnumerator resolve();

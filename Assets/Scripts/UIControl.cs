@@ -229,8 +229,7 @@ public class UIControl : MonoBehaviour
             captureNotice.SetActive(false);
         }
 
-        string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
-        turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
+        turnPhase.text = "Turn: " + gameLogic.TurnIndex;
 
 
     }

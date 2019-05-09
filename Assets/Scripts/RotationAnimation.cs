@@ -6,11 +6,13 @@ public class RotationAnimation : Animation {
 
     Quaternion startRotation;
     Quaternion endRotation;
+    bool portTurn;
 
-    public RotationAnimation(Quaternion start, Quaternion end, Ship s) {
+    public RotationAnimation(Quaternion start, Quaternion end, Ship s, bool port) {
         startRotation = start;
         endRotation = end;
         ship = s;
+        portTurn = port;
     }
 
     public override IEnumerator playAnimation(float speed, float delay = 0f) {
@@ -22,7 +24,10 @@ public class RotationAnimation : Animation {
         yield return PhaseManager.focus(pos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
         GameObject arrow = GameObject.Instantiate(prefab,pos,ship.transform.rotation);
-        arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();
+        if (portTurn) {
+            arrow.transform.localScale = new Vector3(-1,1,1);
+        }
+        arrow.GetComponentInChildren<SpriteRenderer>().color = ship.team.getColorLight();
         yield return new WaitForSeconds(delay);
         if (!complete) {
             startTime = Time.time;

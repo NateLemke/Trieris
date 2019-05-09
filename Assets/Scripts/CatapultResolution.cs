@@ -11,21 +11,21 @@ public class CatapultResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
-        if(target == null || attacker == null) {
+        if(shipB == null || shipA == null) {
             yield break;
         }
 
-        attacker.setIcon(Sprites.main.AttackIcon);
-        target.setIcon(Sprites.main.TargetIcon);
+        shipA.setIcon(Sprites.main.AttackIcon);
+        shipB.setIcon(Sprites.main.TargetIcon);
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
-        CatapultBullet bullet = GameObject.Instantiate(go,attacker.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
-        bullet.target = target;
-        bullet.startPos = attacker.transform.position;
+        CatapultBullet bullet = GameObject.Instantiate(go,shipA.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
+        bullet.target = shipB;
+        bullet.startPos = shipA.transform.position;
 
-        Vector2 focusPos = attacker.Position + (attacker.Position - target.Position) / 2;
+        Vector2 focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
         yield return PhaseManager.focus(focusPos,0f,0.3f);
 
         while (bullet != null) {
@@ -33,12 +33,12 @@ public class CatapultResolution : CombatResolution
             yield return null;
         }
 
-        target.life -= damageToTarget;
+        shipB.life -= damageToB;
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
-        attacker.disableIcon();
-        target.disableIcon();
+        shipA.disableIcon();
+        shipB.disableIcon();
 
         resolved = true;
         yield return null;

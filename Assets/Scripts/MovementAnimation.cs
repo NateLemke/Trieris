@@ -8,13 +8,15 @@ public class MovementAnimation : Animation {
     public Node endNode;
     Vector3 startPos;
     Vector2 endPos;
+    bool reverse;
 
-    public MovementAnimation(Node start, Node end, Ship s) {
+    public MovementAnimation(Node start, Node end, Ship s,bool r = false) {
         startNode = start;
         endNode = end;
         ship = s;
 
-        endPos = PhaseManager.shipNodePos(ship,endNode); 
+        endPos = PhaseManager.shipNodePos(ship,endNode);
+        reverse = r;
     }
 
     public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
@@ -26,7 +28,10 @@ public class MovementAnimation : Animation {
         yield return PhaseManager.focus(arrowPos,0.7f,0.3f);
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
         GameObject arrow = GameObject.Instantiate(prefab,arrowPos,ship.transform.rotation);
-        arrow.GetComponent<SpriteRenderer>().color = ship.team.getColor();
+        if (reverse) {
+            arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
+        }
+        arrow.GetComponent<SpriteRenderer>().color = ship.team.getColorLight();
         yield return new WaitForSeconds(delay);
         if (!complete) {
             startTime = Time.time;

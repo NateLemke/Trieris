@@ -46,7 +46,7 @@ public class Sprites : MonoBehaviour {
 
     public static Sprites main;
 
-    void Start() {
+    void Awake() {
         main = this;
     }
 
