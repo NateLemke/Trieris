@@ -282,7 +282,7 @@ PrefabInstance:
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -124.4
+      value: -124.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -578,6 +578,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5018984736376474878, guid: 4644fa1be05bf1b43ae11765fa079891,
+        type: 3}
+      propertyPath: m_Name
+      value: GameOver
+      objectReference: {fileID: 0}
     - target: {fileID: 1095194295400463565, guid: 4644fa1be05bf1b43ae11765fa079891,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -682,11 +687,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018984736376474878, guid: 4644fa1be05bf1b43ae11765fa079891,
-        type: 3}
-      propertyPath: m_Name
-      value: GameOver
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4644fa1be05bf1b43ae11765fa079891, type: 3}
@@ -5523,7 +5523,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 758589061}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &758589063
 Behaviour:
   m_ObjectHideFlags: 0
