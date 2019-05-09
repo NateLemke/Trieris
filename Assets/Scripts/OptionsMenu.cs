@@ -13,13 +13,11 @@ public class OptionsMenu : MonoBehaviour
     }
     public void CloseOptions()
     {
+        Time.timeScale = 1;
         gameObject.SetActive(false);
     }
-
-    public void RuleBookButton()
+    public void OpenOptions()
     {
-        string Path = Application.dataPath;
-
-        Debug.Log("Path: " + Path);
+        Time.timeScale = 0;
     }
 }
