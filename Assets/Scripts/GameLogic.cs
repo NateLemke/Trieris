@@ -33,6 +33,7 @@ public class GameLogic : MonoBehaviour {
     public void newExecuteTurn() {
         Debug.Log("Begin turn");
         DebugControl.log("turn","BEGIN TURN");
+        PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
         foreach (Ship ship in gameManager.getPlayerShips()) {
@@ -56,6 +57,7 @@ public class GameLogic : MonoBehaviour {
         
         if (phaseIndex >= 3) {
             //UIControl.main.devPhaseTrack(4);
+            PhaseManager.DisablePhaseUI();
             phaseIndex = 4;
             resetShips();
             gameManager.checkVictory();

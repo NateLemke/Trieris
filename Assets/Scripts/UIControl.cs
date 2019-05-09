@@ -46,8 +46,10 @@ public class UIControl : MonoBehaviour
     Color arrowYellow;
     Color greyedOut;
 
+    public GameObject phaseAnnouncer;
     public GameObject phase;
     public GameObject subPhase;
+    //public GameObject subPhaseProgress;
 
     public GameObject optionsPanel;
     public static UIControl main;
@@ -177,7 +179,14 @@ public class UIControl : MonoBehaviour
 
         phase = GameObject.Find("Phase");
         subPhase = GameObject.Find("SubPhase");
-        subPhase.SetActive(false);
+
+        phaseAnnouncer = GameObject.Find("PhaseAnnouncer");
+        phaseAnnouncer.SetActive(false);
+
+             
+        //subPhase.SetActive(false);
+        //subPhaseProgress = GameObject.Find("SubPhase Progress");
+        //subPhaseProgress.SetActive(false);
     }
 
     void Update()
