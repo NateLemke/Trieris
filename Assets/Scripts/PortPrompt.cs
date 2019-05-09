@@ -48,6 +48,7 @@ public class PortPrompt : MonoBehaviour
 
     public void accept()
     {
+        GameManager.PortsCaptured++;
         thisPort.setTeam(currentShip.team);
         currentShip.needCaptureChoice = false;
         currentShip.needRedirect = true;

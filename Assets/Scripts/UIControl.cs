@@ -46,8 +46,10 @@ public class UIControl : MonoBehaviour
     Color arrowYellow;
     Color greyedOut;
 
+    public GameObject phaseAnnouncer;
     public GameObject phase;
     public GameObject subPhase;
+    //public GameObject subPhaseProgress;
 
     public GameObject optionsPanel;
     public static UIControl main;
@@ -61,23 +63,23 @@ public class UIControl : MonoBehaviour
         gameLogic = gameObject.GetComponent<GameLogic>();
         optionsPanel = GameObject.Find("OverlayCanvas");
         optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
-        DebugControl.init();
+        //DebugControl.init();
     }
 
     void Start()
     {
         main = this;
-        captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
-        phaseTracker = GameObject.Find("PhaseTracker");
-        animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
-        redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
-        debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
+        //captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
+        //phaseTracker = GameObject.Find("PhaseTracker");
+        //animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
+        //redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
+        //debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
 
         Selected = null;
-        DevUI = GameObject.Find("DevUI");
-        DevUI.SetActive(false);
-        LogToggle = GameObject.Find("DebugToggle");
-        LogToggle.SetActive(false);
+        //DevUI = GameObject.Find("DevUI");
+        //DevUI.SetActive(false);
+        //LogToggle = GameObject.Find("DebugToggle");
+        //LogToggle.SetActive(false);
 
         actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
         actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
@@ -177,67 +179,71 @@ public class UIControl : MonoBehaviour
 
         phase = GameObject.Find("Phase");
         subPhase = GameObject.Find("SubPhase");
-        subPhase.SetActive(false);
+
+        phaseAnnouncer = GameObject.Find("PhaseAnnouncer");
+        phaseAnnouncer.SetActive(false);
+
+             
+        //subPhase.SetActive(false);
+        //subPhaseProgress = GameObject.Find("SubPhase Progress");
+        //subPhaseProgress.SetActive(false);
     }
 
     void Update()
     {
 
-        if (gameManager.animationPlaying)
-        {
-            animationText.text = "animation playing";
-            animationText.color = Color.red;
-        }
-        else
-        {
-            animationText.text = "no animation";
-            animationText.color = Color.green;
-        }
+        //if (gameManager.animationPlaying)
+        //{
+        //    animationText.text = "animation playing";
+        //    animationText.color = Color.red;
+        //}
+        //else
+        //{
+        //    animationText.text = "no animation";
+        //    animationText.color = Color.green;
+        //}
 
         if (gameManager.needRedirect)
         {
-            redirectText.text = "need redirect";
-            redirectText.color = Color.red;
+            //redirectText.text = "need redirect";
+            //redirectText.color = Color.red;
             redirectNotice.SetActive(true);
         }
         else
         {
-            redirectText.text = "no redirect";
-            redirectText.color = Color.green;
+            //redirectText.text = "no redirect";
+            //redirectText.color = Color.green;
             redirectNotice.SetActive(false);
         }
 
         if (gameManager.needCaptureChoice)
         {
-            captureTracker.text = "need capture";
-            captureTracker.color = Color.red;
+            //captureTracker.text = "need capture";
+            //captureTracker.color = Color.red;
             captureNotice.SetActive(true);
         }
         else
         {
-            captureTracker.text = "no capture";
-            captureTracker.color = Color.green;
+            //captureTracker.text = "no capture";
+            //captureTracker.color = Color.green;
             captureNotice.SetActive(false);
         }
+
         string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
         turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
 
-        s = (gameLogic.phaseIndex == 4) ? "START TURN" : "PHASE " + (gameLogic.phaseIndex + 1);
-        phaseText.text = s;
-
-        if (Input.GetKeyDown("escape"))
-        {
-            if (!optionsPanel.active)
-                optionsPanel.SetActive(true);
-            else
-                optionsPanel.SetActive(false);
-        }
 
     }
 
     private void setSelection(Ship value) {
+        if(selected != null) {
+            selected.disableIcon();
+        }
+
         if(value != null) {
             selected = value;
+            onShipSelection();
+
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
             {
@@ -314,100 +320,89 @@ public class UIControl : MonoBehaviour
 
     public void setSelection(int value)
     {
-        if (gameManager.getPlayerShips()[value] == null)
-        {
-            //for (int i = 0; i < actions.Length; i++)
-            //{
-            //    selected = gameManager.getPlayerShips()[value];
-            //    //actions[i].interactable = false;
-            //    //compass.SetActive(false);
-            //    //shipID.text = "No Ship";
-            //}
-        }
-        else
-        {
-            selected = gameManager.getPlayerShips()[value];
-            //compass.SetActive(true);
-            for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++)
-            {
-                //Debug.Log(i); 
-                //actions[i].interactable = false;                
-                //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
-                //actions[i].interactable = true;
-            }
-
-            selected.currentActionIndex = 0;
-            for (int j = 0; j < Ship.MAX_HEALTH; j++)
-            {
-                if (j >= selected.getLife())
-                {
-                    setDamaged();
-                    setActionImages(-1);
-                }
-                else
-                {
-                    setUndamaged();
-                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
-                }
-                selected.currentActionIndex++;
-            }
-            selected.currentActionIndex = 0;
-
-            foreach (Button b in attackPanels)
-            {
-                ColorBlock cb = b.colors;
-                cb.normalColor = attackUnclicked;
-                b.colors = cb;
-            }
-
-            foreach (Button b in attackArrows)
-            {
-                ColorBlock cb = b.colors;
-                cb.normalColor = arrowYellow;
-                b.colors = cb;
-            }
-
-            if (selected.catapultIndex >= 0)
-            {
-                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
-                colBlock.normalColor = attackClicked;
-                attackPanels[selected.catapultIndex].colors = colBlock;
-
-                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
-                {
-                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
-                    colorBlock.normalColor = attackClicked;
-                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
-                }
-            }
-
-            foreach (GameObject go in shipTabs)
-            {
-                Outline o = go.GetComponent<Outline>();
-                Color c = o.effectColor;
-                c.a = 0;
-                o.effectColor = c;
-            }
-
-            Outline selectedOutline = shipTabs[value].GetComponent<Outline>();
-            Color color = selectedOutline.effectColor;
-            color.a = 255;
-            selectedOutline.effectColor = color;
-
-            foreach (GameObject go in actionPanels)
-            {
-                Outline o = go.GetComponent<Outline>();
-                Color c = o.effectColor;
-                c.a = 0;
-                o.effectColor = c;
-            }
-
-            Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-            Color currentPanelColor = currentPanel.effectColor;
-            currentPanelColor.a = 255;
-            currentPanel.effectColor = color;
+        if (selected != null) {
+            selected.disableIcon();
         }
 
+        selected = gameManager.getPlayerShips()[value];
+        onShipSelection();
+
+        //compass.SetActive(true);
+        for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
+            //Debug.Log(i); 
+            //actions[i].interactable = false;                
+            //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
+            //actions[i].interactable = true;
+        }
+
+        selected.currentActionIndex = 0;
+        for (int j = 0; j < Ship.MAX_HEALTH; j++) {
+            if (j >= selected.getLife()) {
+                setDamaged();
+                setActionImages(-1);
+            } else {
+                setUndamaged();
+                setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+            }
+            selected.currentActionIndex++;
+        }
+        selected.currentActionIndex = 0;
+
+        foreach (Button b in attackPanels) {
+            ColorBlock cb = b.colors;
+            cb.normalColor = attackUnclicked;
+            b.colors = cb;
+        }
+
+        foreach (Button b in attackArrows) {
+            ColorBlock cb = b.colors;
+            cb.normalColor = arrowYellow;
+            b.colors = cb;
+        }
+
+        if (selected.catapultIndex >= 0) {
+            ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+            colBlock.normalColor = attackClicked;
+            attackPanels[selected.catapultIndex].colors = colBlock;
+
+            if (selected.actions[selected.catapultIndex].catapultDirection >= 0) {
+                ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
+                colorBlock.normalColor = attackClicked;
+                attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
+            }
+        }
+
+        foreach (GameObject go in shipTabs) {
+            Outline o = go.GetComponent<Outline>();
+            Color c = o.effectColor;
+            c.a = 0;
+            o.effectColor = c;
+        }
+
+        Outline selectedOutline = shipTabs[value].GetComponent<Outline>();
+        Color color = selectedOutline.effectColor;
+        color.a = 255;
+        selectedOutline.effectColor = color;
+
+        foreach (GameObject go in actionPanels) {
+            Outline o = go.GetComponent<Outline>();
+            Color c = o.effectColor;
+            c.a = 0;
+            o.effectColor = c;
+        }
+
+        Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+        Color currentPanelColor = currentPanel.effectColor;
+        currentPanelColor.a = 255;
+        currentPanel.effectColor = color;
+
+    }
+
+    void onShipSelection() {
+        if(selected != null) {
+            StartCoroutine(PhaseManager.focus(selected.Position,0.0f,SpeedManager.CameraFocusSpeed));
+            selected.setIconString(selected.getNumeralID());
+        }
     }
 
     public void redirect(int newDirection)

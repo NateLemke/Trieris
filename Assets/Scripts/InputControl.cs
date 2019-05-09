@@ -29,11 +29,15 @@ public class InputControl : MonoBehaviour {
 
     public static bool fastAnimation = false;
 
+    public GameObject optionsPanel;
+
     private void Awake() {
         mainCamera = GameObject.Find("Main Camera");
         camera = mainCamera.GetComponent<Camera>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         uiControl = GameObject.Find("GameManager").GetComponent<UIControl>();
+        optionsPanel = GameObject.Find("OverlayCanvas");
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
     }
 
     // Use this for initialization
@@ -62,10 +66,24 @@ public class InputControl : MonoBehaviour {
         cameraUpdate();
         
         if (Input.GetKeyDown(KeyCode.F)) {
-            fastAnimation = !fastAnimation;
+            SpeedManager.toggleFastAnimations();
+        }
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            SpeedManager.skipSubPhase();
         }
         if (gameManager.playerTeam != null) {
             shipSelectUpdate();
+        }
+
+        if (Input.GetKeyDown("escape"))
+        {
+            if (!optionsPanel.active)
+            {
+                optionsPanel.SetActive(true);
+                optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
+            }
+            else
+                optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
         }
     }
 

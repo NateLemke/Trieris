@@ -14,11 +14,8 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="UpArrow.svg"
-   inkscape:export-filename="C:\Users\aking\Documents\UnityProjects\COMP-4900-Trieris\Assets\Resources\UpArrow.png"
-   inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="minimap_icons.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -28,18 +25,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="145.01319"
-     inkscape:cy="882.19847"
+     inkscape:zoom="1.4"
+     inkscape:cx="272.39873"
+     inkscape:cy="818.63739"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:snap-object-midpoints="true"
-     inkscape:snap-global="true"
      inkscape:window-width="1920"
-     inkscape:window-height="986"
-     inkscape:window-x="-11"
-     inkscape:window-y="-11"
+     inkscape:window-height="1057"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -49,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,17 +53,30 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:#000000;stroke-width:0.21559003"
-       d="M 31.948213,0.96583251 16.583777,27.577645 1.2193413,54.189457 H 18.341293 V 99.948419 H 45.555652 V 54.189457 H 62.677088 L 47.312652,27.577645 Z"
-       id="path24"
-       inkscape:connector-curvature="0"
+       sodipodi:type="star"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:5.97473654;stroke:#000000;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path819"
+       sodipodi:sides="3"
+       sodipodi:cx="74.272324"
+       sodipodi:cy="73.805061"
+       sodipodi:r1="37.247921"
+       sodipodi:r2="18.62396"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.52359878"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 74.272325,36.55714 16.128821,27.935941 16.128824,27.935942 -32.257646,-10e-7 -32.257647,-10e-7 16.128824,-27.93594 z"
+       inkscape:transform-center-y="-9.3119805"
+       transform="matrix(0.73635818,0,0,1,11.076826,0)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <path
-       style="fill:#ffffff;stroke-width:0.15587945"
-       d="M 31.948213,10.793139 20.839333,30.034859 9.7304499,49.27606 H 22.83921 V 95.412778 H 41.360043 V 49.27606 H 54.166495 L 43.057615,30.034859 Z"
-       id="path24-3"
-       inkscape:connector-curvature="0"
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:5.12699986;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path821"
+       cx="124.07068"
+       cy="57.2686"
+       r="26.174852"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
   </g>

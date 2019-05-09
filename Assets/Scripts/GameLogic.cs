@@ -33,6 +33,7 @@ public class GameLogic : MonoBehaviour {
     public void newExecuteTurn() {
         Debug.Log("Begin turn");
         DebugControl.log("turn","BEGIN TURN");
+        PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
         foreach (Ship ship in gameManager.getPlayerShips()) {
@@ -55,7 +56,8 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
-            UIControl.main.devPhaseTrack(4);
+            //UIControl.main.devPhaseTrack(4);
+            PhaseManager.DisablePhaseUI();
             phaseIndex = 4;
             resetShips();
             gameManager.checkVictory();
@@ -87,7 +89,7 @@ public class GameLogic : MonoBehaviour {
     }
 
     private void executePhase(int phase) {
-        UIControl.main.devPhaseTrack(phaseIndex);
+        //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
@@ -99,6 +101,8 @@ public class GameLogic : MonoBehaviour {
                     newDirection = ship.getAI().setNewShipDirection(ship);
                     ship.hold();
                     ship.setFront(newDirection);
+                    ship.setSpriteRotation();
+
                 }
 
                 /*
@@ -109,6 +113,7 @@ public class GameLogic : MonoBehaviour {
                         int newDirection = 0;
                         newDirection = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(newDirection);
+                        ship.setSpriteRotation();
                     }                   
                 }
                 */
@@ -123,9 +128,49 @@ public class GameLogic : MonoBehaviour {
         StartCoroutine( PhaseManager.playAnimations());        
     }
 
+
+    /// <summary>
+    /// Final check for port capture and ship sinking. Also determines if a win or lose state is reached.
+    /// </summary>
     public void postAnimation() {
         handleCapture();
         sinkShips();
+        determineGameState();
+        
+    }
+
+    private void determineGameState()
+    {
+        if (GameManager.main.playerTeam.ships.Count == 0)
+        {
+            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
+            gameOverObj.GetComponent<GameOver>().Initialize("Defeat");
+        }
+        else if (GameManager.main.getAllShips().Count == GameManager.main.playerTeam.ships.Count)
+        {
+            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
+            gameOverObj.GetComponent<GameOver>().Initialize("Victory");
+        }
+        else
+        {
+            int capitalCount = 0;
+            foreach (Port port in GameManager.main.getBoard().getAllPorts())
+            {
+                if (port.getTeam() == GameManager.main.playerTeam && port.getCapital())
+                {
+                    capitalCount++;
+                    break;
+                }
+            }
+            if (capitalCount == 0)
+            {
+                GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+                gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
+                gameOverObj.GetComponent<GameOver>().Initialize("Defeat");
+            }
+        }
     }
 
     private void handleCapture() {
@@ -154,6 +199,8 @@ public class GameLogic : MonoBehaviour {
                         ship.capturePort();
                         int direction = ship.getAI().setNewShipDirection(ship);
                         ship.setFront(direction);
+                        ship.setSpriteRotation();
+
                         //ship.canActAfterCollision = true;
                     }
                 }
