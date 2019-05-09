@@ -199,9 +199,6 @@ public class Ship : MonoBehaviour {
         }
 
         protected override void affectShip() {
-            if (ship.team.getTeamType() == Team.Type.green && ship.id == 3 ) {
-                ;
-            }
             ship.hold();
             if (catapultDirection == -1) {
                 ship.repair();
@@ -228,6 +225,24 @@ public class Ship : MonoBehaviour {
 
         protected override void affectShip() {
             ship.turn(-1);
+        }
+    }
+
+    public class EmptyAction : Action
+    {
+
+        public EmptyAction(int catapultDirection, Ship ship, int index) : base(catapultDirection, ship, index)
+        {
+            reverseReady = true;
+        }
+
+        protected override void affectShip()
+        {
+            ship.hold();
+            if (catapultDirection == -1)
+            {
+                ship.repair();
+            }
         }
     }
 
@@ -409,7 +424,7 @@ public class Ship : MonoBehaviour {
     public void populateDefaultActions() {
         for (int i = 0; i < MAX_HEALTH; i++) {
             if (actions[i] == null) {
-                actions[i] = new HoldAction(-1,this,4);
+                actions[i] = new EmptyAction(-1,this,6);
             }
         }
     }
