@@ -13,6 +13,11 @@ public class OptionsMenu : MonoBehaviour
     }
     public void CloseOptions()
     {
+        Time.timeScale = 1;
         gameObject.SetActive(false);
+    }
+    public void OpenOptions()
+    {
+        Time.timeScale = 0;
     }
 }

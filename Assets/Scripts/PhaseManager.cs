@@ -49,6 +49,7 @@ public static class PhaseManager
         foreach(subPhase s in subPhaseOrder) {
             yield return s();
             nextSubPhase();
+            sinkAnimations.Clear();
         }
 
         //yield return playBasicActions();

@@ -232,16 +232,6 @@ public class UIControl : MonoBehaviour
         string s = (gameLogic.phaseIndex == 4) ? " Planning phase" : " Phase: " + gameLogic.phaseIndex;
         turnPhase.text = "Turn: " + gameLogic.TurnIndex + s;
 
-        s = (gameLogic.phaseIndex == 4) ? "START TURN" : "PHASE " + (gameLogic.phaseIndex + 1);
-        phaseText.text = s;
-
-        if (Input.GetKeyDown("escape"))
-        {
-            if (!optionsPanel.active)
-                optionsPanel.SetActive(true);
-            else
-                optionsPanel.SetActive(false);
-        }
 
     }
 
