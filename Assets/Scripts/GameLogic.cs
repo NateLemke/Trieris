@@ -94,7 +94,8 @@ public class GameLogic : MonoBehaviour {
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
-                checkAdjHRam(ship,phase);
+                //if(!checkAdjHRam(ship,phase))
+                //    ship.doAction(phase);
                 ship.doAction(phase);
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
@@ -134,7 +135,7 @@ public class GameLogic : MonoBehaviour {
     /// </summary>
     /// <param name="ship"></param>
     /// <param name="phase"></param>
-    public void checkAdjHRam(Ship ship, int phase)
+    public bool checkAdjHRam(Ship ship, int phase)
     {
         if (ship.actions[phase].GetType().Name == "ForwardAction")
         {
@@ -144,9 +145,11 @@ public class GameLogic : MonoBehaviour {
                 if(Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
                 {
                     ship.ram(s);
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     /// <summary>
