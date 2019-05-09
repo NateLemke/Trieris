@@ -3015,6 +3015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 493708846496188183}
   - component: {fileID: 8933800269388464021}
+  - component: {fileID: 6914307317431518108}
   m_Layer: 0
   m_Name: Ship2
   m_TagString: Untagged
@@ -3062,6 +3063,25 @@ MonoBehaviour:
   currentActionIndex: 0
   catapultIndex: 0
   redirectUI: {fileID: 0}
+--- !u!95 &6914307317431518108
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896327536109820843}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3b06bbe9f2f6a6a4fad1f6ae9404f581, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6927597732911287672
 GameObject:
   m_ObjectHideFlags: 0
@@ -3871,11 +3891,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CBT
       objectReference: {fileID: 0}
-    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     - target: {fileID: 4077031272601837247, guid: d294833786d4d254cbc52d9fff79b0b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3981,6 +3996,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294833786d4d254cbc52d9fff79b0b5, type: 3}
 --- !u!224 &8248026384413463058 stripped
