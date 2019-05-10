@@ -317,6 +317,8 @@ public static class PhaseManager
         GameObject phaseObj = UIControl.main.phase;
         phaseObj.SetActive(true);
         phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase + 1);
+        GameManager.main.uiControl.GoText.text = "PHASE " + (phase + 1);
+
     }
 
     static void clearAnimationLists() {

@@ -415,6 +415,12 @@ public class Ship : MonoBehaviour {
         PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
         node = null;
         team.ships.Remove(this);
+
+        if(this == GameManager.main.uiControl.Selected)
+        {
+            GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].getID());
+        }
+
         Destroy(this.gameObject);
     }
 

@@ -34,7 +34,7 @@ public class UIControl : MonoBehaviour
     Text[] tabTexts = new Text[5];
     Image[,] bottomIcons = new Image[6, 5];
     Text[] portTexts = new Text[6];
-    Text phaseText;
+    Text goText;
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -62,6 +62,8 @@ public class UIControl : MonoBehaviour
     public GameObject[] ShipTabs { get { return shipTabs; } }
 
     public Text[] Tabtexts {  get { return tabTexts; } }
+
+    public Text GoText {  get { return goText; } }
 
     private void Awake()
     {
@@ -167,7 +169,7 @@ public class UIControl : MonoBehaviour
         portTexts[4] = GameObject.Find("BottomPortsBlue").GetComponent<Text>();
         portTexts[5] = GameObject.Find("BottomPortsBlack").GetComponent<Text>();
 
-        phaseText = GameObject.Find("GoText").GetComponent<Text>();
+        goText = GameObject.Find("GoText").GetComponent<Text>();
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
@@ -616,18 +618,21 @@ public class UIControl : MonoBehaviour
 
     public void setCatapultIndex(int i)
     {
-        foreach (Button b in attackPanels)
+        if (selected != null)
         {
-            ColorBlock cb = b.colors;
-            cb.normalColor = attackUnclicked;
-            b.colors = cb;
+            foreach (Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            ColorBlock colBlock = attackPanels[i].colors;
+            colBlock.normalColor = attackClicked;
+            attackPanels[i].colors = colBlock;
+
+            selected.catapultIndex = i;
         }
-
-        ColorBlock colBlock = attackPanels[i].colors;
-        colBlock.normalColor = attackClicked;
-        attackPanels[i].colors = colBlock;
-
-        selected.catapultIndex = i;
     }
 
     public void setAttackDirection(int i)
