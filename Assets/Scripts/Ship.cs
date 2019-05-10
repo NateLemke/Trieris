@@ -104,6 +104,9 @@ public class Ship : MonoBehaviour {
         
         this.node = node;
         node.getShips().Add(this);
+        //if(node.getPort() != null) {
+        //    node.getPort().setTransparency();
+        //}
         gameObject.transform.position = node.getRealPos();
 
         actions = new Action[4];
@@ -111,7 +114,7 @@ public class Ship : MonoBehaviour {
 
         populateDefaultActions();
 
-        this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.getShipSprite();
+        this.transform.Find("ShipSprite").GetComponent<SpriteRenderer>().sprite = team.ShipSprite;
         transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColorLight();
         currentActionIndex = 0;
         setHealthBar();
@@ -176,8 +179,9 @@ public class Ship : MonoBehaviour {
         }
 
         protected override void affectShip() {           // throws ShipCrashedException 
-            ship.move(ship.front);
             ship.speedup();
+            ship.move(ship.front);
+            
         }
     }
 
@@ -349,8 +353,8 @@ public class Ship : MonoBehaviour {
         //}
         bool reverse = direction == getRelativeDirection(-4);
 
-        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,reverse));
-        ;
+        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,momentum,reverse));
+        
     }
 
 
@@ -399,7 +403,7 @@ public class Ship : MonoBehaviour {
             node.getShips().Remove(this);
         }
         PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
-        node = null;
+        //node = null;
         team.ships.Remove(this);
         Destroy(this.gameObject);
     }
@@ -710,13 +714,19 @@ public class Ship : MonoBehaviour {
     }
 
     public void setIcon(Sprite sprite) {
+        icon.color = Color.white;
+        icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
         icon.gameObject.SetActive(true);
         icon.sprite = sprite;        
     }
 
     public void disableIcon() {
-        icon.gameObject.SetActive(false);
-        icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
+        if(UIControl.main.Selected == this) {
+            setIconString(getNumeralID());
+        } else {
+            icon.gameObject.SetActive(false);
+            icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
+        }        
     }
 
     public void selectThisShip()

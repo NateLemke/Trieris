@@ -38,7 +38,7 @@ public class CatapultResolution : CombatResolution
 
         shipB.life -= damageToB;
 
-        yield return new WaitForSeconds(SpeedManager.CombatDelay);
+        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
 
         shipA.disableIcon();
         shipB.disableIcon();

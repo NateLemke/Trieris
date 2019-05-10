@@ -76,7 +76,7 @@ public class RammingResolution : CombatResolution
         shipB.disableIcon();
         shipA.disableIcon();
 
-        yield return new WaitForSeconds(SpeedManager.CombatDelay);
+        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
 
         resolved = true;
         yield return null;

@@ -48,8 +48,9 @@ public class PortPrompt : MonoBehaviour
 
     public void accept()
     {
+        PortCaptureAnimation anim = new PortCaptureAnimation(currentShip);
+        GameManager.main.StartCoroutine(anim.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed));
         GameManager.PortsCaptured++;
-        thisPort.setTeam(currentShip.team);
         currentShip.needCaptureChoice = false;
         currentShip.needRedirect = true;
         currentShip.setRedirectUI(true);
