@@ -395,6 +395,20 @@ public class Ship : MonoBehaviour {
         if (node != null) {
             node.getShips().Remove(this);
         }
+        if(this.team == GameManager.main.playerTeam)
+        {
+            Button st = GameManager.main.uiControl.ShipTabs[this.getID()].GetComponent<Button>();
+
+            ColorBlock cb = st.colors;
+            cb.normalColor = CustomColor.TeamBlack;
+            st.colors = cb;
+
+            Text tt = GameManager.main.uiControl.Tabtexts[this.getID()].GetComponent<Text>();
+
+            tt.color = CustomColor.TeamBlack;
+
+            st.interactable = false;
+        }
         PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
         node = null;
         team.ships.Remove(this);

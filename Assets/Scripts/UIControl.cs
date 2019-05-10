@@ -31,6 +31,7 @@ public class UIControl : MonoBehaviour
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
+    Text[] tabTexts = new Text[5];
     Image[,] bottomIcons = new Image[6, 5];
     Text[] portTexts = new Text[6];
     Text phaseText;
@@ -57,6 +58,10 @@ public class UIControl : MonoBehaviour
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
     private Ship selected;
+
+    public GameObject[] ShipTabs { get { return shipTabs; } }
+
+    public Text[] Tabtexts {  get { return tabTexts; } }
 
     private void Awake()
     {
@@ -112,6 +117,12 @@ public class UIControl : MonoBehaviour
         shipTabs[2] = GameObject.Find("ShipTab3");
         shipTabs[3] = GameObject.Find("ShipTab4");
         shipTabs[4] = GameObject.Find("ShipTab5");
+
+        tabTexts[0] = GameObject.Find("TabText1").GetComponent<Text>();
+        tabTexts[1] = GameObject.Find("TabText2").GetComponent<Text>();
+        tabTexts[2] = GameObject.Find("TabText3").GetComponent<Text>();
+        tabTexts[3] = GameObject.Find("TabText4").GetComponent<Text>();
+        tabTexts[4] = GameObject.Find("TabText5").GetComponent<Text>();
 
         bottomIcons[0, 0] = GameObject.Find("BottomRed1").GetComponent<Image>();
         bottomIcons[0, 1] = GameObject.Find("BottomRed2").GetComponent<Image>();
@@ -326,16 +337,21 @@ public class UIControl : MonoBehaviour
             selected.disableIcon();
         }
 
-        selected = gameManager.getPlayerShips()[value];
+        //selected = gameManager.getPlayerShips()[value];
+        foreach(Ship s in gameManager.getPlayerShips())
+        {
+            if (s.getID() == value)
+                selected = s;
+        }
         onShipSelection();
 
         //compass.SetActive(true);
-        for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
+        //for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
             //Debug.Log(i); 
             //actions[i].interactable = false;                
             //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
             //actions[i].interactable = true;
-        }
+        //}
 
         selected.currentActionIndex = 0;
         for (int j = 0; j < Ship.MAX_HEALTH; j++) {
@@ -381,7 +397,7 @@ public class UIControl : MonoBehaviour
             o.effectColor = c;
         }
 
-        Outline selectedOutline = shipTabs[value].GetComponent<Outline>();
+        Outline selectedOutline = shipTabs[selected.getID()].GetComponent<Outline>();
         Color color = selectedOutline.effectColor;
         color.a = 255;
         selectedOutline.effectColor = color;
