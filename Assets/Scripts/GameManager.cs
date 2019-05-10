@@ -43,12 +43,13 @@ public class GameManager : MonoBehaviour {
         board.CreateGridVisuals();
 
         // spawn teams, ships and ports
-        createTeams();
+        
 
         cameraLock = true;
     }   
 
     private void Start() {
+        createTeams();
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();

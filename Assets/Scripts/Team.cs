@@ -28,7 +28,25 @@ public class Team
         return shipSprite;
     }
     public Sprite getPortSprite() {
-        return portSprite;
+        //return portSprite;
+        switch (teamType) {
+            case Type.red:
+            return Sprites.main.RedPort;
+            case Type.orange:
+            return Sprites.main.OrangePort;
+            case Type.yellow:
+            return Sprites.main.YellowPort;
+            case Type.green:
+            return Sprites.main.GreenPort;
+            case Type.blue:
+            return Sprites.main.BluePort;
+            case Type.black:
+            return Sprites.main.BlackPort;
+            default:
+            return null;
+
+        }
+
     }
     public Sprite getcaptialSprite() {
         return capitalSprite;
