@@ -255,7 +255,7 @@ public static class PhaseManager
 
     public static void tempPopulateSinkAnimation() {
         foreach(Ship s in GameManager.main.getAllShips()) {
-            if(s.life == 0) {
+            if(s.life <= 0) {
                 sinkAnimations.Add(new SinkAnimation(s));
             }
         }
