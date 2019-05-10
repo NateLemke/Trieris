@@ -214,7 +214,7 @@ public class TrierisAI {
                 index++;
             }
         } catch (ArgumentOutOfRangeException e) {
-            Debug.LogError("ArgumentOutOfRangeException for AI ship"+ship);
+            Debug.LogError("ArgumentOutOfRangeException for AI ship "+ship);
         }
 
         

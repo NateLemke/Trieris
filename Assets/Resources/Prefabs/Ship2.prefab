@@ -1122,7 +1122,7 @@ Transform:
   m_GameObject: {fileID: 1175936310662332107}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.052, z: 0}
-  m_LocalScale: {x: 0.22533448, y: 0.22533448, z: 0.22533448}
+  m_LocalScale: {x: 0.30699572, y: 0.30699572, z: 0.30699572}
   m_Children: []
   m_Father: {fileID: 493708846496188183}
   m_RootOrder: 2
@@ -4751,6 +4751,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CBT
       objectReference: {fileID: 0}
+    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     - target: {fileID: 4077031272601837247, guid: d294833786d4d254cbc52d9fff79b0b5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4856,11 +4861,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6728920044035510037, guid: d294833786d4d254cbc52d9fff79b0b5,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 935b13048912e9341894fe60b848119a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d294833786d4d254cbc52d9fff79b0b5, type: 3}
 --- !u!224 &8248026384413463058 stripped

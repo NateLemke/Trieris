@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UIControl : MonoBehaviour
 {
-
     GameManager gameManager;
     GameLogic gameLogic;
 
@@ -14,7 +13,7 @@ public class UIControl : MonoBehaviour
     Text redirectText;
 
     GameObject debugMenu;
-    GameObject DevUI;
+    //GameObject DevUI;
     GameObject LogToggle;
     GameObject phaseTracker;
     Text turnPhase;
@@ -67,6 +66,7 @@ public class UIControl : MonoBehaviour
 
     private void Awake()
     {
+        main = this;
         gameManager = gameObject.GetComponent<GameManager>();
         gameLogic = gameObject.GetComponent<GameLogic>();
         optionsPanel = GameObject.Find("OverlayCanvas");
@@ -76,7 +76,7 @@ public class UIControl : MonoBehaviour
 
     void Start()
     {
-        main = this;
+        
         //captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
         //phaseTracker = GameObject.Find("PhaseTracker");
         //animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
@@ -250,13 +250,16 @@ public class UIControl : MonoBehaviour
     }
 
     private void setSelection(Ship value) {
-        if(selected != null) {
-            selected.disableIcon();
-        }
+        
+
+        Ship previous = selected;
 
         if(value != null) {
             selected = value;
             onShipSelection();
+            if (previous != null) {
+                previous.disableIcon();
+            }
 
             selected.currentActionIndex = 0;
             for (int j = 0; j < Ship.MAX_HEALTH; j++)
@@ -334,9 +337,7 @@ public class UIControl : MonoBehaviour
 
     public void setSelection(int value)
     {
-        if (selected != null) {
-            selected.disableIcon();
-        }
+        Ship previous = selected;
 
         //selected = gameManager.getPlayerShips()[value];
         foreach(Ship s in gameManager.getPlayerShips())
@@ -345,6 +346,10 @@ public class UIControl : MonoBehaviour
                 selected = s;
         }
         onShipSelection();
+
+        if (previous != null) {
+            previous.disableIcon();
+        }
 
         //compass.SetActive(true);
         //for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
@@ -492,11 +497,11 @@ public class UIControl : MonoBehaviour
         gameManager.setPlayerTeam(i);
     }
 
-    public void toggleDevUI()
-    {
-        DevUI.SetActive(!DevUI.activeSelf);
-        LogToggle.SetActive(!LogToggle.activeSelf);
-    }
+    //public void toggleDevUI()
+    //{
+    //    DevUI.SetActive(!DevUI.activeSelf);
+    //    LogToggle.SetActive(!LogToggle.activeSelf);
+    //}
 
     public void setCurrentActionIndex(int i)
     {

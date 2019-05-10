@@ -19,21 +19,21 @@ public static class PhaseManager
 
     public static bool playingAnimation = false;
 
-    public static float nodeMultiShipScale = 0.3f;
+    public static float nodeMultiShipScale = 0.34f;
 
     delegate IEnumerator subPhase();
 
     static subPhase[] subPhaseOrder = {
         playBasicActions ,
-        sinkShips,
-        rammingChoices,
+        sinkShips,        
         resolveRamming,
+        rammingChoices,
         sinkShips,
         catapultChoices,
         resolveCatapults,
         sinkShips,
-        resolvePortCapture,
         portCaptureChoice,
+        resolvePortCapture,        
         resolveRedirects,
     };
 
@@ -127,8 +127,8 @@ public static class PhaseManager
                 float offset = (rounded -1)* nodeMultiShipScale / 2f;
                 Vector2 pos = new Vector2(j * nodeMultiShipScale - offset,-i * 0.3f);
                 pos += n.getRealPos();
-                Debug.DrawLine(pos + Vector2.up * 0.1f,pos + Vector2.down * 0.1f,c);
-                Debug.DrawLine(pos + Vector2.left * 0.1f,pos + Vector2.right * 0.1f,c);
+                //Debug.DrawLine(pos + Vector2.up * 0.1f,pos + Vector2.down * 0.1f,c);
+                //Debug.DrawLine(pos + Vector2.left * 0.1f,pos + Vector2.right * 0.1f,c);
                 counter++;
                 if(counter >= f) {
                     return;
@@ -262,7 +262,7 @@ public static class PhaseManager
     }   
 
     public static IEnumerator resolvePortCapture() {
-        subPhaseProgress();
+        
         if (captureAnimations.Count == 0) {
             yield break;
         }
@@ -274,7 +274,7 @@ public static class PhaseManager
     }
 
     public static IEnumerator portCaptureChoice() {
-        
+        subPhaseProgress();
         if (!GameManager.main.needCaptureChoice) {
             yield break;
         }

@@ -297,7 +297,7 @@ PrefabInstance:
     - target: {fileID: 4608405581332513921, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -36.200012
+      value: -36.19995
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581856627070, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -4457,12 +4457,24 @@ MonoBehaviour:
   targetIcon: {fileID: 21300000, guid: b57a66b7bb9e3834c9f49699832c87ca, type: 3}
   emptyIcon: {fileID: 21300000, guid: 3691818db8c8e964db362228c0c4952b, type: 3}
   sinkIcon: {fileID: 21300000, guid: 37912ff563a4f084ea15f9a7bf373d57, type: 3}
+  captial: {fileID: 21300000, guid: c932237172af6ae44987661591e07c2a, type: 3}
   redPort: {fileID: 21300000, guid: 1377db319a2e10e4e82d6a0bbffb6431, type: 3}
   orangePort: {fileID: 21300000, guid: f9e8bbf269b8f4844a7d0b0f372e5146, type: 3}
   yellowPort: {fileID: 21300000, guid: 12a3c735fc4e6654497484a2745149e5, type: 3}
   greenPort: {fileID: 21300000, guid: 26e170bd38f53c74482b67ba5a5cfd59, type: 3}
   bluePort: {fileID: 21300000, guid: f75c75cf6b938474ba8302550f60e0cc, type: 3}
   blackPort: {fileID: 21300000, guid: 4dd7b6293778d0f4e912f50b305a4dc1, type: 3}
+  straightArrow: {fileID: 21300000, guid: 510a095b9e4f33c439d698dc1f328ac4, type: 3}
+  curvedArrow: {fileID: 21300000, guid: 3130c168626ffed429856371caa8f0fc, type: 3}
+  holdSprite: {fileID: 21300000, guid: 662284846f5df424db6ec9534ac8cc7f, type: 3}
+  emptySprite: {fileID: 21300000, guid: c58dca7be43cd594abf23af151df4680, type: 3}
+  teamShips:
+  - {fileID: 21300000, guid: eb58ca0fdd284b94e8382d53d4783393, type: 3}
+  - {fileID: 21300000, guid: 03312be0d4d96e349897fe042d1d5fba, type: 3}
+  - {fileID: 21300000, guid: 9533e28262516854e822e2e6184d08d9, type: 3}
+  - {fileID: 21300000, guid: 32ba35a30342c114187ee74008cd8ee5, type: 3}
+  - {fileID: 21300000, guid: 71124c44c50f34a44a36e632163f5e08, type: 3}
+  - {fileID: 21300000, guid: e2e5d1eff8ee0d640ad8c222cd3d01f7, type: 3}
 --- !u!1 &542641031
 GameObject:
   m_ObjectHideFlags: 0
@@ -6094,7 +6106,6 @@ GameObject:
   - component: {fileID: 758589065}
   - component: {fileID: 758589064}
   - component: {fileID: 758589063}
-  - component: {fileID: 758589062}
   m_Layer: 0
   m_Name: MinimapCamera
   m_TagString: MainCamera
@@ -12095,7 +12106,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 12e29802b2fa5fe4988f115ea9f3072e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9dd9e0f1315c20c4b8d16b0794bd06e8, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
