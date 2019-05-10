@@ -894,7 +894,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 205, y: -10}
+  m_AnchoredPosition: {x: 206.99998, y: -10}
   m_SizeDelta: {x: 130, y: 90}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &105969592
@@ -1716,7 +1716,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 915916550}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1756,7 +1756,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '   1a. Ship Tabs'
+  m_Text: '   1b. Ship Tabs'
 --- !u!222 &290753216
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7676,8 +7676,8 @@ RectTransform:
   m_Children:
   - {fileID: 460931418}
   - {fileID: 339175719}
-  - {fileID: 290753214}
   - {fileID: 1021255364}
+  - {fileID: 290753214}
   - {fileID: 424762925}
   - {fileID: 1778566716}
   - {fileID: 1758651628}
@@ -7705,7 +7705,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
+    m_Left: 10
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
@@ -8803,7 +8803,7 @@ GameObject:
   - component: {fileID: 1021255366}
   - component: {fileID: 1021255365}
   m_Layer: 5
-  m_Name: Phases
+  m_Name: Minimap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8821,7 +8821,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 915916550}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -8861,7 +8861,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '   1b. Phases'
+  m_Text: '   1a. Minimap'
 --- !u!222 &1021255366
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13419,7 +13419,7 @@ GameObject:
   - component: {fileID: 1758651630}
   - component: {fileID: 1758651629}
   m_Layer: 5
-  m_Name: DirectionSelect
+  m_Name: CombatDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13661,7 +13661,7 @@ GameObject:
   - component: {fileID: 1778566718}
   - component: {fileID: 1778566717}
   m_Layer: 5
-  m_Name: PhaseSelect
+  m_Name: CombatPhase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
