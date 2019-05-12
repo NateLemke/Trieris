@@ -46,14 +46,14 @@ public class GameManager : MonoBehaviour {
         
 
         cameraLock = true;
-    }   
+    }
 
     private void Start() {
         createTeams();
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
-    }        
+    }
 
     private void Update() {        
 
@@ -235,11 +235,11 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public delegate IEnumerator coroutineDel();
+    //public delegate IEnumerator coroutineDel();
 
-    public void startCoroutine(coroutineDel d) {
-        d();
-    }
+    //public void startCoroutine(coroutineDel d) {
+    //    d();
+    //}
 
     public void revealRedirects() {
         foreach(Ship s in getPlayerShips()) {

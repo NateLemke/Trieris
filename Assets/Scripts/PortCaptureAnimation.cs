@@ -38,6 +38,14 @@ public class PortCaptureAnimation : Animation {
         }
         upperImg.fillAmount = 0;
         ship.getNode().getPort().setTeam(ship.team);
+        
+        if (!GameManager.main.getPlayerShips().Contains(ship)) {
+            int direction = ship.getAI().setNewShipDirection(ship);
+            ship.setFront(direction);
+            ship.setSpriteRotation();
+        }
+
+
         yield return new WaitForSeconds(SpeedManager.CaptureDelay);
         GameObject.Destroy(animObj);
         GameManager.main.uiControl.updatePortsUI();

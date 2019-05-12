@@ -31,8 +31,8 @@ public class GameLogic : MonoBehaviour {
     }
 
     public void newExecuteTurn() {
-        Debug.Log("Begin turn");
-        DebugControl.log("turn","BEGIN TURN");
+        //Debug.Log("Begin turn");
+        //DebugControl.log("turn","BEGIN TURN");
         PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
@@ -42,9 +42,6 @@ public class GameLogic : MonoBehaviour {
                 ship.populateDefaultActions();
                 Debug.Log("ship not ready");
             }                
-        }
-        if(PhaseManager.actionAnimations.Count != 0) {
-            ;
         }
         
         phaseIndex = 0;
@@ -126,7 +123,8 @@ public class GameLogic : MonoBehaviour {
 
         handleCollisions();
         handleCatapults();
-        
+        handleCapture();
+
         StartCoroutine( PhaseManager.playAnimations());        
     }
 
@@ -156,7 +154,7 @@ public class GameLogic : MonoBehaviour {
     /// Final check for port capture and ship sinking. Also determines if a win or lose state is reached.
     /// </summary>
     public void postAnimation() {
-        handleCapture();
+        
         sinkShips();
         determineGameState();
         
@@ -220,9 +218,7 @@ public class GameLogic : MonoBehaviour {
                     if (ship.getAI().decidePortCapture())
                     {
                         ship.capturePort();
-                        int direction = ship.getAI().setNewShipDirection(ship);
-                        ship.setFront(direction);
-                        ship.setSpriteRotation();
+                        
 
                         //ship.canActAfterCollision = true;
                     }

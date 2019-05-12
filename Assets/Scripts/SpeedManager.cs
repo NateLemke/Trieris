@@ -9,6 +9,8 @@ public static class SpeedManager {
     public static float ActionSpeed { get { return (fastAnimations) ? actionSpeed * fastFactor : actionSpeed; } }
     static float combatDelay = 0.6f;
     public static float CombatDelay { get { return (fastAnimations) ? combatDelay * fastFactor : combatDelay; } }
+    static float combatPostDelay = 1.2f;
+    public static float CombatPostDelay { get { return (fastAnimations) ? combatPostDelay * fastFactor : combatPostDelay; } }
     static float captureSpeed = 0.6f;
     public static float CaptureSpeed { get { return (fastAnimations) ? captureSpeed * fastFactor : captureSpeed; } }
     static float captureDelay = 1f;

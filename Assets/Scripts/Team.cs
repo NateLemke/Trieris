@@ -13,20 +13,20 @@ public class Team
     Team.Type teamType;
     public List<Ship> ships { get; set; }
 
-    Sprite shipSprite;
-    Sprite portSprite;
-    Sprite capitalSprite;
+    public Sprite ShipSprite { get { return Sprites.getTeamShip(this); } }
+    public Sprite PortSprite { get { return Sprites.getTeamPort(this); } }
+    public Sprite CapitalSprite { get { return Sprites.getColoredCaptial(this); } }
 
     public Team(Team.Type t) {
         ships = new List<Ship>();
         teamType = t;
-        loadSprites();
+        //loadSprites();
         setPortsAndCapital();
     }
 
-    public Sprite getShipSprite() {
-        return shipSprite;
-    }
+    //public Sprite getShipSprite() {
+    //    return shipSprite;
+    //}
     public Sprite getPortSprite() {
         //return portSprite;
         switch (teamType) {
@@ -48,29 +48,29 @@ public class Team
         }
 
     }
-    public Sprite getcaptialSprite() {
-        return capitalSprite;
-    }
+    //public Sprite getcaptialSprite() {
+    //    return capitalSprite;
+    //}
 
-    private void loadSprites() {
-        try {
-            shipSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Ship");
-        } catch (Exception e) {
-            Debug.LogWarning("Could not load ship sprite for team " + teamType.ToString());
-        }
+    //private void loadSprites() {
+        //try {
+        //    shipSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Ship");
+        //} catch (Exception e) {
+        //    Debug.LogWarning("Could not load ship sprite for team " + teamType.ToString());
+        //}
 
-        try {
-            portSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Port");
-        } catch (Exception e) {
-            Debug.LogWarning("Could not load port sprite for team " + teamType.ToString());
-        }
+        //try {
+        //    portSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Port");
+        //} catch (Exception e) {
+        //    Debug.LogWarning("Could not load port sprite for team " + teamType.ToString());
+        //}
 
-        try {
-            capitalSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Cap");
-        } catch (Exception e) {
-            Debug.LogWarning("Could not load capital sprite for team " + teamType.ToString());
-        }
-    }
+        //try {
+        //    capitalSprite = Resources.Load<Sprite>("Sprites/" + teamType.ToString() + "Cap");
+        //} catch (Exception e) {
+        //    Debug.LogWarning("Could not load capital sprite for team " + teamType.ToString());
+        //}
+    //}
 
     private void setPortsAndCapital() {
         if(GameManager.main.getBoard() == null) {

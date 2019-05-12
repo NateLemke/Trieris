@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Port {
+public class Port{
     private bool capital;
 
     // type TeamColor -> Color
@@ -43,7 +43,8 @@ public class Port {
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
         go.transform.position = node.getRealPos();
         spriteRenderer = go.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = capital ? t.getcaptialSprite() : t.getPortSprite();
+        spriteRenderer.sprite = capital ? t.CapitalSprite : t.PortSprite;
+        go.name = capital ? t.ToString() + " captial" : "port";
         GameObject parent;
         if((parent = GameObject.Find("Ports")) == null) {
             parent = GameObject.Instantiate(new GameObject());
@@ -51,6 +52,7 @@ public class Port {
         }
         go.transform.SetParent(parent.transform);
         GameManager.main.spawnShip(node,t);
+        setTransparency();
     }
 
     public GameObject getGameObject()
@@ -99,7 +101,17 @@ public class Port {
     }
 
     private void setSprite(Team t) {
-        spriteRenderer.sprite = capital ? t.getcaptialSprite() : t.getPortSprite();
+        spriteRenderer.sprite = capital ? t.CapitalSprite : t.PortSprite;
+    }
+
+    public void setTransparency() {
+        Color c = spriteRenderer.color;
+        if(node.getNumberOfShips() == 0) {
+            c.a = 1;
+        } else {
+            c.a = 0.5f;
+        }
+        spriteRenderer.color = c;
     }
 
 
