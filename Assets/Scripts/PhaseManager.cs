@@ -255,7 +255,7 @@ public static class PhaseManager
 
     public static void tempPopulateSinkAnimation() {
         foreach(Ship s in GameManager.main.getAllShips()) {
-            if(s.life == 0) {
+            if(s.life <= 0) {
                 sinkAnimations.Add(new SinkAnimation(s));
             }
         }
@@ -317,6 +317,8 @@ public static class PhaseManager
         GameObject phaseObj = UIControl.main.phase;
         phaseObj.SetActive(true);
         phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase + 1);
+        GameManager.main.uiControl.GoText.text = "PHASE " + (phase + 1);
+
     }
 
     static void clearAnimationLists() {

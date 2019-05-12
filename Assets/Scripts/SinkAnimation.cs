@@ -13,8 +13,9 @@ public class SinkAnimation : Animation {
             yield break;
         }
 
-        PhaseManager.focus(ship.Position,0f,0.5f);
-        yield return new WaitForSeconds(SpeedManager.CombatDelay);
+        yield return PhaseManager.focus(ship.Position,0f,0.5f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);        
+
         ship.setIcon(Sprites.main.SinkIcon);
         InitSinkAnimation();
         
@@ -37,8 +38,9 @@ public class SinkAnimation : Animation {
         yield return null;
     }
 
-    void InitSinkAnimation()
+    public void InitSinkAnimation()
     {
         ship.GetComponent<Animator>().SetTrigger("Sinking");
     }
+
 }

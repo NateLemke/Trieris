@@ -30,9 +30,10 @@ public class UIControl : MonoBehaviour
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
     GameObject[] shipTabs = new GameObject[5];
+    Text[] tabTexts = new Text[5];
     Image[,] bottomIcons = new Image[6, 5];
     Text[] portTexts = new Text[6];
-    Text phaseText;
+    Text goText;
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -56,6 +57,12 @@ public class UIControl : MonoBehaviour
 
     public Ship Selected { get { return selected; } set { setSelection(value); } }
     private Ship selected;
+
+    public GameObject[] ShipTabs { get { return shipTabs; } }
+
+    public Text[] Tabtexts {  get { return tabTexts; } }
+
+    public Text GoText {  get { return goText; } }
 
     private void Awake()
     {
@@ -113,6 +120,12 @@ public class UIControl : MonoBehaviour
         shipTabs[3] = GameObject.Find("ShipTab4");
         shipTabs[4] = GameObject.Find("ShipTab5");
 
+        tabTexts[0] = GameObject.Find("TabText1").GetComponent<Text>();
+        tabTexts[1] = GameObject.Find("TabText2").GetComponent<Text>();
+        tabTexts[2] = GameObject.Find("TabText3").GetComponent<Text>();
+        tabTexts[3] = GameObject.Find("TabText4").GetComponent<Text>();
+        tabTexts[4] = GameObject.Find("TabText5").GetComponent<Text>();
+
         bottomIcons[0, 0] = GameObject.Find("BottomRed1").GetComponent<Image>();
         bottomIcons[0, 1] = GameObject.Find("BottomRed2").GetComponent<Image>();
         bottomIcons[0, 2] = GameObject.Find("BottomRed3").GetComponent<Image>();
@@ -156,7 +169,7 @@ public class UIControl : MonoBehaviour
         portTexts[4] = GameObject.Find("BottomPortsBlue").GetComponent<Text>();
         portTexts[5] = GameObject.Find("BottomPortsBlack").GetComponent<Text>();
 
-        phaseText = GameObject.Find("GoText").GetComponent<Text>();
+        goText = GameObject.Find("GoText").GetComponent<Text>();
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
@@ -326,7 +339,12 @@ public class UIControl : MonoBehaviour
     {
         Ship previous = selected;
 
-        selected = gameManager.getPlayerShips()[value];
+        //selected = gameManager.getPlayerShips()[value];
+        foreach(Ship s in gameManager.getPlayerShips())
+        {
+            if (s.getID() == value)
+                selected = s;
+        }
         onShipSelection();
 
         if (previous != null) {
@@ -334,12 +352,12 @@ public class UIControl : MonoBehaviour
         }
 
         //compass.SetActive(true);
-        for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
+        //for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
             //Debug.Log(i); 
             //actions[i].interactable = false;                
             //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
             //actions[i].interactable = true;
-        }
+        //}
 
         selected.currentActionIndex = 0;
         for (int j = 0; j < Ship.MAX_HEALTH; j++) {
@@ -385,7 +403,7 @@ public class UIControl : MonoBehaviour
             o.effectColor = c;
         }
 
-        Outline selectedOutline = shipTabs[value].GetComponent<Outline>();
+        Outline selectedOutline = shipTabs[selected.getID()].GetComponent<Outline>();
         Color color = selectedOutline.effectColor;
         color.a = 255;
         selectedOutline.effectColor = color;
@@ -605,18 +623,21 @@ public class UIControl : MonoBehaviour
 
     public void setCatapultIndex(int i)
     {
-        foreach (Button b in attackPanels)
+        if (selected != null)
         {
-            ColorBlock cb = b.colors;
-            cb.normalColor = attackUnclicked;
-            b.colors = cb;
+            foreach (Button b in attackPanels)
+            {
+                ColorBlock cb = b.colors;
+                cb.normalColor = attackUnclicked;
+                b.colors = cb;
+            }
+
+            ColorBlock colBlock = attackPanels[i].colors;
+            colBlock.normalColor = attackClicked;
+            attackPanels[i].colors = colBlock;
+
+            selected.catapultIndex = i;
         }
-
-        ColorBlock colBlock = attackPanels[i].colors;
-        colBlock.normalColor = attackClicked;
-        attackPanels[i].colors = colBlock;
-
-        selected.catapultIndex = i;
     }
 
     public void setAttackDirection(int i)

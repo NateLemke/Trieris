@@ -53,6 +53,7 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
+            GameManager.main.uiControl.GoText.text = "START TURN";
             //UIControl.main.devPhaseTrack(4);
             PhaseManager.DisablePhaseUI();
             phaseIndex = 4;
@@ -76,6 +77,7 @@ public class GameLogic : MonoBehaviour {
                 image.color = tempCol;
             }
 
+            gameManager.uiControl.setSelection(gameManager.getPlayerShips()[0].getID());
             return false;
         } else {
             phaseIndex++;
