@@ -8,7 +8,7 @@ public class SinkAnimation : Animation {
         ship = s;
     }
 
-    public override IEnumerator playAnimation(float speed,float delay) {
+    public override IEnumerator playAnimation() {
         if(ship == null) {
             yield break;
         }
@@ -17,9 +17,9 @@ public class SinkAnimation : Animation {
 
         ship.setIcon(Sprites.main.SinkIcon);
         InitSinkAnimation();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
         ship.disableIcon();
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
         yield return null;
     }
 

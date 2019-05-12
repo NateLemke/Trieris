@@ -15,7 +15,7 @@ public class RotationAnimation : Animation {
         portTurn = port;
     }
 
-    public override IEnumerator playAnimation(float speed, float delay = 0f) {
+    public override IEnumerator playAnimation() {
         if (complete) {
             yield break;
         }
@@ -28,12 +28,12 @@ public class RotationAnimation : Animation {
             arrow.transform.localScale = new Vector3(-1,1,1);
         }
         arrow.GetComponentInChildren<SpriteRenderer>().color = ship.team.getColorLight();
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
             startTime = Time.time;
 
-            while (Time.time - startTime < speed) {
-                ship.transform.rotation = Quaternion.Lerp(startRotation,endRotation,(Time.time - startTime) / speed);
+            while (Time.time - startTime < SpeedManager.ActionSpeed) {
+                ship.transform.rotation = Quaternion.Lerp(startRotation,endRotation,(Time.time - startTime) / SpeedManager.ActionSpeed);
                 yield return null;
             }
             complete = true;

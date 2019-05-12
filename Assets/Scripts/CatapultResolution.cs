@@ -18,18 +18,18 @@ public class CatapultResolution : CombatResolution
         shipA.setIcon(Sprites.main.AttackIcon);
         shipB.setIcon(Sprites.main.TargetIcon);
 
+        Vector2 focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
+        yield return PhaseManager.focus(focusPos,0f,SpeedManager.CameraFocusSpeed);
+
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
         CatapultBullet bullet = GameObject.Instantiate(go,shipA.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
         bullet.target = shipB;
         bullet.startPos = shipA.transform.position;
-
         
-        InitCatapultAnimation();
-
-        Vector2 focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
-        yield return PhaseManager.focus(focusPos,0f,0.3f);
+        InitCatapultAnimation();     
+        
 
         while (bullet != null) {
 

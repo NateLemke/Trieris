@@ -9,7 +9,7 @@ public class PortCaptureAnimation : Animation {
         ship = s;
     }
 
-    public override IEnumerator playAnimation(float speed,float delay) {
+    public override IEnumerator playAnimation() {
 
         if(ship == null) {
             yield break;
@@ -25,22 +25,22 @@ public class PortCaptureAnimation : Animation {
         upperImg.sprite = ship.getNode().getPort().getTeam().getPortSprite();
         lowerImg.sprite = ship.team.getPortSprite();
 
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
 
-        float timeStamp = Time.time + speed;
+        float timeStamp = Time.time + SpeedManager.CaptureSpeed;
 
         float fill = 1f;
 
         while(Time.time < timeStamp) {
-            fill = (timeStamp - Time.time) / speed;
+            fill = (timeStamp - Time.time) / SpeedManager.CaptureSpeed;
             upperImg.fillAmount = fill;
             yield return null;
         }
         upperImg.fillAmount = 0;
         ship.getNode().getPort().setTeam(ship.team);
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
         GameObject.Destroy(animObj);
         GameManager.main.uiControl.updatePortsUI();
-        yield return new WaitForSeconds(delay/2);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
     }
 }

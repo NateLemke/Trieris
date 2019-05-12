@@ -8,8 +8,8 @@ public class RammingResolution : CombatResolution
 
     public int damageToA;
 
-    public RammingResolution(Ship a,Ship b,int dmgB) : base(a,b,dmgB) {
-
+    public RammingResolution(Ship a,Ship b,int dmgB, int dmgA=0) : base(a,b,dmgB) {
+        damageToA += dmgA;
     }
 
     public override IEnumerator resolve() {
@@ -30,13 +30,13 @@ public class RammingResolution : CombatResolution
         }
 
         if(B != null && B.GetType() == typeof(RotationAnimation)) {
-            yield return B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed);
+            yield return B.playAnimation();
         }
 
         try {
             if (A != null) {
                 //StartCoroutine(A.playAnimation());
-                GameManager.main.StartCoroutine(A.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
+                GameManager.main.StartCoroutine(A.playAnimation());
             }            
         } catch (Exception e) {
             Debug.LogError("Rammed without moving?");
@@ -44,7 +44,7 @@ public class RammingResolution : CombatResolution
 
         if (B != null) {
             //StartCoroutine(B.playAnimation());
-            GameManager.main.StartCoroutine(B.playAnimation(SpeedManager.CombatDelay,SpeedManager.ActionSpeed));
+            GameManager.main.StartCoroutine(B.playAnimation());
         }
 
         if (A == null) {

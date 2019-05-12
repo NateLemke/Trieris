@@ -189,7 +189,7 @@ public static class PhaseManager
                 continue;
             }
 
-            yield return a.playAnimation(SpeedManager.ActionDelay,SpeedManager.ActionSpeed);
+            yield return a.playAnimation();
         }
 
         yield return null;
@@ -246,7 +246,7 @@ public static class PhaseManager
         if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
             foreach (SinkAnimation a in sinkAnimations) {
-                yield return a.playAnimation(0.1f,0.1f);
+                yield return a.playAnimation();
             }
             sinkAnimations.Clear();
         }
@@ -269,7 +269,7 @@ public static class PhaseManager
         setSubphaseText("port capture");
         foreach (PortCaptureAnimation ca in captureAnimations) {
             
-            yield return ca.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed);
+            yield return ca.playAnimation();
         }
     }
 
@@ -369,11 +369,14 @@ public static class PhaseManager
         subPhaseIndex++;
     }
     
-    public static void addRammingResolution(Ship attacker, Ship target, int damage) {
+    public static void addRammingResolution(Ship attacker, Ship target, int damage,int damageToSelf=0) {
+//RammingResolution r = null;
         bool foundPair = false;
         foreach (RammingResolution rr in rammingResolutions) {
             if(rr.shipA == target && rr.shipB == attacker) {
-                rr.damageToA = damage;
+                rr.damageToA += damage;
+                rr.damageToB += damageToSelf;
+                //r = rr;
                 foundPair = true;
                 break;
             }
@@ -381,8 +384,10 @@ public static class PhaseManager
         if (!foundPair) {
             involvedInRamming.Add(attacker);
             involvedInRamming.Add(target);
-            rammingResolutions.Add(new RammingResolution(attacker,target,damage));
+            //r = 
+            rammingResolutions.Add(new RammingResolution(attacker,target,damage,damageToSelf));
         }
+        //return r;
     }
 
 }

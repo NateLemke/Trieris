@@ -19,7 +19,7 @@ public class MovementAnimation : Animation {
         reverse = r;
     }
 
-    public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
+    public override IEnumerator playAnimation() {
         if (complete) {
             yield break;
         }        
@@ -32,12 +32,12 @@ public class MovementAnimation : Animation {
             arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
         }
         arrow.GetComponent<SpriteRenderer>().color = ship.team.getColorLight();
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
             startTime = Time.time;
 
-            while (Time.time - startTime < speed) {
-                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / speed);
+            while (Time.time - startTime < SpeedManager.ActionSpeed) {
+                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / SpeedManager.ActionSpeed);
                 yield return null;
             }
             complete = true;
