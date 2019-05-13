@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CatapultResolution : CombatResolution
 {
+    public bool interrupted;
+
     public CatapultResolution(Ship a,Ship t,int dmgT) : base(a,t,dmgT) {
 
     }

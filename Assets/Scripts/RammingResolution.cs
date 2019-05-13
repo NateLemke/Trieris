@@ -67,6 +67,20 @@ public class RammingResolution : CombatResolution
         shipB.life -= damageToB;
         shipA.life -= damageToA;
 
+        foreach(CatapultResolution cr in PhaseManager.catapultResolutions)
+        {
+            if (cr.shipA == shipA)
+            {
+                Debug.Log("Removed " + shipA.team + shipA.getNumeralID());
+                cr.interrupted = true;
+            }
+            if (cr.shipA == shipB)
+            {
+                Debug.Log("Removed " + shipB.team + shipB.getNumeralID());
+                cr.interrupted = true;
+            }
+        }
+
         shipB.updateFrontAfterCollision();
         shipA.updateFrontAfterCollision();
 

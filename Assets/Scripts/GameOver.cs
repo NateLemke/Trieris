@@ -44,7 +44,7 @@ public class GameOver : MonoBehaviour
     public void ExitGame()
     {
         //For Editor Closing
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         //For Build Closing
         Application.Quit();
     }

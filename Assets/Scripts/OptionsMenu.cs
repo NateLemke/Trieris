@@ -10,7 +10,7 @@ public class OptionsMenu : MonoBehaviour
     public void QuitGame()
     {
         //For Editor Closing
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         overlay = GameObject.Find("OverlayCanvas");
         //For Build Closing
         Application.Quit();
