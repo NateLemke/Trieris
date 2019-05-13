@@ -182,7 +182,7 @@ public class UIControl : MonoBehaviour
         holdSprite = Resources.Load("holdicon", typeof(Sprite)) as Sprite;
         emptySprite = Resources.Load("setaction", typeof(Sprite)) as Sprite;
 
-        victoryTracker = GameObject.Find("VictoryCounter").GetComponentInChildren<Text>();
+        victoryTracker = GameObject.Find("VictoryText").GetComponent<Text>();
         turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
 
         redirectNotice = GameObject.Find("PendingRedirect");
@@ -611,19 +611,21 @@ public class UIControl : MonoBehaviour
 
     private void setDamaged()
     {
+        actionPanels[selected.currentActionIndex].GetComponent<Button>().interactable = false;
         Image i = actionPanels[selected.currentActionIndex].GetComponent<Image>();
         i.color = new Color(1, 0, 0, 1);
     }
 
     private void setUndamaged()
     {
+        actionPanels[selected.currentActionIndex].GetComponent<Button>().interactable = true;
         Image i = actionPanels[selected.currentActionIndex].GetComponent<Image>();
         i.color = defaultGreen;
     }
 
     public void setCatapultIndex(int i)
     {
-        if (selected != null)
+        if (selected != null && i < selected.getLife())
         {
             foreach (Button b in attackPanels)
             {
@@ -682,8 +684,8 @@ public class UIControl : MonoBehaviour
 
         for (int i = 0; i < 6; i++)
         {
-            if (i == 3)
-                GameObject.Find("VictoryCounter").GetComponentInChildren<Text>().text = scores[i] + "/12\nports";
+            if (i == (int)gameManager.playerTeam.getTeamType())
+                GameObject.Find("VictoryText").GetComponent<Text>().text = scores[i] + "/12\nports";
             portTexts[i].text = scores[i] + " / 12";
         }
     }
