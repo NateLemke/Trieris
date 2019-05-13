@@ -540,7 +540,7 @@ public class Ship : MonoBehaviour {
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);        
         if (!target.movedForward && this.front != target.front) {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
-            //this.life--;
+            this.life--;
         }
         PhaseManager.addRammingResolution(this,target,momentum);
         //PhaseManager.addRamming(this,target,momentum);
