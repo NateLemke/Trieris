@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
 
@@ -50,6 +52,12 @@ public class GameManager : MonoBehaviour {
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
+
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
     }
 
     private void Update() {        
@@ -202,6 +210,21 @@ public class GameManager : MonoBehaviour {
 
         // draw nodes and node connections
         //drawBoardGizmos();
+
+        //if(board != null) {
+        //    Gizmos.color = Color.red;
+        //    foreach (Node n in board.getAllNodes()) {
+        //        Handles.Label(n.getRealPos(),n.getPosition().ToString());
+        //        for (int i = 0; i < 8; i++) {
+        //            if (n.getAdjacentNode(i) != null) {
+        //                Vector2 halfway = (n.getAdjacentNode(i).getRealPos() - n.getRealPos()) / 2;
+        //                Gizmos.DrawLine(n.getRealPos(),n.getRealPos() + halfway);
+        //            }
+        //        }
+        //    }
+        //}
+
+        
     }
 
     private void drawBoardGizmos() {

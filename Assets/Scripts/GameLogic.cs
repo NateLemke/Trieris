@@ -290,18 +290,19 @@ public class GameLogic : MonoBehaviour {
     private void handleCatapults() {
         foreach (Ship ship in gameManager.getAllShips()) {
             Node node = ship.getCatapultNode();
-            if (node != null && node.getShips().Count > 0) {
+            if (node != null) {
 
                 List<Ship> potentialTargets = new List<Ship>();
 
-                foreach(Ship s in node.getShips()) {
-                    if(s.team != ship.team) {
-                        potentialTargets.Add(s);
+                foreach(Ship potentialTarget in node.getShips()) {
+                    if(potentialTarget.team != ship.team) {
+                        potentialTargets.Add(potentialTarget);
                     }
                 }
 
                 Ship chosenShip = null;
                 if(potentialTargets.Count == 0) {
+                    PhaseManager.addMissedShot(ship,node);
                     continue;
                 }
                 else if(potentialTargets.Count == 1) {

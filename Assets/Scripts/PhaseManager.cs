@@ -519,7 +519,11 @@ public static class PhaseManager
         //return r;
     }
 
-    
+    public static void addMissedShot(Ship s, Node n) {
+        CatapultResolution cr = new CatapultResolution(s,null,0,n);       
+     
+        catapultResolutions.Add(cr);
+    }
 
 }
 
