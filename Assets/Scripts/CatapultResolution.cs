@@ -8,6 +8,8 @@ public class CatapultResolution : CombatResolution
 {
     public Node missedNode;
 
+    public bool interrupted;
+
     public CatapultResolution(Ship a,Ship b,int dmgToB, Node missed = null) : base(a,b,dmgToB) {
         missedNode = missed;
      }
