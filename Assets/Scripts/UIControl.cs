@@ -22,6 +22,7 @@ public class UIControl : MonoBehaviour
     GameObject redirectNotice;
     GameObject captureNotice;
     GameObject rammingNotice;
+    GameObject catapultNotice;
 
     GameObject TeamSelectUI;
 
@@ -188,7 +189,8 @@ public class UIControl : MonoBehaviour
         redirectNotice = GameObject.Find("PendingRedirect");
         captureNotice = GameObject.Find("PendingCapture");
         rammingNotice = GameObject.Find("PendingRamming");
-        rammingNotice.SetActive(false);
+        catapultNotice = GameObject.Find("PendingCatapult");
+        //rammingNotice.SetActive(false);
 
         TeamSelectUI = GameObject.Find("TeamSelectPanel");
 
@@ -207,42 +209,10 @@ public class UIControl : MonoBehaviour
     void Update()
     {
 
-        //if (gameManager.animationPlaying)
-        //{
-        //    animationText.text = "animation playing";
-        //    animationText.color = Color.red;
-        //}
-        //else
-        //{
-        //    animationText.text = "no animation";
-        //    animationText.color = Color.green;
-        //}
-
-        if (gameManager.needRedirect)
-        {
-            //redirectText.text = "need redirect";
-            //redirectText.color = Color.red;
-            redirectNotice.SetActive(true);
-        }
-        else
-        {
-            //redirectText.text = "no redirect";
-            //redirectText.color = Color.green;
-            redirectNotice.SetActive(false);
-        }
-
-        if (gameManager.needCaptureChoice)
-        {
-            //captureTracker.text = "need capture";
-            //captureTracker.color = Color.red;
-            captureNotice.SetActive(true);
-        }
-        else
-        {
-            //captureTracker.text = "no capture";
-            //captureTracker.color = Color.green;
-            captureNotice.SetActive(false);
-        }
+        rammingNotice.SetActive(gameManager.needRammingChoice);
+        redirectNotice.SetActive(gameManager.needRedirect);
+        captureNotice.SetActive(gameManager.needCaptureChoice);
+        catapultNotice.SetActive(gameManager.needCatapultChoice);
 
         turnPhase.text = "Turn: " + gameLogic.TurnIndex;
 
@@ -424,7 +394,7 @@ public class UIControl : MonoBehaviour
 
     void onShipSelection() {
         if(selected != null) {
-            StartCoroutine(PhaseManager.focus(selected.Position,0.0f,SpeedManager.CameraFocusSpeed));
+            StartCoroutine(PhaseManager.focus(selected.Position));
             selected.setIconString(selected.getNumeralID());
         }
     }

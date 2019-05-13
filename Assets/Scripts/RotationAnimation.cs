@@ -13,15 +13,15 @@ public class RotationAnimation : Animation {
         endRotation = end;
         ship = s;
         portTurn = port;
+        focusPoint = ship.Position;
     }
 
     public override IEnumerator playAnimation() {
         if (complete) {
             yield break;
         }
-        
-        Vector3 pos = ship.Position;
-        yield return PhaseManager.focus(pos,0.7f,0.3f);
+
+        yield return PhaseManager.focus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
         GameObject arrow = GameObject.Instantiate(prefab,ship.transform);
         if (portTurn) {

@@ -12,7 +12,6 @@ public class Board{
     public const int ROW_OF_NODES = 16;
     public const int COLUMN_OF_NODES = 21;
     public List<Port> ports = new List<Port>();
-    //private List<Ship> ships = new List<Ship>();
     private List<Node> portNodes = new List<Node>();
 
     private Node[,] node;
@@ -21,14 +20,8 @@ public class Board{
         node = new Node[ROW_OF_NODES,COLUMN_OF_NODES];
         initialize();
         setIsland();
-        //setPorts();
-        //setAllShips();
         setAdjacentNodes();
     }
-
-    //public List<Ship> getAllShips() {
-    //    return ships;
-    //}
 
     public List<Port> getAllPorts() {
         return ports;
@@ -81,13 +74,6 @@ public class Board{
         }
     }
 
-    private void setPorts() {
-
-    }
-
-    private void setPort(String file,TeamColor tColor) {
-
-    }
 
     private void setAdjacentNodes() {
 
@@ -153,7 +139,7 @@ public class Board{
         }
     }
 
-    // used to compare for duplicate edges
+    // used to compare for duplicate edges for creating line renderers for grid lines
     private class EdgePair : IEquatable<EdgePair> {
 
         public Vector2 a;

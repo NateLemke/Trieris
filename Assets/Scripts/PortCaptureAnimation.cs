@@ -7,6 +7,7 @@ public class PortCaptureAnimation : Animation {
 
     public PortCaptureAnimation(Ship s) {
         ship = s;
+        focusPoint = ship.Position;
     }
 
     public override IEnumerator playAnimation() {
@@ -15,7 +16,7 @@ public class PortCaptureAnimation : Animation {
             yield break;
         }
 
-        yield return PhaseManager.focus(ship.Position,0f,0.3f);
+        yield return PhaseManager.focus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
         GameObject animObj = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
         animObj.GetComponent<Canvas>().sortingLayerName = "UILayer";

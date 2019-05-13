@@ -5,7 +5,6 @@ using UnityEngine;
 public class Port{
     private bool capital;
 
-    // type TeamColor -> Color
     private Color tColor;
 
     private Color color;
@@ -24,8 +23,6 @@ public class Port{
 
     private GameObject go;
 
-    //private Vector2 pos;
-
     public Node node { get; set; }
 
     SpriteRenderer spriteRenderer;
@@ -35,7 +32,6 @@ public class Port{
     }
 
     public Port(Vector2Int p,Team t,bool isCaptial) {
-        //Debug.Log("New port!");
         team = t;
         capital = isCaptial;
         node = GameManager.main.getBoard().getNodeAt(p);
@@ -50,8 +46,7 @@ public class Port{
             parent = GameObject.Instantiate(new GameObject());
             parent.name = "Ports";
         }
-        go.transform.SetParent(parent.transform);
-        GameManager.main.spawnShip(node,t);
+        go.transform.SetParent(parent.transform);        
         setTransparency();
     }
 
@@ -60,19 +55,10 @@ public class Port{
         return go;
     }
 
-    //public Port(bool isCapital,Color teamColor) {
-    //    setCapital(isCapital);
-    //    setTeamColor(teamColor);
-    //    setColor(teamColor);
-    //}
 
     public bool getCapital() {
         return capital;
     }
-
-    //public Color getTeamColor() {
-    //    return tColor;
-    //}
 
     public Team getTeam() {
         return team;
@@ -85,10 +71,6 @@ public class Port{
     public void setCapital(bool isCapital) {
         capital = isCapital;
     }
-
-    //public void setTeamColor(Color teamColor) {
-    //    tColor = teamColor;
-    //}
 
     public void setTeam(Team t) {
         team = t;
@@ -112,6 +94,10 @@ public class Port{
             c.a = 0.5f;
         }
         spriteRenderer.color = c;
+    }
+
+    public void activatePrompt(Ship s) {
+        go.GetComponent<PortPrompt>().activateNotification(this,s);
     }
 
 

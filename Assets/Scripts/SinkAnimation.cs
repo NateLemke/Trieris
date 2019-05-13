@@ -13,7 +13,7 @@ public class SinkAnimation : Animation {
             yield break;
         }
 
-        yield return PhaseManager.focus(ship.Position,0f,0.5f);
+        yield return PhaseManager.focus(ship.Position);
         yield return new WaitForSeconds(SpeedManager.CombatDelay);        
 
         ship.setIcon(Sprites.main.SinkIcon);

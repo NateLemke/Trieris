@@ -19,7 +19,7 @@ public class CatapultResolution : CombatResolution
         shipB.setIcon(Sprites.main.TargetIcon);
 
         Vector2 focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
-        yield return PhaseManager.focus(focusPos,0f,SpeedManager.CameraFocusSpeed);
+        yield return PhaseManager.focus(focusPos);
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
 

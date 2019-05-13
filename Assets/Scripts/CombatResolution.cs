@@ -12,6 +12,8 @@ public abstract class CombatResolution {
 
     protected bool resolved;
 
+    Vector2 focusPoint;
+
     public CombatResolution(Ship a, Ship b, int dmgB) {
         shipA = a;
         shipB = b;

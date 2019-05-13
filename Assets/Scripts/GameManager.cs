@@ -38,18 +38,15 @@ public class GameManager : MonoBehaviour {
         lineRenderer = GetComponent<LineRenderer>();
         main = this;
         board = new Board();
-
-        // draw nodes and lines on board
-        board.CreateGridVisuals();
-
-        // spawn teams, ships and ports
-        
+        board.CreateGridVisuals();       
 
         cameraLock = true;
     }
 
     private void Start() {
         createTeams();
+        createPorts();
+        createShips();
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
@@ -59,6 +56,7 @@ public class GameManager : MonoBehaviour {
 
         checkForChoices();
         checkForExecuteNextPhase();
+        PhaseManager.drawFocusMargin();
     }
 
     public void checkForRedirects() {
@@ -187,10 +185,6 @@ public class GameManager : MonoBehaviour {
         return ship;
     }
 
-    //public List<Ship> getShips() {
-    //    return ships;
-    //}
-
     public Team getTeam (Team.Type t) {
         return teams[(int)t];
     }
@@ -202,7 +196,6 @@ public class GameManager : MonoBehaviour {
         }
         return teams[i];
     }
-
     
 
     private void OnDrawGizmos() {
@@ -235,12 +228,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    //public delegate IEnumerator coroutineDel();
-
-    //public void startCoroutine(coroutineDel d) {
-    //    d();
-    //}
-
     public void revealRedirects() {
         foreach(Ship s in getPlayerShips()) {
             s.setRedirectUI(true);
@@ -256,13 +243,12 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-        //uiControl.updatePlayerScore();
+
     }
 
     void setAIDirections() {
         foreach (TrierisAI ai in getAllAi()) {
             if (ai.GetTeam() == playerTeam) {
-                //Debug.LogError("player team is not ai!");
                 continue;                
             }
             foreach (Ship ship in ai.GetTeam().ships) {
@@ -282,11 +268,15 @@ public class GameManager : MonoBehaviour {
     }
 
     public void createPorts() {
-
+        foreach(Team t in teams) {
+            t.createPorts();
+        }
     }
 
     public void createShips() {
-
+        foreach (Team t in teams) {
+            t.createShips();
+        }
     }
 
     void createAIs() {
