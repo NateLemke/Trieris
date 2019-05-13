@@ -53,6 +53,9 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
+
+            gameManager.uiControl.enableControls();
+
             GameManager.main.uiControl.GoText.text = "START TURN";
             //UIControl.main.devPhaseTrack(4);
             PhaseManager.DisablePhaseUI();

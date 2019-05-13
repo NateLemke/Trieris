@@ -30,11 +30,13 @@ public class UIControl : MonoBehaviour
     GameObject[] actionPanels = new GameObject[4];
     Button[] attackPanels = new Button[4];
     Button[] attackArrows = new Button[9];
+    Button[] commandPanels = new Button[5];
     GameObject[] shipTabs = new GameObject[5];
     Text[] tabTexts = new Text[5];
     Image[,] bottomIcons = new Image[6, 5];
     Text[] portTexts = new Text[6];
     Text goText;
+    Button goButton;
 
     Sprite straightArrow;
     Sprite curvedArrow;
@@ -47,6 +49,8 @@ public class UIControl : MonoBehaviour
     Color attackClicked;
     Color arrowYellow;
     Color greyedOut;
+
+    bool controlsEnabled = true;
 
     public GameObject phaseAnnouncer;
     public GameObject phase;
@@ -99,6 +103,12 @@ public class UIControl : MonoBehaviour
         actionPanels[1] = GameObject.Find("PanelAction2");
         actionPanels[2] = GameObject.Find("PanelAction3");
         actionPanels[3] = GameObject.Find("PanelAction4");
+
+        commandPanels[0] = GameObject.Find("PanelUp").GetComponent<Button>();
+        commandPanels[1] = GameObject.Find("PanelHold").GetComponent<Button>();
+        commandPanels[2] = GameObject.Find("PanelRev").GetComponent<Button>();
+        commandPanels[3] = GameObject.Find("PanelTurnR").GetComponent<Button>();
+        commandPanels[4] = GameObject.Find("PanelTurnL").GetComponent<Button>();
 
         attackPanels[0] = GameObject.Find("AttackCrosshair1").GetComponent<Button>();
         attackPanels[1] = GameObject.Find("AttackCrosshair2").GetComponent<Button>();
@@ -171,6 +181,7 @@ public class UIControl : MonoBehaviour
         portTexts[5] = GameObject.Find("BottomPortsBlack").GetComponent<Text>();
 
         goText = GameObject.Find("GoText").GetComponent<Text>();
+        goButton = GameObject.Find("GoButton").GetComponent<Button>();
 
         defaultGreen = actionPanels[0].GetComponent<Image>().color;
         attackUnclicked = attackPanels[0].colors.normalColor;
@@ -178,7 +189,7 @@ public class UIControl : MonoBehaviour
         arrowYellow = attackArrows[0].colors.normalColor;
         greyedOut = new Color(50, 50, 50, 255);
 
-        straightArrow = Resources.Load("StraightArrow", typeof(Sprite)) as Sprite;
+        straightArrow = Resources.Load("UpArrow", typeof(Sprite)) as Sprite;
         curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
         holdSprite = Resources.Load("holdicon", typeof(Sprite)) as Sprite;
         emptySprite = Resources.Load("setaction", typeof(Sprite)) as Sprite;
@@ -200,7 +211,7 @@ public class UIControl : MonoBehaviour
         phaseAnnouncer = GameObject.Find("PhaseAnnouncer");
         phaseAnnouncer.SetActive(false);
 
-             
+           
         //subPhase.SetActive(false);
         //subPhaseProgress = GameObject.Find("SubPhase Progress");
         //subPhaseProgress.SetActive(false);
@@ -407,6 +418,8 @@ public class UIControl : MonoBehaviour
     public void testMove()
     {
 
+        disableControls();
+
         GameLogic gl = GameManager.main.gameLogic;
         if (GameManager.main.gameLogic.phaseIndex == 4)
         {
@@ -498,7 +511,7 @@ public class UIControl : MonoBehaviour
                 image.sprite = straightArrow;
                 tempCol.a = 255;
                 image.color = tempCol;
-                image.transform.eulerAngles = new Vector3(0, 0, -90);
+                image.transform.eulerAngles = new Vector3(0, 0, 0);
                 //image.rectTransform.Rotate(new Vector3(0, 0, -90));
                 break;
 
@@ -529,7 +542,7 @@ public class UIControl : MonoBehaviour
                 image.sprite = straightArrow;
                 tempCol.a = 255;
                 image.color = tempCol;
-                image.transform.eulerAngles = new Vector3(0, 0, 90);
+                image.transform.eulerAngles = new Vector3(0, 0, 180);
                 //image.rectTransform.Rotate(new Vector3(0, 0, 90));
                 break;
 
@@ -595,7 +608,7 @@ public class UIControl : MonoBehaviour
 
     public void setCatapultIndex(int i)
     {
-        if (selected != null && i < selected.getLife())
+        if (selected != null && i < selected.getLife() && controlsEnabled)
         {
             foreach (Button b in attackPanels)
             {
@@ -614,27 +627,30 @@ public class UIControl : MonoBehaviour
 
     public void setAttackDirection(int i)
     {
-        foreach (Button b in attackArrows)
+        if (controlsEnabled)
         {
-            ColorBlock cb = b.colors;
-            cb.normalColor = arrowYellow;
-            b.colors = cb;
-        }
-
-        if (selected.catapultIndex >= 0 && selected != null)
-        {
-
-
-            ColorBlock colBlock = attackArrows[i].colors;
-            colBlock.normalColor = attackClicked;
-            attackArrows[i].colors = colBlock;
-
-            foreach (Ship.Action a in selected.actions)
+            foreach (Button b in attackArrows)
             {
-                a.setCatapult(-1);
+                ColorBlock cb = b.colors;
+                cb.normalColor = arrowYellow;
+                b.colors = cb;
             }
 
-            selected.actions[selected.catapultIndex].setCatapult(i);
+            if (selected.catapultIndex >= 0 && selected != null)
+            {
+
+
+                ColorBlock colBlock = attackArrows[i].colors;
+                colBlock.normalColor = attackClicked;
+                attackArrows[i].colors = colBlock;
+
+                foreach (Ship.Action a in selected.actions)
+                {
+                    a.setCatapult(-1);
+                }
+
+                selected.actions[selected.catapultIndex].setCatapult(i);
+            }
         }
     }
 
@@ -657,6 +673,28 @@ public class UIControl : MonoBehaviour
             if (i == (int)gameManager.playerTeam.getTeamType())
                 GameObject.Find("VictoryText").GetComponent<Text>().text = scores[i] + "/12\nports";
             portTexts[i].text = scores[i] + " / 12";
+        }
+    }
+
+    public void disableControls()
+    {
+        controlsEnabled = false;
+        goButton.enabled = false;
+
+        foreach(Button b in commandPanels)
+        {
+            b.interactable = false;
+        }
+    }
+
+    public void enableControls()
+    {
+        controlsEnabled = true;
+        goButton.enabled = true;
+
+        foreach (Button b in commandPanels)
+        {
+            b.interactable = true;
         }
     }
 }
