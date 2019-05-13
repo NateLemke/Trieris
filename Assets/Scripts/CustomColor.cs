@@ -29,9 +29,18 @@ public static class CustomColor
     public static Color Green5 = new Color(0f, 0.945f, 0.118f);
 
     public static Color TeamRed = new Color(0.988f, 0f, 0f);
+    public static Color TeamRedLight = new Color(1f,0.6f,0.6f);
     public static Color TeamOrange = new Color(0.9876f, 0.373f, 0f);
+    public static Color TeamOrangeLight = new Color(1f,0.75f,0.4f);
+    //FCFD00
     public static Color TeamYellow = new Color(0.988f, 0.992f, 0f);
+    //FFFF51
+    public static Color TeamYellowLight = new Color(1f,1f,0.51f);
+    //00FC00
     public static Color TeamGreen = new Color(0f, 0.988f, 0f);
+    public static Color TeamGreenLight = new Color(0.4f,1f,0.4f);
     public static Color TeamBlue = new Color(0f, 0f, 0.988f);
+    public static Color TeamBlueLight = new Color(0f,0.9f,0.984f);
     public static Color TeamBlack = new Color(0f, 0f, 0f);
+    public static Color TeamBlackLight = new Color(0.75f,0.75f,0.75f);
 }

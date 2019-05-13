@@ -24,7 +24,7 @@ public static class PhaseManager
     delegate IEnumerator subPhase();
 
     static subPhase[] subPhaseOrder = {
-        playBasicActions ,
+        resolveBasicActions ,
         sinkShips,        
         resolveRamming,
         rammingChoices,
@@ -144,27 +144,109 @@ public static class PhaseManager
         //Debug.DrawLine(camPos + new Vector2(0,camHeight / 2),camPos + new Vector2(0,-camHeight / 2),Color.red);
         //Debug.DrawLine(camPos + new Vector2(camWidth / 2,0),camPos + new Vector2(-camWidth / 2,0),Color.blue);
         float canvasWidth = GameObject.Find("OverlayCanvas").GetComponent<RectTransform>().rect.width;
+        float canvasHeight = GameObject.Find("OverlayCanvas").GetComponent<RectTransform>().rect.height;
         float sideUIWidth = GameObject.Find("UISidePanel").GetComponent<RectTransform>().rect.width;
-        float ratio = (canvasWidth - sideUIWidth) / canvasWidth;
+        float bottomUIHeight = GameObject.Find("UIBottomPanel").GetComponent<RectTransform>().rect.height;
+        float widthRatio = (canvasWidth - sideUIWidth) / canvasWidth;
+        float heightRatio = (canvasHeight - bottomUIHeight) / canvasHeight;
         //Debug.DrawLine(camPos + new Vector2(-camWidth / 2,2),camPos + new Vector2(camWidth * ratio / 2,2),Color.green);
         Vector2[] r = new Vector2[2];
-        r[0] = camPos - new Vector2(camWidth / 2,camHeight / 2);
-        r[1] = new Vector2(camWidth * ratio,camHeight);
+        r[0] = camPos - new Vector2(camWidth / 2,camHeight / -2);
+        r[1] = new Vector2(camWidth * widthRatio,camHeight * -heightRatio);
         return r;
     }
 
-    //public static void focusCamera() {
-    //    Vector2[] bv = getBoardView();
-    //    Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
-    //}
-
-    
-    public static IEnumerator focus(Vector2 v, float margin, float speed) {
+    public static void drawFocusMargin() {
         Vector2[] bv = getBoardView();
-        //margin = bv[1].y * margin;
-        margin = 0;
-        if(v.x < bv[0].x + margin || v.x > bv[0].x + bv[1].x - margin || v.y < bv[0].y + margin || v.y > bv[0].y + bv[1].y - margin) {
-            yield return moveCameraTo(v,speed);
+        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+        
+        float xMargin = bv[1].x * 0.08f;
+        float yMargin = bv[1].y * 0.08f;
+
+        float xMin = bv[0].x + xMargin;
+        float xMax = bv[0].x + bv[1].x - xMargin;
+        float yMin = bv[0].y + yMargin;
+        float yMax = bv[0].y + bv[1].y - yMargin;
+
+        Vector2 v1 = new Vector2(xMin,yMin);
+        Vector2 v2 = new Vector2(xMin,yMax);
+        Vector2 v3 = new Vector2(xMax,yMin);
+        Vector2 v4 = new Vector2(xMax,yMax);
+
+        Debug.DrawLine(v1,v2,Color.green);
+        Debug.DrawLine(v1,v3,Color.green);
+        Debug.DrawLine(v2,v4,Color.green);
+        Debug.DrawLine(v3,v4,Color.green);
+
+        debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
+        debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
+    }
+
+    public static Vector2[] crossOnPoint(Vector2 v,float f) {
+        Vector2[] r = new Vector2[4];
+        r[0] = new Vector2(v.x,v.y + f);
+        r[1] = new Vector2(v.x,v.y - f);
+        r[2] = new Vector2(v.x + f,v.y);
+        r[3] = new Vector2(v.x - f,v.y);
+        return r;
+    }
+
+    public static Vector2[] xOnPoint(Vector2 v,float f) {
+        float sqr = Mathf.Sqrt(2);
+        float val = Mathf.Sqrt(Mathf.Pow(f,2) / 2);
+        Vector2[] r = new Vector2[4];
+        r[0] = new Vector2(v.x + val,v.y + val);
+        r[1] = new Vector2(v.x - val,v.y - val);
+        r[2] = new Vector2(v.x + val,v.y - val);
+        r[3] = new Vector2(v.x - val,v.y + val);
+
+        return r;
+    }
+
+    public static List<Vector2> starOnPoint(Vector2 v,float f) {
+        List<Vector2> r = new List<Vector2>();
+        r.AddRange(crossOnPoint(v,f));
+        r.AddRange(xOnPoint(v,f));
+        return r;
+    }
+
+    public static void debugStarPoint(Vector2 v,float f,Color c,float duration = 0) {
+        List<Vector2> points = starOnPoint(v,f);
+        for (int i = 0; i < 8; i += 2) {
+            Debug.DrawLine(points[i],points[i + 1],c,duration);
+        }
+    }
+
+    public static Vector2 boardviewCenter() {
+        Vector2[] bv = getBoardView();
+        return (bv[0] + bv[1] / 2);
+    }
+
+    public static bool outOfFocus(Vector2 v) {
+
+        Vector2[] bv = getBoardView();
+        float focusMargin = 0.08f;
+        float xMargin = bv[1].x * focusMargin;
+        float yMargin = bv[1].y * focusMargin;
+
+        float xMin = bv[0].x + xMargin;
+        float xMax = bv[0].x + bv[1].x - xMargin;
+        float yMin = bv[0].y + bv[1].y - yMargin;
+        float yMax = bv[0].y + yMargin;
+
+        return (v.x < xMin || v.x > xMax || v.y < yMin || v.y > yMax);
+    }
+
+    public static IEnumerator focus(Vector2 v) {
+
+        if (outOfFocus(v)) {
+
+            //debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
+            //debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
+            Vector2[] bv = getBoardView();
+            Vector2 offset = (Vector2)Camera.main.transform.position - boardviewCenter();
+
+            yield return moveCameraTo(v + offset,SpeedManager.CameraFocusSpeed);
         }
     }
 
@@ -179,18 +261,46 @@ public static class PhaseManager
         }
         movingCamera = false;
     }
-    
-    static IEnumerator playBasicActions() {
+
+    static IEnumerator resolveBasicActions() {
         setSubphaseText("resolving actions");
         List<Animation> anims = actionAnimations.Values.ToList();
 
-        foreach (Animation a in anims) {
-            if (involvedInRamming.Contains(a.ship)) {
-                continue;
+        bool pendingAnimation = true;
+        while (pendingAnimation) {
+            pendingAnimation = false;
+            Animation closestToCamera = null;
+            float closestDistance = Mathf.Infinity;
+            bool foundFocus = false;
+
+            List<Animation> inFocus = new List<Animation>();
+
+            foreach (Animation a in anims) {
+
+                if(!involvedInRamming.Contains(a.ship) && !a.complete) {
+                    pendingAnimation = true;
+                    if (!outOfFocus(a.focusPoint)) {
+                        inFocus.Add(a);
+                    } else {
+                        if(Vector2.Distance(a.focusPoint,boardviewCenter()) < closestDistance) {
+                            closestDistance = Vector2.Distance(a.focusPoint,boardviewCenter());
+                            closestToCamera = a;
+                            foundFocus = true;
+                        }
+                    }
+                }                
             }
 
-            yield return a.playAnimation(SpeedManager.ActionDelay,SpeedManager.ActionSpeed);
+            foreach(Animation a in inFocus) {
+                yield return a.playAnimation();
+            }
+
+            if (foundFocus) {
+                yield return focus(closestToCamera.focusPoint);            
+            }
         }
+
+        
 
         yield return null;
     }
@@ -234,8 +344,9 @@ public static class PhaseManager
     public static IEnumerator resolveCatapults() {
         if(catapultResolutions.Count > 0) {
             setSubphaseText("resolving catapults");
-            foreach(CombatResolution cr in catapultResolutions) {
-                yield return cr.resolve();
+            foreach(CatapultResolution cr in catapultResolutions) {
+                if (!cr.interrupted)
+                    yield return cr.resolve();
             }
         }        
     }    
@@ -246,7 +357,7 @@ public static class PhaseManager
         if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
             foreach (SinkAnimation a in sinkAnimations) {
-                yield return a.playAnimation(0.1f,0.1f);
+                yield return a.playAnimation();
             }
             sinkAnimations.Clear();
         }
@@ -255,7 +366,7 @@ public static class PhaseManager
 
     public static void tempPopulateSinkAnimation() {
         foreach(Ship s in GameManager.main.getAllShips()) {
-            if(s.life == 0) {
+            if(s.life <= 0) {
                 sinkAnimations.Add(new SinkAnimation(s));
             }
         }
@@ -269,7 +380,7 @@ public static class PhaseManager
         setSubphaseText("port capture");
         foreach (PortCaptureAnimation ca in captureAnimations) {
             
-            yield return ca.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed);
+            yield return ca.playAnimation();
         }
     }
 
@@ -279,6 +390,16 @@ public static class PhaseManager
             yield break;
         }
         setSubphaseText("choose port capture");
+
+        Ship focusTarget = null;
+        foreach(Ship s in GameManager.main.getPlayerShips()) {
+            
+            if (s.needCaptureChoice) {
+                focusTarget = s;
+                s.getNode().getPort().activatePrompt(s);
+            }
+        }
+        yield return focus(focusTarget.Position);
         while (GameManager.main.needCaptureChoice) {
             yield return null;
         }
@@ -289,6 +410,13 @@ public static class PhaseManager
             yield break;
         }
         setSubphaseText("choose redirects");
+        Ship focusTarget = null;
+        foreach (Ship s in GameManager.main.getPlayerShips()) {
+            if (s.needRedirect) {
+                focusTarget = s;
+            }
+        }
+        yield return focus(focusTarget.Position);
         while (GameManager.main.needRedirect) {
             yield return null;
         }        
@@ -371,11 +499,14 @@ public static class PhaseManager
         subPhaseIndex++;
     }
     
-    public static void addRammingResolution(Ship attacker, Ship target, int damage) {
+    public static void addRammingResolution(Ship attacker, Ship target, int damage,int damageToSelf=0) {
+//RammingResolution r = null;
         bool foundPair = false;
         foreach (RammingResolution rr in rammingResolutions) {
             if(rr.shipA == target && rr.shipB == attacker) {
-                rr.damageToA = damage;
+                rr.damageToA += damage;
+                rr.damageToB += damageToSelf;
+                //r = rr;
                 foundPair = true;
                 break;
             }
@@ -383,8 +514,16 @@ public static class PhaseManager
         if (!foundPair) {
             involvedInRamming.Add(attacker);
             involvedInRamming.Add(target);
-            rammingResolutions.Add(new RammingResolution(attacker,target,damage));
+            //r = 
+            rammingResolutions.Add(new RammingResolution(attacker,target,damage,damageToSelf));
         }
+        //return r;
+    }
+
+    public static void addMissedShot(Ship s, Node n) {
+        CatapultResolution cr = new CatapultResolution(s,null,0,n);       
+     
+        catapultResolutions.Add(cr);
     }
 
 }

@@ -19,17 +19,17 @@ public class MovementAnimation : Animation {
         momentum = m;
         endPos = PhaseManager.shipNodePos(ship,endNode);
         reverse = r;
+        focusPoint = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos()) / 2;
     }
 
-    public override IEnumerator playAnimation(float speed,float delay = 0.3f) {
+    public override IEnumerator playAnimation() {
         if (complete) {
             yield break;
         }        
 
-        Vector3 arrowPos = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos())/2;
-        yield return PhaseManager.focus(arrowPos,0.7f,0.3f);
+        yield return PhaseManager.focus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
-        GameObject arrow = GameObject.Instantiate(prefab,arrowPos,ship.transform.rotation);
+        GameObject arrow = GameObject.Instantiate(prefab,focusPoint,ship.transform.rotation);
         if (reverse) {
             arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
         }
@@ -37,15 +37,15 @@ public class MovementAnimation : Animation {
         arrow.GetComponentInChildren<Text>().text = (momentum > 1) ? momentum.ToString() : "";
         arrow.GetComponentInChildren<Text>().text = (momentum > 1) ? momentum.ToString() : "";
         arrow.GetComponentInChildren<Text>().color = ship.team.getColorLight();
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
             startTime = Time.time;
             updatePositionOnNode(startNode);
             if(startNode.getPort() != null) {
                 startNode.getPort().setTransparency();
             }
-            while (Time.time - startTime < speed) {
-                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / speed);
+            while (Time.time - startTime < SpeedManager.ActionSpeed) {
+                ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / SpeedManager.ActionSpeed);
                 yield return null;
             }
             if(endNode.getPort() != null) {

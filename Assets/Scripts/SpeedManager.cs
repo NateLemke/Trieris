@@ -16,6 +16,9 @@ public static class SpeedManager {
     static float captureDelay = 1f;
     public static float CaptureDelay { get { return (fastAnimations) ? captureDelay * fastFactor : captureDelay; } }
 
+    static float catapultLaunchDelay = 0.2f;
+    public static float CatapultLaunchDelay { get { return (fastAnimations) ? catapultLaunchDelay * fastFactor : catapultLaunchDelay; } }
+
     static float cameraFocusSpeed = 0.3f;
     public static float CameraFocusSpeed { get { return (fastAnimations) ? cameraFocusSpeed * fastFactor : cameraFocusSpeed; } }
 

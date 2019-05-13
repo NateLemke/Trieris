@@ -8,18 +8,19 @@ public class SinkAnimation : Animation {
         ship = s;
     }
 
-    public override IEnumerator playAnimation(float speed,float delay) {
+    public override IEnumerator playAnimation() {
         if(ship == null) {
             yield break;
         }
 
-        PhaseManager.focus(ship.Position,0f,0.5f);
+        yield return PhaseManager.focus(ship.Position);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);        
 
         ship.setIcon(Sprites.main.SinkIcon);
         InitSinkAnimation();
-        yield return new WaitForSeconds(1f);
+        
         ship.disableIcon();
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
         if (ship.getNode().getShips().Contains(ship)) {
             ship.getNode().getShips().Remove(ship);
@@ -37,8 +38,9 @@ public class SinkAnimation : Animation {
         yield return null;
     }
 
-    void InitSinkAnimation()
+    public void InitSinkAnimation()
     {
         ship.GetComponent<Animator>().SetTrigger("Sinking");
     }
+
 }

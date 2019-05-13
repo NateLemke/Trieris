@@ -48,23 +48,44 @@ public class PortPrompt : MonoBehaviour
 
     public void accept()
     {
-        PortCaptureAnimation anim = new PortCaptureAnimation(currentShip);
-        GameManager.main.StartCoroutine(anim.playAnimation(SpeedManager.CaptureDelay,SpeedManager.CaptureSpeed));
+
         GameManager.PortsCaptured++;
         currentShip.needCaptureChoice = false;
         currentShip.needRedirect = true;
         currentShip.setRedirectUI(true);
         portPromptPanel.SetActive(false);
+        GameManager.main.StartCoroutine(acceptAnimation(currentShip));
     }
 
     public void decline()
     {
         currentShip.needCaptureChoice = false;
         portPromptPanel.SetActive(false);
+        GameManager.main.StartCoroutine(declineAnimation());
     }
 
     void Update()
     {
         CheckUnfocus();
+    }
+
+    static IEnumerator acceptAnimation(Ship s) {
+        yield return new PortCaptureAnimation(s).playAnimation();
+        foreach (Ship ps in GameManager.main.getPlayerShips()) {
+            if (ps.needCaptureChoice) {
+                yield return PhaseManager.focus(ps.Position);
+                break;
+            }
+        }
+    }
+
+    static IEnumerator declineAnimation() {
+        yield return new WaitForSeconds(0.5f);
+        foreach (Ship ps in GameManager.main.getPlayerShips()) {
+            if (ps.needCaptureChoice) {
+                yield return PhaseManager.focus(ps.Position);
+                break;
+            }
+        }
     }
 }

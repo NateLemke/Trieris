@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class OptionsMenu : MonoBehaviour
 {
+
+    GameObject overlay;
+
     public void QuitGame()
     {
         //For Editor Closing
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
+        overlay = GameObject.Find("OverlayCanvas");
         //For Build Closing
         Application.Quit();
     }
@@ -19,5 +23,11 @@ public class OptionsMenu : MonoBehaviour
     public void OpenOptions()
     {
         Time.timeScale = 0;
+    }
+
+    public void OpenInstructions()
+    {
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
     }
 }

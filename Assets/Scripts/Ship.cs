@@ -310,6 +310,7 @@ public class Ship : MonoBehaviour {
     public void catapult(Ship target) {
         if (target != null) {
             //target.life -= 1;
+            //Debug.Log(team.ToString() + getNumeralID() + " shot " + target.team.ToString() + target.getNumeralID());
             PhaseManager.addCatapultAnimation(this,target);
         }
     }
@@ -527,21 +528,23 @@ public class Ship : MonoBehaviour {
         //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        if (!target.movedForward) {
-            this.life--;
-        }
-        PhaseManager.addRammingResolution(this,target,momentum);
+        int dmgToSelf = target.movedForward ? 0 : 1;
+        //if (!target.movedForward) {
+        //    this.life--;
+        //}
+        PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
         DebugControl.log("ramming","glancing ram");
         //target.life -= momentum;
-        target.frontAfterCollision = target.getRelativeDirection(relativeTurn);        
+        target.frontAfterCollision = target.getRelativeDirection(relativeTurn);
+        int dmgToSelf = 0;
         if (!target.movedForward && this.front != target.front) {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
-            this.life--;
+            dmgToSelf = 1;
         }
-        PhaseManager.addRammingResolution(this,target,momentum);
+        PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
         //PhaseManager.addRamming(this,target,momentum);
         //addRammingAnimation(target,momentum);
     }

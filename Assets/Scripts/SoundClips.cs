@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Sound class to attach sound objects and play them
+/// Sound class to attach sound objects and play them in Unity
 /// </summary>
 public class SoundClips : MonoBehaviour
 {

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
 
@@ -38,27 +40,31 @@ public class GameManager : MonoBehaviour {
         lineRenderer = GetComponent<LineRenderer>();
         main = this;
         board = new Board();
-
-        // draw nodes and lines on board
-        board.CreateGridVisuals();
-
-        // spawn teams, ships and ports
-        
+        board.CreateGridVisuals();       
 
         cameraLock = true;
     }
 
     private void Start() {
         createTeams();
+        createPorts();
+        createShips();
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
+
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
+        //Debug.Log(Random.Range(-0.5f,0.5f));
     }
 
     private void Update() {        
 
         checkForChoices();
         checkForExecuteNextPhase();
+        PhaseManager.drawFocusMargin();
     }
 
     public void checkForRedirects() {
@@ -187,10 +193,6 @@ public class GameManager : MonoBehaviour {
         return ship;
     }
 
-    //public List<Ship> getShips() {
-    //    return ships;
-    //}
-
     public Team getTeam (Team.Type t) {
         return teams[(int)t];
     }
@@ -202,13 +204,27 @@ public class GameManager : MonoBehaviour {
         }
         return teams[i];
     }
-
     
 
     private void OnDrawGizmos() {
 
         // draw nodes and node connections
         //drawBoardGizmos();
+
+        //if(board != null) {
+        //    Gizmos.color = Color.red;
+        //    foreach (Node n in board.getAllNodes()) {
+        //        Handles.Label(n.getRealPos(),n.getPosition().ToString());
+        //        for (int i = 0; i < 8; i++) {
+        //            if (n.getAdjacentNode(i) != null) {
+        //                Vector2 halfway = (n.getAdjacentNode(i).getRealPos() - n.getRealPos()) / 2;
+        //                Gizmos.DrawLine(n.getRealPos(),n.getRealPos() + halfway);
+        //            }
+        //        }
+        //    }
+        //}
+
+        
     }
 
     private void drawBoardGizmos() {
@@ -235,12 +251,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    //public delegate IEnumerator coroutineDel();
-
-    //public void startCoroutine(coroutineDel d) {
-    //    d();
-    //}
-
     public void revealRedirects() {
         foreach(Ship s in getPlayerShips()) {
             s.setRedirectUI(true);
@@ -256,13 +266,12 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-        //uiControl.updatePlayerScore();
+
     }
 
     void setAIDirections() {
         foreach (TrierisAI ai in getAllAi()) {
             if (ai.GetTeam() == playerTeam) {
-                //Debug.LogError("player team is not ai!");
                 continue;                
             }
             foreach (Ship ship in ai.GetTeam().ships) {
@@ -282,11 +291,15 @@ public class GameManager : MonoBehaviour {
     }
 
     public void createPorts() {
-
+        foreach(Team t in teams) {
+            t.createPorts();
+        }
     }
 
     public void createShips() {
-
+        foreach (Team t in teams) {
+            t.createShips();
+        }
     }
 
     void createAIs() {
