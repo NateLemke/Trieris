@@ -868,6 +868,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5018984736376474878, guid: 4644fa1be05bf1b43ae11765fa079891,
+        type: 3}
+      propertyPath: m_Name
+      value: GameOver
+      objectReference: {fileID: 0}
     - target: {fileID: 1095194295400463565, guid: 4644fa1be05bf1b43ae11765fa079891,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -972,11 +977,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018984736376474878, guid: 4644fa1be05bf1b43ae11765fa079891,
-        type: 3}
-      propertyPath: m_Name
-      value: GameOver
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4644fa1be05bf1b43ae11765fa079891, type: 3}
@@ -4997,7 +4997,7 @@ MonoBehaviour:
   sizzle: {fileID: 8300000, guid: c401b1903aba65b408af47bb33314004, type: 3}
   fireball: {fileID: 8300000, guid: f7a539993e988b44981ad9ca9eeb333b, type: 3}
   launch: {fileID: 8300000, guid: 702f710fc0035de42ab2cfba28180bfe, type: 3}
-  blub: {fileID: 8300000, guid: 007b9019686b679448c572bfa1eba7a3, type: 3}
+  blub: {fileID: 8300000, guid: 8ef50b739a21d9043bcef972d8ba56c4, type: 3}
   whistle: {fileID: 8300000, guid: 908ae72c8b02901458d1175022e6f9cb, type: 3}
   rip: {fileID: 8300000, guid: 83d22e55357148041972d98ada60dc4f, type: 3}
   longRip: {fileID: 8300000, guid: 31be1ec211810bb43b04fb64752b6d33, type: 3}

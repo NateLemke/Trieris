@@ -377,8 +377,9 @@ public static class PhaseManager
 
         if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
-            foreach (SinkAnimation a in sinkAnimations) {
-                yield return a.playAnimation();
+            for (int i = 0; i < sinkAnimations.Count; i++)
+            {
+                yield return sinkAnimations[i].playAnimation();
             }
             sinkAnimations.Clear();
         }

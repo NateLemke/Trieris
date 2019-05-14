@@ -11,6 +11,8 @@ public static class SpeedManager {
     public static float CombatDelay { get { return (fastAnimations) ? combatDelay * fastFactor : combatDelay; } }
     static float combatPostDelay = 1.2f;
     public static float CombatPostDelay { get { return (fastAnimations) ? combatPostDelay * fastFactor : combatPostDelay; } }
+    static float combatSinking = 2f;
+    public static float CombatSinking { get { return (fastAnimations) ? combatSinking * fastFactor : combatPostDelay; } }
     static float captureSpeed = 0.6f;
     public static float CaptureSpeed { get { return (fastAnimations) ? captureSpeed * fastFactor : captureSpeed; } }
     static float captureDelay = 1f;

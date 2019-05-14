@@ -441,6 +441,21 @@ public class Ship : MonoBehaviour {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].getID());
         }
 
+        if (this.getNode().getShips().Contains(this))
+        {
+            this.getNode().getShips().Remove(this);
+        }
+
+        if (this.getNode().getPort() != null)
+        {
+            this.getNode().getPort().setTransparency();
+        }
+
+        foreach (Ship s in this.getNode().getShips())
+        {
+            s.transform.position = PhaseManager.shipNodePos(s, this.getNode());
+        }
+
         Destroy(this.gameObject);
     }
 
