@@ -418,9 +418,11 @@ public static class PhaseManager
             if (s.needCaptureChoice) {
                 focusTarget = s;
                 s.getNode().getPort().activatePrompt(s);
+                yield return focus(focusTarget.Position);
+                while (s.needCaptureChoice || s.needRedirect)
+                    yield return null;
             }
         }
-        yield return focus(focusTarget.Position);
         while (GameManager.main.needCaptureChoice) {
             yield return null;
         }

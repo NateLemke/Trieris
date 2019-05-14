@@ -48,11 +48,10 @@ public class PortPrompt : MonoBehaviour
 
     public void accept()
     {
-
+        foreach (Ship s in currentShip.getNode().getShips())
+            s.needCaptureChoice = false;
         GameManager.PortsCaptured++;
-        currentShip.needCaptureChoice = false;
-        currentShip.needRedirect = true;
-        currentShip.setRedirectUI(true);
+        currentShip.playerCapture();
         portPromptPanel.SetActive(false);
         GameManager.main.StartCoroutine(acceptAnimation(currentShip));
     }
