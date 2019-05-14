@@ -64,7 +64,7 @@ public class RammingResolution : CombatResolution
         }
 
         
-        //InitRammingAnimation();
+        InitRammingAnimation();
         Sounds.main.playRandomCrunch();
         if(damageToA > 0) {
             yield return new WaitForSeconds(0.3f);
