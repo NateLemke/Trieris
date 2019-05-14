@@ -128,8 +128,8 @@ public class Board{
                             lr.SetPosition(0,adjPos);
                             lr.SetPosition(1,pos);
                             lr.transform.SetParent(node.transform);
-                            lr.startWidth = 0.02f;
-                            lr.endWidth = 0.02f;
+                            lr.startWidth = 0.03f;
+                            lr.endWidth = 0.03f;
                             lr.startColor = gridColor;
                             lr.endColor = gridColor;
                         }

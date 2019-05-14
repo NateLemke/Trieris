@@ -50,7 +50,7 @@ public class CatapultResolution : CombatResolution
             }
         } else {
             if (missedNode == shipA.getNode()) {
-                bullet.endPos = shipA.Position + new Vector3(Random.Range(-0.7f,0.7f),Random.Range(-0.7f,0.7f));
+                bullet.endPos = shipA.Position + new Vector3(Random.Range(-0.55f,0.55f),Random.Range(-0.55f,0.55f));
             } else {
                 bullet.endPos = missedNode.getRealPos();
             }
