@@ -28,14 +28,12 @@ public class CatapultResolution : CombatResolution
         } else {
             focusPos = (shipA.Position + (Vector3)missedNode.getRealPos()) / 2;
         }
-
-
         
         yield return PhaseManager.focus(focusPos);
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
         Sounds.main.playClip(Sounds.main.Launch);
-        InitCatapultAnimation();
+        //InitCatapultAnimation();
         yield return new WaitForSeconds(SpeedManager.CatapultLaunchDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
@@ -50,7 +48,7 @@ public class CatapultResolution : CombatResolution
             }
         } else {
             if (missedNode == shipA.getNode()) {
-                bullet.endPos = shipA.Position + new Vector3(Random.Range(-0.55f,0.55f),Random.Range(-0.55f,0.55f));
+                bullet.endPos = shipA.Position + new Vector3(Random.Range(-0.4f,0.4f),Random.Range(-0.4f,0.4f));
             } else {
                 bullet.endPos = missedNode.getRealPos();
             }
@@ -71,8 +69,14 @@ public class CatapultResolution : CombatResolution
         if (missedNode == null) {
             shipB.life -= damageToB;
         }
+        
+        if (missedNode == null && shipB.life == 0) {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay * 2);
 
-        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+        } else {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+
+        }
 
         shipA.disableIcon();
 

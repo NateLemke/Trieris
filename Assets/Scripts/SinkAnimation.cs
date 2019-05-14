@@ -20,7 +20,7 @@ public class SinkAnimation : Animation {
         InitSinkAnimation();
         
         ship.disableIcon();
-        yield return new WaitForSeconds(SpeedManager.CombatDelay);
+        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
 
         if (ship.getNode().getShips().Contains(ship)) {
             ship.getNode().getShips().Remove(ship);

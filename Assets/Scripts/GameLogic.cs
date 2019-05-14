@@ -130,7 +130,7 @@ public class GameLogic : MonoBehaviour {
         handleCatapults();
         handleCapture();
 
-        StartCoroutine( PhaseManager.playAnimations());        
+        StartCoroutine( PhaseManager.playPhaseAnimations());        
     }
 
     /// <summary>
@@ -258,12 +258,17 @@ public class GameLogic : MonoBehaviour {
                         if (ship.team == gameManager.playerTeam) {
 
                             //Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
-                            ship.needRammingChoice = true;
+                            
                             //ship.getNode().activateNotification();
                             //chosenShip = potentialCollisions[0];
-                            PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
-                            PhaseManager.involvedInRamming.Add(ship);
-
+                            
+                            if(potentialCollisions.Count > 1) {
+                                ship.needRammingChoice = true;
+                                PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
+                                PhaseManager.involvedInRamming.Add(ship);
+                            } else {
+                                chosenShip = potentialCollisions[0];
+                            }
                         } else {
                             chosenShip = ship.getAI().selectShip(potentialCollisions);
                         }

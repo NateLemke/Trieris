@@ -40,12 +40,12 @@ public class CatapultBullet : MonoBehaviour
             GetComponent<ParticleSystem>().enableEmission = false;
 
             if (!missed) {
-                sounds.playClip(sounds.Sizzle);
+                //sounds.playClip(sounds.Sizzle,0.5f);
                 sounds.playRandomCrunch();
             } else {
                 sounds.playClip(sounds.Splash);
             }
-            sounds.playClip(sounds.Fireball);
+            sounds.playClip(sounds.Fireball,0.4f);
             
             impacted = true;
         }

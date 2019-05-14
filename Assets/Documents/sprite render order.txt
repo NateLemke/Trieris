@@ -1,16 +1,22 @@
 sprite render order
 
-catapult bullet 8
-catapult trail  7
-icons			6
-ships			5
+catapult bullet		12
+catapult trail		11
 
-move arrows		4
-target UI		4
+choice UI			10
+icons				9
 
-port			3
+momentum numbers	8
+action arrows		7
+	(movement and rotation)
 
-grid			2
-	(node AND node line)
-island			1
-ocean			0
+ships				6
+
+
+target UI			5
+
+port				4
+grid node			3
+grid line			2
+island				1
+ocean				0

@@ -26,16 +26,6 @@ public class TargetButton : MonoBehaviour
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.grey;
     }
 
-    private void OnMouseUp() {
-        
-    }
-
-    private void OnMouseUpAsButton() {
-        
-
-
-    }
-
     bool closest() {
         bool closest = true;
         foreach (TargetButton tb in parent.buttons) {

@@ -41,7 +41,12 @@ public static class PhaseManager
         resolveRedirects,
     };
 
-    public static IEnumerator playAnimations() {
+    /// <summary>
+    /// runs through the subphases for the current phase
+    /// executes ramming, movement, port capture, etc
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerator playPhaseAnimations() {
         playingAnimation = true;
         subPhaseIndex = 0;
         yield return null;
@@ -159,31 +164,7 @@ public static class PhaseManager
         return r;
     }
 
-    public static void drawFocusMargin() {
-        Vector2[] bv = getBoardView();
-        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
-        
-        float xMargin = bv[1].x * 0.08f;
-        float yMargin = bv[1].y * 0.08f;
 
-        float xMin = bv[0].x + xMargin;
-        float xMax = bv[0].x + bv[1].x - xMargin;
-        float yMin = bv[0].y + yMargin;
-        float yMax = bv[0].y + bv[1].y - yMargin;
-
-        Vector2 v1 = new Vector2(xMin,yMin);
-        Vector2 v2 = new Vector2(xMin,yMax);
-        Vector2 v3 = new Vector2(xMax,yMin);
-        Vector2 v4 = new Vector2(xMax,yMax);
-
-        Debug.DrawLine(v1,v2,Color.green);
-        Debug.DrawLine(v1,v3,Color.green);
-        Debug.DrawLine(v2,v4,Color.green);
-        Debug.DrawLine(v3,v4,Color.green);
-
-        debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
-        debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
-    }
 
     public static Vector2[] crossOnPoint(Vector2 v,float f) {
         Vector2[] r = new Vector2[4];
@@ -225,6 +206,32 @@ public static class PhaseManager
         return (bv[0] + bv[1] / 2);
     }
 
+    public static void drawFocusMargin() {
+        Vector2[] bv = getBoardView();
+        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+
+        float xMargin = bv[1].x * 0.08f;
+        float yMargin = bv[1].y * 0.08f;
+
+        float xMin = bv[0].x + xMargin;
+        float xMax = bv[0].x + bv[1].x - xMargin;
+        float yMin = bv[0].y + bv[1].y - yMargin;
+        float yMax = bv[0].y + yMargin * 3;        
+
+        Vector2 v1 = new Vector2(xMin,yMax);
+        Vector2 v2 = new Vector2(xMin,yMin);
+        Vector2 v3 = new Vector2(xMax,yMax);
+        Vector2 v4 = new Vector2(xMax,yMin);
+
+        Debug.DrawLine(v1,v2,Color.green);
+        Debug.DrawLine(v1,v3,Color.red);
+        Debug.DrawLine(v2,v4,Color.yellow);
+        Debug.DrawLine(v3,v4,Color.blue);
+
+        debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
+        debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
+    }
+
     public static bool outOfFocus(Vector2 v) {
 
         Vector2[] bv = getBoardView();
@@ -235,7 +242,7 @@ public static class PhaseManager
         float xMin = bv[0].x + xMargin;
         float xMax = bv[0].x + bv[1].x - xMargin;
         float yMin = bv[0].y + bv[1].y - yMargin;
-        float yMax = bv[0].y + yMargin;
+        float yMax = bv[0].y + yMargin * 3;
 
         return (v.x < xMin || v.x > xMax || v.y < yMin || v.y > yMax);
     }
@@ -248,8 +255,10 @@ public static class PhaseManager
             //debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
             Vector2[] bv = getBoardView();
             Vector2 offset = (Vector2)Camera.main.transform.position - boardviewCenter();
-
-            yield return moveCameraTo(v + offset,SpeedManager.CameraFocusSpeed);
+            Vector3 pos = v + offset;
+            yield return moveCameraTo(pos,SpeedManager.CameraFocusSpeed);
+            pos.z = Camera.main.transform.position.z;
+            Camera.main.transform.position = pos;
         }
     }
 

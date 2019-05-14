@@ -36,6 +36,7 @@ public class ShipTargetResolution
         prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
         GameObject textObj = GameObject.Instantiate(prefab,new Vector2(xAverage,yHighest + 0.6f),Quaternion.identity);
         textObj.GetComponentInChildren<Text>().text = text;
+        textObj.GetComponent<Canvas>().sortingOrder = 10;
 
         Node targetNode = targets[0].getNode();
         foreach (Ship s in targetNode.getShips()) {

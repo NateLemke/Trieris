@@ -14,9 +14,11 @@ public class RammingResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
+        yield return PhaseManager.focus(shipA.getNode().getRealPos());
+
         shipA.setIcon(Sprites.main.AttackIcon);
         shipB.setIcon(Sprites.main.AttackIcon);
-
+               
         Animation A = null;
         try {
             A = PhaseManager.actionAnimations[shipA];
@@ -62,7 +64,12 @@ public class RammingResolution : CombatResolution
         }
 
         
-        InitRammingAnimation();
+        //InitRammingAnimation();
+        Sounds.main.playRandomCrunch();
+        if(damageToA > 0) {
+            yield return new WaitForSeconds(0.3f);
+            Sounds.main.playRandomCrunch();
+        }
 
         shipB.life -= damageToB;
         shipA.life -= damageToA;
@@ -89,8 +96,13 @@ public class RammingResolution : CombatResolution
 
         shipB.disableIcon();
         shipA.disableIcon();
+        if(shipA.life == 0 || shipB.life == 0) {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay * 2);
 
-        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+        } else {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+
+        }
 
         resolved = true;
         yield return null;

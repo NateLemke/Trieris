@@ -85,6 +85,9 @@ public class Ship : MonoBehaviour {
             {
                 InitCBT((lifeValue - value).ToString());
                 lifeValue = value;
+                if(lifeValue == 0) {
+                    Sounds.main.playClip(Sounds.main.LongRip);
+                }
             }
             else
             {
@@ -96,7 +99,14 @@ public class Ship : MonoBehaviour {
 
     public GameObject redirectUI;
         
-    public void intialize(Team team,Node node) {
+
+    /// <summary>
+    /// Used to initialize the ship at the beginning of the game
+    /// sets sprites and rotations
+    /// </summary>
+    /// <param name="team">the team to assign the ship to</param>
+    /// <param name="node">the node to start the ship on</param>
+    public void initialize(Team team,Node node) {
         this.team = team;
         team.ships.Add(this);
         this.id = team.shipIdCounter++;
@@ -104,9 +114,9 @@ public class Ship : MonoBehaviour {
         
         this.node = node;
         node.getShips().Add(this);
-        //if(node.getPort() != null) {
-        //    node.getPort().setTransparency();
-        //}
+        if (node.getPort() != null) {
+            node.getPort().setTransparency();
+        }
         gameObject.transform.position = node.getRealPos();
 
         actions = new Action[4];
@@ -147,7 +157,7 @@ public class Ship : MonoBehaviour {
         public bool reverseReady = false;
         public int actionIndex;
         // since java inner classes are different than c sharp nested classes
-        // we need a wave for these nested classes to communicate with their ship
+        // we need a way for these nested classes to communicate with their ship
         protected Ship ship;
 
         public Action(int catapultDirection, Ship ship, int index) {
