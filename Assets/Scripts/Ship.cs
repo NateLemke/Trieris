@@ -97,25 +97,12 @@ public class Ship : MonoBehaviour {
         }
     }
 
-<<<<<<< HEAD
-    public GameObject redirectUI;
-        
-
-    /// <summary>
-    /// Used to initialize the ship at the beginning of the game
-    /// sets sprites and rotations
-    /// </summary>
-    /// <param name="team">the team to assign the ship to</param>
-    /// <param name="node">the node to start the ship on</param>
-    public void initialize(Team team,Node node) {
-=======
     private GameObject redirectUI;
 
     private GameObject redirectNotification;
 
 
     public void intialize(Team team,Node node) {
->>>>>>> develop
         this.team = team;
         team.ships.Add(this);
         this.id = team.shipIdCounter++;

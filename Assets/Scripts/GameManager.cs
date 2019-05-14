@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour {
         Ship ship = spawn.GetComponent<Ship>();
         //Debug.Log("can act: "+ship.getCanActa());
         //ships.Add(ship);
-        ship.initialize(team,node);
+        ship.intialize(team,node);
         ship.name = team.getTeamType().ToString() + " ship " + ship.getID();
 
         return ship;
