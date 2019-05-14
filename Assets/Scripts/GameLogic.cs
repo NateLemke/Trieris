@@ -12,7 +12,7 @@ public class GameLogic : MonoBehaviour {
     //private List<Ship> playerShips = new List<Ship>();
     //private List<Ship> aiShips = new List<Ship>();
 
-    public int phaseIndex { get; set; }
+    public static int phaseIndex { get; set; }
     
     public int TurnIndex { get { return turnIndex; } set { } }
     private int turnIndex = 1;
@@ -96,9 +96,9 @@ public class GameLogic : MonoBehaviour {
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
-                //if(!checkAdjHRam(ship,phase))
-                //    ship.doAction(phase);
-                ship.doAction(phase);
+                if (!checkAdjHRam(ship,phase))
+                    ship.doAction(phase);
+                //ship.doAction(phase);
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
                     int newDirection = 0;

@@ -546,6 +546,10 @@ public class Ship : MonoBehaviour {
         PhaseManager.addRammingResolution(this,target,momentum * 2);
     }
 
+    public bool AdjHeadOnRamCheck(Ship s, int phase) {
+        return (Mathf.Abs(getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction" && actions[phase].GetType().Name == "ForwardAction");            
+    }
+
     private void headOnRam(Ship target) {
         DebugControl.log("ramming","head on ram");
         //target.life -= momentum;
@@ -555,7 +559,13 @@ public class Ship : MonoBehaviour {
         //if (!target.movedForward) {
         //    this.life--;
         //}
-        PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+        if (AdjHeadOnRamCheck(target,GameLogic.phaseIndex)) {
+            PhaseManager.addAdjHeadOnRamming(this,target);
+        } else {
+            PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+        }
+
+        
     }
 
     private void glancingRam(Ship target,int relativeTurn) {

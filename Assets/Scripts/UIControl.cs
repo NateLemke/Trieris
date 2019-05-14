@@ -421,7 +421,7 @@ public class UIControl : MonoBehaviour
         disableControls();
 
         GameLogic gl = GameManager.main.gameLogic;
-        if (GameManager.main.gameLogic.phaseIndex == 4)
+        if (GameLogic.phaseIndex == 4)
         {
             if (PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0)
             {

@@ -101,7 +101,6 @@ public class RammingResolution : CombatResolution
 
         } else {
             yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
-
         }
 
         resolved = true;
