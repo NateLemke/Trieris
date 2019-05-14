@@ -94,8 +94,11 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public GameObject redirectUI;
-        
+    private GameObject redirectUI;
+
+    private GameObject redirectNotification;
+
+
     public void intialize(Team team,Node node) {
         this.team = team;
         team.ships.Add(this);
@@ -123,6 +126,9 @@ public class Ship : MonoBehaviour {
         icon = transform.Find("ShipUI/NonRotation/Icon").GetComponent<Image>();
         icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
         icon.gameObject.SetActive(false);
+        
+        redirectNotification = transform.Find("ShipUI/RedirectNotification").gameObject;
+        redirectUI = transform.Find("ShipUI/Direction").gameObject;
     }
 
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
@@ -280,6 +286,7 @@ public class Ship : MonoBehaviour {
         return canAct;
     }
 
+
     public bool getMoved() {
         return movedForward;
     }
@@ -434,10 +441,23 @@ public class Ship : MonoBehaviour {
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
+        momentum = 0;
         if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
             //GameManager.main.uiControl.updatePlayerScore();
         }
         PhaseManager.addCaptureAnimation(this);
+    }
+    
+    public void playerCapture()
+    {
+        needCaptureChoice = false;
+        canActAfterCollision = false;
+        canAct = false;
+        movedForward = false;
+        needRedirect = true;
+        portRepairCount = -5;
+        //setRedirectUI(true);
+        activateRedirectNotification();
     }
 
     public void updateFrontAfterCollision() {
@@ -566,28 +586,15 @@ public class Ship : MonoBehaviour {
         return team.ToString() + " Ship " + id;
     }
 
-    private void Awake() {
-        //underlay = transform.Find("underlay").GetComponent<SpriteRenderer>();
-        //underlay.color = Color.clear;
-        redirectUI = transform.Find("ShipUI/Direction").gameObject;
-        redirectUI.SetActive(false);
-    }
-
     private void Start() {
         
     }
     
     private void Update() {  
 
-        scaleToCamera();
+        //scaleToCamera();
 
-        try {
-            if (team == GameManager.main.playerTeam) {
-                chooseDirection();
-            }
-        } catch(Exception e) {
-            ;
-        }        
+        CheckUnfocus();
 
         //canHold();
     }
@@ -623,7 +630,7 @@ public class Ship : MonoBehaviour {
     {
         if (needRedirect)
         {
-            transform.Find("ShipUI/Direction").gameObject.SetActive(true);
+            transform.Find("ShipUI/RedirectNotification").gameObject.SetActive(true);
         }
     }
 
@@ -638,7 +645,7 @@ public class Ship : MonoBehaviour {
     public void redirect(int newDirection) {
         setDirection(newDirection);
         needRedirect = false;
-        transform.Find("ShipUI/Direction").gameObject.SetActive(false);
+        redirectUI.SetActive(false);
     }
 
     private void setDirection(int newDirection) {
@@ -725,7 +732,7 @@ public class Ship : MonoBehaviour {
     }
 
     public void setRedirectUI(bool b) {
-        redirectUI.SetActive(b);
+        redirectNotification.SetActive(b);
     }
 
     public void setIconString(String s) {
@@ -776,5 +783,26 @@ public class Ship : MonoBehaviour {
             default:
             return null;
         }
+    }
+    
+    private void CheckUnfocus()
+    {
+        if (Input.GetMouseButton(0) && redirectUI.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(redirectUI.GetComponent<RectTransform>(), Input.mousePosition, Camera.main))
+        {
+            activateRedirectNotification();
+        }
+    }
+
+    public void activateRedirectNotification()
+    {
+        redirectNotification.SetActive(true);
+        redirectUI.SetActive(false);
+    }
+
+    public void activateRedirectPanel()
+    {
+        icon.gameObject.SetActive(false);
+        redirectUI.SetActive(true);
+        redirectNotification.SetActive(false);
     }
 }
