@@ -101,6 +101,8 @@ public class Ship : MonoBehaviour {
 
     private GameObject redirectNotification;
 
+    private GameObject directionLabel;
+
 
     public void intialize(Team team,Node node) {
         this.team = team;
@@ -648,6 +650,7 @@ public class Ship : MonoBehaviour {
     public void redirect(int newDirection) {
         setDirection(newDirection);
         needRedirect = false;
+        Destroy(directionLabel);
         redirectUI.SetActive(false);
     }
 
@@ -738,6 +741,14 @@ public class Ship : MonoBehaviour {
         redirectNotification.SetActive(b);
     }
 
+    public void repositionIcon()
+    {
+        if (redirectNotification.activeSelf)
+            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.6f);
+        else
+            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.486f);
+    }
+
     public void setIconString(String s) {
         icon.gameObject.SetActive(true);
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(true);
@@ -798,6 +809,7 @@ public class Ship : MonoBehaviour {
 
     public void activateRedirectNotification()
     {
+        Destroy(directionLabel);
         redirectNotification.SetActive(true);
         redirectUI.SetActive(false);
     }
@@ -805,6 +817,12 @@ public class Ship : MonoBehaviour {
     public void activateRedirectPanel()
     {
         icon.gameObject.SetActive(false);
+
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
+        directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
+        directionLabel.GetComponentInChildren<Text>().text = "Direction";
+        directionLabel.GetComponent<Canvas>().sortingOrder = 10;
+
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);
     }
