@@ -419,6 +419,7 @@ public class UIControl : MonoBehaviour
     {
 
         disableControls();
+        setShipAttacks();
 
         GameLogic gl = GameManager.main.gameLogic;
         if (GameManager.main.gameLogic.phaseIndex == 4)
