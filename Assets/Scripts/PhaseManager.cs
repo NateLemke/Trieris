@@ -12,6 +12,8 @@ public static class PhaseManager
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
     public static List<PortCaptureAnimation> captureAnimations = new List<PortCaptureAnimation>();
+    public static List<ShipTargetResolution> catapultTargetResolutions = new List<ShipTargetResolution>();
+    public static List<ShipTargetResolution> rammingTargetResolutions = new List<ShipTargetResolution>();
 
     static int subPhaseIndex = 0;
 
@@ -19,7 +21,9 @@ public static class PhaseManager
 
     public static bool playingAnimation = false;
 
-    public static float nodeMultiShipScale = 0.34f;
+    public const float nodeMultiShipScale = 0.34f;
+
+    public static Ship chosenTarget = null;
 
     delegate IEnumerator subPhase();
 
@@ -36,7 +40,6 @@ public static class PhaseManager
         resolvePortCapture,        
         resolveRedirects,
     };
-
 
     public static IEnumerator playAnimations() {
         playingAnimation = true;
@@ -85,7 +88,7 @@ public static class PhaseManager
 
     //public static 
 
-    public static Vector2 shipNodePos(Ship s,Node n) {
+    public static Vector2 shipNodePos(Ship s,Node n, float xSpace = nodeMultiShipScale,float ySpace = 0.3f) {
         
         List<Ship> ships = n.getShips();
 
@@ -111,8 +114,8 @@ public static class PhaseManager
         int x = (i) % (int)rounded  ;
         int y = i / (int)rounded;
 
-        float offset = (rounded - 1) * nodeMultiShipScale / 2f;
-        Vector2 pos = new Vector2(x * nodeMultiShipScale - offset,-y * 0.3f);
+        float offset = (rounded - 1) * xSpace / 2f;
+        Vector2 pos = new Vector2(x * xSpace - offset,-y * ySpace);
 
         return pos + n.getRealPos();
     }
@@ -307,12 +310,16 @@ public static class PhaseManager
 
     public static IEnumerator rammingChoices() {
         subPhaseProgress();
-        if (!GameManager.main.needRammingChoice) {
+        if (rammingTargetResolutions.Count == 0) {
             yield break;
         }
         setSubphaseText("choose ramming targets");
-        while (GameManager.main.needRammingChoice) {
-            yield return null;
+        foreach (ShipTargetResolution tr in rammingTargetResolutions) {
+
+            yield return focus(tr.attacker.Position);
+            yield return tr.resolve();
+            tr.attacker.ram(chosenTarget);
+            yield return rammingResolutions[rammingResolutions.Count-1].resolve();
         }
     }
 
@@ -332,13 +339,18 @@ public static class PhaseManager
 
     public static IEnumerator catapultChoices() {
         subPhaseProgress();
-        if (!GameManager.main.needCatapultChoice) {
+        if (catapultTargetResolutions.Count == 0) {
             yield break;
         }
         setSubphaseText("chose catapult targets");
-        while (GameManager.main.needCatapultChoice) {
-            yield return null;
+
+        foreach(ShipTargetResolution tr in catapultTargetResolutions) {
+            yield return focus(tr.attacker.Position);
+            yield return tr.resolve();
+            yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
         }
+
+
     }
 
     public static IEnumerator resolveCatapults() {
@@ -346,6 +358,7 @@ public static class PhaseManager
             setSubphaseText("resolving catapults");
             foreach(CombatResolution cr in catapultResolutions) {
                 yield return cr.resolve();
+                
             }
         }        
     }    

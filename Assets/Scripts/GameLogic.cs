@@ -254,10 +254,12 @@ public class GameLogic : MonoBehaviour {
                         Ship chosenShip = null;
                         if (ship.team == gameManager.playerTeam) {
 
-                            Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
+                            //Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
                             ship.needRammingChoice = true;
                             //ship.getNode().activateNotification();
-                            chosenShip = potentialCollisions[0];
+                            //chosenShip = potentialCollisions[0];
+                            PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
+                            PhaseManager.involvedInRamming.Add(ship);
 
                         } else {
                             chosenShip = ship.getAI().selectShip(potentialCollisions);
@@ -313,7 +315,9 @@ public class GameLogic : MonoBehaviour {
                         // need player ship catapult choice
                         ship.needCatapultChoice = true;
 
-                        chosenShip = potentialTargets[0];
+                        PhaseManager.catapultTargetResolutions.Add(new ShipTargetResolution(ship,potentialTargets));
+
+                        //chosenShip = potentialTargets[0];
                     }
                 } else {
                     chosenShip = ship.getAI().selectShip(potentialTargets);

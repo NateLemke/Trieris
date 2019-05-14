@@ -22,9 +22,9 @@ public class CatapultResolution : CombatResolution
         shipA.setIcon(Sprites.main.AttackIcon);
         if(missedNode == null) {
             shipB.setIcon(Sprites.main.TargetIcon);
-            focusPos = shipA.Position + (shipA.Position - shipB.Position) / 2;
+            focusPos = (shipA.Position + shipB.Position) / 2;
         } else {
-            focusPos = shipA.Position + (shipA.Position - (Vector3)missedNode.getRealPos()) / 2;
+            focusPos = (shipA.Position + (Vector3)missedNode.getRealPos()) / 2;
         }
 
 
