@@ -16,6 +16,10 @@ public class Ship : MonoBehaviour {
 
     public const int MAX_HEALTH = 4;
 
+    public int currentActionIndex;
+    public int catapultIndex;
+    public int catapultDirection;
+
     // Combat Text
     public GameObject CBTprefab;
 
@@ -69,8 +73,7 @@ public class Ship : MonoBehaviour {
         }
     }
 
-    public int currentActionIndex;
-    public int catapultIndex; 
+   
 
     private int lifeValue;
     public int life
@@ -101,7 +104,10 @@ public class Ship : MonoBehaviour {
         team.ships.Add(this);
         this.id = team.shipIdCounter++;
         this.life = MAX_HEALTH;
-        
+
+        catapultIndex = -1;
+        catapultDirection = -1;
+
         this.node = node;
         node.getShips().Add(this);
         //if(node.getPort() != null) {
@@ -118,7 +124,6 @@ public class Ship : MonoBehaviour {
         transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColorLight();
         currentActionIndex = 0;
         setHealthBar();
-        catapultIndex = -1;
 
         icon = transform.Find("ShipUI/NonRotation/Icon").GetComponent<Image>();
         icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
@@ -574,7 +579,6 @@ public class Ship : MonoBehaviour {
     }
 
     private void Start() {
-        
     }
     
     private void Update() {  

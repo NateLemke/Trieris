@@ -644,12 +644,16 @@ public class UIControl : MonoBehaviour
                 colBlock.normalColor = attackClicked;
                 attackArrows[i].colors = colBlock;
 
+                selected.catapultDirection = i;
+
+                /*
                 foreach (Ship.Action a in selected.actions)
                 {
                     a.setCatapult(-1);
                 }
 
                 selected.actions[selected.catapultIndex].setCatapult(i);
+                */
             }
         }
     }
@@ -695,6 +699,20 @@ public class UIControl : MonoBehaviour
         foreach (Button b in commandPanels)
         {
             b.interactable = true;
+        }
+    }
+
+    public void setShipAttacks()
+    {
+        foreach(Ship s in gameManager.getPlayerShips())
+        {
+            foreach(Ship.Action a in s.actions)
+            {
+                a.setCatapult(-1);
+            }
+
+            if (s.catapultIndex >= 0 && s.catapultDirection >= 0)
+                s.actions[s.catapultIndex].setCatapult(s.catapultDirection);
         }
     }
 }
