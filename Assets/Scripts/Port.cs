@@ -31,10 +31,17 @@ public class Port{
         team = t;
     }
 
-    public Port(Vector2Int p,Team t,bool isCaptial) {
+    /// <summary>
+    /// Constructor
+    /// Instantiates a port prefab gameobject and keeps the reference to it
+    /// </summary>
+    /// <param name="boardPos">the port's node position on the board</param>
+    /// <param name="t">the team the port belongs to</param>
+    /// <param name="isCaptial">sets the port to be a capital or not</param>
+    public Port(Vector2Int boardPos,Team t,bool isCaptial) {
         team = t;
         capital = isCaptial;
-        node = GameManager.main.getBoard().getNodeAt(p);
+        node = GameManager.main.getBoard().getNodeAt(boardPos);
         go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
         go.transform.position = node.getRealPos();
@@ -72,20 +79,33 @@ public class Port{
         capital = isCapital;
     }
 
+    /// <summary>
+    /// Changes ownership of the port to another team
+    /// also changes the sprite and minimap sprite
+    /// </summary>
+    /// <param name="t"></param>
     public void setTeam(Team t) {
         team = t;
         setSprite(team);
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
+    //public void setColor(Color color) {
+    //    this.color = color;
+    //}
 
+    /// <summary>
+    /// changes the sprite for the port
+    /// gets the sprite from the given team input
+    /// </summary>
+    /// <param name="t">the team to change the port to</param>
     private void setSprite(Team t) {
         spriteRenderer.sprite = capital ? t.CapitalSprite : t.PortSprite;
     }
 
+    /// <summary>
+    /// Checks if a ship is present on the node and sets the sprite to be transparent if so
+    /// </summary>
     public void setTransparency() {
         Color c = spriteRenderer.color;
         if(node.getNumberOfShips() == 0) {
@@ -96,6 +116,10 @@ public class Port{
         spriteRenderer.color = c;
     }
 
+    /// <summary>
+    /// Activates the port capture prompt UI attached to this port
+    /// </summary>
+    /// <param name="s">The particular ship the prompt is for</param>
     public void activatePrompt(Ship s) {
         go.GetComponent<PortPrompt>().activateNotification(this,s);
     }

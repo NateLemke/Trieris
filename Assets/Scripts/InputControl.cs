@@ -158,7 +158,7 @@ public class InputControl : MonoBehaviour {
     mainCamera.transform.position += move * Time.deltaTime * moveRate * camera.orthographicSize;
     }
 
-    public Vector2 mouseWorldPos() {
+    public static Vector2 mouseWorldPos() {
         return Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
     }    
 }

@@ -14,7 +14,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    sodipodi:docname="combat and selection icons.svg"
    inkscape:export-filename="C:\Users\Thompson\COMP-4900-Trieris\Assets\ArtAssets\targetIcon.png"
    inkscape:export-xdpi="60.959999"
@@ -36,9 +36,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="525.91214"
-     inkscape:cy="316.12368"
+     inkscape:zoom="4"
+     inkscape:cx="-14.73311"
+     inkscape:cy="887.01786"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -49,9 +49,9 @@
      inkscape:bbox-paths="true"
      inkscape:snap-global="false"
      inkscape:window-width="1920"
-     inkscape:window-height="1057"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:window-height="986"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true" />
@@ -573,5 +573,27 @@
          id="flowPara880"
          style="-inkscape-font-specification:'Verdana Bold';font-family:Verdana;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:middle;text-align:center;fill:#ffffff;fill-opacity:1">Set</flowPara><flowPara
          id="flowPara882"
-         style="-inkscape-font-specification:'Verdana Bold';font-family:Verdana;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:middle;text-align:center;fill:#ffffff;fill-opacity:1">Action</flowPara></flowRoot>  </g>
+         style="-inkscape-font-specification:'Verdana Bold';font-family:Verdana;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;text-anchor:middle;text-align:center;fill:#ffffff;fill-opacity:1">Action</flowPara></flowRoot>    <circle
+       style="opacity:1;fill:#f2f2f2;fill-opacity:0;stroke:#6e6e6e;stroke-width:1.04100001;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       id="path4510-8-8"
+       cx="-10.190574"
+       cy="61.496647"
+       r="11.472285"
+       inkscape:export-xdpi="214.36696"
+       inkscape:export-ydpi="214.36696" />
+    <path
+       style="opacity:1;fill:#696969;fill-opacity:0.95719844;stroke:none;stroke-width:6.09458447;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m -25.220683,60.814375 v 1.364774 h 7.660515 v -1.364774 z m 22.3004477,0 v 1.364774 h 8.0325846 v -1.364774 z"
+       id="rect4512-0-6"
+       inkscape:export-xdpi="214.36696"
+       inkscape:export-ydpi="214.36696"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:connector-curvature="0"
+       style="opacity:1;fill:#696969;fill-opacity:0.95719844;stroke:none;stroke-width:6.09458447;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m -10.759016,76.66476 h 1.3647745 v -7.660515 h -1.3647745 z m 0,-22.300448 h 1.3647745 v -8.032584 h -1.3647745 z"
+       id="rect4512-0-6-0"
+       inkscape:export-xdpi="214.36696"
+       inkscape:export-ydpi="214.36696" />
+  </g>
 </svg>

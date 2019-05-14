@@ -131,7 +131,7 @@ public class GameLogic : MonoBehaviour {
         handleCatapults();
         handleCapture();
 
-        StartCoroutine( PhaseManager.playAnimations());        
+        StartCoroutine( PhaseManager.playPhaseAnimations());        
     }
 
     /// <summary>
@@ -258,11 +258,18 @@ public class GameLogic : MonoBehaviour {
                         Ship chosenShip = null;
                         if (ship.team == gameManager.playerTeam) {
 
-                            Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
-                            ship.needRammingChoice = true;
+                            //Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
+                            
                             //ship.getNode().activateNotification();
-                            chosenShip = potentialCollisions[0];
-
+                            //chosenShip = potentialCollisions[0];
+                            
+                            if(potentialCollisions.Count > 1) {
+                                ship.needRammingChoice = true;
+                                PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
+                                PhaseManager.involvedInRamming.Add(ship);
+                            } else {
+                                chosenShip = potentialCollisions[0];
+                            }
                         } else {
                             chosenShip = ship.getAI().selectShip(potentialCollisions);
                         }
@@ -317,7 +324,9 @@ public class GameLogic : MonoBehaviour {
                         // need player ship catapult choice
                         ship.needCatapultChoice = true;
 
-                        chosenShip = potentialTargets[0];
+                        PhaseManager.catapultTargetResolutions.Add(new ShipTargetResolution(ship,potentialTargets));
+
+                        //chosenShip = potentialTargets[0];
                     }
                 } else {
                     chosenShip = ship.getAI().selectShip(potentialTargets);

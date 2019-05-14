@@ -1,0 +1,22 @@
+sprite render order
+
+catapult bullet		12
+catapult trail		11
+
+choice UI			10
+icons				9
+
+momentum numbers	8
+action arrows		7
+	(movement and rotation)
+
+ships				6
+
+
+target UI			5
+
+port				4
+grid node			3
+grid line			2
+island				1
+ocean				0

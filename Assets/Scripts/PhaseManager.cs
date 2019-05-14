@@ -12,6 +12,8 @@ public static class PhaseManager
     public static List<CombatResolution> rammingResolutions = new List<CombatResolution>();
     public static List<CombatResolution> catapultResolutions = new List<CombatResolution>();
     public static List<PortCaptureAnimation> captureAnimations = new List<PortCaptureAnimation>();
+    public static List<ShipTargetResolution> catapultTargetResolutions = new List<ShipTargetResolution>();
+    public static List<ShipTargetResolution> rammingTargetResolutions = new List<ShipTargetResolution>();
 
     static int subPhaseIndex = 0;
 
@@ -19,7 +21,9 @@ public static class PhaseManager
 
     public static bool playingAnimation = false;
 
-    public static float nodeMultiShipScale = 0.34f;
+    public const float nodeMultiShipScale = 0.34f;
+
+    public static Ship chosenTarget = null;
 
     delegate IEnumerator subPhase();
 
@@ -37,8 +41,12 @@ public static class PhaseManager
         resolveRedirects,
     };
 
-
-    public static IEnumerator playAnimations() {
+    /// <summary>
+    /// runs through the subphases for the current phase
+    /// executes ramming, movement, port capture, etc
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerator playPhaseAnimations() {
         playingAnimation = true;
         subPhaseIndex = 0;
         yield return null;
@@ -85,7 +93,7 @@ public static class PhaseManager
 
     //public static 
 
-    public static Vector2 shipNodePos(Ship s,Node n) {
+    public static Vector2 shipNodePos(Ship s,Node n, float xSpace = nodeMultiShipScale,float ySpace = 0.3f) {
         
         List<Ship> ships = n.getShips();
 
@@ -111,8 +119,8 @@ public static class PhaseManager
         int x = (i) % (int)rounded  ;
         int y = i / (int)rounded;
 
-        float offset = (rounded - 1) * nodeMultiShipScale / 2f;
-        Vector2 pos = new Vector2(x * nodeMultiShipScale - offset,-y * 0.3f);
+        float offset = (rounded - 1) * xSpace / 2f;
+        Vector2 pos = new Vector2(x * xSpace - offset,-y * ySpace);
 
         return pos + n.getRealPos();
     }
@@ -156,31 +164,7 @@ public static class PhaseManager
         return r;
     }
 
-    public static void drawFocusMargin() {
-        Vector2[] bv = getBoardView();
-        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
-        
-        float xMargin = bv[1].x * 0.08f;
-        float yMargin = bv[1].y * 0.08f;
 
-        float xMin = bv[0].x + xMargin;
-        float xMax = bv[0].x + bv[1].x - xMargin;
-        float yMin = bv[0].y + yMargin;
-        float yMax = bv[0].y + bv[1].y - yMargin;
-
-        Vector2 v1 = new Vector2(xMin,yMin);
-        Vector2 v2 = new Vector2(xMin,yMax);
-        Vector2 v3 = new Vector2(xMax,yMin);
-        Vector2 v4 = new Vector2(xMax,yMax);
-
-        Debug.DrawLine(v1,v2,Color.green);
-        Debug.DrawLine(v1,v3,Color.green);
-        Debug.DrawLine(v2,v4,Color.green);
-        Debug.DrawLine(v3,v4,Color.green);
-
-        debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
-        debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
-    }
 
     public static Vector2[] crossOnPoint(Vector2 v,float f) {
         Vector2[] r = new Vector2[4];
@@ -222,6 +206,32 @@ public static class PhaseManager
         return (bv[0] + bv[1] / 2);
     }
 
+    public static void drawFocusMargin() {
+        Vector2[] bv = getBoardView();
+        Debug.DrawLine(bv[0],bv[0] + bv[1],Color.red);
+
+        float xMargin = bv[1].x * 0.08f;
+        float yMargin = bv[1].y * 0.08f;
+
+        float xMin = bv[0].x + xMargin;
+        float xMax = bv[0].x + bv[1].x - xMargin;
+        float yMin = bv[0].y + bv[1].y - yMargin;
+        float yMax = bv[0].y + yMargin * 3;        
+
+        Vector2 v1 = new Vector2(xMin,yMax);
+        Vector2 v2 = new Vector2(xMin,yMin);
+        Vector2 v3 = new Vector2(xMax,yMax);
+        Vector2 v4 = new Vector2(xMax,yMin);
+
+        Debug.DrawLine(v1,v2,Color.green);
+        Debug.DrawLine(v1,v3,Color.red);
+        Debug.DrawLine(v2,v4,Color.yellow);
+        Debug.DrawLine(v3,v4,Color.blue);
+
+        debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
+        debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
+    }
+
     public static bool outOfFocus(Vector2 v) {
 
         Vector2[] bv = getBoardView();
@@ -232,7 +242,7 @@ public static class PhaseManager
         float xMin = bv[0].x + xMargin;
         float xMax = bv[0].x + bv[1].x - xMargin;
         float yMin = bv[0].y + bv[1].y - yMargin;
-        float yMax = bv[0].y + yMargin;
+        float yMax = bv[0].y + yMargin * 3;
 
         return (v.x < xMin || v.x > xMax || v.y < yMin || v.y > yMax);
     }
@@ -245,8 +255,10 @@ public static class PhaseManager
             //debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
             Vector2[] bv = getBoardView();
             Vector2 offset = (Vector2)Camera.main.transform.position - boardviewCenter();
-
-            yield return moveCameraTo(v + offset,SpeedManager.CameraFocusSpeed);
+            Vector3 pos = v + offset;
+            yield return moveCameraTo(pos,SpeedManager.CameraFocusSpeed);
+            pos.z = Camera.main.transform.position.z;
+            Camera.main.transform.position = pos;
         }
     }
 
@@ -307,12 +319,16 @@ public static class PhaseManager
 
     public static IEnumerator rammingChoices() {
         subPhaseProgress();
-        if (!GameManager.main.needRammingChoice) {
+        if (rammingTargetResolutions.Count == 0) {
             yield break;
         }
         setSubphaseText("choose ramming targets");
-        while (GameManager.main.needRammingChoice) {
-            yield return null;
+        foreach (ShipTargetResolution tr in rammingTargetResolutions) {
+
+            yield return focus(tr.attacker.Position);
+            yield return tr.resolve();
+            tr.attacker.ram(chosenTarget);
+            yield return rammingResolutions[rammingResolutions.Count-1].resolve();
         }
     }
 
@@ -332,13 +348,18 @@ public static class PhaseManager
 
     public static IEnumerator catapultChoices() {
         subPhaseProgress();
-        if (!GameManager.main.needCatapultChoice) {
+        if (catapultTargetResolutions.Count == 0) {
             yield break;
         }
         setSubphaseText("chose catapult targets");
-        while (GameManager.main.needCatapultChoice) {
-            yield return null;
+
+        foreach(ShipTargetResolution tr in catapultTargetResolutions) {
+            yield return focus(tr.attacker.Position);
+            yield return tr.resolve();
+            yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
         }
+
+
     }
 
     public static IEnumerator resolveCatapults() {
@@ -397,9 +418,11 @@ public static class PhaseManager
             if (s.needCaptureChoice) {
                 focusTarget = s;
                 s.getNode().getPort().activatePrompt(s);
+                yield return focus(focusTarget.Position);
+                while (s.needCaptureChoice || s.needRedirect)
+                    yield return null;
             }
         }
-        yield return focus(focusTarget.Position);
         while (GameManager.main.needCaptureChoice) {
             yield return null;
         }
