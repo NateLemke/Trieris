@@ -43,4 +43,6 @@ public static class CustomColor
     public static Color TeamBlueLight = new Color(0f,0.9f,0.984f);
     public static Color TeamBlack = new Color(0f, 0f, 0f);
     public static Color TeamBlackLight = new Color(0.75f,0.75f,0.75f);
+
+    public static Color Transparent = new Color(0f, 0f, 0f, 0f);
 }

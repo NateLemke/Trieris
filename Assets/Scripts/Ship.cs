@@ -310,6 +310,7 @@ public class Ship : MonoBehaviour {
     public void catapult(Ship target) {
         if (target != null) {
             //target.life -= 1;
+            //Debug.Log(team.ToString() + getNumeralID() + " shot " + target.team.ToString() + target.getNumeralID());
             PhaseManager.addCatapultAnimation(this,target);
         }
     }

@@ -356,9 +356,9 @@ public static class PhaseManager
     public static IEnumerator resolveCatapults() {
         if(catapultResolutions.Count > 0) {
             setSubphaseText("resolving catapults");
-            foreach(CombatResolution cr in catapultResolutions) {
-                yield return cr.resolve();
-                
+            foreach(CatapultResolution cr in catapultResolutions) {
+                if (!cr.interrupted)
+                    yield return cr.resolve();
             }
         }        
     }    
