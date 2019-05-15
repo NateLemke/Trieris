@@ -20,26 +20,16 @@ public class SinkAnimation : Animation {
         InitSinkAnimation();
         
         ship.disableIcon();
-        yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+        yield return new WaitForSeconds(SpeedManager.CombatSinking);
 
-        if (ship.getNode().getShips().Contains(ship)) {
-            ship.getNode().getShips().Remove(ship);
-        }
-
-        if(ship.getNode().getPort() != null) {
-            ship.getNode().getPort().setTransparency();
-        }
-
-        foreach (Ship s in ship.getNode().getShips()) { 
-            s.transform.position = PhaseManager.shipNodePos(s,ship.getNode());
-        }
-
+        ship.sink();
 
         yield return null;
     }
 
     public void InitSinkAnimation()
     {
+        Sounds.main.playClip(Sounds.main.Blub);
         ship.GetComponent<Animator>().SetTrigger("Sinking");
     }
 

@@ -377,8 +377,9 @@ public static class PhaseManager
 
         if (sinkAnimations.Count > 0) {
             setSubphaseText("sinking ships");
-            foreach (SinkAnimation a in sinkAnimations) {
-                yield return a.playAnimation();
+            for (int i = 0; i < sinkAnimations.Count; i++)
+            {
+                yield return sinkAnimations[i].playAnimation();
             }
             sinkAnimations.Clear();
         }
@@ -463,7 +464,7 @@ public static class PhaseManager
     }
 
     public static void updateText() {
-        int phase = GameManager.main.gameLogic.phaseIndex;
+        int phase = GameLogic.phaseIndex;
         
         GameObject phaseObj = UIControl.main.phase;
         phaseObj.SetActive(true);
@@ -555,6 +556,22 @@ public static class PhaseManager
             catapultResolutions.Add(cr);
 
             s.CanFire = false;
+        }
+    }
+
+    public static void addAdjHeadOnRamming(Ship a, Ship b) {
+        bool foundPair = false;
+        int dmg = (a.getMomentum() == 0) ? 1 : a.getMomentum();
+        foreach(RammingResolution rr in rammingResolutions) {
+            if(rr.shipA == b && rr.shipB == a) {
+                rr.damageToA = dmg;
+                foundPair = true;
+                break;
+            }
+        }
+
+        if (!foundPair) {
+            rammingResolutions.Add(new HeadOnRammingResolution(a,b,dmg));
         }
     }
 

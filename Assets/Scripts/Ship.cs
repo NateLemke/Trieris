@@ -107,6 +107,8 @@ public class Ship : MonoBehaviour {
 
     private GameObject redirectNotification;
 
+    private GameObject directionLabel;
+
 
     public void intialize(Team team,Node node) {
         this.team = team;
@@ -445,6 +447,21 @@ public class Ship : MonoBehaviour {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].getID());
         }
 
+        if (this.getNode().getShips().Contains(this))
+        {
+            this.getNode().getShips().Remove(this);
+        }
+
+        if (this.getNode().getPort() != null)
+        {
+            this.getNode().getPort().setTransparency();
+        }
+
+        foreach (Ship s in this.getNode().getShips())
+        {
+            s.transform.position = PhaseManager.shipNodePos(s, this.getNode());
+        }
+
         Destroy(this.gameObject);
     }
 
@@ -555,6 +572,10 @@ public class Ship : MonoBehaviour {
         PhaseManager.addRammingResolution(this,target,momentum * 2);
     }
 
+    public bool AdjHeadOnRamCheck(Ship s, int phase) {
+        return (Mathf.Abs(getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction" && actions[phase].GetType().Name == "ForwardAction");            
+    }
+
     private void headOnRam(Ship target) {
         DebugControl.log("ramming","head on ram");
         //target.life -= momentum;
@@ -564,7 +585,13 @@ public class Ship : MonoBehaviour {
         //if (!target.movedForward) {
         //    this.life--;
         //}
-        PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+        if (AdjHeadOnRamCheck(target,GameLogic.phaseIndex)) {
+            PhaseManager.addAdjHeadOnRamming(this,target);
+        } else {
+            PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+        }
+
+        
     }
 
     private void glancingRam(Ship target,int relativeTurn) {
@@ -656,6 +683,7 @@ public class Ship : MonoBehaviour {
     public void redirect(int newDirection) {
         setDirection(newDirection);
         needRedirect = false;
+        Destroy(directionLabel);
         redirectUI.SetActive(false);
     }
 
@@ -746,6 +774,14 @@ public class Ship : MonoBehaviour {
         redirectNotification.SetActive(b);
     }
 
+    public void repositionIcon()
+    {
+        if (redirectNotification.activeSelf)
+            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.6f);
+        else
+            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.486f);
+    }
+
     public void setIconString(String s) {
         icon.gameObject.SetActive(true);
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(true);
@@ -806,6 +842,7 @@ public class Ship : MonoBehaviour {
 
     public void activateRedirectNotification()
     {
+        Destroy(directionLabel);
         redirectNotification.SetActive(true);
         redirectUI.SetActive(false);
     }
@@ -813,6 +850,12 @@ public class Ship : MonoBehaviour {
     public void activateRedirectPanel()
     {
         icon.gameObject.SetActive(false);
+
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
+        directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
+        directionLabel.GetComponentInChildren<Text>().text = "Direction";
+        directionLabel.GetComponent<Canvas>().sortingOrder = 5;
+
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);
     }

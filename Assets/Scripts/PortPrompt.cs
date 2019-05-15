@@ -58,7 +58,7 @@ public class PortPrompt : MonoBehaviour
 
     public void decline()
     {
-        currentShip.needCaptureChoice = false;
+        
         portPromptPanel.SetActive(false);
         GameManager.main.StartCoroutine(declineAnimation());
     }
@@ -76,6 +76,7 @@ public class PortPrompt : MonoBehaviour
                 break;
             }
         }
+        s.needCaptureChoice = false;
     }
 
     static IEnumerator declineAnimation() {
