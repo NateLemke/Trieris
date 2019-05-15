@@ -31,6 +31,7 @@ public class HeadOnRammingResolution : RammingResolution {
             yield return null;
         }
 
+        InitHeadOnAnimation();
         Sounds.main.playRandomCrunch();
         yield return new WaitForSeconds(0.3f);
         Sounds.main.playRandomCrunch();
@@ -54,6 +55,13 @@ public class HeadOnRammingResolution : RammingResolution {
             yield return null;
 
         }
+
+    }
+
+    public void InitHeadOnAnimation()
+    {
+        shipA.GetComponent<Animator>().SetTrigger("Collision");
+        shipB.GetComponent<Animator>().SetTrigger("Collision");
     }
 
 
