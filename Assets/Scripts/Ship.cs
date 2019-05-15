@@ -850,7 +850,7 @@ public class Ship : MonoBehaviour {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
         directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
         directionLabel.GetComponentInChildren<Text>().text = "Direction";
-        directionLabel.GetComponent<Canvas>().sortingOrder = 10;
+        directionLabel.GetComponent<Canvas>().sortingOrder = 5;
 
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);
