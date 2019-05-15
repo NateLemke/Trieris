@@ -356,7 +356,8 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
-            //redirectUI.SetActive(true);
+            if(team == GameManager.main.playerTeam)
+                activateRedirectNotification();
             return;
         }
        
