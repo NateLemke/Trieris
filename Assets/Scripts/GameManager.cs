@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour {
             parent = Instantiate(new GameObject());
             parent.name = "Ships";
         }
-        GameObject shipPrefab = Resources.Load("Prefabs/Ship2") as GameObject;
+        GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
         GameObject spawn = Instantiate(shipPrefab,node.getPosition(),Quaternion.identity);
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
