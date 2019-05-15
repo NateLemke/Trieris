@@ -144,14 +144,15 @@ public class GameLogic : MonoBehaviour {
         if (ship.actions[phase].GetType().Name == "ForwardAction")
         {
             Node nextNode = ship.getNode().getAdjacentNode(ship.getFront());
-            foreach(Ship s in nextNode.getShips())
-            {
-                if(Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+            if(nextNode != null)
+                foreach(Ship s in nextNode.getShips())
                 {
-                    ship.ram(s);
-                    return true;
+                    if(Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+                    {
+                        ship.ram(s);
+                        return true;
+                    }
                 }
-            }
         }
         return false;
     }
