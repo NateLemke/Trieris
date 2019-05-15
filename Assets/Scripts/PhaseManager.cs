@@ -485,7 +485,11 @@ public static class PhaseManager
     }
 
     public static void addCatapultAnimation(Ship attacker, Ship target) {
-        catapultResolutions.Add(new CatapultResolution(attacker,target,1));
+        if (attacker.CanFire)
+        {
+            catapultResolutions.Add(new CatapultResolution(attacker, target, 1));
+            attacker.CanFire = false;
+        }
     }
 
     public static void addCaptureAnimation(Ship s) {
@@ -544,9 +548,14 @@ public static class PhaseManager
     }
 
     public static void addMissedShot(Ship s, Node n) {
-        CatapultResolution cr = new CatapultResolution(s,null,0,n);       
-     
-        catapultResolutions.Add(cr);
+        if (s.CanFire)
+        {
+            CatapultResolution cr = new CatapultResolution(s, null, 0, n);
+
+            catapultResolutions.Add(cr);
+
+            s.CanFire = false;
+        }
     }
 
 }

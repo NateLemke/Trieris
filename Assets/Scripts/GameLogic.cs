@@ -64,6 +64,10 @@ public class GameLogic : MonoBehaviour {
             gameManager.checkVictory();
             turnIndex++;
             //PhaseManager.updateText();
+            foreach(Ship ship in gameManager.getAllShips())
+            {
+                ship.CanFire = true;
+            }
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.catapultIndex = -1;

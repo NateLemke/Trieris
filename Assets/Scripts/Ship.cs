@@ -19,6 +19,9 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
     public int catapultIndex;
     public int catapultDirection;
+    bool canFire;
+
+    public bool CanFire { get { return canFire; } set { canFire = value; } }
 
     // Combat Text
     public GameObject CBTprefab;
@@ -113,6 +116,7 @@ public class Ship : MonoBehaviour {
 
         catapultIndex = -1;
         catapultDirection = -1;
+        canFire = true;
 
         this.node = node;
         node.getShips().Add(this);
