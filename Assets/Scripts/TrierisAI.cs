@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Gives commands to all AI ships.
+/// has functions to find the nearest port, set attacks, and set directions.
+/// </summary>
 public class TrierisAI {
 
     // AI manage teams, so might as well give them access to a team's list of ships
@@ -38,6 +42,12 @@ public class TrierisAI {
     //    }
     //}
 
+    /// <summary>
+    /// Basic constructor for the AI.
+    /// Sets the team to given one. 
+    /// Doesn't work if given team is null or has no ships.
+    /// </summary>
+    /// <param name="t">The team to set this AI to.</param>
     public TrierisAI(Team t) {
         if(t == null) {
             Debug.Log("Assigning an AI a NULL team");
@@ -51,7 +61,10 @@ public class TrierisAI {
         }
     }
 
-    // throws InvalidActionIndexException, CannotReverseException, InvalidActionException
+    /// <summary>
+    /// Sets the next turn of actions and attack for the AI ship.
+    /// Throws InvalidActionIndexException, CannotReverseException, InvalidActionException
+    /// </summary>
     public void setNextTurn()  {
         destinationPorts = new List<Node>();
         foreach (Ship ship in team.ships) {
@@ -104,6 +117,11 @@ public class TrierisAI {
         }
     }
 
+    /// <summary>
+    /// Finds the shortest path to a port.
+    /// </summary>
+    /// <param name="shipPath">The current path.</param>
+    /// <returns>The shortest path to a port.</returns>
     public NodePath shortestPathToPort(NodePath shipPath) {
         visitedNodes.Add(shipPath.getNode());
         queue.Add(shipPath);
@@ -174,10 +192,19 @@ public class TrierisAI {
         return shipPath;
     }
 
+    /// <summary>
+    /// Returns wether the ship decides to catpure a port (currently always captures.)
+    /// </summary>
+    /// <returns>true</returns>
     public bool decidePortCapture() {
         return true;
     }
 
+    /// <summary>
+    /// Randomly selects an enemy ship to attack or ram.
+    /// </summary>
+    /// <param name="enemyShips">a list of possible enemy targets.</param>
+    /// <returns>the randomly selected target.</returns>
     public Ship selectShip(List<Ship> enemyShips) {
         System.Random rand = new System.Random();
     
@@ -191,6 +218,11 @@ public class TrierisAI {
         return null;
     }
 
+    /// <summary>
+    /// Sets a new direction for the ship. 
+    /// </summary>
+    /// <param name="ship">The AI ship.</param>
+    /// <returns>The new direction.</returns>
     public int setNewShipDirection(Ship ship) {
         //Debug.Log("setting new AI direction for "+ship);
         ship.needRedirect = false;
@@ -221,10 +253,19 @@ public class TrierisAI {
         return shipDirection % 8;
     }
 
+    /// <summary>
+    /// Returns a list of all ships on this team.
+    /// </summary>
+    /// <returns>a list of all ships on this team.</returns>
     public List<Ship> getShips() {
         return team.ships;
     }
 
+    /// <summary>
+    /// Gives attack commands to the given ship if there are valid targets.
+    /// </summary>
+    /// <param name="ship">The AI ship</param>
+    /// <returns>The Catapult Directions.</returns>
     public List<int> catapultInstructions(Ship ship) {
         Node shipNode = ship.getNode();
         List<int> catapultDirections = new List<int>();

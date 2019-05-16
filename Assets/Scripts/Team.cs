@@ -5,6 +5,10 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
+/// <summary>
+/// Represents one team in the game, and contains it's ships and ports.
+/// There are 6 teams in the game, including the player's team.
+/// </summary>
 public class Team 
 {
     public enum Type { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
@@ -18,6 +22,11 @@ public class Team
     public Sprite PortSprite { get { return Sprites.getTeamPort(this); } }
     public Sprite CapitalSprite { get { return Sprites.getColoredCaptial(this); } }
 
+    /// <summary>
+    /// Basic constructor for the team.
+    /// Creates new lists for ports and ships.
+    /// </summary>
+    /// <param name="t"></param>
     public Team(Team.Type t) {
         ships = new List<Ship>();
         ports = new List<Port>();
@@ -26,9 +35,10 @@ public class Team
         setPortsAndCapital();
     }
 
-    //public Sprite getShipSprite() {
-    //    return shipSprite;
-    //}
+    /// <summary>
+    /// Returns the port sprite for this particular team.
+    /// </summary>
+    /// <returns>The port sprite for this team.</returns>
     public Sprite getPortSprite() {
         //return portSprite;
         switch (teamType) {
@@ -97,10 +107,18 @@ public class Team
 
     }
 
+    /// <summary>
+    /// Returns the teamtype for this Team.
+    /// </summary>
+    /// <returns>The teamtype for this team.</returns>
     public Type getTeamType() {
         return teamType;
     }
 
+    /// <summary>
+    /// Returns the standard colour for this particular team.
+    /// </summary>
+    /// <returns>The standard colour this team.</returns>
     public Color getColor() {
         switch (teamType) {
             case Team.Type.black:
@@ -121,6 +139,10 @@ public class Team
         }
     }
 
+    /// <summary>
+    /// Returns the light colour for this particular team.
+    /// </summary>
+    /// <returns>The light colour this team.</returns>
     public Color getColorLight() {
         switch (teamType) {
             case Team.Type.black:
@@ -141,10 +163,17 @@ public class Team
         }
     }
 
+    /// <summary>
+    /// Returns a string version of the teamtype for this team.
+    /// </summary>
+    /// <returns>the string version of the teamtype for this team.</returns>
     public override string ToString() {
         return teamType.ToString();
     }
 
+    /// <summary>
+    /// Creates all ports that belong to this team and places them on the board.
+    /// </summary>
     public void createPorts() {
         if (GameManager.main.getBoard() == null) {
             Debug.LogError("Cannot set team ports and capital until game board has been created");
@@ -167,6 +196,9 @@ public class Team
         }
     }
 
+    /// <summary>
+    /// Creates all the ships belonging to this team and places them on each port.
+    /// </summary>
     public void createShips() {
         foreach(Port p in ports) {
             GameManager.main.spawnShip(p.node,this);
