@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: The different directions ships can face. Currently is only used for creating the board.
+/// </summary>
 public class Direction {
 
     public static int[][] DIRECTIONS = {

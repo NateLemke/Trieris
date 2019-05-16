@@ -398,6 +398,10 @@ public class UIControl : MonoBehaviour
     {
         TeamSelectUI.SetActive(false);
         gameManager.setPlayerTeam(i);
+
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
+        overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(false);
     }
 
 

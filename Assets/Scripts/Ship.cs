@@ -360,7 +360,8 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
-            //redirectUI.SetActive(true);
+            if(team == GameManager.main.playerTeam)
+                activateRedirectNotification();
             return;
         }
        
@@ -586,6 +587,7 @@ public class Ship : MonoBehaviour {
         //    this.life--;
         //}
         if (AdjHeadOnRamCheck(target,GameLogic.phaseIndex)) {
+            movedForward = false;
             PhaseManager.addAdjHeadOnRamming(this,target);
         } else {
             PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);

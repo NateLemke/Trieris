@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: Allows easy access to team colours and custom colours.
+/// </summary>
 public static class CustomColor
 {
     public static Color Yellow1 = new Color(1f, 0.89f, 0.659f);

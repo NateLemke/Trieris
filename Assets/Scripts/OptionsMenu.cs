@@ -25,9 +25,17 @@ public class OptionsMenu : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    public void OpenInstructions()
+    public void OpenControls()
     {
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
+        overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(false);
+    }
+
+    public void OpenRules()
+    {
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
+        overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(true);
     }
 }

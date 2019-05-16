@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Handles the keyboard and mouse inputs for camera controls, menu controls, and game speed controls
+/// </summary>
 public class InputControl : MonoBehaviour {
 
     public GameObject mainCamera;
@@ -75,7 +78,7 @@ public class InputControl : MonoBehaviour {
             shipSelectUpdate();
         }
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") && GameManager.main.gameOver == false)
         {
             if (!optionsPanel.active)
             {
@@ -86,14 +89,15 @@ public class InputControl : MonoBehaviour {
                 optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
         }
 
-        if (Input.GetKeyDown("`"))
+        if (Input.GetKeyDown("p") && GameManager.main.gameOver == false)
         {
-            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-            gameOverObj.GetComponent<GameOver>().Initialize("Victory");
+            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         }
     }
 
+    /// <summary>
+    /// Makes the ship that is currently under the cursor to be the current selected ship
+    /// </summary>
     public void shipSelectUpdate() {
         Ship hover = null;
 
@@ -117,6 +121,9 @@ public class InputControl : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Used to manipulate the camera's zoom levels based on mouse scroll wheel input
+    /// </summary>
     public void cameraUpdate() {
         float input;
         cameraHeight = camera.orthographicSize * 2.0f;
@@ -142,6 +149,10 @@ public class InputControl : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Changes the zoom level of the camera
+    /// </summary>
+    /// <param name="input"></param>
     public void cameraZoom(float input) {
         input *= zoomInputScale;
 
@@ -151,13 +162,19 @@ public class InputControl : MonoBehaviour {
         camera.orthographicSize = Mathf.Clamp(Mathf.Pow(zoomRate,zoomExponent), minCamSize, maxCamSize);
     }
 
+    /// <summary>
+    /// Moves the main camera
+    /// </summary>
+    /// <param name="move">The amount that the screen moves</param>
     public void cameraMove(Vector3 move)
     {
-    
-    //float
-    mainCamera.transform.position += move * Time.deltaTime * moveRate * camera.orthographicSize;
+        mainCamera.transform.position += move * Time.deltaTime * moveRate * camera.orthographicSize;
     }
 
+    /// <summary>
+    /// Gets the location of the camera based on the position it is on the screen and returns the location that it is over in the world space
+    /// </summary>
+    /// <returns></returns>
     public static Vector2 mouseWorldPos() {
         return Camera.main.ScreenToWorldPoint((Vector2)Input.mousePosition);
     }    
