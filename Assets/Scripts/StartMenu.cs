@@ -20,8 +20,6 @@ public class StartMenu : MonoBehaviour
 
     public void RuleBookButton()
     {
-        string Path = Application.dataPath;
-
-        Debug.Log("Path: " + Path);
+        Application.OpenURL("http://trieris.ca/rulebook/");
     }
 }

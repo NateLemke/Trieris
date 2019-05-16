@@ -21,6 +21,9 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
     public int catapultIndex;
     public int catapultDirection;
+    bool canFire;
+
+    public bool CanFire { get { return canFire; } set { canFire = value; } }
 
     // used to display damage text
     public GameObject CBTprefab;
@@ -107,6 +110,7 @@ public class Ship : MonoBehaviour {
 
         catapultIndex = -1;
         catapultDirection = -1;
+        canFire = true;
 
         this.node = node;
         node.getShips().Add(this);
@@ -395,7 +399,8 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
-            //redirectUI.SetActive(true);
+            if(team == GameManager.main.playerTeam)
+                activateRedirectNotification();
             return;
         }
        
@@ -999,7 +1004,7 @@ public class Ship : MonoBehaviour {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
         directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
         directionLabel.GetComponentInChildren<Text>().text = "Direction";
-        directionLabel.GetComponent<Canvas>().sortingOrder = 10;
+        directionLabel.GetComponent<Canvas>().sortingOrder = 5;
 
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);

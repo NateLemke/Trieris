@@ -64,6 +64,10 @@ public class GameLogic : MonoBehaviour {
             gameManager.checkVictory();
             turnIndex++;
             //PhaseManager.updateText();
+            foreach(Ship ship in gameManager.getAllShips())
+            {
+                ship.CanFire = true;
+            }
             foreach (Ship s in gameManager.getPlayerShips()) {
                 s.currentActionIndex = 0;
                 s.catapultIndex = -1;
@@ -144,15 +148,17 @@ public class GameLogic : MonoBehaviour {
         if (ship.actions[phase].GetType().Name == "ForwardAction")
         {
             Node nextNode = ship.getNode().getAdjacentNode(ship.getFront());
-            if(nextNode != null)
-                foreach(Ship s in nextNode.getShips())
+            if (nextNode != null)
+            {
+                foreach (Ship s in nextNode.getShips())
                 {
-                    if(Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+                    if (Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
                     {
                         ship.ram(s);
                         return true;
                     }
                 }
+            }
         }
         return false;
     }

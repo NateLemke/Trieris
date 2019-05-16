@@ -605,7 +605,11 @@ public static class PhaseManager
     /// <param name="attacker">the attacking ship</param>
     /// <param name="target">the ship targetting by the attacking ship</param>
     public static void addCatapultAnimation(Ship attacker, Ship target) {
-        catapultResolutions.Add(new CatapultResolution(attacker,target,1));
+        if (attacker.CanFire)
+        {
+            catapultResolutions.Add(new CatapultResolution(attacker, target, 1));
+            attacker.CanFire = false;
+        }
     }
 
     /// <summary>
@@ -686,8 +690,14 @@ public static class PhaseManager
     /// <param name="s">the ship thats shooting</param>
     /// <param name="n">the node they're aiming at</param>
     public static void addMissedShot(Ship s, Node n) {
-        CatapultResolution cr = new CatapultResolution(s,null,0,n);     
-        catapultResolutions.Add(cr);
+        if (s.CanFire)
+        {
+            CatapultResolution cr = new CatapultResolution(s, null, 0, n);
+
+            catapultResolutions.Add(cr);
+
+            s.CanFire = false;
+        }
     }
 
     /// <summary>

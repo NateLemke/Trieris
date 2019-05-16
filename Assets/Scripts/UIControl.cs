@@ -230,90 +230,26 @@ public class UIControl : MonoBehaviour
 
     }
 
-    private void setSelection(Ship value) {
-        
+    private void setSelection(Ship value)
+    {
+
 
         Ship previous = selected;
 
-        if(value != null) {
+        if (value != null)
+        {
             selected = value;
             onShipSelection();
-            if (previous != null) {
+            if (previous != null)
+            {
                 previous.disableIcon();
             }
 
-            selected.currentActionIndex = 0;
-            for (int j = 0; j < Ship.MAX_HEALTH; j++)
-            {
-                if (j >= selected.getLife())
-                {
-                    setDamaged();
-                    setActionImages(-1);
-                }
-                else
-                {
-                    setUndamaged();
-                    setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
-                }
-                selected.currentActionIndex++;
-            }
-            selected.currentActionIndex = 0;
+            updateActionUI();
+            updateAttackUI();
+            updateTabsUI();
 
-            foreach (Button b in attackPanels)
-            {
-                ColorBlock cb = b.colors;
-                cb.normalColor = attackUnclicked;
-                b.colors = cb;
-            }
-
-            foreach (Button b in attackArrows)
-            {
-                ColorBlock cb = b.colors;
-                cb.normalColor = arrowYellow;
-                b.colors = cb;
-            }
-
-            if (selected.catapultIndex >= 0)
-            {
-                ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
-                colBlock.normalColor = attackClicked;
-                attackPanels[selected.catapultIndex].colors = colBlock;
-
-                if (selected.actions[selected.catapultIndex].catapultDirection >= 0)
-                {
-                    ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
-                    colorBlock.normalColor = attackClicked;
-                    attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
-                }
-            }
-
-            foreach (GameObject go in shipTabs)
-            {
-                Outline o = go.GetComponent<Outline>();
-                Color c = o.effectColor;
-                c.a = 0;
-                o.effectColor = c;
-            }
-
-            Outline selectedOutline = shipTabs[value.Id].GetComponent<Outline>();
-            Color color = selectedOutline.effectColor;
-            color.a = 255;
-            selectedOutline.effectColor = color;
-
-            foreach (GameObject go in actionPanels)
-            {
-                Outline o = go.GetComponent<Outline>();
-                Color c = o.effectColor;
-                c.a = 0;
-                o.effectColor = c;
-            }
-
-            Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-            Color currentPanelColor = currentPanel.effectColor;
-            currentPanelColor.a = 255;
-            currentPanel.effectColor = color;
         }
-
     }
 
     public void setSelection(int value)
@@ -334,73 +270,15 @@ public class UIControl : MonoBehaviour
 
         //compass.SetActive(true);
         //for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
-            //Debug.Log(i); 
-            //actions[i].interactable = false;                
-            //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
-            //actions[i].interactable = true;
+        //Debug.Log(i); 
+        //actions[i].interactable = false;                
+        //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
+        //actions[i].interactable = true;
         //}
 
-        selected.currentActionIndex = 0;
-        for (int j = 0; j < Ship.MAX_HEALTH; j++) {
-            if (j >= selected.getLife()) {
-                setDamaged();
-                setActionImages(-1);
-            } else {
-                setUndamaged();
-                setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
-            }
-            selected.currentActionIndex++;
-        }
-        selected.currentActionIndex = 0;
-
-        foreach (Button b in attackPanels) {
-            ColorBlock cb = b.colors;
-            cb.normalColor = attackUnclicked;
-            b.colors = cb;
-        }
-
-        foreach (Button b in attackArrows) {
-            ColorBlock cb = b.colors;
-            cb.normalColor = arrowYellow;
-            b.colors = cb;
-        }
-
-        if (selected.catapultIndex >= 0) {
-            ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
-            colBlock.normalColor = attackClicked;
-            attackPanels[selected.catapultIndex].colors = colBlock;
-
-            if (selected.actions[selected.catapultIndex].catapultDirection >= 0) {
-                ColorBlock colorBlock = attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors;
-                colorBlock.normalColor = attackClicked;
-                attackArrows[selected.actions[selected.catapultIndex].catapultDirection].colors = colBlock;
-            }
-        }
-
-        foreach (GameObject go in shipTabs) {
-            Outline o = go.GetComponent<Outline>();
-            Color c = o.effectColor;
-            c.a = 0;
-            o.effectColor = c;
-        }
-
-        Outline selectedOutline = shipTabs[selected.Id].GetComponent<Outline>();
-        Color color = selectedOutline.effectColor;
-        color.a = 255;
-        selectedOutline.effectColor = color;
-
-        foreach (GameObject go in actionPanels) {
-            Outline o = go.GetComponent<Outline>();
-            Color c = o.effectColor;
-            c.a = 0;
-            o.effectColor = c;
-        }
-
-        Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-        Color currentPanelColor = currentPanel.effectColor;
-        currentPanelColor.a = 255;
-        currentPanel.effectColor = color;
-
+        updateActionUI();
+        updateAttackUI();
+        updateTabsUI();
     }
 
     void onShipSelection() {
@@ -715,6 +593,87 @@ public class UIControl : MonoBehaviour
             if (s.catapultIndex >= 0 && s.catapultDirection >= 0)
                 s.actions[s.catapultIndex].setCatapult(s.catapultDirection);
         }
+    }
+
+    private void updateActionUI()
+    {
+        selected.currentActionIndex = 0;
+        for (int j = 0; j < Ship.MAX_HEALTH; j++)
+        {
+            if (j >= selected.getLife())
+            {
+                setDamaged();
+                setActionImages(-1);
+            }
+            else
+            {
+                setUndamaged();
+                setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+            }
+            selected.currentActionIndex++;
+        }
+        selected.currentActionIndex = 0;
+
+
+        foreach (GameObject go in actionPanels)
+        {
+            Outline o = go.GetComponent<Outline>();
+            Color c = o.effectColor;
+            c.a = 0;
+            o.effectColor = c;
+        }
+
+        Outline currentPanel = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+        Color currentPanelColor = currentPanel.effectColor;
+        currentPanelColor.a = 255;
+        currentPanel.effectColor = currentPanelColor;
+    }
+
+    private void updateAttackUI()
+    {
+        foreach (Button b in attackPanels)
+        {
+            ColorBlock cb = b.colors;
+            cb.normalColor = attackUnclicked;
+            b.colors = cb;
+        }
+
+        foreach (Button b in attackArrows)
+        {
+            ColorBlock cb = b.colors;
+            cb.normalColor = arrowYellow;
+            b.colors = cb;
+        }
+
+        if (selected.catapultIndex >= 0)
+        {
+            ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+            colBlock.normalColor = attackClicked;
+            attackPanels[selected.catapultIndex].colors = colBlock;
+
+            if (selected.catapultDirection >= 0)
+            {
+                ColorBlock colorBlock = attackArrows[selected.catapultDirection].colors;
+                colorBlock.normalColor = attackClicked;
+                attackArrows[selected.catapultDirection].colors = colBlock;
+            }
+        }
+    }
+
+    private void updateTabsUI()
+    {
+        foreach (GameObject go in shipTabs)
+        {
+            Outline o = go.GetComponent<Outline>();
+            Color c = o.effectColor;
+            c.a = 0;
+            o.effectColor = c;
+        }
+
+        Outline selectedOutline = shipTabs[selected.getID()].GetComponent<Outline>();
+        Color color = selectedOutline.effectColor;
+        color.a = 255;
+        selectedOutline.effectColor = color;
     }
 }
 
