@@ -282,7 +282,7 @@ PrefabInstance:
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -124.4
+      value: -124.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -297,7 +297,7 @@ PrefabInstance:
     - target: {fileID: 4608405581332513921, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -36.19996
+      value: -36.19995
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581856627070, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -1576,7 +1576,7 @@ GameObject:
   - component: {fileID: 136339762}
   - component: {fileID: 136339761}
   m_Layer: 5
-  m_Name: Controls
+  m_Name: Rules
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1634,7 +1634,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Controls
+  m_Text: Rules
 --- !u!222 &136339762
 CanvasRenderer:
   m_ObjectHideFlags: 0
