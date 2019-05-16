@@ -19,9 +19,8 @@ public class SinkAnimation : Animation {
         ship.setIcon(Sprites.main.SinkIcon);
         InitSinkAnimation();
         
-        ship.disableIcon();
         yield return new WaitForSeconds(SpeedManager.CombatSinking);
-
+        ship.disableIcon();
         ship.sink();
 
         yield return null;
