@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+/// <summary>
+/// Purpose: The catapult sub-phase during combat resolution. Focuses the camera where a catapult animation
+/// is playing and creates combat icons to display. Animation will play out and ships involved will lose health
+/// if hit.
+/// </summary>
 public class CatapultResolution : CombatResolution
 {
     public Node missedNode;
@@ -33,7 +38,6 @@ public class CatapultResolution : CombatResolution
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
         Sounds.main.playClip(Sounds.main.Launch);
-        //InitCatapultAnimation();
         yield return new WaitForSeconds(SpeedManager.CatapultLaunchDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
@@ -89,8 +93,4 @@ public class CatapultResolution : CombatResolution
         yield return null;
     }
 
-    public void InitCatapultAnimation()
-    {
-        shipA.GetComponent<Animator>().SetTrigger("Catapult");
-    }
 }

@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+/// <summary>
+/// Purpose: Debug controls to allow developers additional ways for testing. Displays actions as messages to the console.
+/// </summary>
 public static class DebugControl {
     static bool logSelect;
     static bool logAction;

@@ -43,9 +43,17 @@ public class OptionsMenu : MonoBehaviour
     /// <summary>
     /// Opens the instructions menu when the view instructions button is pressed
     /// </summary>
-    public void OpenInstructions()
+    public void OpenControls()
     {
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
+        overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(false);
+    }
+
+    public void OpenRules()
+    {
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
+        overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(true);
     }
 }

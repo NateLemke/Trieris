@@ -186,34 +186,59 @@ public class GameLogic : MonoBehaviour {
     {
         if (GameManager.main.playerTeam.ships.Count == 0)
         {
-            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-            gameOverObj.GetComponent<GameOver>().Initialize("Defeat");
+            gameOver("Defeat");
         }
         else if (GameManager.main.getAllShips().Count == GameManager.main.playerTeam.ships.Count)
         {
-            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-            gameOverObj.GetComponent<GameOver>().Initialize("Victory");
+            gameOver("Victory");
         }
         else
         {
-            int capitalCount = 0;
-            foreach (Port port in GameManager.main.getBoard().getAllPorts())
+            foreach(Team t in GameManager.main.teams)
             {
-                if (port.Team == GameManager.main.playerTeam && port.IsCapital)
+                int portCount = 0;
+                bool hasCapital = false;
+                foreach (Port port in GameManager.main.getBoard().getAllPorts())
                 {
-                    capitalCount++;
+                    if (port.getTeam() == t)
+                    {
+                        portCount++;
+                        Debug.Log(port.node.getX() + ", " + port.node.getY());
+                        Debug.Log(" This is " + port.OriginalTeam.getTeamType().ToString());
+
+                        if (port.getCapital() && port.OriginalTeam == t)
+                        {
+                            Debug.Log(t.getTeamType().ToString() + " has their capital");
+                            hasCapital = true;
+                        }
+                    }
+                }
+                if (!hasCapital)
+                {
+                    foreach (Ship s in t.ships)
+                        s.life = 0;
                     break;
                 }
-            }
-            if (capitalCount == 0)
-            {
-                GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-                gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-                gameOverObj.GetComponent<GameOver>().Initialize("Defeat");
+                if(portCount >= 12)
+                {
+                    if(t == GameManager.main.playerTeam)
+                        gameOver("Victory");
+                    else
+                        gameOver("Defeat");
+                }
+
             }
         }
+
+    }
+
+    private void gameOver(string gamestate)
+    {
+        GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+        gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
+        gameOverObj.GetComponent<GameOver>().Initialize(gamestate);
+        GameManager.main.gameOver = true;
+        Time.timeScale = 0;
     }
 
     private void handleCapture() {

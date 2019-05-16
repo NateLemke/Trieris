@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: Shows a catapult bullet being shot from a ship using vector points and particle emissions.
+/// Plays sound clips while the animation is playing at the same time.
+/// </summary>
 public class CatapultBullet : MonoBehaviour
 {
     public Vector3 startPos;

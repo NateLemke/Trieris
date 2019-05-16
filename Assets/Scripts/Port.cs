@@ -11,6 +11,11 @@ public class Port{
     //public Team.Type teamType { get; set; }
 
     // the team that the port belongs to
+    private Team originalTeam;
+
+    public Team OriginalTeam { get { return originalTeam; } }
+
+    public Team.Type teamType { get; set; }
     public Team Team {
         get {
             return team;
@@ -45,6 +50,8 @@ public class Port{
     public Port(Vector2Int boardPos,Team t,bool isCaptial) {
         team = t;
         IsCapital = isCaptial;
+        originalTeam = team;
+        //capital = isCaptial;
         node = GameManager.main.getBoard().getNodeAt(boardPos);
         go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
