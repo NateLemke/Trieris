@@ -58,7 +58,7 @@ public class RulesMenu : MonoBehaviour
         content.transform.Find("HeadOn").gameObject.SetActive(true);
         content.transform.Find("Momentum").gameObject.SetActive(true);
 
-        infoText.text = "When a ship moves into a node that contains another ship, it will ram that ship. If two ships move into the same space, they will ram each other! Broadside:\nShip rams another ship that is perpendicular to itself.\nGlancing:\n Ship rams another ship at an angle.\nHead On:\n Two ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes";
+        infoText.text = "When a ship moves into a node that contains another ship, it will ram that ship. If two ships move into the same space, they will ram each other!\n<b><i>Broadside:</i></b>\nShip rams another ship that is perpendicular to itself. Double Damage!\n<b><i>Glancing:</i></b>\nShip rams another ship at an angle.\n<b><i>Head On:</i></b>\nTwo ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes";
     }
 
     /// <summary>
