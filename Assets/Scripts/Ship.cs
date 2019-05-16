@@ -79,8 +79,8 @@ public class Ship : MonoBehaviour {
             {
                 InitCBT((lifeValue - value).ToString());
                 lifeValue = value;
-                if(lifeValue == 0) {
-                    Sounds.main.playClip(Sounds.main.LongRip);
+                if(lifeValue <= 0) {
+                    Sounds.main.playClip(Sounds.main.LongRip, 0.8f);
                 }
             }
             else
