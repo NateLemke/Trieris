@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Contains the functions that are used by the UI to set ship actions, selected ship, attacks.
+/// Contains functions that are used to update the UI to reflect changes in the game.
+/// </summary>
 public class UIControl : MonoBehaviour
 {
     GameManager gameManager;
@@ -69,6 +73,9 @@ public class UIControl : MonoBehaviour
 
     public Text GoText {  get { return goText; } }
 
+    /// <summary>
+    /// basic initialization.
+    /// </summary>
     private void Awake()
     {
         main = this;
@@ -79,6 +86,9 @@ public class UIControl : MonoBehaviour
         //DebugControl.init();
     }
 
+    /// <summary>
+    /// Initializes UI elements, resources, colours, and notices.
+    /// </summary>
     void Start()
     {
         
@@ -217,6 +227,10 @@ public class UIControl : MonoBehaviour
         //subPhaseProgress.SetActive(false);
     }
 
+    /// <summary>
+    /// Activates the Redirect, Port Capture, Ramming Target, and Catapult Target notices
+    /// when they are needed.
+    /// </summary>
     void Update()
     {
 
@@ -230,6 +244,12 @@ public class UIControl : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sets the currently selected ship when a ship on the board is clicked.
+    /// Sets the ship control UI to reflect the new ship.
+    /// Changes camera focus to the ship that was just selected.
+    /// </summary>
+    /// <param name="value">The ship on the board that is clicked</param>
     private void setSelection(Ship value)
     {
 
@@ -252,6 +272,12 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the currently selected ship when a ship tab on the UI is clicked.
+    /// Sets the ship control UI to reflect the new ship.
+    /// Changes camera focus to the ship that was just selected.
+    /// </summary>
+    /// <param name="value">The id of the ship to be selected</param>
     public void setSelection(int value)
     {
         Ship previous = selected;
@@ -281,6 +307,9 @@ public class UIControl : MonoBehaviour
         updateTabsUI();
     }
 
+    /// <summary>
+    /// Changes camera focus to the ship that was just selected.
+    /// </summary>
     void onShipSelection() {
         if(selected != null) {
             StartCoroutine(PhaseManager.focus(selected.Position));
@@ -288,11 +317,21 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Redirects the selected ship to face the given direction.
+    /// Used when the redirect UI is clicked.
+    /// </summary>
+    /// <param name="newDirection">The desired new direction. Forward is 0, then increases clockwise.</param>
     public void redirect(int newDirection)
     {
         selected.redirect(newDirection);
     }
 
+    /// <summary>
+    /// Executes the next turn of the game.
+    /// Used when the player clicks the start turn button.
+    /// Disables ship controls (besides ship tabs) during turn.
+    /// </summary>
     public void testMove()
     {
 
@@ -314,6 +353,13 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds the given action to the selected ship's actions.
+    /// Used when the player clicks a ship command button.
+    /// Updates the Action Images to reflect the new action.
+    /// If the selected ship still has remaining open actions, automatically increments to the next action panel.
+    /// </summary>
+    /// <param name="i">The action to be set. Forward=1, Turn left=2, Turn right=3, Hold=4, Reverse=5</param>
     public void setAction(int i)
     {
         selected.setAction(selected.currentActionIndex, i, -1);
@@ -335,36 +381,32 @@ public class UIControl : MonoBehaviour
 
     }
 
-    public void setSelected(Ship ship)
-    {
-        if (ship == null)
-        {
-            selection.SetActive(false);
-        }
-        else
-        {
-            selection.transform.position = ship.transform.position;
-            selection.SetActive(true);
-        }
-    }
-
+    /// <summary>
+    /// Toggles the Debug menu on/off.
+    /// </summary>
     public void toggleDebugMenu()
     {
         debugMenu.SetActive(!debugMenu.activeSelf);
     }
 
+    /// <summary>
+    /// Sets the player's Team to the given team.
+    /// </summary>
+    /// <param name="i">The team to switch the player to.
+    /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
     public void setTeam(int i)
     {
         TeamSelectUI.SetActive(false);
         gameManager.setPlayerTeam(i);
     }
 
-    //public void toggleDevUI()
-    //{
-    //    DevUI.SetActive(!DevUI.activeSelf);
-    //    LogToggle.SetActive(!LogToggle.activeSelf);
-    //}
 
+    /// <summary>
+    /// Sets the current action index of the currently selected ship to the given one.
+    /// Changes the action panels to outline the new current action.
+    /// Used when the player clicks on an undamaged action panel.
+    /// </summary>
+    /// <param name="i">The desired action index</param>
     public void setCurrentActionIndex(int i)
     {
         Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
@@ -380,6 +422,14 @@ public class UIControl : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Changes the sprite in the current action panel to reflect the action that is stored there.
+    /// Used when the player gives a new command to a ship, or when the selected ship is changed.
+    /// EmptyAction(6) is used to populate the ships default actions before the player sets them.
+    /// NoImage(default) is used for damaged panels.
+    /// </summary>
+    /// <param name="i">Represents the action that is being set.
+    /// Forward=1, Turn left=2, Turn right=3, Hold=4, Reverse=5, EmptyAction=6, NoImage = default</param>
     public void setActionImages(int i)
     {
         Image image = actionImages[selected.currentActionIndex].GetComponent<Image>();
@@ -439,38 +489,10 @@ public class UIControl : MonoBehaviour
         }
     }
 
-    public void devPhaseTrack(int i)
-    {
-        if (phaseTracker.activeSelf)
-        {
-            phaseTracker.GetComponentInChildren<Text>().text = "Phase " + (i + 1);
-            Image phaseImg = phaseTracker.GetComponent<Image>();
-            switch (i)
-            {
-                case 0:
-                    phaseImg.color = Color.blue; break;
-                case 1:
-                    phaseImg.color = Color.green; break;
-                case 2:
-                    phaseImg.color = Color.yellow; break;
-                case 3:
-                    phaseImg.color = Color.red; break;
-                case 4:
-                    phaseImg.color = Color.black;
-                    phaseTracker.GetComponentInChildren<Text>().text = "planning phase"; break;
-            }
-        }
-    }
-
-    public static void postNotice(string s, float time)
-    {
-        GameObject prefab = Resources.Load<GameObject>("Prefabs/TempText");
-        GameObject go = Instantiate(prefab, GameObject.Find("NoticeHolder").transform);
-        go.GetComponent<TempText>().lifetime = time;
-        go.GetComponent<Text>().text = s;
-        //Debug.Break();
-    }
-
+    /// <summary>
+    /// Sets the current action panel to damaged.
+    /// Changes it's colour and disables it.
+    /// </summary>
     private void setDamaged()
     {
         actionPanels[selected.currentActionIndex].GetComponent<Button>().interactable = false;
@@ -478,6 +500,10 @@ public class UIControl : MonoBehaviour
         i.color = new Color(1, 0, 0, 1);
     }
 
+    /// <summary>
+    /// Sets the current action panel to undamaged.
+    /// Changes it's colour and enables it.
+    /// </summary>
     private void setUndamaged()
     {
         actionPanels[selected.currentActionIndex].GetComponent<Button>().interactable = true;
@@ -485,6 +511,13 @@ public class UIControl : MonoBehaviour
         i.color = defaultGreen;
     }
 
+    /// <summary>
+    /// Sets the catapult index of the currently selected ship to the given value.
+    /// Updates the attack panels on the UI to reflect the new catapult index.
+    /// Used when an attack panel is clicked.
+    /// Doesn't work if the given index is damaged for the selected ship.
+    /// </summary>
+    /// <param name="i">The desired catapult index</param>
     public void setCatapultIndex(int i)
     {
         if (selected != null && i < selected.getLife() && controlsEnabled)
@@ -504,6 +537,12 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the attack direction for the currently selected ship.
+    /// Updates the attack direction arrows on the UI to reflect the new attack direction.
+    /// Doesn't work if an catapult index has not been set yet.
+    /// </summary>
+    /// <param name="i">The desired attack direction. Forward is 0, the increases clockwise. Middle is 8</param>
     public void setAttackDirection(int i)
     {
         if (controlsEnabled)
@@ -525,23 +564,26 @@ public class UIControl : MonoBehaviour
 
                 selected.catapultDirection = i;
 
-                /*
-                foreach (Ship.Action a in selected.actions)
-                {
-                    a.setCatapult(-1);
-                }
-
-                selected.actions[selected.catapultIndex].setCatapult(i);
-                */
             }
         }
     }
 
+    /// <summary>
+    /// Updates the bottom UI to show that a ship has been destroyed.
+    /// </summary>
+    /// <param name="teamNo">The team the dead ship was on
+    /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
+    /// <param name="shipNo">The ID of the dead ship</param>
     public void setDead(int teamNo, int shipNo)
     {
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
     }
 
+    /// <summary>
+    /// Updates the bottom UI to show the port totals of each team.
+    /// Called each time a port is captured.
+    /// Also updates the port total for the player's team on the victory panel.
+    /// </summary>
     public void updatePortsUI()
     {
         int[] scores = new int[6];
@@ -570,6 +612,11 @@ public class UIControl : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Enables ship command buttons, attack panels, attack direction arrows, and start turn button.
+    /// Called when a turn is ended.
+    /// </summary>
     public void enableControls()
     {
         controlsEnabled = true;
@@ -581,6 +628,11 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the ship attacks for each player ship.
+    /// Called when the turn is started, before actions are executed.
+    /// Doesn't set any attack if a ship doesn't have both it's catapult index and catapult direction set.
+    /// </summary>
     public void setShipAttacks()
     {
         foreach(Ship s in gameManager.getPlayerShips())
@@ -595,6 +647,10 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the action panels to reflect the newly selected ship's actions.
+    /// Called in the setSelection function when a new ship is selected.
+    /// </summary>
     private void updateActionUI()
     {
         selected.currentActionIndex = 0;
@@ -629,6 +685,10 @@ public class UIControl : MonoBehaviour
         currentPanel.effectColor = currentPanelColor;
     }
 
+    /// <summary>
+    /// Updates the Attack panels and attack direction arrows to reflect the newly selected ship's actions.
+    /// Called in the setSelection function when a new ship is selected.
+    /// </summary>
     private void updateAttackUI()
     {
         foreach (Button b in attackPanels)
@@ -660,6 +720,10 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the ship tabs to reflect the newly selected ship's actions.
+    /// Called in the setSelection function when a new ship is selected.
+    /// </summary>
     private void updateTabsUI()
     {
         foreach (GameObject go in shipTabs)

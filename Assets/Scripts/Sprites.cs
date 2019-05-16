@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to easliy obtain various sprites.
+/// </summary>
 public class Sprites : MonoBehaviour {
 
     [SerializeField]
@@ -70,10 +73,18 @@ public class Sprites : MonoBehaviour {
 
     public static Sprites main;
 
+    /// <summary>
+    /// Basic initialization.
+    /// </summary>
     void Awake() {
         main = this;
     }
 
+    /// <summary>
+    /// Returns the capital sprite for the given team.
+    /// </summary>
+    /// <param name="team">The team you want the capital sprite for.</param>
+    /// <returns>the capital sprite for the given team.</returns>
     public static Sprite getColoredCaptial(Team team) {
         Sprite capital = main.Capital;
         Texture2D t = new Texture2D(capital.texture.width,capital.texture.height);
@@ -98,6 +109,11 @@ public class Sprites : MonoBehaviour {
         return Sprite.Create(t,new Rect(0f,0f,t.width,t.height),new Vector2(0.5f,0.5f));
     }
 
+    /// <summary>
+    /// Returns the port sprite for the given team.
+    /// </summary>
+    /// <param name="team">The team you want the port sprite for.</param>
+    /// <returns>the port sprite for the given team.</returns>
     public static Sprite getTeamPort(Team team) {
         switch (team.getTeamType()) {
             case Team.Type.red:
@@ -117,6 +133,11 @@ public class Sprites : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns the ship sprite for the given team.
+    /// </summary>
+    /// <param name="team">The team you want the ship sprite for.</param>
+    /// <returns>the ship sprite for the given team.</returns>
     public static Sprite getTeamShip(Team team) {
         return main.TeamShips[(int)team.getTeamType()];
     }

@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Used to prompt the player to choose a target for ramming/catapult
+/// </summary>
 public class TargetButton : MonoBehaviour
 {
     public ShipTargetResolution parent;
     public Ship target;
 
+    /// <summary>
+    /// Sets the button colour to red if moused over to give it a more "button-like" appearance.
+    /// </summary>
     private void OnMouseOver() {
         //Debug.Log("Mouse over");
         if (closest()) {
@@ -20,12 +26,17 @@ public class TargetButton : MonoBehaviour
         }
     }
 
-
-
+    /// <summary>
+    /// Resets the button to grey when the mouse leaves it.
+    /// </summary>
     private void OnMouseExit() {
         transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.grey;
     }
 
+    /// <summary>
+    /// Determines which button is closest to the mouse (which one is being clicked.)
+    /// </summary>
+    /// <returns>Returns true if this is the button closest to the mouse, false otherwise.</returns>
     bool closest() {
         bool closest = true;
         foreach (TargetButton tb in parent.buttons) {
