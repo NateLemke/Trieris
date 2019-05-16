@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: Abstract class that other combat resolutions inherit from. Defines the ships involved in the
+/// combat as well as the location it is occuring and damage dealt.
+/// </summary>
 public abstract class CombatResolution {
 
     public Ship shipA;
