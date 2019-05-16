@@ -670,7 +670,7 @@ public class UIControl : MonoBehaviour
             o.effectColor = c;
         }
 
-        Outline selectedOutline = shipTabs[selected.getID()].GetComponent<Outline>();
+        Outline selectedOutline = shipTabs[selected.Id].GetComponent<Outline>();
         Color color = selectedOutline.effectColor;
         color.a = 255;
         selectedOutline.effectColor = color;

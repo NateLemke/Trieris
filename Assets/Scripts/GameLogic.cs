@@ -61,7 +61,7 @@ public class GameLogic : MonoBehaviour {
             PhaseManager.DisablePhaseUI();
             phaseIndex = 4;
             resetShips();
-            gameManager.checkVictory();
+            //gameManager.checkVictory();
             turnIndex++;
             //PhaseManager.updateText();
             foreach(Ship ship in gameManager.getAllShips())
@@ -95,14 +95,19 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
+    public int executed = 0;
+
     private void executePhase(int phase) {
         //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
-                if (!checkAdjHRam(ship,phase))
+                if (!checkAdjHRam(ship,phase)) {
                     ship.doAction(phase);
+                    executed++;
+                }
+                    
                 //ship.doAction(phase);
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
@@ -130,6 +135,10 @@ public class GameLogic : MonoBehaviour {
                 //Debug.Log("ship " + ship + " cannot act");
             }
         }
+
+        ;
+
+        executed = 0;
 
         handleCollisions();
         handleCatapults();
@@ -170,7 +179,7 @@ public class GameLogic : MonoBehaviour {
         
         sinkShips();
         determineGameState();
-        
+        executeNextPhase();
     }
 
     private void determineGameState()

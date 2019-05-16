@@ -2,43 +2,60 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: This class stores information for a corordiante node on a board. Nodes may contain multiple ships and up to one Port.
+///             Ports have an X Y coordiante on the game board, which is NOT the same as their realworld unity scene position
+/// </summary>
 public class Node{
 
-    // new properties
+    // used for debugging visuals
     public const float GIZMO_SIZE = 0.1f;
     public static Color GIZMO_COLOR = Color.black;
-    //public Vector3 realPos;
 
+    // game board coordinates
     private int x;
     private int y;
 
-    private Color color;
+    //private Color color;
 
+    // adjacent nodes in clockwise direction
     private Node[] adjacents = new Node[8];
     private Port port;
     private List<Ship> ships = new List<Ship>();
     private bool island;
     private GameObject thisNode;
-    
 
-    public Node() {
-        setColor(Color.black);
+    //public Node() {
+    //    setColor(Color.black);
+    //}
+
+    /// <summary>
+    /// Constructor. Sets the game board X Y coordinates for this node.
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    public Node(int x,int y) {
+        this.x = x;
+        this.y = y;
     }
 
+    /// <summary>
+    /// Sets the reference to this node's sprite renderer gameobject
+    /// </summary>
+    /// <param name="input"></param>
     public void setGameObject(GameObject input)
     {
         thisNode = input;
     }
 
+    /// <summary>
+    /// Gets the reference to this node's sprite renderer gameobject
+    /// </summary>
+    /// <returns></returns>
     public GameObject getGameObject()
     {
         return thisNode;
-    }
-
-    public Node(int x,int y) {
-        this.x = x;
-        this.y = y;
-    }
+    }    
 
     public int getX() {
         return x;
@@ -48,19 +65,25 @@ public class Node{
         return y;
     }
 
-    // new function
+    /// <summary>
+    /// Returns the node's game board coordinate
+    /// </summary>
+    /// <returns></returns>
     public Vector2 getPosition() {
         return new Vector2(x,y);
     }
 
-    // new function
+    /// <summary>
+    /// Gets this node's world position in the scene's X Y space
+    /// </summary>
+    /// <returns></returns>
     public Vector2 getRealPos() {
         return new Vector2(y,Board.ROW_OF_NODES - 1 - x);
     }
 
-    public Color getColor() {
-        return color;
-    }
+    //public Color getColor() {
+    //    return color;
+    //}
 
     public Node getAdjacentNode(int direction) {
         return adjacents[direction];
@@ -87,9 +110,9 @@ public class Node{
         this.y = y;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
-    }
+    //public void setColor(Color color) {
+    //    this.color = color;
+    //}
 
     public void setAdjacentNode(int direction,Node node) {
         adjacents[direction] = node;
@@ -104,9 +127,9 @@ public class Node{
     }
 
     public void setIsland(bool isIsland) {
-        if (isIsland) {
-            setColor(Color.magenta);
-        }
+        //if (isIsland) {
+        //    setColor(Color.magenta);
+        //}
         island = isIsland;
     }
 
@@ -114,13 +137,14 @@ public class Node{
         return ships.Count;
     }
 
-    public void activateNotification()
-    {
-        thisNode.transform.Find("TargetNeededNotification").gameObject.SetActive(true);
-    }
 
-    public void expand()
-    {
+    //public void activateNotification()
+    //{
+    //    thisNode.transform.Find("TargetNeededNotification").gameObject.SetActive(true);
+    //}
 
-    }
+    //public void expand()
+    //{
+
+    //}
 }

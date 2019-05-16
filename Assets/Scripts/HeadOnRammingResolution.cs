@@ -2,12 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose:    This class is used to resolve a special ramming case where two ships in adjacent nodes try to pass by each other and ram head on 
+///                 in the middle.
+///                 The ships will stay in their nodes and take damage from the head-on ramming.
+/// </summary>
 public class HeadOnRammingResolution : RammingResolution {
 
+    /// <summary>
+    /// Constructor, takes info for the two ships involved, and the damage to each.
+    /// </summary>
+    /// <param name="a">reference to shipA</param>
+    /// <param name="b">reference to shipB</param>
+    /// <param name="dmgB">damage to shipB</param>
+    /// <param name="dmgA">damage to shipA</param>
     public HeadOnRammingResolution(Ship a,Ship b,int dmgB,int dmgA = 0) : base(a,b,dmgB,dmgA) {
 
     }
 
+    /// <summary>
+    /// Plays the combat animation and resolved the pending damage.
+    /// Animates the two ships to the midpoints between the nodes, applies the damage, then returns them to their original positions.
+    /// </summary>
+    /// <returns></returns>
     public override IEnumerator resolve() {
 
         Vector3 midPoint = (shipA.Position + shipB.Position) / 2;
@@ -56,6 +73,9 @@ public class HeadOnRammingResolution : RammingResolution {
 
     }
 
+    /// <summary>
+    /// Used to initiate animator components
+    /// </summary>
     public void InitHeadOnAnimation()
     {
         shipA.GetComponent<Animator>().SetTrigger("Collision");

@@ -43,7 +43,7 @@ public class Ship : MonoBehaviour {
     private bool canAct = true;
     public bool canActAfterCollision = true;
     private int frontAfterCollision = -1;
-    public int Id { get; }
+    public int Id { get { return id; } }
     private int id = -1;
     public TrierisAI Ai { get; set; }
 
@@ -105,8 +105,8 @@ public class Ship : MonoBehaviour {
     public void intialize(Team team,Node node) {
         this.team = team;
         team.ships.Add(this);
-        this.id = team.shipIdCounter++;
-        this.life = MAX_HEALTH;
+        id = team.shipIdCounter++;
+        life = MAX_HEALTH;
 
         catapultIndex = -1;
         catapultDirection = -1;
@@ -427,6 +427,10 @@ public class Ship : MonoBehaviour {
         front = getRelativeDirection(relativeDirection);
         momentum = 0;
         bool portTurn = (relativeDirection == -1);
+        if (PhaseManager.actionAnimations.ContainsKey(this)) {
+            ;
+        }
+
         PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this,portTurn));
 
         movedForward = false;

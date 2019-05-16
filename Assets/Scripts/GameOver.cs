@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Purpose:    This class manages the game over screen, and checks for a game over condition.
+/// </summary>
 public class GameOver : MonoBehaviour
 {
     Text title;
@@ -11,6 +14,9 @@ public class GameOver : MonoBehaviour
     Text portsCaptured;
     Text shipsAlive;
 
+    /// <summary>
+    /// Gets references to UI elements
+    /// </summary>
     void Awake()
     {
         title = transform.Find("Screen/Title/Text").GetComponent<Text>();
@@ -19,6 +25,10 @@ public class GameOver : MonoBehaviour
         shipsAlive = transform.Find("Screen/Stats/ShipsAlive").GetComponent<Text>();
     }
 
+    /// <summary>
+    /// Sets the test for the game over screen
+    /// </summary>
+    /// <param name="gameOverState">Whether the player as won or lost</param>
     public void Initialize(string gameOverState)
     {
         title.text = gameOverState;
@@ -27,6 +37,10 @@ public class GameOver : MonoBehaviour
         shipsAlive.text = "Ships Owned: " + GameManager.main.playerTeam.ships.Count.ToString();
     }
 
+    /// <summary>
+    /// Returns the number of ports owned by the player
+    /// </summary>
+    /// <returns></returns>
     private int countPorts()
     {
         int portCount = 0;
@@ -36,11 +50,17 @@ public class GameOver : MonoBehaviour
         return portCount;
     }
 
+    /// <summary>
+    /// Restarts the game
+    /// </summary>
     public void Restart()
     {
         SceneManager.LoadScene("ThompsonDevScene");
     }
 
+    /// <summary>
+    /// Exits the application
+    /// </summary>
     public void ExitGame()
     {
         //For Editor Closing
