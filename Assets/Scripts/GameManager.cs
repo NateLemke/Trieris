@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
    // private List<Ship> ships = new List<Ship>();
     public UIControl uiControl;
     private List<TrierisAI> aiList;
-    private bool gameOver = false;
+    public bool gameOver = false;
 
     // for moving and flipping the board
     private int boardOffsetX;
