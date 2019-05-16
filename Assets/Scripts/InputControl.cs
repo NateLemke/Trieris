@@ -75,7 +75,7 @@ public class InputControl : MonoBehaviour {
             shipSelectUpdate();
         }
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") && GameManager.main.gameOver == false)
         {
             if (!optionsPanel.active)
             {
@@ -86,11 +86,9 @@ public class InputControl : MonoBehaviour {
                 optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
         }
 
-        if (Input.GetKeyDown("`"))
+        if (Input.GetKeyDown("p") && GameManager.main.gameOver == false)
         {
-            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-            gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-            gameOverObj.GetComponent<GameOver>().Initialize("Victory");
+            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
         }
     }
 

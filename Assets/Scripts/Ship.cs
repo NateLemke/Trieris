@@ -587,6 +587,7 @@ public class Ship : MonoBehaviour {
         //    this.life--;
         //}
         if (AdjHeadOnRamCheck(target,GameLogic.phaseIndex)) {
+            movedForward = false;
             PhaseManager.addAdjHeadOnRamming(this,target);
         } else {
             PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
