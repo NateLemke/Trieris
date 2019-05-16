@@ -6,6 +6,10 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: The game board that the user will see on initialization. Contains a list
+/// of ports and nodes on the board as well as setting the grid on it.
+/// </summary>
 public class Board{
 
     private static Color gridColor = new Color(0.69f,0.91f,0.922f);
@@ -23,14 +27,26 @@ public class Board{
         setAdjacentNodes();
     }
 
+    /// <summary>
+    /// Returns all the ports on the board
+    /// </summary>
+    /// <returns>List of ports</returns>
     public List<Port> getAllPorts() {
         return ports;
     }
 
+    /// <summary>
+    /// Returns all the nodes on the board that have a port on it
+    /// </summary>
+    /// <returns>List of Nodes</returns>
     public List<Node> getAllPortNodes() {
         return portNodes;
     }
 
+    /// <summary>
+    /// Adds all the nodes on the board into a list of nodes
+    /// </summary>
+    /// <returns>List of nodes</returns>
     public List<Node> getAllNodes() {
         List<Node> nodes = new List<Node>();
         for (int row = 0; row < ROW_OF_NODES; row++) {
@@ -44,14 +60,28 @@ public class Board{
         return nodes;
     }
 
+    /// <summary>
+    /// Returns a node at a specified row and column
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <returns>Node</returns>
     public Node getNodeAt(int row,int col) {
         return node[row,col];
     }
 
+    /// <summary>
+    /// Returns a node at a specified vector point using integers
+    /// </summary>
+    /// <param name="v"></param>
+    /// <returns>Node</returns>
     public Node getNodeAt(Vector2Int v) {
         return node[v.x,v.y];
     }
 
+    /// <summary>
+    /// Creates the nodes on the board
+    /// </summary>
     private void initialize() {
         for (int row = 0; row < ROW_OF_NODES; row++) {
             for (int col = 0; col < COLUMN_OF_NODES; col++) {
@@ -60,6 +90,9 @@ public class Board{
         }
     }    
 
+    /// <summary>
+    /// Creates the islands on the game board from an image asset
+    /// </summary>
     private void setIsland() {
 
         TextAsset islandsFile = Resources.Load<TextAsset>("worldData/island");
@@ -74,7 +107,10 @@ public class Board{
         }
     }
 
-
+    /// <summary>
+    /// Sets which nodes are adjacent to each other from a text file. Allows ships to travel
+    /// between adjacent nodes.
+    /// </summary>
     private void setAdjacentNodes() {
 
         TextAsset adjacentFile = Resources.Load<TextAsset>("worldData/adjacentNodes");
@@ -98,6 +134,9 @@ public class Board{
         }
     }
 
+    /// <summary>
+    /// Draws the nodes and lines between nodes onto the game board. Nodes are a prefab from Resources.
+    /// </summary>
     public void CreateGridVisuals() {
         GameObject parent;
         HashSet<EdgePair> renderedEdges = new HashSet<EdgePair>();
