@@ -81,7 +81,7 @@ public class GameLogic : MonoBehaviour {
                 image.color = tempCol;
             }
 
-            gameManager.uiControl.setSelection(gameManager.getPlayerShips()[0].getID());
+            gameManager.uiControl.setSelection(gameManager.getPlayerShips()[0].Id);
             return false;
         } else {
             phaseIndex++;
@@ -103,7 +103,7 @@ public class GameLogic : MonoBehaviour {
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
                     int newDirection = 0;
-                    newDirection = ship.getAI().setNewShipDirection(ship);
+                    newDirection = ship.Ai.setNewShipDirection(ship);
                     ship.hold();
                     ship.setFront(newDirection);
                     ship.setSpriteRotation();
@@ -186,7 +186,7 @@ public class GameLogic : MonoBehaviour {
             int capitalCount = 0;
             foreach (Port port in GameManager.main.getBoard().getAllPorts())
             {
-                if (port.getTeam() == GameManager.main.playerTeam && port.getCapital())
+                if (port.Team == GameManager.main.playerTeam && port.IsCapital)
                 {
                     capitalCount++;
                     break;
@@ -206,7 +206,7 @@ public class GameLogic : MonoBehaviour {
             Port port = ship.getNode().getPort();
             int enemyShipNo = 0;
             
-            if (port != null && port.getTeam() != ship.team) {
+            if (port != null && port.Team != ship.team) {
                 foreach (Ship s in port.node.getShips())
                 {
                     if (s.team != ship.team)
@@ -221,7 +221,7 @@ public class GameLogic : MonoBehaviour {
                 else if(enemyShipNo == 0)
                 {
                     // AI port capture
-                    if (ship.getAI().decidePortCapture())
+                    if (ship.Ai.decidePortCapture())
                     {
                         ship.capturePort();
                         
@@ -244,7 +244,7 @@ public class GameLogic : MonoBehaviour {
         foreach (Ship ship in gameManager.getAllShips()) {
 
             if (ship.getMoved()) {
-                DebugControl.log("position","ship " + ship.getID() + " at " +ship.getNode().ToString());
+                DebugControl.log("position","ship " + ship.Id + " at " +ship.getNode().ToString());
                 if (ship.getNode().getNumberOfShips() > 1) {
 
                     List<Ship> enemyShips = new List<Ship>();
@@ -272,7 +272,7 @@ public class GameLogic : MonoBehaviour {
                                 chosenShip = potentialCollisions[0];
                             }
                         } else {
-                            chosenShip = ship.getAI().selectShip(potentialCollisions);
+                            chosenShip = ship.Ai.selectShip(potentialCollisions);
                         }
                         ship.ram(chosenShip);
                     }
@@ -330,7 +330,7 @@ public class GameLogic : MonoBehaviour {
                         //chosenShip = potentialTargets[0];
                     }
                 } else {
-                    chosenShip = ship.getAI().selectShip(potentialTargets);
+                    chosenShip = ship.Ai.selectShip(potentialTargets);
                 }
                 ship.catapult(chosenShip);
             }
@@ -347,7 +347,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
-            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
+            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.Id);
             ship.sink();
             Debug.Log("Sinking ship");
         }

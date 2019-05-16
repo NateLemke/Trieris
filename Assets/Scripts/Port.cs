@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Port{
-    private bool capital;
 
-    private Color tColor;
+    public bool IsCapital { get; set; }
+    //private Color tColor;
+    //private Color color;
 
-    private Color color;
+    //public Team.Type teamType { get; set; }
 
-    public Team.Type teamType { get; set; }
+    // the team that the port belongs to
     public Team Team {
         get {
             return team;
@@ -21,15 +22,18 @@ public class Port{
     }
     private Team team;
 
+    // The reference to the instantiated port prefab object that contains sprite renders and capture UI
     private GameObject go;
 
+    // the location of the port
     public Node node { get; set; }
 
+    // reference to port's main sprite renderer (not the minimap renderer)
     SpriteRenderer spriteRenderer;
 
-    public Port(Team t) {
-        team = t;
-    }
+    //public Port(Team t) {
+    //    team = t;
+    //}
 
     /// <summary>
     /// Constructor
@@ -40,14 +44,14 @@ public class Port{
     /// <param name="isCaptial">sets the port to be a capital or not</param>
     public Port(Vector2Int boardPos,Team t,bool isCaptial) {
         team = t;
-        capital = isCaptial;
+        IsCapital = isCaptial;
         node = GameManager.main.getBoard().getNodeAt(boardPos);
         go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
         go.transform.position = node.getRealPos();
         spriteRenderer = go.GetComponent<SpriteRenderer>();
-        spriteRenderer.sprite = capital ? t.CapitalSprite : t.PortSprite;
-        go.name = capital ? t.ToString() + " captial" : "port";
+        spriteRenderer.sprite = IsCapital ? t.CapitalSprite : t.PortSprite;
+        go.name = IsCapital ? t.ToString() + " captial" : "port";
         GameObject parent;
         if((parent = GameObject.Find("Ports")) == null) {
             parent = GameObject.Instantiate(new GameObject());
@@ -60,23 +64,6 @@ public class Port{
     public GameObject getGameObject()
     {
         return go;
-    }
-
-
-    public bool getCapital() {
-        return capital;
-    }
-
-    public Team getTeam() {
-        return team;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setCapital(bool isCapital) {
-        capital = isCapital;
     }
 
     /// <summary>
@@ -100,7 +87,7 @@ public class Port{
     /// </summary>
     /// <param name="t">the team to change the port to</param>
     private void setSprite(Team t) {
-        spriteRenderer.sprite = capital ? t.CapitalSprite : t.PortSprite;
+        spriteRenderer.sprite = IsCapital ? t.CapitalSprite : t.PortSprite;
     }
 
     /// <summary>

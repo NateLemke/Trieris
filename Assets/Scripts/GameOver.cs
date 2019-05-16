@@ -31,7 +31,7 @@ public class GameOver : MonoBehaviour
     {
         int portCount = 0;
         foreach(Port port in GameManager.main.getBoard().ports)
-            if (port.getTeam() == GameManager.main.playerTeam)
+            if (port.Team == GameManager.main.playerTeam)
                 portCount++;
         return portCount;
     }

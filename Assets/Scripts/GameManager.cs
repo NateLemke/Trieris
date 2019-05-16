@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour {
 
     public void checkForExecuteNextPhase() {
         if (processingTurn) {
-            if (!PhaseManager.playingAnimation && !needRedirect && !needCaptureChoice) {
+            if (!needRedirect && !needCaptureChoice) {
                 processingTurn = gameLogic.executeNextPhase();
             }
         }
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour {
         }
         foreach (Node portNode in board.getAllPortNodes()) {
             if (portNode.getPort() != null) {
-                Team t = portNode.getPort().getTeam();
+                Team t = portNode.getPort().Team;
                 int currentValue = distribution[t.ToString()];
                 distribution[t.ToString()] = currentValue + 1;
                 if (currentValue + 1 >= 12) {
@@ -188,7 +188,7 @@ public class GameManager : MonoBehaviour {
         //Debug.Log("can act: "+ship.getCanActa());
         //ships.Add(ship);
         ship.intialize(team,node);
-        ship.name = team.getTeamType().ToString() + " ship " + ship.getID();
+        ship.name = team.getTeamType().ToString() + " ship " + ship.Id;
 
         return ship;
     }
@@ -276,7 +276,7 @@ public class GameManager : MonoBehaviour {
             }
             foreach (Ship ship in ai.GetTeam().ships) {
 
-                int direction = ship.getAI().setNewShipDirection(ship);
+                int direction = ship.Ai.setNewShipDirection(ship);
                 ship.setFront(direction);
                 ship.needRedirect = false;
                 ship.setSpriteRotation();

@@ -97,7 +97,6 @@ public class Node{
 
     public void setPort(Port port) {
         this.port = port;
-        setColor(port.getColor());
     }
 
     public void setShips(List<Ship> ships) {

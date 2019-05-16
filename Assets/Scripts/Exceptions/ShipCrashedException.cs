@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShipCrashedException : Exception {
-    public ShipCrashedException(Ship ship) : base("Ship number " + ship.getID() + " has crashed into land.") {
+    public ShipCrashedException(Ship ship) : base("Ship number " + ship.Id + " has crashed into land.") {
 
     }
 }

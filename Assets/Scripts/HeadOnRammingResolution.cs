@@ -25,15 +25,19 @@ public class HeadOnRammingResolution : RammingResolution {
 
         float startTime = Time.time;
 
-        while(Time.time < startTime + 0.4f) {
-            shipA.Position = Vector3.Lerp(startPosA,endPosA, (Time.time - startTime) / 0.4f);
-            shipB.Position = Vector3.Lerp(startPosB,endPosB, (Time.time - startTime) / 0.4f);
+        while(Time.time < startTime + SpeedManager.HeadOnSpeed) {
+            shipA.Position = Vector3.Lerp(startPosA,endPosA, (Time.time - startTime) / SpeedManager.HeadOnSpeed);
+            shipB.Position = Vector3.Lerp(startPosB,endPosB, (Time.time - startTime) / SpeedManager.HeadOnSpeed);
             yield return null;
         }
 
         InitHeadOnAnimation();
         Sounds.main.playRandomCrunch();
-        yield return new WaitForSeconds(0.3f);
+        if (shipA.life == 0 || shipB.life == 0) {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay * 2);
+        } else {
+            yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
+        }
         Sounds.main.playRandomCrunch();
 
         shipB.life -= damageToB;
@@ -42,18 +46,12 @@ public class HeadOnRammingResolution : RammingResolution {
         shipB.disableIcon();
         shipA.disableIcon();
 
-        if (shipA.life == 0 || shipB.life == 0) {
-            yield return new WaitForSeconds(SpeedManager.CombatPostDelay * 2);
-        } else {
-            yield return new WaitForSeconds(SpeedManager.CombatPostDelay);
-        }
 
         startTime = Time.time;
-        while (Time.time < startTime + 0.4f) {
-            shipA.Position = Vector3.Lerp(endPosA,startPosA,(Time.time - startTime) / 0.4f);
-            shipB.Position = Vector3.Lerp(endPosB,startPosB,(Time.time - startTime) / 0.4f);
+        while (Time.time < startTime + 0.1f) {
+            shipA.Position = Vector3.Lerp(endPosA,startPosA,(Time.time - startTime) / 0.1f);
+            shipB.Position = Vector3.Lerp(endPosB,startPosB,(Time.time - startTime) / 0.1f);
             yield return null;
-
         }
 
     }
