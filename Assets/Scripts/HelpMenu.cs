@@ -58,11 +58,11 @@ public class HelpMenu : MonoBehaviour
 
     void Start()
     {
-        background = transform.Find("Panel/Background").gameObject;
-        mask = transform.Find("Panel/Mask").gameObject;
-        image = transform.Find("Panel/Mask/Image").gameObject;
-        infoPanel = transform.Find("Panel/InfoPanel").gameObject;
-        infoText = transform.Find("Panel/InfoPanel/Text").GetComponent<Text>();
+        background = transform.Find("Controls/Background").gameObject;
+        mask = transform.Find("Controls/Mask").gameObject;
+        image = transform.Find("Controls/Mask/Image").gameObject;
+        infoPanel = transform.Find("Controls/InfoPanel").gameObject;
+        infoText = transform.Find("Controls/InfoPanel/Text").GetComponent<Text>();
         moveToMinimap();
     }
 

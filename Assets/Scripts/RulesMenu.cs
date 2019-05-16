@@ -5,26 +5,20 @@ using UnityEngine.UI;
 
 public class RulesMenu : MonoBehaviour
 {
-    GameObject background;
     GameObject image;
-    GameObject mask;
-    Vector3 childLocation;
 
     WindowData minimap = new WindowData(205f, 93f, 126f, 87f, -155f, -78f);
-    WindowData shipTab = new WindowData(205f, 40f, 130f, 30f, -155f, -25f);
-    WindowData combatPhase = new WindowData(205f, -16f, 125f, 27f, -155f, 31f);
-    WindowData combatDirection = new WindowData(235.5f, -61f, 65f, 72f, -185.5f, 76f);
-    WindowData movementPhase = new WindowData(208f, -8.76f, 127f, 37f, -158f, 6.3f);
-    WindowData movementAction = new WindowData(176f, -60f, 70f, 70f, -126, 75f);
 
-    WindowData cameraControls = new WindowData(-17f, 24.5f, 310f, 231f, 67f, -10f);
-    WindowData direction = new WindowData(-12f, 22f, 25f, 25f, 62f, 37f);
-
-    WindowData infoMain = new WindowData(50f, 60f, 180f, 125f, 0, 0);
-    WindowData infoMap = new WindowData(205f, 50f, 125f, 150f, 0, 0);
+    WindowData infoMain = new WindowData(230f, 0f, 125f, 220f, 0, 0);
 
     Text infoText;
     GameObject infoPanel;
+
+    GameObject content;
+
+    string position;
+
+    List<string> catapultList;
 
     struct WindowData
     {
@@ -58,98 +52,93 @@ public class RulesMenu : MonoBehaviour
 
     void Start()
     {
-        background = transform.Find("Panel/Background").gameObject;
-        mask = transform.Find("Panel/Mask").gameObject;
-        image = transform.Find("Panel/Mask/Image").gameObject;
-        infoPanel = transform.Find("Panel/InfoPanel").gameObject;
-        infoText = transform.Find("Panel/InfoPanel/Text").GetComponent<Text>();
-        moveToMinimap();
+        content = transform.Find("Content").gameObject;
+
+        infoPanel = transform.Find("InfoPanel").gameObject;
+        infoText = transform.Find("InfoPanel/Text").GetComponent<Text>();
+        
+        moveToActions();
     }
 
-
-
-    public void moveToMinimap()
+    public void moveToActions()
     {
-        mask.transform.localPosition = new Vector3(minimap.X, minimap.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(minimap.Width, minimap.Height);
-        image.transform.localPosition = new Vector3(minimap.X2, minimap.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "This is the minimap. It will display the locations of all ships as well as the ports and their respective colors";
+        setImagesInactive();
+        content.transform.Find("Actions").gameObject.SetActive(true);
+        
+        infoText.text = "Every turn, there are 4 phases in which actions can be set. You can only set actions for as much life as your ship has.\nExample: your ship has 3 life remaining, you can only set 3 actions for that ship";
     }
 
-    public void moveToShipTabs()
+    public void moveToCatapults()
     {
-        mask.transform.localPosition = new Vector3(shipTab.X, shipTab.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(shipTab.Width, shipTab.Height);
-        image.transform.localPosition = new Vector3(shipTab.X2, shipTab.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "Here you can select the ship you would like to set the actions for.";
+        setImagesInactive();
+        content.transform.Find("CatapultTarget").gameObject.SetActive(true);
+        content.transform.Find("Catapult").gameObject.SetActive(true);
+
+        infoText.text = "On the righthand side of the screen, there is a catapult targeting interface. On any turn, you may set a phase to aim and shoot a catapult for 1 damage.\nIf your ship is rammed, neither ship may shoot for the rest of the turn";
     }
 
-    public void moveToCombatPhase()
+    public void moveToRamming()
     {
-        mask.transform.localPosition = new Vector3(combatPhase.X, combatPhase.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(combatPhase.Width, combatPhase.Height);
-        image.transform.localPosition = new Vector3(combatPhase.X2, combatPhase.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "Click on one of these targeting indicators to select the turn you would like to use your catapult.";
+        setImagesInactive();
+        content.transform.Find("Broadside").gameObject.SetActive(true);
+        content.transform.Find("Glancing1").gameObject.SetActive(true);
+        content.transform.Find("HeadOn").gameObject.SetActive(true);
+        content.transform.Find("Momentum").gameObject.SetActive(true);
+
+        infoText.text = "When a ship moves into a node that contains another ship, it will ram that ship. If two ships move into the same space, they will ram each other! Broadside:\nShip rams another ship that is perpendicular to itself.\nGlancing:\n Ship rams another ship at an angle.\nHead On:\n Two ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes";
     }
 
-    public void moveToCombatDirection()
+    public void moveToMultipleTargets()
     {
-        mask.transform.localPosition = new Vector3(combatDirection.X, combatDirection.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(combatDirection.Width, combatDirection.Height);
-        image.transform.localPosition = new Vector3(combatDirection.X2, combatDirection.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "Select the direction the catapult is fired.\n\nMake note of the direction the image of the ship on the UI is facing! The UI image is not always facing the same direction that your ship is.";
+        setImagesInactive();
+        content.transform.Find("MultipleTarget").gameObject.SetActive(true);
+
+        infoText.text = "When a catapult or ram targets a node that contains multiple ships, you will get to choose the ship that damage is dealt to.";
     }
 
-    public void moveToMovementPhase()
+    public void moveToRedirection()
     {
-        mask.transform.localPosition = new Vector3(movementPhase.X, movementPhase.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(movementPhase.Width, movementPhase.Height);
-        image.transform.localPosition = new Vector3(movementPhase.X2, movementPhase.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "Click one of these buttons to choose the phase that you wish to enter in the current action. Phase 1 is the leftmost button while phase 4 is the rightmost one.\nYour ship can only act as many times as that ship has health.";
+        setImagesInactive();
+        content.transform.Find("Redirection1").gameObject.SetActive(true);
+        content.transform.Find("Redirection2").gameObject.SetActive(true);
+
+        infoText.text = "Whenever a ship runs into land or captures a port/capital, that ship loses the rest of its actions this turn and can immediately choose the direction that it faces.";
     }
 
-    public void moveToMovementAction()
+    public void moveToPorts()
     {
-        mask.transform.localPosition = new Vector3(movementAction.X, movementAction.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(movementAction.Width, movementAction.Height);
-        image.transform.localPosition = new Vector3(movementAction.X2, movementAction.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMain.X, infoMain.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
-        infoText.text = "Here you can select a movement action to perform. Selecting an action will automatically move the cursor to the next phase.\n\nThe reverse action can \bONLY be performed after a hold action";
+        setImagesInactive();
+        content.transform.Find("Port").gameObject.SetActive(true);
+
+        infoText.text = "When a ship lands on a port or capital, the player may choose to capture it. Doing so will make that ship lose its actions for the rest of the turn.\n If you hold on a port or capital that you own, your ship will begin to repair. On a port, you repair once a turn and on a capital, you repair every phase.";
     }
 
-    public void moveToCameraControls()
+    public void moveToPortsCapitals()
     {
-        mask.transform.localPosition = new Vector3(cameraControls.X, cameraControls.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(cameraControls.Width, cameraControls.Height);
-        image.transform.localPosition = new Vector3(cameraControls.X2, cameraControls.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMap.X, infoMap.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMap.Width, infoMap.Height);
-        infoText.text = "Use the WASD or arrow keys to move the camera. You can zoom in or out using the scrollwheel on your mouse";
-    }
+        setImagesInactive();
+        content.transform.Find("Capital").gameObject.SetActive(true);
 
-    public void moveToDirections()
+        infoText.text = "If a team controls 12 ports at any given time, that team wins the game. However, losing your team's capital will immediately cause you to lose.";
+    }
+    
+    public void moveToShipsAlive()
     {
-        mask.transform.localPosition = new Vector3(direction.X, direction.Y, 0);
-        mask.GetComponent<RectTransform>().sizeDelta = new Vector2(direction.Width, direction.Height);
-        image.transform.localPosition = new Vector3(direction.X2, direction.Y2, 0);
-        infoPanel.transform.localPosition = new Vector3(infoMap.X, infoMap.Y, 0);
-        infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMap.Width, infoMap.Height);
-        infoText.text = "Here you can see directional indicators. Click the direction you wish the ship to face.\nBe careful when setting your ship direction! Your direction can only be changed by turning your ship during your turn, capturing a port, or crashing into land.";
+        setImagesInactive();
+        content.transform.Find("Score").gameObject.SetActive(true);
+
+        infoText.text = "If your team has no ships remaining, your team also loses. Even if you own more ports than your opponents. The number at the top is the number of ports you own and the ship icons are how many ships you own alive.";
+    }
+    
+    public void setImagesInactive()
+    {
+        foreach(Transform child in transform.Find("Content"))
+        {
+            child.gameObject.SetActive(false);
+        }
     }
 
     public void exitHelp()
     {
-        gameObject.SetActive(false);
+        transform.parent.gameObject.SetActive(false);
     }
 }
