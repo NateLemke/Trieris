@@ -200,13 +200,13 @@ public class GameLogic : MonoBehaviour {
                 bool hasCapital = false;
                 foreach (Port port in GameManager.main.getBoard().getAllPorts())
                 {
-                    if (port.getTeam() == t)
+                    if (port.Team == t)
                     {
                         portCount++;
                         Debug.Log(port.node.getX() + ", " + port.node.getY());
                         Debug.Log(" This is " + port.OriginalTeam.getTeamType().ToString());
 
-                        if (port.getCapital() && port.OriginalTeam == t)
+                        if (port.IsCapital && port.OriginalTeam == t)
                         {
                             Debug.Log(t.getTeamType().ToString() + " has their capital");
                             hasCapital = true;
