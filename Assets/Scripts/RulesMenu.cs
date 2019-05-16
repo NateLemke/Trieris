@@ -5,51 +5,15 @@ using UnityEngine.UI;
 
 public class RulesMenu : MonoBehaviour
 {
-    GameObject image;
-
-    WindowData minimap = new WindowData(205f, 93f, 126f, 87f, -155f, -78f);
-
-    WindowData infoMain = new WindowData(230f, 0f, 125f, 220f, 0, 0);
 
     Text infoText;
     GameObject infoPanel;
 
     GameObject content;
 
-    string position;
-
-    List<string> catapultList;
-
-    struct WindowData
-    {
-        private float x;
-        private float y;
-        private float width;
-        private float height;
-
-        private float x2;
-        private float y2;
-
-        public float X { get { return x; } }
-        public float Y { get { return y; } }
-        public float Width { get { return width; } }
-        public float Height { get { return height; } }
-
-        public float X2 { get { return x2; } }
-        public float Y2 { get { return y2; } }
-
-        public WindowData(float x, float y, float width, float height, float x2, float y2)
-        {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-
-            this.x2 = x2;
-            this.y2 = y2;
-        }
-    }
-
+    /// <summary>
+    /// Sets the gameobject references at the first frame the object is loaded and then calls the first function for displaying rules.
+    /// </summary>
     void Start()
     {
         content = transform.Find("Content").gameObject;
@@ -60,6 +24,9 @@ public class RulesMenu : MonoBehaviour
         moveToActions();
     }
 
+    /// <summary>
+    /// Displays rules about Phases and Actions planned for phases
+    /// </summary>
     public void moveToActions()
     {
         setImagesInactive();
@@ -68,6 +35,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "Every turn, there are 4 phases in which actions can be set. You can only set actions for as much life as your ship has.\nExample: your ship has 3 life remaining, you can only set 3 actions for that ship";
     }
 
+    /// <summary>
+    /// Displays rules about Catapults
+    /// </summary>
     public void moveToCatapults()
     {
         setImagesInactive();
@@ -77,6 +47,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "On the righthand side of the screen, there is a catapult targeting interface. On any turn, you may set a phase to aim and shoot a catapult for 1 damage.\nIf your ship is rammed, neither ship may shoot for the rest of the turn";
     }
 
+    /// <summary>
+    /// Displays rules about Ramming and the different types of Ramming
+    /// </summary>
     public void moveToRamming()
     {
         setImagesInactive();
@@ -88,6 +61,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "When a ship moves into a node that contains another ship, it will ram that ship. If two ships move into the same space, they will ram each other! Broadside:\nShip rams another ship that is perpendicular to itself.\nGlancing:\n Ship rams another ship at an angle.\nHead On:\n Two ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes";
     }
 
+    /// <summary>
+    /// Explains what happens when multiple ships are potential targets when ramming or shooting a catapult
+    /// </summary>
     public void moveToMultipleTargets()
     {
         setImagesInactive();
@@ -96,6 +72,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "When a catapult or ram targets a node that contains multiple ships, you will get to choose the ship that damage is dealt to.";
     }
 
+    /// <summary>
+    /// Explains the rules about redirecting after port capture and crashing into land
+    /// </summary>
     public void moveToRedirection()
     {
         setImagesInactive();
@@ -105,6 +84,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "Whenever a ship runs into land or captures a port/capital, that ship loses the rest of its actions this turn and can immediately choose the direction that it faces.";
     }
 
+    /// <summary>
+    /// Explains the rules about port capture and repair
+    /// </summary>
     public void moveToPorts()
     {
         setImagesInactive();
@@ -113,6 +95,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "When a ship lands on a port or capital, the player may choose to capture it. Doing so will make that ship lose its actions for the rest of the turn.\n If you hold on a port or capital that you own, your ship will begin to repair. On a port, you repair once a turn and on a capital, you repair every phase.";
     }
 
+    /// <summary>
+    /// Explains what must be done to win or lose a game regarding port/capital capture
+    /// </summary>
     public void moveToPortsCapitals()
     {
         setImagesInactive();
@@ -121,6 +106,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "If a team controls 12 ports at any given time, that team wins the game. However, losing your team's capital will immediately cause you to lose.";
     }
     
+    /// <summary>
+    /// Explains what happens when a team loses all of its ships.
+    /// </summary>
     public void moveToShipsAlive()
     {
         setImagesInactive();
@@ -129,6 +117,9 @@ public class RulesMenu : MonoBehaviour
         infoText.text = "If your team has no ships remaining, your team also loses. Even if you own more ports than your opponents. The number at the top is the number of ports you own and the ship icons are how many ships you own alive.";
     }
     
+    /// <summary>
+    /// Sets all childeren of the Content gameObject to be not active. This resets the panel and prevents multiple images from overlapping
+    /// </summary>
     public void setImagesInactive()
     {
         foreach(Transform child in transform.Find("Content"))
@@ -137,6 +128,9 @@ public class RulesMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This closes the rules menu
+    /// </summary>
     public void exitHelp()
     {
         transform.parent.gameObject.SetActive(false);

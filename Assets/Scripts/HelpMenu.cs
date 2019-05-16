@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Used to run the Controls menu opened from the pause menu and at launch
+/// </summary>
 public class HelpMenu : MonoBehaviour
 {
     GameObject background;
@@ -26,6 +29,11 @@ public class HelpMenu : MonoBehaviour
     Text infoText;
     GameObject infoPanel;
 
+
+    /// <summary>
+    /// Struct used to store the window sizes of the mask and image for the help menu.
+    /// X and Y are used for the mask locations and X2 and Y2 are used for the image locations
+    /// </summary>
     struct WindowData
     {
         private float x;
@@ -56,6 +64,9 @@ public class HelpMenu : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the gameobject references at the first frame the object is loaded and then calls the first function for displaying controls.
+    /// </summary>
     void Start()
     {
         background = transform.Find("Controls/Background").gameObject;
@@ -67,7 +78,9 @@ public class HelpMenu : MonoBehaviour
     }
 
 
-
+    /// <summary>
+    /// Moves the cursor to the Minimap sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToMinimap()
     {
         mask.transform.localPosition = new Vector3(minimap.X, minimap.Y, 0);
@@ -78,6 +91,10 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "This is the minimap. It will display the locations of all ships as well as the ports and their respective colors";
     }
 
+
+    /// <summary>
+    /// Moves the cursor to the Ship Tab sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToShipTabs()
     {
         mask.transform.localPosition = new Vector3(shipTab.X, shipTab.Y, 0);
@@ -87,7 +104,10 @@ public class HelpMenu : MonoBehaviour
         infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMain.Width, infoMain.Height);
         infoText.text = "Here you can select the ship you would like to set the actions for.";
     }
-
+    
+    /// <summary>
+    /// Moves the cursor to the Combat Phase sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToCombatPhase()
     {
         mask.transform.localPosition = new Vector3(combatPhase.X, combatPhase.Y, 0);
@@ -98,6 +118,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Click on one of these targeting indicators to select the turn you would like to use your catapult.";
     }
 
+    /// <summary>
+    /// Moves the cursor to the Catapult Direction sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToCombatDirection()
     {
         mask.transform.localPosition = new Vector3(combatDirection.X, combatDirection.Y, 0);
@@ -108,6 +131,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Select the direction the catapult is fired.\n\nMake note of the direction the image of the ship on the UI is facing! The UI image is not always facing the same direction that your ship is.";
     }
 
+    /// <summary>
+    /// Moves the cursor to the Moement Phase sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToMovementPhase()
     {
         mask.transform.localPosition = new Vector3(movementPhase.X, movementPhase.Y, 0);
@@ -118,6 +144,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Click one of these buttons to choose the phase that you wish to enter in the current action. Phase 1 is the leftmost button while phase 4 is the rightmost one.\nYour ship can only act as many times as that ship has health.";
     }
 
+    /// <summary>
+    /// Moves the cursor to the Movement Action sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToMovementAction()
     {
         mask.transform.localPosition = new Vector3(movementAction.X, movementAction.Y, 0);
@@ -128,6 +157,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Here you can select a movement action to perform. Selecting an action will automatically move the cursor to the next phase.\n\nThe reverse action can \bONLY be performed after a hold action";
     }
 
+    /// <summary>
+    /// Moves the cursor to the Camera Control sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToCameraControls()
     {
         mask.transform.localPosition = new Vector3(cameraControls.X, cameraControls.Y, 0);
@@ -138,6 +170,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Use the WASD or arrow keys to move the camera. You can zoom in or out using the scrollwheel on your mouse";
     }
 
+    /// <summary>
+    /// Moves the cursor to the Direction sections and updates the text of the infoPanel
+    /// </summary>
     public void moveToDirections()
     {
         mask.transform.localPosition = new Vector3(direction.X, direction.Y, 0);
@@ -148,6 +183,9 @@ public class HelpMenu : MonoBehaviour
         infoText.text = "Here you can see directional indicators. Click the direction you wish the ship to face.\nBe careful when setting your ship direction! Your direction can only be changed by turning your ship during your turn, capturing a port, or crashing into land.";
     }
 
+    /// <summary>
+    /// Closes the Controls instructions menu
+    /// </summary>
     public void exitHelp()
     {
         gameObject.SetActive(false);
