@@ -13,7 +13,7 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     public void startGame()
     {
-        SceneManager.LoadScene("ThompsonDevScene");
+        SceneManager.LoadScene("GameScene");
     }
 
     /// <summary>
