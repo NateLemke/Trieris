@@ -53,6 +53,8 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
+            
+            determineGameState();
 
             gameManager.uiControl.enableControls();
 
@@ -178,7 +180,6 @@ public class GameLogic : MonoBehaviour {
     public void postAnimation() {
         
         sinkShips();
-        determineGameState();
         executeNextPhase();
     }
 
