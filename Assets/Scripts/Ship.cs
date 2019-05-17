@@ -349,7 +349,8 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the target that this ship is ramming</param>
     public void ram(Ship target) {
         if (target != null) {
-
+            CanFire = false;
+            target.CanFire = false;
             ramDamageAndAngle(target);
             canAct = canActAfterCollision;
             momentum = 0;
@@ -399,6 +400,7 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
+            movedForward = false;
             if(team == GameManager.main.playerTeam)
                 activateRedirectNotification();
             return;

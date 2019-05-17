@@ -33,6 +33,7 @@ public class PortCaptureAnimation : Animation {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
         GameObject animObj = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
         animObj.GetComponent<Canvas>().sortingLayerName = "UILayer";
+        animObj.GetComponent<Canvas>().sortingOrder = 10;
         Image lowerImg = animObj.transform.Find("LowerImage").GetComponent<Image>();
         Image upperImg = animObj.transform.Find("LowerImage").transform.Find("UpperImage").GetComponent<Image>();
 

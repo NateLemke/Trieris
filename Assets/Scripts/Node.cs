@@ -69,7 +69,7 @@ public class Node{
     /// Returns the node's game board coordinate
     /// </summary>
     /// <returns></returns>
-    public Vector2 getPosition() {
+    public Vector2 getBoardPosition() {
         return new Vector2(x,y);
     }
 
@@ -103,11 +103,6 @@ public class Node{
 
     public bool isIsland() {
         return island;
-    }
-
-    public void setPosition(int x,int y) {
-        this.x = x;
-        this.y = y;
     }
 
     //public void setColor(Color color) {

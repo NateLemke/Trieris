@@ -234,7 +234,7 @@ public class GameManager : MonoBehaviour {
             parent.name = "Ships";
         }
         GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
-        GameObject spawn = Instantiate(shipPrefab,node.getPosition(),Quaternion.identity);
+        GameObject spawn = Instantiate(shipPrefab,node.getBoardPosition(),Quaternion.identity);
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
         //Debug.Log("can act: "+ship.getCanActa());
