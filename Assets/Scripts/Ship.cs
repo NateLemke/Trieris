@@ -5,7 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/// <summary>
+/// This class is used to control and calculate actions for a single Trieris ship
+/// </summary>
 public class Ship : MonoBehaviour {
 
     public const int FORWARD = 1;
@@ -23,23 +25,16 @@ public class Ship : MonoBehaviour {
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
 
-    // Combat Text
+    // used to display damage text
     public GameObject CBTprefab;
 
     public Action[] actions;
     private Node node;    
 
-    private int momentum = 0;
-    private int portRepairCount = 0;
-    private bool movedForward { get { return movedForwardField; } set {
-            movedForwardField = value;
-            if(team.getTeamType() == Team.Type.green && id == 3) {
-                ;
-            }
-        }
-    }
+    public int momentum { get; set; }
 
-    private bool movedForwardField = false;
+    private int portRepairCount = 0;
+    private bool movedForward = false;
 
     public int fireDirection = -1;
 
@@ -48,25 +43,20 @@ public class Ship : MonoBehaviour {
     private bool canAct = true;
     public bool canActAfterCollision = true;
     private int frontAfterCollision = -1;
+    public int Id { get { return id; } }
     private int id = -1;
-    TrierisAI ai = null;
+    public TrierisAI Ai { get; set; }
 
-    // new variables
-
-    //public bool crashed;
     public bool needRedirect = true;
-
     public bool needCaptureChoice;
-
     public bool needRammingChoice;
-
     public bool needCatapultChoice;
 
     public Image icon;
 
-    private float animationStart;
-    //SpriteRenderer underlay;
     public Team team;
+
+    // the ship's position in the world (not the game board)
     public Vector3 Position {
         get {
             return transform.position;
@@ -74,9 +64,7 @@ public class Ship : MonoBehaviour {
         set {
             transform.position = value;
         }
-    }
-
-   
+    }   
 
     private int lifeValue;
     public int life
@@ -91,8 +79,8 @@ public class Ship : MonoBehaviour {
             {
                 InitCBT((lifeValue - value).ToString());
                 lifeValue = value;
-                if(lifeValue == 0) {
-                    Sounds.main.playClip(Sounds.main.LongRip);
+                if(lifeValue <= 0) {
+                    Sounds.main.playClip(Sounds.main.LongRip, 0.8f);
                 }
             }
             else
@@ -103,18 +91,22 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    // references to the ship's redirect UI
     private GameObject redirectUI;
-
     private GameObject redirectNotification;
-
     private GameObject directionLabel;
 
-
+    /// <summary>
+    /// Used to initialze the ship upon instantiation
+    /// Sets the ship's team, node, position, health bar, and grabs references to UI/sprites
+    /// </summary>
+    /// <param name="team"></param>
+    /// <param name="node"></param>
     public void intialize(Team team,Node node) {
         this.team = team;
         team.ships.Add(this);
-        this.id = team.shipIdCounter++;
-        this.life = MAX_HEALTH;
+        id = team.shipIdCounter++;
+        life = MAX_HEALTH;
 
         catapultIndex = -1;
         catapultDirection = -1;
@@ -145,6 +137,12 @@ public class Ship : MonoBehaviour {
         redirectUI = transform.Find("ShipUI/Direction").gameObject;
     }
 
+    /// <summary>
+    /// Adds an action for the ship at the given index
+    /// </summary>
+    /// <param name="index">the phase for the action</param>
+    /// <param name="actionNum">the action number the determines the type of action</param>
+    /// <param name="firingDirection">whether or not the ship is firing this turn, and in which direction</param>
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
         if (index > life - 1 || index < 0) {
             //throw new InvalidActionIndexException();
@@ -158,16 +156,22 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Calculates the ship's action for the given phase
+    /// </summary>
+    /// <param name="index"></param>
     public void doAction(int index) {      //throws ShipCrashedException
         actions[index].act();
     }
 
+    /// <summary>
+    /// Abstract classed used for different action
+    /// ALSO STORES CATAPULT SHOOTING DIRECTION FOR THE PHASE
+    /// </summary>
     public  abstract class Action {
         public int catapultDirection = -1;
         public bool reverseReady = false;
         public int actionIndex;
-        // since java inner classes are different than c sharp nested classes
-        // we need a way for these nested classes to communicate with their ship
         protected Ship ship;
 
         public Action(int catapultDirection, Ship ship, int index) {
@@ -192,6 +196,9 @@ public class Ship : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Action for forwards movement
+    /// </summary>
     public class ForwardAction : Action {
 
         public ForwardAction(int catapultDirection, Ship ship, int index) : base(catapultDirection,ship,index) {
@@ -205,6 +212,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Action for reversing
+    /// </summary>
     public class ReverseAction : Action {
 
         public ReverseAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
@@ -216,6 +226,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Action for holding
+    /// </summary>
     public class HoldAction : Action {
 
         public HoldAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
@@ -230,6 +243,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Action for a starboard turn
+    /// </summary>
     public class StarboardAction : Action {
 
         public StarboardAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
@@ -241,6 +257,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Action for a port turn
+    /// </summary>
     public class PortAction : Action {
 
         public PortAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
@@ -252,9 +271,11 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Default action for an action that has not yet been set, counts as a hold
+    /// </summary>
     public class EmptyAction : Action
     {
-
         public EmptyAction(int catapultDirection, Ship ship, int index) : base(catapultDirection, ship, index)
         {
             reverseReady = true;
@@ -278,6 +299,10 @@ public class Ship : MonoBehaviour {
         return momentum;
     }
 
+    /// <summary>
+    /// Gets the node that the ship is aiming at, returns null if no such node exists
+    /// </summary>
+    /// <returns></returns>
     public Node getCatapultNode() {
         if (fireDirection == -1) {
             return null;
@@ -300,15 +325,14 @@ public class Ship : MonoBehaviour {
         return canAct;
     }
 
-
     public bool getMoved() {
         return movedForward;
     }
 
-    public int getID() {
-        return id;
-    }
-
+    /// <summary>
+    /// Returns true if the ship has no null actions in their action list
+    /// </summary>
+    /// <returns></returns>
     public bool ready() {
         foreach (Action action in actions) {
             if (action == null) {
@@ -319,6 +343,10 @@ public class Ship : MonoBehaviour {
         return true;
     }
 
+    /// <summary>
+    /// Calls the required functions to calcuated a ram against the given ship
+    /// </summary>
+    /// <param name="target">the target that this ship is ramming</param>
     public void ram(Ship target) {
         if (target != null) {
 
@@ -328,6 +356,10 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Adds a catapult animation targetting the given ship
+    /// </summary>
+    /// <param name="target"></param>
     public void catapult(Ship target) {
         if (target != null) {
             //target.life -= 1;
@@ -336,6 +368,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Resets turn-specific variables for the next turn
+    /// </summary>
     public void reset() {
         //Debug.Log("resetting...");
         canAct = true;
@@ -350,6 +385,10 @@ public class Ship : MonoBehaviour {
         //}
     }
 
+    /// <summary>
+    /// Moves in the given direction (should be forwards or backwards)
+    /// </summary>
+    /// <param name="direction">the direction to move</param>
     public void move(int direction) {                           //throws ShipCrashedException 
 
         DebugControl.log("action","----moving ship");
@@ -380,11 +419,18 @@ public class Ship : MonoBehaviour {
         
     }
 
-
+    /// <summary>
+    /// Turns the ship in the given direction
+    /// </summary>
+    /// <param name="relativeDirection">the direction to turn the ship</param>
     public void turn(int relativeDirection) {
         front = getRelativeDirection(relativeDirection);
         momentum = 0;
         bool portTurn = (relativeDirection == -1);
+        if (PhaseManager.actionAnimations.ContainsKey(this)) {
+            ;
+        }
+
         PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this,portTurn));
 
         movedForward = false;
@@ -405,9 +451,12 @@ public class Ship : MonoBehaviour {
         movedForward = true;
     }
 
+    /// <summary>
+    /// Repairs the current ship IF they are on a node that contains a port belonging to their team
+    /// </summary>
     public void repair() {
-        if (node.getPort() != null && node.getPort().getTeam() == team) {
-            if (node.getPort().getCapital() && node.getPort().getTeam() == team) {
+        if (node.getPort() != null && node.getPort().Team == team) {
+            if (node.getPort().IsCapital && node.getPort().Team == team) {
                 if (life < MAX_HEALTH)
                     life++;
             } else {
@@ -421,19 +470,22 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Adds an animation to sink this ship
+    /// </summary>
     public void sink() {
         if (node != null) {
             node.getShips().Remove(this);
         }
         if(this.team == GameManager.main.playerTeam)
         {
-            Button st = GameManager.main.uiControl.ShipTabs[this.getID()].GetComponent<Button>();
+            Button st = GameManager.main.uiControl.ShipTabs[this.Id].GetComponent<Button>();
 
             ColorBlock cb = st.colors;
             cb.normalColor = CustomColor.TeamBlack;
             st.colors = cb;
 
-            Text tt = GameManager.main.uiControl.Tabtexts[this.getID()].GetComponent<Text>();
+            Text tt = GameManager.main.uiControl.Tabtexts[this.Id].GetComponent<Text>();
 
             tt.color = CustomColor.TeamBlack;
 
@@ -445,7 +497,7 @@ public class Ship : MonoBehaviour {
 
         if(this == GameManager.main.uiControl.Selected)
         {
-            GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].getID());
+            GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
         }
 
         if (this.getNode().getShips().Contains(this))
@@ -466,18 +518,25 @@ public class Ship : MonoBehaviour {
         Destroy(this.gameObject);
     }
 
+    /// <summary>
+    /// Adds an animation for this ship to capture the port they are on
+    /// Sets ship stats according to capture rules
+    /// </summary>
     public void capturePort() {
         
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
         momentum = 0;
-        if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
+        //if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
             //GameManager.main.uiControl.updatePlayerScore();
-        }
+        //}
         PhaseManager.addCaptureAnimation(this);
     }
     
+    /// <summary>
+    /// Used when the a player ship captures a port, activates port capture UI
+    /// </summary>
     public void playerCapture()
     {
         needCaptureChoice = false;
@@ -490,6 +549,9 @@ public class Ship : MonoBehaviour {
         activateRedirectNotification();
     }
 
+    /// <summary>
+    /// Sets the ships front facing and canAct, according to if they have collided this turn
+    /// </summary>
     public void updateFrontAfterCollision() {
         movedForward = false;
         if (frontAfterCollision != -1) {
@@ -499,6 +561,9 @@ public class Ship : MonoBehaviour {
         frontAfterCollision = -1;
     }
 
+    /// <summary>
+    /// sets the all actions for this ship to be default action
+    /// </summary>
     public void populateDefaultActions() {
         for (int i = 0; i < MAX_HEALTH; i++) {
             if (actions[i] == null) {
@@ -507,6 +572,12 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns an instance of an action class depending upon the actionNum
+    /// </summary>
+    /// <param name="actionNum">the action class's action number</param>
+    /// <param name="firingDirection">the firing direction for the catapult for this phase</param>
+    /// <returns>An action class</returns>
     private Action getAction(int actionNum,int firingDirection) {       // throws InvalidActionException
         switch (actionNum) {
             case 1:
@@ -524,6 +595,11 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Returns the relavtive direction between this ship and the given direction
+    /// </summary>
+    /// <param name="relativeDelta">direction to compare to this ship</param>
+    /// <returns>the relative direction as an int</returns>
     private int getRelativeDirection(int relativeDelta) {
         relativeDelta %= 8;
         int result = front + relativeDelta;
@@ -535,6 +611,10 @@ public class Ship : MonoBehaviour {
         return result;
     }
 
+    /// <summary>
+    /// Calculates the proper ramming type between this ship and its target and executes its function (glancing, broadside, headon)
+    /// </summary>
+    /// <param name="target">the ramming target of this ship</param>
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
         Debug.Log(name + " rammed " + target.name);
@@ -557,6 +637,10 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Disables catapults for the current turn for both this ship and its target
+    /// </summary>
+    /// <param name="target">the target to also disable catapults this turn</param>
     private void disableCatapults(Ship target)
     {
         foreach(Action action in actions)
@@ -565,6 +649,10 @@ public class Ship : MonoBehaviour {
             action.setCatapult(-1);
     }
 
+    /// <summary>
+    /// Calculates a broadside ram between this ship and its target. Adds a pending ramming resolution to the phase manager.
+    /// </summary>
+    /// <param name="target"></param>
     private void broadsideRam(Ship target) {
         DebugControl.log("ramming","broadside ram");
         //target.life -= momentum * 2;
@@ -573,10 +661,22 @@ public class Ship : MonoBehaviour {
         PhaseManager.addRammingResolution(this,target,momentum * 2);
     }
 
+    /// <summary>
+    /// Checks if the ramming between this ship and its target is an adjacent head on ram
+    /// </summary>
+    /// <param name="s">this ships target</param>
+    /// <param name="phase">the phase to check for</param>
+    /// <returns>True if the two ships are in adajcent nodes and moving towards each other</returns>
     public bool AdjHeadOnRamCheck(Ship s, int phase) {
         return (Mathf.Abs(getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction" && actions[phase].GetType().Name == "ForwardAction");            
     }
 
+    /// <summary>
+    /// Calculates a head on ram. Adds a pending ramming resolution to the phase manager.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="phase"></param>
+    /// <returns></returns>
     private void headOnRam(Ship target) {
         DebugControl.log("ramming","head on ram");
         //target.life -= momentum;
@@ -591,11 +691,14 @@ public class Ship : MonoBehaviour {
             PhaseManager.addAdjHeadOnRamming(this,target);
         } else {
             PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
-        }
-
-        
+        }        
     }
 
+    /// <summary>
+    /// Calculates a glancing ram. Adds a ramming resolution to the phase manager.
+    /// </summary>
+    /// <param name="target">the ship being rammed by this ship</param>
+    /// <param name="relativeTurn">the relative rotation</param>
     private void glancingRam(Ship target,int relativeTurn) {
         DebugControl.log("ramming","glancing ram");
         //target.life -= momentum;
@@ -609,36 +712,25 @@ public class Ship : MonoBehaviour {
         //PhaseManager.addRamming(this,target,momentum);
         //addRammingAnimation(target,momentum);
     }
-    //void addRammingAnimation(Ship target, int dmg) {
-    //    PhaseManager.involvedInRamming.Add(this);
-    //    PhaseManager.involvedInRamming.Add(target);
-    //    PhaseManager.addRamming(this,target,dmg);
-    //}
 
-    public void setAI(TrierisAI ai) {
-        this.ai = ai;
-    }
-
-    public TrierisAI getAI() {
-        return ai;
-    }
-
+    /// <summary>
+    /// Returns this ship's team and ID as a string
+    /// </summary>
+    /// <returns></returns>
     public string toString() {
         return team.ToString() + " Ship " + id;
     }
-
-    private void Start() {
-    }
     
-    private void Update() {  
-
-        //scaleToCamera();
-
+    /// <summary>
+    /// Checks if the player has selected another redirect UI this frame
+    /// </summary>
+    private void Update() {
         CheckUnfocus();
-
-        //canHold();
     }
 
+    /// <summary>
+    /// Scales the ship's redirect UI to the camera
+    /// </summary>
     public void scaleToCamera()
     {
         float currentSize = (Camera.main.orthographicSize / 3) - 1F;
@@ -666,6 +758,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+   /// <summary>
+   /// Disables this ship's redirect UI
+   /// </summary>
     public void chooseDirection()
     {
         if (needRedirect)
@@ -673,15 +768,18 @@ public class Ship : MonoBehaviour {
             transform.Find("ShipUI/RedirectNotification").gameObject.SetActive(true);
         }
     }
-
-    //public void canHold()
-    //{
-    //}    
-
+ 
+    /// <summary>
+    /// Sets the rotation of the ships sprite according to its front facing
+    /// </summary>
     public void setSpriteRotation() {
         transform.eulerAngles = new Vector3(0,0,(front)*-45);
     }
 
+    /// <summary>
+    /// Sets the ship's direction to a new facing
+    /// </summary>
+    /// <param name="newDirection">the new direction for this ship to face</param>
     public void redirect(int newDirection) {
         setDirection(newDirection);
         needRedirect = false;
@@ -689,38 +787,51 @@ public class Ship : MonoBehaviour {
         redirectUI.SetActive(false);
     }
 
+    /// <summary>
+    /// Sets this ship's facing
+    /// </summary>
+    /// <param name="newDirection">the new direction for this ship to face</param>
     private void setDirection(int newDirection) {
         front = newDirection;
         setSpriteRotation();
     }
 
-    public void underlayUpdate(Ship hover,Ship selected) {
-        Color c;
+    //public void underlayUpdate(Ship hover,Ship selected) {
+    //    Color c;
         
-        if (needRedirect && (selected == this || hover == this)) {
-            c = Color.red;
-        } else if (needRedirect) {
-            c = new Color(1,0,0,0.6f);
-        } else if(selected == this){
-            c = Color.green;
-        } else if (hover == this) {
-            c = new Color(0,1,0,0.5f);
-        } else {
-            c = Color.clear;
-        }
-        //underlay.color = c;
-    }
+    //    if (needRedirect && (selected == this || hover == this)) {
+    //        c = Color.red;
+    //    } else if (needRedirect) {
+    //        c = new Color(1,0,0,0.6f);
+    //    } else if(selected == this){
+    //        c = Color.green;
+    //    } else if (hover == this) {
+    //        c = new Color(0,1,0,0.5f);
+    //    } else {
+    //        c = Color.clear;
+    //    }
+    //    //underlay.color = c;
+    //}
 
+     /// <summary>
+     /// enables this ship's UI
+     /// </summary>
     public void shipUIOn()
     {
         transform.Find("ShipUI").gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// disables this ship's UI
+    /// </summary>
     public void shipUIOff()
     {
         transform.Find("ShipUI").gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Draws debug gizmos for this ship
+    /// </summary>
     private void OnDrawGizmos() {
         
         Handles.color = Color.magenta;
@@ -749,7 +860,10 @@ public class Ship : MonoBehaviour {
         }       
     }
 
-    // Initiates Combat Text
+    /// <summary>
+    /// Initiates the combat damage text for this ship
+    /// </summary>
+    /// <param name="text">the text to display</param>
     void InitCBT(string text)
     {
         GameObject temp = Instantiate(CBTprefab) as GameObject;
@@ -764,6 +878,9 @@ public class Ship : MonoBehaviour {
         Destroy(temp.gameObject, 2);
     }
 
+    /// <summary>
+    /// Updates this ship's health bar
+    /// </summary>
     void setHealthBar() {
         GameObject healthBar = transform.Find("ShipUI/NonRotation/NewHealthBar").gameObject;
         Image[] healthBoxes = healthBar.transform.GetComponentsInChildren<Image>();
@@ -772,6 +889,10 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Activates this ship's redirect UI
+    /// </summary>
+    /// <param name="b"></param>
     public void setRedirectUI(bool b) {
         redirectNotification.SetActive(b);
     }
@@ -784,6 +905,10 @@ public class Ship : MonoBehaviour {
             icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.486f);
     }
 
+    /// <summary>
+    /// Activates the ship's icon with the given string, used to show ship ID when the ship is selected
+    /// </summary>
+    /// <param name="s">the string to display</param>
     public void setIconString(String s) {
         icon.gameObject.SetActive(true);
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(true);
@@ -792,6 +917,10 @@ public class Ship : MonoBehaviour {
         icon.GetComponentInChildren<Text>().text = s;
     }
 
+    /// <summary>
+    /// Activates the ship's icon and sets it to the given icon
+    /// </summary>
+    /// <param name="sprite">the sprite to get the ship's icon to</param>
     public void setIcon(Sprite sprite) {
         icon.color = Color.white;
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
@@ -799,6 +928,9 @@ public class Ship : MonoBehaviour {
         icon.sprite = sprite;        
     }
 
+    /// <summary>
+    /// Disables the ship's icon. Sets the icon to active if the ship is currently selected.
+    /// </summary>
     public void disableIcon() {
         if(UIControl.main.Selected == this) {
             setIconString(getNumeralID());
@@ -808,15 +940,27 @@ public class Ship : MonoBehaviour {
         }        
     }
 
+    /// <summary>
+    /// Sets this ship to be the currently selected ship
+    /// </summary>
     public void selectThisShip()
     {
         GameObject.Find("GameManager").GetComponent<UIControl>().Selected = this;
     }
 
+    /// <summary>
+    /// Returns this ship's ID as a roman numeral string
+    /// </summary>
+    /// <returns></returns>
     public string getNumeralID() {
         return getNumeral(this.id + 1);
     }
 
+    /// <summary>
+    /// Returns a string of a roman numeral from 1 to 5
+    /// </summary>
+    /// <param name="i">the number to numeralize</param>
+    /// <returns></returns>
     public static string getNumeral(int i) {
         switch (i) {
             case 1:
@@ -834,6 +978,9 @@ public class Ship : MonoBehaviour {
         }
     }
     
+    /// <summary>
+    /// Checks if another ship has had its redirection UI enabled
+    /// </summary>
     private void CheckUnfocus()
     {
         if (Input.GetMouseButton(0) && redirectUI.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(redirectUI.GetComponent<RectTransform>(), Input.mousePosition, Camera.main))
@@ -842,6 +989,9 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Activates the redirection notification UI
+    /// </summary>
     public void activateRedirectNotification()
     {
         Destroy(directionLabel);
@@ -849,6 +999,9 @@ public class Ship : MonoBehaviour {
         redirectUI.SetActive(false);
     }
 
+    /// <summary>
+    /// Activates the redirection notification panel
+    /// </summary>
     public void activateRedirectPanel()
     {
         icon.gameObject.SetActive(false);

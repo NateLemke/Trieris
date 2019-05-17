@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+/// <summary>
+/// This class is used to manage the moment when a player must choose a target to ram or to shoot with a catapult
+/// </summary>
 public class ShipTargetResolution 
 {
     public Ship attacker;
@@ -11,12 +13,22 @@ public class ShipTargetResolution
     public List<TargetButton> buttons = new List<TargetButton>();
     string text;
 
+    /// <summary>
+    /// Constructor. Gets the references for the attacker, the list of targets, and the text to display when this choice is activated
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="t"></param>
+    /// <param name="txt"></param>
     public ShipTargetResolution(Ship a, List<Ship> t, string txt="Choose Target") {
         attacker = a;
         targets = t;
         text = txt;
     }
 
+    /// <summary>
+    /// Activates this targeting choice, creates the UI objects and checks for input
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator resolve() {
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TargetButton");
         float xAverage = 0f;

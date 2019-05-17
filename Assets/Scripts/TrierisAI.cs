@@ -57,7 +57,7 @@ public class TrierisAI {
             Debug.Log("Assigning an AI a team with no ships");
         }
         foreach (Ship ship in team.ships) {
-            ship.setAI(this);
+            ship.Ai = this;
         }
     }
 
@@ -106,7 +106,7 @@ public class TrierisAI {
                 
                 for (int i = 0; i<ship.getLife(); i++) {
                     if (phase == i) {
-                        DebugControl.log("AI",ship.team + " " + ship.getID());
+                        DebugControl.log("AI",ship.team + " " + ship.Id);
                         DebugControl.log("AI", "firing catapult in phase: " + phase + " in direction: " + catapultDirection);
                         ship.setAction(phase, shipActions[i], catapultDirection);
                     } else {
@@ -135,7 +135,7 @@ public class TrierisAI {
             shipPath = queue[0];
             queue.RemoveAt(0);
             if (shipPath.getNode().getPort() != null
-                    && team.ships[0].team != shipPath.getNode().getPort().getTeam()
+                    && team.ships[0].team != shipPath.getNode().getPort().Team
                     && !destinationPorts.Contains(shipPath.getNode())) {
                 DebugControl.log("AI","found port");
                 DebugControl.log("AI",shipPath.getNode().getX() + ", " + shipPath.getNode().getY());

@@ -7,6 +7,8 @@ public static class SpeedManager {
     public static float ActionDelay { get { return (fastAnimations) ? actionDelay * fastFactor : actionDelay; } }
     static float actionSpeed = 0.5f;
     public static float ActionSpeed { get { return (fastAnimations) ? actionSpeed * fastFactor : actionSpeed; } }
+    static float headOnSpeed = 0.25f;
+    public static float HeadOnSpeed { get { return headOnSpeed * ((fastAnimations) ? fastFactor : 1); } }
     static float combatDelay = 0.6f;
     public static float CombatDelay { get { return (fastAnimations) ? combatDelay * fastFactor : combatDelay; } }
     static float combatPostDelay = 1.2f;
@@ -20,6 +22,9 @@ public static class SpeedManager {
 
     static float catapultLaunchDelay = 0.2f;
     public static float CatapultLaunchDelay { get { return (fastAnimations) ? catapultLaunchDelay * fastFactor : catapultLaunchDelay; } }
+
+    static float catapultTravelTime = 2f;
+    public static float CatapultTravelTime { get { return (fastAnimations) ? catapultTravelTime * fastFactor : catapultTravelTime; } }
 
     static float cameraFocusSpeed = 0.3f;
     public static float CameraFocusSpeed { get { return (fastAnimations) ? cameraFocusSpeed * fastFactor : cameraFocusSpeed; } }

@@ -2,16 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// This class represents an instance of ramming combat between two ships
+/// It is used to play an animation and resolve the combat damage
+/// </summary>
 public class RammingResolution : CombatResolution
 {
-
+    // both shipA and shipB may take damage, so an extra damage variable is added to this class
     public int damageToA;
 
     public RammingResolution(Ship a,Ship b,int dmgB, int dmgA=0) : base(a,b,dmgB) {
         damageToA += dmgA;
     }
 
+    /// <summary>
+    /// Plays the action animations and deals damage to the ships involved
+    /// Also enables combat icons and focus the camera onto the animation
+    /// </summary>
+    /// <returns></returns>
     public override IEnumerator resolve() {
 
         yield return PhaseManager.focus(shipA.getNode().getRealPos());

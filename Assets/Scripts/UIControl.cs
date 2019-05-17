@@ -285,7 +285,7 @@ public class UIControl : MonoBehaviour
         //selected = gameManager.getPlayerShips()[value];
         foreach(Ship s in gameManager.getPlayerShips())
         {
-            if (s.getID() == value)
+            if (s.Id == value)
                 selected = s;
         }
         onShipSelection();
@@ -341,7 +341,7 @@ public class UIControl : MonoBehaviour
         GameLogic gl = GameManager.main.gameLogic;
         if (GameLogic.phaseIndex == 4)
         {
-            if (PhaseManager.playingAnimation || PhaseManager.actionAnimations.Count != 0)
+            if (PhaseManager.actionAnimations.Count != 0)
             {
                 Debug.LogError("Animation manager not finished yet");
             }
@@ -738,7 +738,7 @@ public class UIControl : MonoBehaviour
             o.effectColor = c;
         }
 
-        Outline selectedOutline = shipTabs[selected.getID()].GetComponent<Outline>();
+        Outline selectedOutline = shipTabs[selected.Id].GetComponent<Outline>();
         Color color = selectedOutline.effectColor;
         color.a = 255;
         selectedOutline.effectColor = color;

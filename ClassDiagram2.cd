@@ -1,0 +1,389 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Animation">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAgAAAAACAAAAAAoAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Animation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Board">
+    <Position X="16.5" Y="16.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Board.EdgePair" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AQEgAAACQAAEAAAAAAEAAAAAAAABAAAAAAICAkCAAgA=</HashCode>
+      <FileName>Assets\Scripts\Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CatapultBullet" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAQAAACAAAAAAAAAAAEAggBAEAAAABAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\CatapultBullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CatapultResolution">
+    <Position X="4.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAgAAgAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\CatapultResolution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CircleHealthBar" Collapsed="true">
+    <Position X="40.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQACAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\CircleHealthBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CombatResolution">
+    <Position X="4.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAgAAAAACAACAAAABAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\CombatResolution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CustomColor">
+    <Position X="37.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>4wgQAUDwBQAAAAB8AAEAAAAAECAAAAggIAAAQBAAAQA=</HashCode>
+      <FileName>Assets\Scripts\CustomColor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DebugControl" Collapsed="true">
+    <Position X="40.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAQAABAAAACAIAAAAAAAIAAAAYAAIAAAg=</HashCode>
+      <FileName>Assets\Scripts\DebugControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Direction" Collapsed="true">
+    <Position X="40.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAIAAAAAAAAAAAAAAAAAAABBAA=</HashCode>
+      <FileName>Assets\Scripts\Direction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InvalidActionException" Collapsed="true">
+    <Position X="40.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Exceptions\InvalidActionException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShipCrashedException" Collapsed="true">
+    <Position X="40.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Exceptions\ShipCrashedException.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameLogic">
+    <Position X="21.75" Y="8.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="GameLogic.Phases" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\GameLogic.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gEAAIAAAAEAAEQCBABAAIEAABAAAYAAAAAABAIAAEMA=</HashCode>
+      <FileName>Assets\Scripts\GameLogic.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager">
+    <Position X="27" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkSECEYAIGpEBCBJAAIEAAgKEBgEAQgAIAAcQAoEAMc=</HashCode>
+      <FileName>Assets\Scripts\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameOver" Collapsed="true">
+    <Position X="21" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAIAAAAQAEAEQAAAAAAAAAAAAAEAAAAAAAAAAAAAUA=</HashCode>
+      <FileName>Assets\Scripts\GameOver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HeadOnRammingResolution">
+    <Position X="2.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\HeadOnRammingResolution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HealthBar" Collapsed="true">
+    <Position X="23.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\HealthBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HelpMenu" Collapsed="true">
+    <Position X="23.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAIIABAAjAAJAAACEACgAAAEIADQQGAAAAICAAApAA=</HashCode>
+      <FileName>Assets\Scripts\HelpMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputControl">
+    <Position X="23.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEUoAAAgAiAgFgAAAACCABAAggAAEAICBCAAEAAEiEA=</HashCode>
+      <FileName>Assets\Scripts\InputControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MovementAnimation">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAgAAEAAAAAAAAAABAAAAIBIAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\MovementAnimation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Node">
+    <Position X="18.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAEAAAAQAEAAEAUAAhAKACMACAiAAABigGAJAig=</HashCode>
+      <FileName>Assets\Scripts\Node.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NodePath" BaseTypeListCollapsed="true">
+    <Position X="20" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAAAAAAAAAAAQAAAAAAABAACAEABBAQAEAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\NodePath.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="OptionsMenu" Collapsed="true">
+    <Position X="20.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAZAAAAAAABAAAAAAQAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\OptionsMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PhaseManager">
+    <Position X="25.25" Y="8.75" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="PhaseManager.subPhase" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\PhaseManager.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>pSAAAAAhCABCgBCgAAgQQgQEFAgEQRIEABARCoAgREo=</HashCode>
+      <FileName>Assets\Scripts\PhaseManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Port">
+    <Position X="14.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAACAQAQAQAAABAIAQCAAAEAAIAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Port.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PortCaptureAnimation">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PortCaptureAnimation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PortPrompt" Collapsed="true">
+    <Position X="23" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAwAAACAgCAAAgAgAAEAAAAAAMAAAAAAAECAQACAAAA=</HashCode>
+      <FileName>Assets\Scripts\PortPrompt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PreventRotation">
+    <Position X="25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\PreventRotation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RammingResolution">
+    <Position X="2.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAgAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Assets\Scripts\RammingResolution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RotationAnimation">
+    <Position X="0.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIEAAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\RotationAnimation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ship">
+    <Position X="7.75" Y="8.75" Width="1.5" />
+    <NestedTypes>
+      <Class Name="Ship.Action" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.ForwardAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.ReverseAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.HoldAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.StarboardAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.PortAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Ship.EmptyAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Ship.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>owVOCOROAVAoAGKgdQEQLwAZIAgQEtQoCcTCAUupAsA=</HashCode>
+      <FileName>Assets\Scripts\Ship.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShipTargetResolution" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAoAAAAAAAAAAEAAAIAABAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\ShipTargetResolution.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SinkAnimation">
+    <Position X="7.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SinkAnimation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundClips">
+    <Position X="25.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAEAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SoundClips.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sounds">
+    <Position X="34" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AERAAAAAYCAAACoAAAA4AAAAEACACBAAAggQAAJEAAQ=</HashCode>
+      <FileName>Assets\Scripts\Sounds.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpeedManager">
+    <Position X="35.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BBACIACAAAAAABAAAIgAAEDQYAAgUGAAAIAAhCAAAoQ=</HashCode>
+      <FileName>Assets\Scripts\SpeedManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpriteColorChange" Collapsed="true">
+    <Position X="40.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAgCAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SpriteColorChange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sprites">
+    <Position X="32.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkKBQBDChQAwgAACIAAQAAAAEAgAAAhAAECBAAJAAEw=</HashCode>
+      <FileName>Assets\Scripts\Sprites.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StartMenu" Collapsed="true">
+    <Position X="29.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\StartMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Stats">
+    <Position X="27.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Stats.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TargetButton" Collapsed="true">
+    <Position X="29.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAIAAAAAAAEAAAAAAAAAAAAAgQAAA=</HashCode>
+      <FileName>Assets\Scripts\TargetButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Team">
+    <Position X="17.75" Y="8.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Team.Type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Team.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QgAAAAAAAgAUBAAEAAgAAAAAABAUABAAAAAAhEAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Team.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamColor" Collapsed="true">
+    <Position X="40.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAABAAgAAAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TeamColor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TempText">
+    <Position X="27.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACABAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Assets\Scripts\TempText.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TrierisAI">
+    <Position X="9.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>yAAAAMIAAAAAABAAgABQIABAIAGQABQAgABAgAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\TrierisAI.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UIControl">
+    <Position X="11.75" Y="8.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>wEQQADDIMyUqAQJhAkAADBCloBiEhIAAFCNEBoFsGGY=</HashCode>
+      <FileName>Assets\Scripts\UIControl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -116,7 +116,7 @@ public class InputControl : MonoBehaviour {
 
             uiControl.Selected = hover;
             if(hover != null) {
-                DebugControl.log("select","selected ship "+hover.team.ToString()+" " + hover.getID());
+                DebugControl.log("select","selected ship "+hover.team.ToString()+" " + hover.Id);
             }
         }
     }

@@ -3,13 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Purpose:
+///             This class plays manages the execution of a port capture animation.
+/// </summary>
 public class PortCaptureAnimation : Animation {
 
+    /// <summary>
+    /// Constructor, also sets the focus point for this animation
+    /// </summary>
+    /// <param name="s">the ship that's doing the capture</param>
     public PortCaptureAnimation(Ship s) {
         ship = s;
         focusPoint = ship.Position;
     }
 
+    /// <summary>
+    /// Plays the Animation. Instantiates the required prefabs and destroys them. Also sets the ship rotation if the ship is AI controlled.
+    /// Transfers ownership of the port.
+    /// </summary>
+    /// <returns></returns>
     public override IEnumerator playAnimation() {
 
         if(ship == null) {
@@ -23,7 +36,7 @@ public class PortCaptureAnimation : Animation {
         Image lowerImg = animObj.transform.Find("LowerImage").GetComponent<Image>();
         Image upperImg = animObj.transform.Find("LowerImage").transform.Find("UpperImage").GetComponent<Image>();
 
-        upperImg.sprite = ship.getNode().getPort().getTeam().getPortSprite();
+        upperImg.sprite = ship.getNode().getPort().Team.getPortSprite();
         lowerImg.sprite = ship.team.getPortSprite();
 
         yield return new WaitForSeconds(SpeedManager.CaptureDelay);
@@ -41,11 +54,10 @@ public class PortCaptureAnimation : Animation {
         ship.getNode().getPort().setTeam(ship.team);
         
         if (!GameManager.main.getPlayerShips().Contains(ship)) {
-            int direction = ship.getAI().setNewShipDirection(ship);
+            int direction = ship.Ai.setNewShipDirection(ship);
             ship.setFront(direction);
             ship.setSpriteRotation();
         }
-
 
         yield return new WaitForSeconds(SpeedManager.CaptureDelay);
         GameObject.Destroy(animObj);
