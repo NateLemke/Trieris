@@ -20,6 +20,9 @@ public class SinkAnimation : Animation {
         InitSinkAnimation();
         
         yield return new WaitForSeconds(SpeedManager.CombatSinking);
+
+        GameManager.main.uiControl.setDead((int)ship.team.getTeamType(), ship.Id);
+
         ship.disableIcon();
         ship.sink();
 

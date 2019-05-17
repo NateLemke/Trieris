@@ -53,6 +53,8 @@ public class GameLogic : MonoBehaviour {
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
         if (phaseIndex >= 3) {
+            
+            determineGameState();
 
             gameManager.uiControl.enableControls();
 
@@ -161,7 +163,7 @@ public class GameLogic : MonoBehaviour {
             {
                 foreach (Ship s in nextNode.getShips())
                 {
-                    if (Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+                    if (s.team != ship.team && Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
                     {
                         ship.ram(s);
                         return true;
@@ -178,7 +180,6 @@ public class GameLogic : MonoBehaviour {
     public void postAnimation() {
         
         sinkShips();
-        determineGameState();
         executeNextPhase();
     }
 
@@ -203,21 +204,12 @@ public class GameLogic : MonoBehaviour {
                     if (port.Team == t)
                     {
                         portCount++;
-                        Debug.Log(port.node.getX() + ", " + port.node.getY());
-                        Debug.Log(" This is " + port.OriginalTeam.getTeamType().ToString());
 
                         if (port.IsCapital && port.OriginalTeam == t)
                         {
-                            Debug.Log(t.getTeamType().ToString() + " has their capital");
                             hasCapital = true;
                         }
                     }
-                }
-                if (!hasCapital)
-                {
-                    foreach (Ship s in t.ships)
-                        s.life = 0;
-                    break;
                 }
                 if(portCount >= 12)
                 {
@@ -387,7 +379,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
-            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.Id);
+            //gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }
