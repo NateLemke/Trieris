@@ -152,7 +152,7 @@ public class GameLogic : MonoBehaviour {
             {
                 foreach (Ship s in nextNode.getShips())
                 {
-                    if (Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
+                    if (s.team != ship.team && Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
                     {
                         ship.ram(s);
                         return true;
@@ -380,7 +380,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
-            gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
+            //gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }
