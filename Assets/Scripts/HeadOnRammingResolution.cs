@@ -27,6 +27,10 @@ public class HeadOnRammingResolution : RammingResolution {
     /// <returns></returns>
     public override IEnumerator resolve() {
 
+        if(shipA == null || shipB == null){
+            yield break;
+        }
+
         Vector3 midPoint = (shipA.Position + shipB.Position) / 2;
 
         yield return PhaseManager.focus((shipA.Position + shipB.Position) / 2);

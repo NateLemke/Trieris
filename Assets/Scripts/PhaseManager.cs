@@ -391,7 +391,7 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator rammingChoices() {
-        subPhaseProgress();
+        
         if (rammingTargetResolutions.Count == 0) {
             yield break;
         }
@@ -410,7 +410,8 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     static IEnumerator resolveRamming() {
-        if(rammingResolutions.Count == 0) {
+        subPhaseProgress();
+        if (rammingResolutions.Count == 0) {
             yield break;
         }
         //rammingResolutions.Sort(new RammingSorter());
