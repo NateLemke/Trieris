@@ -213,12 +213,6 @@ public class GameLogic : MonoBehaviour {
                         }
                     }
                 }
-                if (!hasCapital)
-                {
-                    foreach (Ship s in t.ships)
-                        s.life = 0;
-                    break;
-                }
                 if(portCount >= 12)
                 {
                     if(t == GameManager.main.playerTeam)
