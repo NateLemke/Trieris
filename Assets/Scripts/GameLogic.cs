@@ -203,21 +203,12 @@ public class GameLogic : MonoBehaviour {
                     if (port.Team == t)
                     {
                         portCount++;
-                        Debug.Log(port.node.getX() + ", " + port.node.getY());
-                        Debug.Log(" This is " + port.OriginalTeam.getTeamType().ToString());
 
                         if (port.IsCapital && port.OriginalTeam == t)
                         {
-                            Debug.Log(t.getTeamType().ToString() + " has their capital");
                             hasCapital = true;
                         }
                     }
-                }
-                if (!hasCapital)
-                {
-                    foreach (Ship s in t.ships)
-                        s.life = 0;
-                    break;
                 }
                 if(portCount >= 12)
                 {
