@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Used for the Rules menu acessed via the pause menu
+/// </summary>
 public class RulesMenu : MonoBehaviour
 {
 
