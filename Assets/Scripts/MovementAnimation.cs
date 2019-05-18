@@ -28,7 +28,7 @@ public class MovementAnimation : Animation {
         endNode = end;
         ship = s;
         momentum = m;
-        endPos = PhaseManager.shipNodePos(ship,endNode);
+        endPos = PhaseManager.shipNodePos(ship);
         reverse = r;
         focusPoint = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos()) / 2;
     }
@@ -84,7 +84,7 @@ public class MovementAnimation : Animation {
             if (PhaseManager.actionAnimations.ContainsKey(s) && (PhaseManager.actionAnimations[s] is MovementAnimation && !PhaseManager.actionAnimations[s].complete)) {
                 continue;
             }
-            s.transform.position = PhaseManager.shipNodePos(s,n);
+            s.transform.position = PhaseManager.shipNodePos(s);
         }
     }
 }

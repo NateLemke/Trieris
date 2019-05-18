@@ -52,7 +52,7 @@ public class ShipTargetResolution
 
         Node targetNode = targets[0].getNode();
         foreach (Ship s in targetNode.getShips()) {
-            s.Position = PhaseManager.shipNodePos(s,targetNode,0.6f,0.6f);
+            s.Position = PhaseManager.shipNodePos(s,0.6f,0.6f);
         }
 
         while (chosenTarget == null) {
@@ -65,7 +65,7 @@ public class ShipTargetResolution
         GameObject.Destroy(textObj);
         PhaseManager.chosenTarget = chosenTarget;
         foreach (Ship s in targetNode.getShips()) {
-            s.Position = PhaseManager.shipNodePos(s,targetNode);
+            s.Position = PhaseManager.shipNodePos(s);
         }
     }
 }

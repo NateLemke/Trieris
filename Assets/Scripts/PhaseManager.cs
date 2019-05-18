@@ -105,8 +105,8 @@ public static class PhaseManager
     /// <param name="xSpace">the spacing between ships on the x-axis</param>
     /// <param name="ySpace">the spacing between shpis on the y-axis</param>
     /// <returns>Vector2 position that the ship should be set to</returns>
-    public static Vector2 shipNodePos(Ship s,Node n, float xSpace = nodeMultiShipScale,float ySpace = 0.3f) {
-        
+    public static Vector2 shipNodePos(Ship s,float xSpace = nodeMultiShipScale,float ySpace = 0.3f) {
+        Node n = s.getNode();
         List<Ship> ships = n.getShips();
 
         if(ships.Count == 0) {
@@ -258,8 +258,10 @@ public static class PhaseManager
         Vector2[] bv = getBoardView();
         Debug.DrawLine(bv[0],bv[0] + bv[1],Color.white);
 
-        float xMargin = bv[1].x * 0.08f;
-        float yMargin = bv[1].y * 0.08f;
+        float focusMargin = 0.08f * ((10f - Camera.main.orthographicSize) / 10f);
+
+        float xMargin = bv[1].x * focusMargin;
+        float yMargin = bv[1].y * focusMargin;
 
         float xMin = bv[0].x + xMargin;
         float xMax = bv[0].x + bv[1].x - xMargin;
@@ -289,7 +291,7 @@ public static class PhaseManager
     public static bool outOfFocus(Vector2 v) {
 
         Vector2[] bv = getBoardView();
-        float focusMargin = 0.08f;
+        float focusMargin = 0.08f * ( (10f -  Camera.main.orthographicSize) / 10f) ;
         float xMargin = bv[1].x * focusMargin;
         float yMargin = bv[1].y * focusMargin;
 

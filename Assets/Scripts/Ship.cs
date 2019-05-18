@@ -514,7 +514,7 @@ public class Ship : MonoBehaviour {
 
         foreach (Ship s in this.getNode().getShips())
         {
-            s.transform.position = PhaseManager.shipNodePos(s, this.getNode());
+            s.transform.position = PhaseManager.shipNodePos(s);
         }
 
         Destroy(this.gameObject);
