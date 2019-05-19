@@ -412,7 +412,8 @@ public static class PhaseManager
             setSubphaseText("resolving catapults");
             foreach(CatapultResolution cr in catapultResolutions) {
 
-                    yield return cr.resolve();
+                yield return cr.resolve();
+                cr.shipA.CanFire = false;
             }
         }        
     }    
@@ -566,7 +567,7 @@ public static class PhaseManager
         if (attacker.CanFire)
         {
             catapultResolutions.Add(new CatapultResolution(attacker, target, 1));
-            attacker.CanFire = false;
+            
         }
     }
 
