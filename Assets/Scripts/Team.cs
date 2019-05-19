@@ -175,7 +175,7 @@ public class Team
     /// Creates all ports that belong to this team and places them on the board.
     /// </summary>
     public void createPorts() {
-        if (GameManager.main.getBoard() == null) {
+        if (GameManager.main.Board == null) {
             Debug.LogError("Cannot set team ports and capital until game board has been created");
             return;
         }
@@ -191,8 +191,8 @@ public class Team
             //Debug.Log("Making new port!");
             Port p = new Port(new Vector2Int(x,y),this,isCapital);
             ports.Add(p);
-            GameManager.main.getBoard().getNodeAt(x,y).setPort(p);
-            GameManager.main.getBoard().ports.Add(p);
+            GameManager.main.Board.getNodeAt(x,y).Port = p;
+            GameManager.main.Board.ports.Add(p);
         }
     }
 

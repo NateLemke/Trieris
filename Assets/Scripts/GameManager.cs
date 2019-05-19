@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
 
+    public Board Board { get { return board; } }
     private Board board;
     public GameLogic gameLogic;
    // private List<Ship> ships = new List<Ship>();
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour {
     // for moving and flipping the way the board is rendered offscreen
     private int boardOffsetX;
     private int boardOffsetY;
-    private bool fipBoard;
+    private bool flipBoard;
 
     public bool processingTurn { get; set; }
     public bool animationPlaying = false;
@@ -61,12 +62,6 @@ public class GameManager : MonoBehaviour {
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
-
-        //Debug.Log(Random.Range(-0.5f,0.5f));
-        //Debug.Log(Random.Range(-0.5f,0.5f));
-        //Debug.Log(Random.Range(-0.5f,0.5f));
-        //Debug.Log(Random.Range(-0.5f,0.5f));
-        //Debug.Log(Random.Range(-0.5f,0.5f));
     }
 
     /// <summary>
@@ -162,10 +157,6 @@ public class GameManager : MonoBehaviour {
         return aiList;
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
     /// <summary>
     /// Executes the next turn
     /// </summary>
@@ -189,37 +180,6 @@ public class GameManager : MonoBehaviour {
             }
         }    
     }
-
-    //public bool promptPlayerCapture(string message) {
-    //    //return trierisUI.promptPlayerCapture(message);
-    //    Debug.Log(playerTeam.getTeamType().ToString() + " player has captured a port!");
-    //    return false;
-    //}
-
-    ///// <summary>
-    ///// Checks to see if the game has reached a game over condition
-    ///// </summary>
-    //public void checkVictory() {
-    //    Dictionary<string,int> distribution = new Dictionary<string,int>();
-    //    foreach (Team t in teams) {
-    //        distribution.Add(t.ToString(),0);
-    //    }
-    //    foreach (Node portNode in board.getAllPortNodes()) {
-    //        if (portNode.getPort() != null) {
-    //            Team t = portNode.getPort().Team;
-    //            int currentValue = distribution[t.ToString()];
-    //            distribution[t.ToString()] = currentValue + 1;
-    //            if (currentValue + 1 >= 12) {
-    //                victory(t);
-    //            }
-    //        }
-    //    }
-    //}
-
-    
-    //private void victory(Team t) {
-    //    this.gameOver = true;
-    //}
 
     /// <summary>
     /// Instantiates a new ship into the game world for the given team on the given node
@@ -295,15 +255,15 @@ public class GameManager : MonoBehaviour {
             for (int x = 0; x < Board.ROW_OF_NODES; x++) {
                 for (int y = 0; y < Board.COLUMN_OF_NODES; y++) {
                     Node n = board.getNodeAt(x,y);
-                    if (!n.isIsland()) {
-                        Vector3 pos = new Vector3(n.getY(),Board.ROW_OF_NODES - 1 - n.getX(),0);
+                    if (!n.island) {
+                        Vector3 pos = new Vector3(n.Y,Board.ROW_OF_NODES - 1 - n.X,0);
 
                         Gizmos.DrawSphere(pos,Node.GIZMO_SIZE);
 
-                        Node[] adjacents = n.getAdjacentNodes();
+                        Node[] adjacents = n.Adjacents;
                         for (int i = 0; i < adjacents.Length; i++) {
                             if (adjacents[i] != null) {
-                                Vector3 adjPos = new Vector3(adjacents[i].getY(),Board.ROW_OF_NODES - 1 - adjacents[i].getX(),0);
+                                Vector3 adjPos = new Vector3(adjacents[i].Y,Board.ROW_OF_NODES - 1 - adjacents[i].X,0);
                                 Gizmos.DrawLine(pos,adjPos);
                             }
                         }

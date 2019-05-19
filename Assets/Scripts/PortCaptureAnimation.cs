@@ -37,7 +37,7 @@ public class PortCaptureAnimation : Animation {
         Image lowerImg = animObj.transform.Find("LowerImage").GetComponent<Image>();
         Image upperImg = animObj.transform.Find("LowerImage").transform.Find("UpperImage").GetComponent<Image>();
 
-        upperImg.sprite = ship.getNode().getPort().Team.getPortSprite();
+        upperImg.sprite = ship.getNode().Port.Team.getPortSprite();
         lowerImg.sprite = ship.team.getPortSprite();
 
         yield return new WaitForSeconds(SpeedManager.CaptureDelay);
@@ -52,7 +52,7 @@ public class PortCaptureAnimation : Animation {
             yield return null;
         }
         upperImg.fillAmount = 0;
-        ship.getNode().getPort().setTeam(ship.team);
+        ship.getNode().Port.setTeam(ship.team);
         
         if (!GameManager.main.getPlayerShips().Contains(ship)) {
             int direction = ship.Ai.setNewShipDirection(ship);

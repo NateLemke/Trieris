@@ -134,18 +134,18 @@ public class TrierisAI {
             //shipPath = queue.poll();
             shipPath = queue[0];
             queue.RemoveAt(0);
-            if (shipPath.getNode().getPort() != null
-                    && team.ships[0].team != shipPath.getNode().getPort().Team
+            if (shipPath.getNode().Port != null
+                    && team.ships[0].team != shipPath.getNode().Port.Team
                     && !destinationPorts.Contains(shipPath.getNode())) {
                 DebugControl.log("AI","found port");
-                DebugControl.log("AI",shipPath.getNode().getX() + ", " + shipPath.getNode().getY());
+                DebugControl.log("AI",shipPath.getNode().X + ", " + shipPath.getNode().Y);
 
                 //Debug.Log("AI found port");
                 //Debug.Log("AI" + shipPath.getNode().getX() + ", " + shipPath.getNode().getY());
                 destinationPorts.Add(shipPath.getNode());
                 break;
             }
-            Node[] adjacentNodes = shipPath.getNode().getAdjacentNodes();
+            Node[] adjacentNodes = shipPath.getNode().Adjacents;
             List<int> temp;
             for (int i = 0; i < 8; i++) {
                 if (adjacentNodes[(shipPath.getShipDirection() + i) % 8] != null) {
@@ -279,9 +279,9 @@ public class TrierisAI {
         }
         shipDirection %= 8;
             System.Random rand = new System.Random();
-        if (shipNode.getShips().Count > 0) {
-            for (int i = 0; i < shipNode.getShips().Count; i++) {
-                if (shipNode.getShips()[i].team != ship.team) {
+        if (shipNode.Ships.Count > 0) {
+            for (int i = 0; i < shipNode.Ships.Count; i++) {
+                if (shipNode.Ships[i].team != ship.team) {
                     int randNum = rand.Next(100);
                     if (randNum % 2 == 0) {
                         catapultDirections.Add(0);
@@ -289,7 +289,7 @@ public class TrierisAI {
                         return catapultDirections;
                     } else {
                         catapultDirections.Add(0);
-                        catapultDirections.Add((shipNode.getShips()[i].getFront() + 8 - shipDirection) % 8);
+                        catapultDirections.Add((shipNode.Ships[i].getFront() + 8 - shipDirection) % 8);
                         return catapultDirections;
                     }
                 }
@@ -304,11 +304,11 @@ public class TrierisAI {
             shipDirection--;
         }
         shipDirection %= 8;
-        Node[] adjacentNodes = shipNode.getAdjacentNodes();
+        Node[] adjacentNodes = shipNode.Adjacents;
         for (int i = 0; i < 8; i++) {
-            if (adjacentNodes[(shipDirection + i) % 8] != null && adjacentNodes[(shipDirection + i) % 8].getShips().Count > 0) {
-                for (int j = 0; j < shipNode.getShips().Count; j++) {
-                    if (shipNode.getShips()[j].team != ship.team) {
+            if (adjacentNodes[(shipDirection + i) % 8] != null && adjacentNodes[(shipDirection + i) % 8].Ships.Count > 0) {
+                for (int j = 0; j < shipNode.Ships.Count; j++) {
+                    if (shipNode.Ships[j].team != ship.team) {
                         int randNum = rand.Next(80);
                         while (shipNode.getAdjacentNode(randNum % 8) == null) {
                             randNum = rand.Next(80);

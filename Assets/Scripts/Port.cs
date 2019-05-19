@@ -52,7 +52,7 @@ public class Port{
         IsCapital = isCaptial;
         originalTeam = team;
         //capital = isCaptial;
-        node = GameManager.main.getBoard().getNodeAt(boardPos);
+        node = GameManager.main.Board.getNodeAt(boardPos);
         go = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Port"));
         go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
         go.transform.position = node.getRealPos();

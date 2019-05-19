@@ -592,7 +592,7 @@ public class UIControl : MonoBehaviour
     {
         int[] scores = new int[6];
 
-        foreach (Port p in GameManager.main.getBoard().getAllPorts())
+        foreach (Port p in GameManager.main.Board.getAllPorts())
         {
             scores[(int)p.Team.getTeamType()]++;
         }

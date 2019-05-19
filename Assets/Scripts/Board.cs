@@ -103,7 +103,7 @@ public class Board{
             string[] coordinates = s.Split(',');
             int x = int.Parse(coordinates[0]);
             int y = int.Parse(coordinates[1]);
-            getNodeAt(x,y).setIsland(true);
+            getNodeAt(x,y).island = true;
         }
     }
 
@@ -127,7 +127,7 @@ public class Board{
                 if (int.Parse(adjacentNodes[i]) == 1) {
                     int xDiff = Direction.DIRECTIONS[i][1];
                     int yDiff = Direction.DIRECTIONS[i][2];
-                    Node adjacentNode = getNodeAt(node.getX() + xDiff,node.getY() + yDiff);
+                    Node adjacentNode = getNodeAt(node.X + xDiff,node.Y + yDiff);
                     node.setAdjacentNode(i,adjacentNode);
                 }
             }
@@ -147,7 +147,7 @@ public class Board{
         for (int x = 0; x < ROW_OF_NODES; x++) {
             for (int y = 0; y < COLUMN_OF_NODES; y++) {
                 Node n = getNodeAt(x,y);
-                if (!n.isIsland()) {
+                if (!n.island) {
                     
                     GameObject node = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/Node"));
                     node.name = (x + "," + y);
@@ -156,14 +156,14 @@ public class Board{
                     node.GetComponent<SpriteRenderer>().color = gridColor;
                     n.setGameObject(node);
 
-                    Node[] adjacents = n.getAdjacentNodes();
+                    Node[] adjacents = n.Adjacents;
                     for (int i = 0; i < adjacents.Length; i++) {
                         EdgePair ep;
                         if (adjacents[i] != null && !renderedEdges.Contains(ep = new EdgePair(adjacents[i].getBoardPosition(),n.getBoardPosition()))) {
                             renderedEdges.Add(ep);
                             LineRenderer lr = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/NodeLine")).GetComponent<LineRenderer>();                         
-                            Vector3 adjPos = new Vector3(adjacents[i].getY(),Board.ROW_OF_NODES - 1 - adjacents[i].getX(),0);
-                            Vector3 pos = new Vector3(n.getY(),Board.ROW_OF_NODES - 1 - n.getX(),0);
+                            Vector3 adjPos = new Vector3(adjacents[i].Y,Board.ROW_OF_NODES - 1 - adjacents[i].X,0);
+                            Vector3 pos = new Vector3(n.X,Board.ROW_OF_NODES - 1 - n.Y,0);
                             lr.SetPosition(0,adjPos);
                             lr.SetPosition(1,pos);
                             lr.transform.SetParent(node.transform);

@@ -28,7 +28,7 @@ public class MovementAnimation : Animation {
         endNode = end;
         ship = s;
         momentum = m;
-        endPos = PhaseManager.shipNodePos(ship);
+        endPos = ship.getNodePos();
         reverse = r;
         focusPoint = startNode.getRealPos() + (endNode.getRealPos() - startNode.getRealPos()) / 2;
     }
@@ -58,15 +58,15 @@ public class MovementAnimation : Animation {
         if (!complete) {
             startTime = Time.time;
             updatePositionOnNode(startNode);
-            if(startNode.getPort() != null) {
-                startNode.getPort().setTransparency();
+            if(startNode.Port != null) {
+                startNode.Port.setTransparency();
             }
             while (Time.time - startTime < SpeedManager.ActionSpeed) {
                 ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / SpeedManager.ActionSpeed);
                 yield return null;
             }
-            if(endNode.getPort() != null) {
-                endNode.getPort().setTransparency();
+            if(endNode.Port != null) {
+                endNode.Port.setTransparency();
             }
             complete = true;
             ship.transform.position = endPos;
@@ -80,11 +80,11 @@ public class MovementAnimation : Animation {
     /// </summary>
     /// <param name="n"></param>
     void updatePositionOnNode(Node n) {
-        foreach (Ship s in n.getShips()) {
+        foreach (Ship s in n.Ships) {
             if (PhaseManager.actionAnimations.ContainsKey(s) && (PhaseManager.actionAnimations[s] is MovementAnimation && !PhaseManager.actionAnimations[s].complete)) {
                 continue;
             }
-            s.transform.position = PhaseManager.shipNodePos(s);
+            s.updateNodePos();
         }
     }
 }

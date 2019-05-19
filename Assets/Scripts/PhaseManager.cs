@@ -34,13 +34,7 @@ public static class PhaseManager
     public static List<ShipTargetResolution> rammingTargetResolutions = new List<ShipTargetResolution>();
 
     static int subPhaseIndex = 0;
-
-    //public static bool movingCamera = false;
-
-    //public static bool playingAnimation = false;
-
-    // 
-    public const float nodeMultiShipScale = 0.34f;
+  
 
     // when the player choses a target from a target resolution, the choice is stored here
     public static Ship chosenTarget = null;
@@ -95,47 +89,7 @@ public static class PhaseManager
     }
         
 
-    /// <summary>
-    /// calcuates the render position for a ship on a node
-    /// this is needed as there could be possibly multiple ships on the same node
-    /// this calcuation returns positions so the ships are even spaced around the node without overlapping
-    /// </summary>
-    /// <param name="s">the ship whose position we're looking for</param>
-    /// <param name="n">the node the ship is currently on</param>
-    /// <param name="xSpace">the spacing between ships on the x-axis</param>
-    /// <param name="ySpace">the spacing between shpis on the y-axis</param>
-    /// <returns>Vector2 position that the ship should be set to</returns>
-    public static Vector2 shipNodePos(Ship s,float xSpace = nodeMultiShipScale,float ySpace = 0.3f) {
-        Node n = s.getNode();
-        List<Ship> ships = n.getShips();
-
-        if(ships.Count == 0) {
-            Debug.LogError("No ships in node!");
-        }
-
-        if(ships.Count == 1) {
-            return n.getRealPos();
-        }
-
-        float sqr = Mathf.Sqrt(ships.Count);
-        float rounded = Mathf.Ceil(sqr);
-
-
-        int i = 0;
-        for (; i < ships.Count; i++) {
-            if(ships[i] == s) {
-                break;
-            }
-        }
-
-        int x = (i) % (int)rounded  ;
-        int y = i / (int)rounded;
-
-        float offset = (rounded - 1) * xSpace / 2f;
-        Vector2 pos = new Vector2(x * xSpace - offset,-y * ySpace);
-
-        return pos + n.getRealPos();
-    }
+    
 
     //public static void NodePositions(int f, Node n, Color c) {
     //    //float scale = 0.3f;
@@ -526,7 +480,7 @@ public static class PhaseManager
             
             if (s.needCaptureChoice) {
                 focusTarget = s;
-                s.getNode().getPort().activatePrompt(s);
+                s.getNode().Port.activatePrompt(s);
                 yield return focus(focusTarget.Position);
                 while (s.needCaptureChoice || s.needRedirect)
                     yield return null;

@@ -161,7 +161,7 @@ public class GameLogic : MonoBehaviour {
             Node nextNode = ship.getNode().getAdjacentNode(ship.getFront());
             if (nextNode != null)
             {
-                foreach (Ship s in nextNode.getShips())
+                foreach (Ship s in nextNode.Ships)
                 {
                     if (s.team != ship.team && Mathf.Abs(ship.getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction")
                     {
@@ -199,7 +199,7 @@ public class GameLogic : MonoBehaviour {
             {
                 int portCount = 0;
                 bool hasCapital = false;
-                foreach (Port port in GameManager.main.getBoard().getAllPorts())
+                foreach (Port port in GameManager.main.Board.getAllPorts())
                 {
                     if (port.Team == t)
                     {
@@ -235,11 +235,11 @@ public class GameLogic : MonoBehaviour {
 
     private void handleCapture() {
         foreach (Ship ship in gameManager.getAllShips()) {
-            Port port = ship.getNode().getPort();
+            Port port = ship.getNode().Port;
             int enemyShipNo = 0;
             
             if (port != null && port.Team != ship.team) {
-                foreach (Ship s in port.node.getShips())
+                foreach (Ship s in port.node.Ships)
                 {
                     if (s.team != ship.team)
                         enemyShipNo++;
@@ -280,7 +280,7 @@ public class GameLogic : MonoBehaviour {
                 if (ship.getNode().getNumberOfShips() > 1) {
 
                     List<Ship> enemyShips = new List<Ship>();
-                    foreach(Ship nodeShip in ship.getNode().getShips()) {
+                    foreach(Ship nodeShip in ship.getNode().Ships) {
                         if(nodeShip.team != ship.team) {
                             enemyShips.Add(nodeShip);
                         }
@@ -338,7 +338,7 @@ public class GameLogic : MonoBehaviour {
 
                 List<Ship> potentialTargets = new List<Ship>();
 
-                foreach(Ship potentialTarget in node.getShips()) {
+                foreach(Ship potentialTarget in node.Ships) {
                     if(potentialTarget.team != ship.team) {
                         potentialTargets.Add(potentialTarget);
                     }

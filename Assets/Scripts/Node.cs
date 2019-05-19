@@ -8,26 +8,31 @@ using UnityEngine;
 /// </summary>
 public class Node{
 
+    // determines the spacing between ships when there are multiple ships on a node
+    public const float shipSpacingX = 0.34f;
+    public const float shipSpacingY = 0.3f;
+
     // used for debugging visuals
     public const float GIZMO_SIZE = 0.1f;
     public static Color GIZMO_COLOR = Color.black;
 
     // game board coordinates
-    private int x;
-    private int y;
+    public int X { get; }
+    public int Y { get; }
 
     //private Color color;
 
     // adjacent nodes in clockwise direction
+    public Node[] Adjacents { get { return adjacents; } }
     private Node[] adjacents = new Node[8];
-    private Port port;
-    private List<Ship> ships = new List<Ship>();
-    private bool island;
+
+    public Port Port { get; set; }
+    public List<Ship> Ships { get { return ships; } }
+    private List<Ship> ships = new List<Ship>();    
     private GameObject thisNode;
 
-    //public Node() {
-    //    setColor(Color.black);
-    //}
+    // if true, this node is a "land node"
+    public bool island { get; set; }
 
     /// <summary>
     /// Constructor. Sets the game board X Y coordinates for this node.
@@ -35,8 +40,8 @@ public class Node{
     /// <param name="x"></param>
     /// <param name="y"></param>
     public Node(int x,int y) {
-        this.x = x;
-        this.y = y;
+        this.X = x;
+        this.Y = y;
     }
 
     /// <summary>
@@ -57,20 +62,13 @@ public class Node{
         return thisNode;
     }    
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
 
     /// <summary>
     /// Returns the node's game board coordinate
     /// </summary>
     /// <returns></returns>
     public Vector2 getBoardPosition() {
-        return new Vector2(x,y);
+        return new Vector2(X,Y);
     }
 
     /// <summary>
@@ -78,68 +76,65 @@ public class Node{
     /// </summary>
     /// <returns></returns>
     public Vector2 getRealPos() {
-        return new Vector2(y,Board.ROW_OF_NODES - 1 - x);
+        return new Vector2(Y,Board.ROW_OF_NODES - 1 - X);
     }
 
-    //public Color getColor() {
-    //    return color;
-    //}
-
+    /// <summary>
+    /// Returns the adjacent node from this node in the given direction
+    /// </summary>
+    /// <param name="direction"></param>
+    /// <returns></returns>
     public Node getAdjacentNode(int direction) {
         return adjacents[direction];
     }
-
-    public Node[] getAdjacentNodes() {
-        return adjacents;
-    }
-
-    public Port getPort() {
-        return port;
-    }
-
-    public List<Ship> getShips() {
-        return ships;
-    }
-
-    public bool isIsland() {
-        return island;
-    }
-
-    //public void setColor(Color color) {
-    //    this.color = color;
-    //}
-
+ 
     public void setAdjacentNode(int direction,Node node) {
         adjacents[direction] = node;
-    }
-
-    public void setPort(Port port) {
-        this.port = port;
-    }
-
-    public void setShips(List<Ship> ships) {
-        this.ships = ships;
-    }
-
-    public void setIsland(bool isIsland) {
-        //if (isIsland) {
-        //    setColor(Color.magenta);
-        //}
-        island = isIsland;
     }
 
     public int getNumberOfShips() {
         return ships.Count;
     }
 
+    /// <summary>
+    /// calcuates the render position for a ship on a node
+    /// this is needed as there could be possibly multiple ships on the same node
+    /// this calcuation returns positions so the ships are even spaced around the node without overlapping
+    /// </summary>
+    /// <param name="s">the ship whose position we're looking for</param>
+    /// <param name="n">the node the ship is currently on</param>
+    /// <param name="xSpace">the spacing between ships on the x-axis</param>
+    /// <param name="ySpace">the spacing between shpis on the y-axis</param>
+    /// <returns>Vector2 position that the ship should be set to</returns>
+    public Vector2 shipNodePos(Ship s,float xSpace = shipSpacingX,float ySpace = shipSpacingY) {
+        //Node n = s.getNode();
+        //List<Ship> ships = n.getShips();
 
-    //public void activateNotification()
-    //{
-    //    thisNode.transform.Find("TargetNeededNotification").gameObject.SetActive(true);
-    //}
+        if (ships.Count == 0) {
+            Debug.LogError("No ships in node!");
+        }
 
-    //public void expand()
-    //{
+        if (ships.Count == 1) {
+            return getRealPos();
+        }
 
-    //}
+        float sqr = Mathf.Sqrt(ships.Count);
+        float rounded = Mathf.Ceil(sqr);
+
+
+        int i = 0;
+        for (; i < ships.Count; i++) {
+            if (ships[i] == s) {
+                break;
+            }
+        }
+
+        int x = (i) % (int)rounded;
+        int y = i / (int)rounded;
+
+        float offset = (rounded - 1) * xSpace / 2f;
+        Vector2 pos = new Vector2(x * xSpace - offset,-y * ySpace);
+
+        return pos + getRealPos();
+    }
 }

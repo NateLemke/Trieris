@@ -113,9 +113,9 @@ public class Ship : MonoBehaviour {
         canFire = true;
 
         this.node = node;
-        node.getShips().Add(this);
-        if (node.getPort() != null) {
-            node.getPort().setTransparency();
+        node.Ships.Add(this);
+        if (node.Port != null) {
+            node.Port.setTransparency();
         }
         gameObject.transform.position = node.getRealPos();
 
@@ -409,9 +409,9 @@ public class Ship : MonoBehaviour {
 
         Node startNode = node;
 
-        node.getShips().Remove(this);
+        node.Ships.Remove(this);
         node = destNode;
-        node.getShips().Add(this);
+        node.Ships.Add(this);
         //if (PhaseManager.actionAnimations.ContainsKey(this)) {
         //    ;
         //}
@@ -457,8 +457,8 @@ public class Ship : MonoBehaviour {
     /// Repairs the current ship IF they are on a node that contains a port belonging to their team
     /// </summary>
     public void repair() {
-        if (node.getPort() != null && node.getPort().Team == team) {
-            if (node.getPort().IsCapital && node.getPort().Team == team) {
+        if (node.Port != null && node.Port.Team == team) {
+            if (node.Port.IsCapital && node.Port.Team == team) {
                 if (life < MAX_HEALTH)
                     life++;
             } else {
@@ -477,7 +477,7 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public void sink() {
         if (node != null) {
-            node.getShips().Remove(this);
+            node.Ships.Remove(this);
         }
         if(this.team == GameManager.main.playerTeam)
         {
@@ -502,19 +502,19 @@ public class Ship : MonoBehaviour {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
         }
 
-        if (this.getNode().getShips().Contains(this))
+        if (this.getNode().Ships.Contains(this))
         {
-            this.getNode().getShips().Remove(this);
+            this.getNode().Ships.Remove(this);
         }
 
-        if (this.getNode().getPort() != null)
+        if (this.getNode().Port != null)
         {
-            this.getNode().getPort().setTransparency();
+            this.getNode().Port.setTransparency();
         }
 
-        foreach (Ship s in this.getNode().getShips())
+        foreach (Ship s in this.getNode().Ships)
         {
-            s.transform.position = PhaseManager.shipNodePos(s);
+            s.updateNodePos();
         }
 
         Destroy(this.gameObject);
@@ -1015,5 +1015,19 @@ public class Ship : MonoBehaviour {
 
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);
+    }
+
+    /// <summary>
+    /// Used to set the ship's position on a node, spacing it out with any other ships sharing the node
+    /// </summary>
+    public void updateNodePos(float xSpacing = Node.shipSpacingX, float ySpacing = Node.shipSpacingY) {
+        Position = node.shipNodePos(this,xSpacing,ySpacing);
+    }
+
+    /// <summary>
+    /// Used to get this ship's intended position on its node, without updating its actual position
+    /// </summary>
+    public Vector2 getNodePos() {
+        return node.shipNodePos(this); 
     }
 }

@@ -73,7 +73,7 @@ public class PortPrompt : MonoBehaviour{
     /// </summary>
     public void accept()
     {
-        foreach (Ship s in currentShip.getNode().getShips())
+        foreach (Ship s in currentShip.getNode().Ships)
             s.needCaptureChoice = false;
         GameManager.PortsCaptured++;
         currentShip.playerCapture();
