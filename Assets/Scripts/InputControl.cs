@@ -81,10 +81,19 @@ public class InputControl : MonoBehaviour {
 
         if (Input.GetKeyDown("escape") && GameManager.main.gameOver == false)
         {
+
             if (!optionsPanel.active)
             {
-                optionsPanel.SetActive(true);
-                optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
+                if (overlayCanvas.transform.Find("HelpPanel").gameObject.active)
+                {
+                    overlayCanvas.transform.Find("HelpPanel").gameObject.SetActive(false);
+                }
+                else
+                {
+                    optionsPanel.SetActive(true);
+                    optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
+                }
+
             }
             else
             {

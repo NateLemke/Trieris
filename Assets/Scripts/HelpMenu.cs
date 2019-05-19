@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,15 +14,15 @@ public class HelpMenu : MonoBehaviour
     GameObject mask;
     Vector3 childLocation;
 
-    WindowData minimap = new WindowData(205f, 93f, 126f, 87f, -155f, -78f);
-    WindowData shipTab = new WindowData(205f, 40f, 130f, 30f, -155f, -25f);
-    WindowData combatPhase = new WindowData(205f, -16f, 125f, 27f, -155f, 31f);
-    WindowData combatDirection = new WindowData(235.5f, -61f, 65f, 72f, -185.5f, 76f);
-    WindowData movementPhase = new WindowData(208f, -8.76f, 127f, 37f, -158f, 6.3f);
-    WindowData movementAction = new WindowData(176f, -60f, 70f, 70f, -126, 75f);
+    WindowData minimap = new WindowData(155f, 78f, 126f, 87f, 155f, -78f);
+    WindowData shipTab = new WindowData(155f, 25f, 130f, 30f, -155f, -25f);
+    WindowData combatPhase = new WindowData(155f, -31f, 125f, 27f, -155f, 31f);
+    WindowData combatDirection = new WindowData(185.5f, -76f, 65f, 72f, -185.5f, 76f);
+    WindowData movementPhase = new WindowData(158f, -6.3f, 127f, 37f, -158f, 6.3f);
+    WindowData movementAction = new WindowData(126f, -75f, 70f, 70f, -126, 75f);
 
-    WindowData cameraControls = new WindowData(-17f, 24.5f, 310f, 231f, 67f, -10f);
-    WindowData direction = new WindowData(-12f, 22f, 25f, 25f, 62f, 37f);
+    WindowData cameraControls = new WindowData(-67f, 10f, 310f, 231f, 67f, -10f);
+    WindowData direction = new WindowData(-62f, -37f, 25f, 25f, 62f, 37f);
 
     WindowData infoMain = new WindowData(50f, 60f, 180f, 125f, 0, 0);
     WindowData infoMap = new WindowData(205f, 50f, 125f, 150f, 0, 0);
@@ -29,6 +30,8 @@ public class HelpMenu : MonoBehaviour
     Text infoText;
     GameObject infoPanel;
 
+    private List<Action> instructionList = new List<Action>();
+    private int position;
 
     /// <summary>
     /// Struct used to store the window sizes of the mask and image for the help menu.
@@ -69,14 +72,47 @@ public class HelpMenu : MonoBehaviour
     /// </summary>
     void Start()
     {
-        background = transform.Find("Controls/Background").gameObject;
-        mask = transform.Find("Controls/Mask").gameObject;
-        image = transform.Find("Controls/Mask/Image").gameObject;
+        background = transform.Find("Controls/Content/Background").gameObject;
+        mask = transform.Find("Controls/Content/Mask").gameObject;
+        image = transform.Find("Controls/Content/Mask/Image").gameObject;
         infoPanel = transform.Find("Controls/InfoPanel").gameObject;
         infoText = transform.Find("Controls/InfoPanel/Text").GetComponent<Text>();
+
+
+
+        position = 0;
         moveToMinimap();
+
+        instructionList.Add(moveToMinimap);
+        instructionList.Add(moveToShipTabs);
+        instructionList.Add(moveToCombatPhase);
+        instructionList.Add(moveToCombatDirection);
+        instructionList.Add(moveToMovementPhase);
+        instructionList.Add(moveToMovementAction);
+        instructionList.Add(moveToCameraControls);
+        instructionList.Add(moveToDirections);
     }
 
+    public void next()
+    {
+        position++;
+        if (position >= instructionList.Count)
+            position = instructionList.Count - 1;
+        instructionList[position]();
+    }
+
+    public void prev()
+    {
+        position--;
+        if (position < 0)
+            position = 0;
+        instructionList[position]();
+    }
+
+    public void updatePosition(int input)
+    {
+        position = input;
+    }
 
     /// <summary>
     /// Moves the cursor to the Minimap sections and updates the text of the infoPanel
