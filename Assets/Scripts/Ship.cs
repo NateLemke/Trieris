@@ -703,8 +703,7 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the ship being rammed by this ship</param>
     /// <param name="relativeTurn">the relative rotation</param>
     private void glancingRam(Ship target,int relativeTurn) {
-        //DebugControl.log("ramming","glancing ram");
-        //target.life -= momentum;
+
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);
         int dmgToSelf = 0;
         if (!target.movedForward && this.front != target.front) {
@@ -712,8 +711,7 @@ public class Ship : MonoBehaviour {
             dmgToSelf = 1;
         }
         PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
-        //PhaseManager.addRamming(this,target,momentum);
-        //addRammingAnimation(target,momentum);
+
     }
 
     /// <summary>
