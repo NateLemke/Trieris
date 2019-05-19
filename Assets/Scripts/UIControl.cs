@@ -362,21 +362,49 @@ public class UIControl : MonoBehaviour
     /// <param name="i">The action to be set. Forward=1, Turn left=2, Turn right=3, Hold=4, Reverse=5</param>
     public void setAction(int i)
     {
-        selected.setAction(selected.currentActionIndex, i, -1);
-        setActionImages(i);
-
-        if (selected.currentActionIndex < (selected.life - 1))
+        if (i == 5)
         {
-            Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-            Color color = selectedOutline.effectColor;
-            color.a = 0;
-            selectedOutline.effectColor = color;
+            if(selected.currentActionIndex > 0)
+            {
+                if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
+                {
+                    selected.setAction(selected.currentActionIndex, i, -1);
+                    setActionImages(i);
 
-            selected.currentActionIndex++;
+                    if (selected.currentActionIndex < (selected.life - 1))
+                    {
+                        Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                        Color color = selectedOutline.effectColor;
+                        color.a = 0;
+                        selectedOutline.effectColor = color;
 
-            selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-            color.a = 255;
-            selectedOutline.effectColor = color;
+                        selected.currentActionIndex++;
+
+                        selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                        color.a = 255;
+                        selectedOutline.effectColor = color;
+                    }
+                }
+            }
+        }
+        else
+        {
+            selected.setAction(selected.currentActionIndex, i, -1);
+            setActionImages(i);
+
+            if (selected.currentActionIndex < (selected.life - 1))
+            {
+                Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                Color color = selectedOutline.effectColor;
+                color.a = 0;
+                selectedOutline.effectColor = color;
+
+                selected.currentActionIndex++;
+
+                selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                color.a = 255;
+                selectedOutline.effectColor = color;
+            }
         }
 
     }
