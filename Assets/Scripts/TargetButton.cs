@@ -30,7 +30,7 @@ public class TargetButton : MonoBehaviour
     /// Resets the button to grey when the mouse leaves it.
     /// </summary>
     private void OnMouseExit() {
-        transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.grey;
+        transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color32(149,42,42,255);
     }
 
     /// <summary>

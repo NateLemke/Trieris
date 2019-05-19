@@ -349,7 +349,8 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the target that this ship is ramming</param>
     public void ram(Ship target) {
         if (target != null) {
-
+            CanFire = false;
+            target.CanFire = false;
             ramDamageAndAngle(target);
             canAct = canActAfterCollision;
             momentum = 0;
@@ -399,6 +400,7 @@ public class Ship : MonoBehaviour {
             canActAfterCollision = false;
             Debug.Log("----Ship crashed");
             needRedirect = true;
+            movedForward = false;
             if(team == GameManager.main.playerTeam)
                 activateRedirectNotification();
             return;
@@ -1008,8 +1010,8 @@ public class Ship : MonoBehaviour {
 
         GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
         directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
-        directionLabel.GetComponentInChildren<Text>().text = "Direction";
-        directionLabel.GetComponent<Canvas>().sortingOrder = 5;
+        directionLabel.GetComponentInChildren<Text>().text = "Set Direction";
+        directionLabel.GetComponent<Canvas>().sortingOrder = 8;
 
         redirectUI.SetActive(true);
         redirectNotification.SetActive(false);

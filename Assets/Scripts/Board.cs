@@ -159,7 +159,7 @@ public class Board{
                     Node[] adjacents = n.getAdjacentNodes();
                     for (int i = 0; i < adjacents.Length; i++) {
                         EdgePair ep;
-                        if (adjacents[i] != null && !renderedEdges.Contains(ep = new EdgePair(adjacents[i].getPosition(),n.getPosition()))) {
+                        if (adjacents[i] != null && !renderedEdges.Contains(ep = new EdgePair(adjacents[i].getBoardPosition(),n.getBoardPosition()))) {
                             renderedEdges.Add(ep);
                             LineRenderer lr = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/NodeLine")).GetComponent<LineRenderer>();                         
                             Vector3 adjPos = new Vector3(adjacents[i].getY(),Board.ROW_OF_NODES - 1 - adjacents[i].getX(),0);

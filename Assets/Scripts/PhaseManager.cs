@@ -438,6 +438,9 @@ public static class PhaseManager
         setSubphaseText("chose catapult targets");
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
+            if (!tr.attacker.CanFire) {
+                yield break;
+            }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();

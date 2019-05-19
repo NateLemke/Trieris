@@ -1,8 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Used for the Rules menu acessed via the pause menu
+/// </summary>
 public class RulesMenu : MonoBehaviour
 {
 
@@ -10,6 +14,10 @@ public class RulesMenu : MonoBehaviour
     GameObject infoPanel;
 
     GameObject content;
+
+    private int position;
+    
+    private List<Action> ruleList = new List<Action>();
 
     /// <summary>
     /// Sets the gameobject references at the first frame the object is loaded and then calls the first function for displaying rules.
@@ -20,8 +28,40 @@ public class RulesMenu : MonoBehaviour
 
         infoPanel = transform.Find("InfoPanel").gameObject;
         infoText = transform.Find("InfoPanel/Text").GetComponent<Text>();
-        
+
+        position = 0;
         moveToActions();
+
+
+        ruleList.Add(moveToActions);
+        ruleList.Add(moveToCatapults);
+        ruleList.Add(moveToRamming);
+        ruleList.Add(moveToMultipleTargets);
+        ruleList.Add(moveToRedirection);
+        ruleList.Add(moveToPorts);
+        ruleList.Add(moveToPortsCapitals);
+        ruleList.Add(moveToShipsAlive);
+    }
+
+    public void next()
+    {
+        position++;
+        if (position >= ruleList.Count)
+            position = ruleList.Count - 1;
+        ruleList[position]();
+    }
+
+    public void prev()
+    {
+        position--;
+        if (position < 0)
+            position = 0;
+        ruleList[position]();
+    }
+
+    public void updatePosition(int input)
+    {
+        position = input;
     }
 
     /// <summary>

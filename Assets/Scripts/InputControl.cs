@@ -33,14 +33,15 @@ public class InputControl : MonoBehaviour {
     public static bool fastAnimation = false;
 
     public GameObject optionsPanel;
+    public GameObject overlayCanvas;
 
     private void Awake() {
         mainCamera = GameObject.Find("Main Camera");
         camera = mainCamera.GetComponent<Camera>();
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         uiControl = GameObject.Find("GameManager").GetComponent<UIControl>();
-        optionsPanel = GameObject.Find("OverlayCanvas");
-        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
+        overlayCanvas = GameObject.Find("OverlayCanvas");
+        optionsPanel = overlayCanvas.transform.Find("OptionsMenu").gameObject;
     }
 
     // Use this for initialization
@@ -80,13 +81,27 @@ public class InputControl : MonoBehaviour {
 
         if (Input.GetKeyDown("escape") && GameManager.main.gameOver == false)
         {
+
             if (!optionsPanel.active)
             {
-                optionsPanel.SetActive(true);
-                optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
+                if (overlayCanvas.transform.Find("HelpPanel").gameObject.active)
+                {
+                    overlayCanvas.transform.Find("HelpPanel").gameObject.SetActive(false);
+                }
+                else
+                {
+                    optionsPanel.SetActive(true);
+                    optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
+                }
+
             }
             else
-                optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
+            {
+                if (!overlayCanvas.transform.Find("HelpPanel").gameObject.active)
+                    optionsPanel.GetComponent<OptionsMenu>().CloseOptions();
+                else
+                    overlayCanvas.transform.Find("HelpPanel").gameObject.SetActive(false);
+            }
         }
 
         if (Input.GetKeyDown("p") && GameManager.main.gameOver == false)

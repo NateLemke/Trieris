@@ -17,11 +17,11 @@ public class CatapultResolution : CombatResolution
 
     public CatapultResolution(Ship a,Ship b,int dmgToB, Node missed = null) : base(a,b,dmgToB) {
         missedNode = missed;
-     }
+    }
 
     public override IEnumerator resolve() {
 
-        if(shipA == null || (shipB == null && missedNode == null)) {
+        if(shipA == null || (shipB == null && missedNode == null) || !shipA.CanFire) {
             yield break;
         }
 

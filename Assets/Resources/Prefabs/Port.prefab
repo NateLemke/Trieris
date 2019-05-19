@@ -58,7 +58,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: -1153542677
-  m_SortingOrder: 7
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &5164286328627657435
 MonoBehaviour:
@@ -552,7 +552,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1153542677
   m_SortingLayer: 1
-  m_SortingOrder: 8
+  m_SortingOrder: 7
   m_Sprite: {fileID: 21300000, guid: 5da6313a64f1dac41a357935bdf5f669, type: 3}
   m_Color: {r: 1, g: 0.9210452, b: 0, a: 1}
   m_FlipX: 0
