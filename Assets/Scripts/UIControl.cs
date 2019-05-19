@@ -83,7 +83,6 @@ public class UIControl : MonoBehaviour
         gameLogic = gameObject.GetComponent<GameLogic>();
         optionsPanel = GameObject.Find("OverlayCanvas");
         optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
-        //DebugControl.init();
     }
 
     /// <summary>
@@ -91,18 +90,7 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
-        //captureTracker = GameObject.Find("captureStatus").GetComponent<Text>();
-        //phaseTracker = GameObject.Find("PhaseTracker");
-        //animationText = GameObject.Find("AnimationStatus").GetComponent<Text>();
-        //redirectText = GameObject.Find("RedirectStatus").GetComponent<Text>();
-        //debugMenu = GameObject.Find("DebugControls").transform.GetChild(1).gameObject;
-
         Selected = null;
-        //DevUI = GameObject.Find("DevUI");
-        //DevUI.SetActive(false);
-        //LogToggle = GameObject.Find("DebugToggle");
-        //LogToggle.SetActive(false);
 
         actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
         actionImages[1] = GameObject.Find("ActionImage2").GetComponent<Image>();
@@ -199,10 +187,15 @@ public class UIControl : MonoBehaviour
         arrowYellow = attackArrows[0].colors.normalColor;
         greyedOut = new Color(50, 50, 50, 255);
 
-        straightArrow = Resources.Load("UpArrow", typeof(Sprite)) as Sprite;
-        curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
-        holdSprite = Resources.Load("holdicon", typeof(Sprite)) as Sprite;
-        emptySprite = Resources.Load("setaction", typeof(Sprite)) as Sprite;
+        straightArrow = Sprites.main.StraightArrow;
+        curvedArrow = Sprites.main.CurvedArrow;
+        holdSprite = Sprites.main.HoldSprite;
+        emptySprite = Sprites.main.EmptySprite;
+
+        //straightArrow = Resources.Load("UpArrow", typeof(Sprite)) as Sprite;
+        //curvedArrow = Resources.Load("CurvedArrow", typeof(Sprite)) as Sprite;
+        //holdSprite = Resources.Load("holdicon", typeof(Sprite)) as Sprite;
+        //emptySprite = Resources.Load("setaction", typeof(Sprite)) as Sprite;
 
         victoryTracker = GameObject.Find("VictoryText").GetComponent<Text>();
         turnPhase = GameObject.Find("TurnPhase").GetComponentInChildren<Text>();
@@ -211,7 +204,6 @@ public class UIControl : MonoBehaviour
         captureNotice = GameObject.Find("PendingCapture");
         rammingNotice = GameObject.Find("PendingRamming");
         catapultNotice = GameObject.Find("PendingCatapult");
-        //rammingNotice.SetActive(false);
 
         TeamSelectUI = GameObject.Find("TeamSelectPanel");
 
@@ -221,10 +213,6 @@ public class UIControl : MonoBehaviour
         phaseAnnouncer = GameObject.Find("PhaseAnnouncer");
         phaseAnnouncer.SetActive(false);
 
-           
-        //subPhase.SetActive(false);
-        //subPhaseProgress = GameObject.Find("SubPhase Progress");
-        //subPhaseProgress.SetActive(false);
     }
 
     /// <summary>
@@ -233,15 +221,12 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-
         rammingNotice.SetActive(gameManager.needRammingChoice);
         redirectNotice.SetActive(gameManager.needRedirect);
         captureNotice.SetActive(gameManager.needCaptureChoice);
         catapultNotice.SetActive(gameManager.needCatapultChoice);
 
         turnPhase.text = "Turn: " + gameLogic.TurnIndex;
-
-
     }
 
     /// <summary>
@@ -252,8 +237,6 @@ public class UIControl : MonoBehaviour
     /// <param name="value">The ship on the board that is clicked</param>
     private void setSelection(Ship value)
     {
-
-
         Ship previous = selected;
 
         if (value != null)
@@ -268,7 +251,6 @@ public class UIControl : MonoBehaviour
             updateActionUI();
             updateAttackUI();
             updateTabsUI();
-
         }
     }
 
@@ -282,7 +264,6 @@ public class UIControl : MonoBehaviour
     {
         Ship previous = selected;
 
-        //selected = gameManager.getPlayerShips()[value];
         foreach(Ship s in gameManager.getPlayerShips())
         {
             if (s.Id == value)
@@ -293,14 +274,6 @@ public class UIControl : MonoBehaviour
         if (previous != null) {
             previous.disableIcon();
         }
-
-        //compass.SetActive(true);
-        //for (int i = 0; i < gameManager.getPlayerShips()[value].life; i++) {
-        //Debug.Log(i); 
-        //actions[i].interactable = false;                
-        //actions[i].value = gameManager.getPlayerShips()[value].actions[i].actionIndex - 1;
-        //actions[i].interactable = true;
-        //}
 
         updateActionUI();
         updateAttackUI();
@@ -332,9 +305,11 @@ public class UIControl : MonoBehaviour
     /// Used when the player clicks the start turn button.
     /// Disables ship controls (besides ship tabs) during turn.
     /// </summary>
-    public void testMove()
+    public void startTurn()
     {
-
+        if (GameManager.main.needRedirect) {
+            return;
+        }
         disableControls();
         setShipAttacks();
 
@@ -345,7 +320,7 @@ public class UIControl : MonoBehaviour
             {
                 Debug.LogError("Animation manager not finished yet");
             }
-            gameLogic.newExecuteTurn();
+            gameLogic.executeTurn();
         }
         else
         {
@@ -473,7 +448,6 @@ public class UIControl : MonoBehaviour
                 tempCol.a = 255;
                 image.color = tempCol;
                 image.transform.eulerAngles = new Vector3(0, 0, 0);
-                //image.rectTransform.Rotate(new Vector3(0, 0, -90));
                 break;
 
             case 2:
@@ -481,7 +455,6 @@ public class UIControl : MonoBehaviour
                 tempCol.a = 255;
                 image.color = tempCol;
                 image.transform.eulerAngles = new Vector3(0, 180, -10);
-                //image.rectTransform.Rotate(new Vector3(0, 180, 100));
                 break;
 
             case 3:
@@ -489,7 +462,6 @@ public class UIControl : MonoBehaviour
                 tempCol.a = 255;
                 image.color = tempCol;
                 image.transform.eulerAngles = new Vector3(0, 0, -10);
-                //image.rectTransform.Rotate(new Vector3(0, 0, 100));
                 break;
 
             case 4:
@@ -504,7 +476,6 @@ public class UIControl : MonoBehaviour
                 tempCol.a = 255;
                 image.color = tempCol;
                 image.transform.eulerAngles = new Vector3(0, 0, 180);
-                //image.rectTransform.Rotate(new Vector3(0, 0, 90));
                 break;
 
             case 6:

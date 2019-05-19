@@ -30,6 +30,10 @@ public class ShipTargetResolution
     /// </summary>
     /// <returns></returns>
     public IEnumerator resolve() {
+        if(attacker == null) {
+            yield break;
+        }
+
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TargetButton");
         float xAverage = 0f;
         float yHighest = targets[0].Position.y;

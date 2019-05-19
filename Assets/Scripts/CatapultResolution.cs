@@ -11,9 +11,9 @@ using Random = UnityEngine.Random;
 /// </summary>
 public class CatapultResolution : CombatResolution
 {
+    // if the ship has a missed shot, then this will be the node its firing on
+    // if the ship does not miss, then this will be null
     public Node missedNode;
-
-    public bool interrupted;
 
     public CatapultResolution(Ship a,Ship b,int dmgToB, Node missed = null) : base(a,b,dmgToB) {
         missedNode = missed;
@@ -42,9 +42,7 @@ public class CatapultResolution : CombatResolution
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
         CatapultBullet bullet = GameObject.Instantiate(go,shipA.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
-
         
-
         if (missedNode == null) {
             bullet.endPos = shipB.Position;
             if(shipA.getNode() == shipB.getNode()) {
@@ -83,6 +81,8 @@ public class CatapultResolution : CombatResolution
         }
 
         shipA.disableIcon();
+        shipA.CanFire = false;
+
 
         if (missedNode == null) {
             shipB.disableIcon();

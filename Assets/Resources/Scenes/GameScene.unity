@@ -5195,7 +5195,7 @@ GameObject:
   - component: {fileID: 462118438}
   - component: {fileID: 462118439}
   m_Layer: 5
-  m_Name: UIRightSide
+  m_Name: UILeftSide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5992,7 +5992,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1466506f1be1424fb286ddbe08b0f75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  executed: 0
 --- !u!114 &535529810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6127,8 +6126,8 @@ MonoBehaviour:
   greenPort: {fileID: 21300000, guid: 26e170bd38f53c74482b67ba5a5cfd59, type: 3}
   bluePort: {fileID: 21300000, guid: f75c75cf6b938474ba8302550f60e0cc, type: 3}
   blackPort: {fileID: 21300000, guid: 4dd7b6293778d0f4e912f50b305a4dc1, type: 3}
-  straightArrow: {fileID: 21300000, guid: 510a095b9e4f33c439d698dc1f328ac4, type: 3}
-  curvedArrow: {fileID: 21300000, guid: 3130c168626ffed429856371caa8f0fc, type: 3}
+  straightArrow: {fileID: 21300000, guid: 2b2d0f3e8bb17c444a9e775fd976d5ae, type: 3}
+  curvedArrow: {fileID: 21300000, guid: b3101fb48169ec54d8748abc79a07087, type: 3}
   holdSprite: {fileID: 21300000, guid: 662284846f5df424db6ec9534ac8cc7f, type: 3}
   emptySprite: {fileID: 21300000, guid: c58dca7be43cd594abf23af151df4680, type: 3}
   teamShips:
@@ -18465,7 +18464,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 535529810}
-        m_MethodName: testMove
+        m_MethodName: startTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

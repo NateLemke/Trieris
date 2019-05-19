@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// was called Controller 
+/// <summary>
+/// Purpose: This class is responsible for calculating the result of actions for each phase
+/// </summary>
 public class GameLogic : MonoBehaviour {
 
     public static int PHASES = 4;
 
     private GameManager gameManager;
-    //private List<Ship> playerShips = new List<Ship>();
-    //private List<Ship> aiShips = new List<Ship>();
 
+    // the number of the current phase, 0-3
     public static int phaseIndex { get; set; }
     
+    // the number of the current turn
     public int TurnIndex { get { return turnIndex; } set { } }
     private int turnIndex = 1;
 
-    enum Phases { planning, phaseOne, phaseTwo, phaseThree };
+    //enum Phases { planning, phaseOne, phaseTwo, phaseThree };
    
     Image[] actionImages = new Image[4];
 
@@ -30,9 +32,10 @@ public class GameLogic : MonoBehaviour {
         actionImages[3] = GameObject.Find("ActionImage4").GetComponent<Image>();
     }
 
-    public void newExecuteTurn() {
-        //Debug.Log("Begin turn");
-        //DebugControl.log("turn","BEGIN TURN");
+    /// <summary>
+    /// Starts a new turn
+    /// </summary>
+    public void executeTurn() {
         PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
@@ -42,16 +45,20 @@ public class GameLogic : MonoBehaviour {
                 ship.populateDefaultActions();
                 Debug.Log("ship not ready");
             }                
-        }
-        
+        }        
         phaseIndex = 0;
         executePhase(phaseIndex);
     }
 
+    /// <summary>
+    /// Executes the next phase, ends the turn if the phase index is at 3
+    /// </summary>
+    /// <returns></returns>
     public bool executeNextPhase() {
 
         DebugControl.log("turn","--PHASE " + phaseIndex);
         
+        // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
             
             determineGameState();
@@ -97,17 +104,24 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    public int executed = 0;
+    //public int executed = 0;
 
+    /// <summary>
+    /// Executes a phase of a specific index
+    /// also runs the phase manager
+    /// </summary>
+    /// <param name="phase"></param>
     private void executePhase(int phase) {
         //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
         //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
+                
+                // checks for head on ramming where ships are in adjacent nodes
                 if (!checkAdjHRam(ship,phase)) {
                     ship.doAction(phase);
-                    executed++;
+                    //executed++;
                 }
                     
                 //ship.doAction(phase);
@@ -138,9 +152,7 @@ public class GameLogic : MonoBehaviour {
             }
         }
 
-        ;
 
-        executed = 0;
 
         handleCollisions();
         handleCatapults();
@@ -179,10 +191,13 @@ public class GameLogic : MonoBehaviour {
     /// </summary>
     public void postAnimation() {
         
-        sinkShips();
+        //sinkShips();
         executeNextPhase();
     }
 
+    /// <summary>
+    /// Checks to see if any victory/defeat conditions have been met
+    /// </summary>
     private void determineGameState()
     {
         if (GameManager.main.playerTeam.ships.Count == 0)
@@ -224,6 +239,10 @@ public class GameLogic : MonoBehaviour {
 
     }
 
+    /// <summary>
+    /// Ends the game and brings up the game over screen
+    /// </summary>
+    /// <param name="gamestate">the specific game over state (victory/defeat)</param>
     private void gameOver(string gamestate)
     {
         GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
@@ -233,6 +252,11 @@ public class GameLogic : MonoBehaviour {
         Time.timeScale = 0;
     }
 
+    /// <summary>
+    /// Checks each ship if it can capture the node its on.
+    /// AI ships use AI to choose.
+    /// Adds a pending capture choice for the players ships
+    /// </summary>
     private void handleCapture() {
         foreach (Ship ship in gameManager.getAllShips()) {
             Port port = ship.getNode().Port;
@@ -265,12 +289,11 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    // First checks if the ship in question has moved, the checks if node ship
-    // is at has more than 1 ship,
-    // then compares current ship to others to see if they collide and calls
-    // collision handler from the
-    // Event Handler class, where I will either pass in the node of the
-    // collision or the ship list at that node
+    /// <summary>
+    /// Checks each ship for instances of ramming collisions
+    /// Adds ramming resolutions to the phase manager
+    /// Adds ship target resolution if the player has more than one possible target
+    /// </summary>
     private void handleCollisions() {
         
         foreach (Ship ship in gameManager.getAllShips()) {
@@ -323,6 +346,9 @@ public class GameLogic : MonoBehaviour {
         return potentialCollisions;
     }
 
+    /// <summary>
+    /// Calls updateFrontAfterCollision for each ship
+    /// </summary>
     private void updateShips() {
         foreach (Ship ship in gameManager.getAllShips()) {
             ship.updateFrontAfterCollision();
@@ -330,7 +356,11 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    // Detects catapults by checking each ships hasFired()
+    /// <summary>
+    /// Checks each ship for a catapult shot
+    /// Adds animations to phase manager if either a hit or a miss
+    /// Adds pending target resolution if the player's ship has more than one target
+    /// </summary>
     private void handleCatapults() {
         foreach (Ship ship in gameManager.getAllShips()) {
             Node node = ship.getCatapultNode();
@@ -369,7 +399,10 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
-    // 'Sinks' ships by removing them from the lists of ships
+    /// <summary>
+    /// Old method from previous project to sink ships with 0 hp
+    /// </summary>
+    [System.Obsolete("Should use a subphase in phase manager to sink ships instead",true)]
     private void sinkShips() {
         List<Ship> sunkShips = new List<Ship>();
         foreach (Ship ship in gameManager.getAllShips()) {
@@ -379,12 +412,16 @@ public class GameLogic : MonoBehaviour {
             }
         }
         foreach (Ship ship in sunkShips) {
-            //gameManager.uiControl.setDead((int) ship.team.getTeamType(), ship.getID());
             ship.sink();
             Debug.Log("Sinking ship");
         }
     }
 
+    /// <summary>
+    /// calls reset for each ship
+    /// used at the end of a turn
+    /// resets variables like movedForward, canAct
+    /// </summary>
     private void resetShips() {
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship == null)

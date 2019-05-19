@@ -411,7 +411,7 @@ public static class PhaseManager
         if(catapultResolutions.Count > 0) {
             setSubphaseText("resolving catapults");
             foreach(CatapultResolution cr in catapultResolutions) {
-                if (!cr.interrupted)
+
                     yield return cr.resolve();
             }
         }        
@@ -654,7 +654,7 @@ public static class PhaseManager
 
             catapultResolutions.Add(cr);
 
-            s.CanFire = false;
+            
         }
     }
 

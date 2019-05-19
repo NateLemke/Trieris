@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     public bool executeTurn() { 
-        gameLogic.newExecuteTurn();
+        gameLogic.executeTurn();
         return true;
     }
 

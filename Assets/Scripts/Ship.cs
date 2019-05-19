@@ -21,9 +21,10 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
     public int catapultIndex;
     public int catapultDirection;
-    bool canFire;
+    
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
+    bool canFire;
 
     // used to display damage text
     public GameObject CBTprefab;
