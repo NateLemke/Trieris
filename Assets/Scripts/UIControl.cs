@@ -402,6 +402,8 @@ public class UIControl : MonoBehaviour
         TeamSelectUI.SetActive(false);
         gameManager.setPlayerTeam(i);
 
+        setSelection(gameManager.getPlayerShips()[0].Id);
+
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
         overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(false);
