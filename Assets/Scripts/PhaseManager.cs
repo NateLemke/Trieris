@@ -266,8 +266,6 @@ public static class PhaseManager
 
         if (outOfFocus(v)) {
 
-            //debugStarPoint(Camera.main.transform.position,0.2f,Color.red);
-            //debugStarPoint(bv[0] + bv[1] / 2,0.2f,Color.green);
             Vector2[] bv = getBoardView();
             Vector2 offset = (Vector2)Camera.main.transform.position - boardviewCenter();
             Vector3 pos = v + offset;
@@ -394,7 +392,7 @@ public static class PhaseManager
         setSubphaseText("chose catapult targets");
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
-            if (!tr.attacker.CanFire) {
+            if (tr.attacker == null || !tr.attacker.CanFire) {
                 yield break;
             }
             yield return focus(tr.attacker.Position);

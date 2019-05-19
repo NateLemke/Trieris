@@ -619,7 +619,7 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the ramming target of this ship</param>
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
-        Debug.Log(name + " rammed " + target.name);
+        //Debug.Log(name + " rammed " + target.name);
         disableCatapults(target);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
@@ -656,7 +656,7 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="target"></param>
     private void broadsideRam(Ship target) {
-        DebugControl.log("ramming","broadside ram");
+        //DebugControl.log("ramming","broadside ram");
         //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
@@ -680,7 +680,7 @@ public class Ship : MonoBehaviour {
     /// <param name="phase"></param>
     /// <returns></returns>
     private void headOnRam(Ship target) {
-        DebugControl.log("ramming","head on ram");
+        //DebugControl.log("ramming","head on ram");
         //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
@@ -702,7 +702,7 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the ship being rammed by this ship</param>
     /// <param name="relativeTurn">the relative rotation</param>
     private void glancingRam(Ship target,int relativeTurn) {
-        DebugControl.log("ramming","glancing ram");
+        //DebugControl.log("ramming","glancing ram");
         //target.life -= momentum;
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);
         int dmgToSelf = 0;
@@ -798,23 +798,6 @@ public class Ship : MonoBehaviour {
         setSpriteRotation();
     }
 
-    //public void underlayUpdate(Ship hover,Ship selected) {
-    //    Color c;
-        
-    //    if (needRedirect && (selected == this || hover == this)) {
-    //        c = Color.red;
-    //    } else if (needRedirect) {
-    //        c = new Color(1,0,0,0.6f);
-    //    } else if(selected == this){
-    //        c = Color.green;
-    //    } else if (hover == this) {
-    //        c = new Color(0,1,0,0.5f);
-    //    } else {
-    //        c = Color.clear;
-    //    }
-    //    //underlay.color = c;
-    //}
-
      /// <summary>
      /// enables this ship's UI
      /// </summary>
@@ -842,11 +825,9 @@ public class Ship : MonoBehaviour {
             Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
         }
 
-        if (canAct)
+        if (!canAct)
         {
-            Handles.Label(transform.position + new Vector3(0, -0.5f), "Can Act");
-
-            //Gizmos.DrawIcon(transform.position + new Vector3(-0.25f,0),"needRedirect.png",true);
+            Handles.Label(transform.position + new Vector3(0, -0.5f), "cannot act");
         }
 
         if (needCaptureChoice) {

@@ -163,7 +163,7 @@ public class Board{
                             renderedEdges.Add(ep);
                             LineRenderer lr = GameObject.Instantiate(Resources.Load<GameObject>("Prefabs/NodeLine")).GetComponent<LineRenderer>();                         
                             Vector3 adjPos = new Vector3(adjacents[i].Y,Board.ROW_OF_NODES - 1 - adjacents[i].X,0);
-                            Vector3 pos = new Vector3(n.X,Board.ROW_OF_NODES - 1 - n.Y,0);
+                            Vector3 pos = new Vector3(n.Y,Board.ROW_OF_NODES - 1 - n.X,0);
                             lr.SetPosition(0,adjPos);
                             lr.SetPosition(1,pos);
                             lr.transform.SetParent(node.transform);

@@ -34,6 +34,11 @@ public class ShipTargetResolution
         float xAverage = 0f;
         float yHighest = targets[0].Position.y;
         foreach(Ship t in targets) {
+            if(t == null) {
+                continue;
+            }
+
+
             if( t.Position.y > yHighest) {
                 yHighest = t.Position.y;
             }
