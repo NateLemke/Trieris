@@ -34,4 +34,16 @@ public class StartMenu : MonoBehaviour
     {
         Application.OpenURL("http://trieris.ca/rulebook/");
     }
+
+    public void CreditsButton()
+    {
+        GameObject credits = GameObject.Find("Canvas/Panel");
+        credits.transform.Find("Credits").gameObject.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        GameObject credits = GameObject.Find("Canvas/Panel");
+        credits.transform.Find("Credits").gameObject.SetActive(false);
+    }
 }
