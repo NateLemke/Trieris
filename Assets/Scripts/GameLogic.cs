@@ -366,8 +366,6 @@ public class GameLogic : MonoBehaviour {
                         ship.needCatapultChoice = true;
 
                         PhaseManager.catapultTargetResolutions.Add(new ShipTargetResolution(ship,potentialTargets));
-
-                        //chosenShip = potentialTargets[0];
                     }
                 } else {
                     chosenShip = ship.Ai.selectShip(potentialTargets);
