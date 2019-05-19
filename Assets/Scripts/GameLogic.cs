@@ -66,13 +66,10 @@ public class GameLogic : MonoBehaviour {
             gameManager.uiControl.enableControls();
 
             GameManager.main.uiControl.GoText.text = "START TURN";
-            //UIControl.main.devPhaseTrack(4);
             PhaseManager.DisablePhaseUI();
             phaseIndex = 4;
             resetShips();
-            //gameManager.checkVictory();
             turnIndex++;
-            //PhaseManager.updateText();
             foreach(Ship ship in gameManager.getAllShips())
             {
                 ship.CanFire = true;
@@ -103,25 +100,20 @@ public class GameLogic : MonoBehaviour {
             return true;
         }
     }
-
-    //public int executed = 0;
-
+    
     /// <summary>
     /// Executes a phase of a specific index
     /// also runs the phase manager
     /// </summary>
     /// <param name="phase"></param>
     private void executePhase(int phase) {
-        //UIControl.main.devPhaseTrack(phaseIndex);
         DebugControl.log("turn","--PHASE "+phase);
-        //UIControl.postNotice("Phase " + (phaseIndex + 1),4f);
         foreach (Ship ship in gameManager.getAllShips()) {
             if (ship.getCanAct()) {
                 
                 // checks for head on ramming where ships are in adjacent nodes
                 if (!checkAdjHRam(ship,phase)) {
                     ship.doAction(phase);
-                    //executed++;
                 }
                     
                 //ship.doAction(phase);
@@ -135,21 +127,7 @@ public class GameLogic : MonoBehaviour {
 
                 }
 
-                /*
-                try {
-                    ship.doAction(phase);
-                } catch (ShipCrashedException e) {
-                    if (ship.team != gameManager.playerTeam) {
-                        int newDirection = 0;
-                        newDirection = ship.getAI().setNewShipDirection(ship);
-                        ship.setFront(newDirection);
-                        ship.setSpriteRotation();
-                    }                   
-                }
-                */
-            } else {
-                //Debug.Log("ship " + ship + " cannot act");
-            }
+            } 
         }
 
 

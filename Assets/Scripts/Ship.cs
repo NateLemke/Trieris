@@ -364,8 +364,6 @@ public class Ship : MonoBehaviour {
     /// <param name="target"></param>
     public void catapult(Ship target) {
         if (target != null) {
-            //target.life -= 1;
-            //Debug.Log(team.ToString() + getNumeralID() + " shot " + target.team.ToString() + target.getNumeralID());
             PhaseManager.addCatapultAnimation(this,target);
         }
     }
@@ -374,17 +372,13 @@ public class Ship : MonoBehaviour {
     /// Resets turn-specific variables for the next turn
     /// </summary>
     public void reset() {
-        //Debug.Log("resetting...");
         canAct = true;
         portRepairCount = 0;
-        //momentum = 0;
+        canFire = true;
         movedForward = false;
         frontAfterCollision = -1;
         canActAfterCollision = true;
         fireDirection = -1;
-        //for (int i = 0; i < 4; i++) {
-            //actions[i] = null;
-        //}
     }
 
     /// <summary>
@@ -402,6 +396,7 @@ public class Ship : MonoBehaviour {
             Debug.Log("----Ship crashed");
             needRedirect = true;
             movedForward = false;
+            momentum = 0;
             if(team == GameManager.main.playerTeam)
                 activateRedirectNotification();
             return;
@@ -413,9 +408,6 @@ public class Ship : MonoBehaviour {
         node.Ships.Remove(this);
         node = destNode;
         node.Ships.Add(this);
-        //if (PhaseManager.actionAnimations.ContainsKey(this)) {
-        //    ;
-        //}
         bool reverse = direction == getRelativeDirection(-4);
 
         PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,momentum,reverse));
@@ -531,9 +523,6 @@ public class Ship : MonoBehaviour {
         canAct = false;
         movedForward = false;
         momentum = 0;
-        //if(team.getTeamType() == GameManager.main.playerTeam.getTeamType()) {
-            //GameManager.main.uiControl.updatePlayerScore();
-        //}
         PhaseManager.addCaptureAnimation(this);
     }
     
@@ -548,7 +537,6 @@ public class Ship : MonoBehaviour {
         movedForward = false;
         needRedirect = true;
         portRepairCount = -5;
-        //setRedirectUI(true);
         activateRedirectNotification();
     }
 
@@ -620,7 +608,6 @@ public class Ship : MonoBehaviour {
     /// <param name="target">the ramming target of this ship</param>
     private void ramDamageAndAngle(Ship target) {
         int enemyAngle = target.front;
-        //Debug.Log(name + " rammed " + target.name);
         disableCatapults(target);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
@@ -657,8 +644,6 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="target"></param>
     private void broadsideRam(Ship target) {
-        //DebugControl.log("ramming","broadside ram");
-        //target.life -= momentum * 2;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
         PhaseManager.addRammingResolution(this,target,momentum * 2);
@@ -681,14 +666,9 @@ public class Ship : MonoBehaviour {
     /// <param name="phase"></param>
     /// <returns></returns>
     private void headOnRam(Ship target) {
-        //DebugControl.log("ramming","head on ram");
-        //target.life -= momentum;
         target.canActAfterCollision = false;
         canActAfterCollision = false;
         int dmgToSelf = target.movedForward ? 0 : 1;
-        //if (!target.movedForward) {
-        //    this.life--;
-        //}
         if (AdjHeadOnRamCheck(target,GameLogic.phaseIndex)) {
             movedForward = false;
             PhaseManager.addAdjHeadOnRamming(this,target);
