@@ -486,7 +486,7 @@ public class Ship : MonoBehaviour {
 
             st.interactable = false;
         }
-        PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
+        //PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
         //node = null;
         team.ships.Remove(this);
 
