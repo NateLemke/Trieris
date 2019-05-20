@@ -86,7 +86,8 @@ public class InputControl : MonoBehaviour {
             {
                 if (overlayCanvas.transform.Find("HelpPanel").gameObject.active)
                 {
-                    gameObject.GetComponent<UIControl>().startObjectiveFade();
+                    if (GameObject.Find("OverlayCanvas/Objective").gameObject.active)
+                        gameObject.GetComponent<UIControl>().startObjectiveFade();
                     overlayCanvas.transform.Find("HelpPanel").gameObject.SetActive(false);
                 }
                 else
