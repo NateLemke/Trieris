@@ -36,6 +36,7 @@ public class RulesMenu : MonoBehaviour
         ruleList.Add(moveToActions);
         ruleList.Add(moveToCatapults);
         ruleList.Add(moveToRamming);
+        ruleList.Add(moveToRamming2);
         ruleList.Add(moveToMultipleTargets);
         ruleList.Add(moveToRedirection);
         ruleList.Add(moveToPorts);
@@ -72,7 +73,7 @@ public class RulesMenu : MonoBehaviour
         setImagesInactive();
         content.transform.Find("Actions").gameObject.SetActive(true);
         
-        infoText.text = "Every turn, there are 4 phases in which actions can be set. You can only set actions for as much life as your ship has.\nExample: your ship has 3 life remaining, you can only set 3 actions for that ship";
+        infoText.text = "Every turn, there are 4 phases in which actions can be set. You can only set actions for as much life as your ship has.\n\nExample: your ship has 3 life remaining, you can only set 3 actions for that ship.";
     }
 
     /// <summary>
@@ -84,7 +85,7 @@ public class RulesMenu : MonoBehaviour
         content.transform.Find("CatapultTarget").gameObject.SetActive(true);
         content.transform.Find("Catapult").gameObject.SetActive(true);
 
-        infoText.text = "On the righthand side of the screen, there is a catapult targeting interface. On any turn, you may set a phase to aim and shoot a catapult for 1 damage.\nIf your ship is rammed, neither ship may shoot for the rest of the turn";
+        infoText.text = "On the righthand side of the screen, there is a catapult targeting interface. On any turn, you may set a phase to aim and shoot a catapult for 1 damage.\n\nIf your ship is rammed, neither ship may shoot for the rest of the phases on this turn.\n\nShips ram before using catapults.";
     }
 
     /// <summary>
@@ -98,7 +99,15 @@ public class RulesMenu : MonoBehaviour
         content.transform.Find("HeadOn").gameObject.SetActive(true);
         content.transform.Find("Momentum").gameObject.SetActive(true);
 
-        infoText.text = "When a ship moves into a node that contains another ship, it will ram that ship. If two ships move into the same space, they will ram each other!\n<b><i>Broadside:</i></b>\nShip rams another ship that is perpendicular to itself. Double Damage!\n<b><i>Glancing:</i></b>\nShip rams another ship at an angle.\n<b><i>Head On:</i></b>\nTwo ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes";
+        infoText.text = "A ship will ram when it moves into a node that contains another ship. If two ships move into the same space, they will ram each other!\n\n<b><i>Broadside:</i></b>\nShip rams another ship that is perpendicular to itself. Double Damage!\n<b><i>Glancing:</i></b>\nShip rams another ship at an angle. This attack changes the direction the two ships face.\n<b>(Continued Next Page)</b>";
+    }
+
+    /// <summary>
+    /// Displays rules about Ramming and the different types of Ramming
+    /// </summary>
+    public void moveToRamming2()
+    {
+        infoText.text = "<b><i>Head On:</i></b>\nTwo ships ram each other while facing each other. If they are adjacent to each other, they will not enter each other's nodes.\n\n<b><i>Momentum:</i></b>\nAs your ship moves forward, it gains speed. For every consecutive forward action, you deal 1 addtional daamge when ramming.";
     }
 
     /// <summary>
@@ -132,7 +141,7 @@ public class RulesMenu : MonoBehaviour
         setImagesInactive();
         content.transform.Find("Port").gameObject.SetActive(true);
 
-        infoText.text = "When a ship lands on a port or capital, the player may choose to capture it. Doing so will make that ship lose its actions for the rest of the turn.\n If you hold on a port or capital that you own, your ship will begin to repair. On a port, you repair once a turn and on a capital, you repair every phase.";
+        infoText.text = "When a ship lands on a port or capital, the player may choose to capture it. Doing so will make that ship lose its actions for the rest of the turn.\n\nIf you hold on a port or capital that you own, your ship will begin to repair. On a port, you repair once a turn and on a capital, you repair every phase.";
     }
 
     /// <summary>
@@ -143,7 +152,7 @@ public class RulesMenu : MonoBehaviour
         setImagesInactive();
         content.transform.Find("Capital").gameObject.SetActive(true);
 
-        infoText.text = "If a team controls 12 ports at any given time, that team wins the game. However, losing your team's capital will immediately cause you to lose.";
+        infoText.text = "If a team controls 12 ports at any given time, that team wins the game.";
     }
     
     /// <summary>
@@ -173,6 +182,7 @@ public class RulesMenu : MonoBehaviour
     /// </summary>
     public void exitHelp()
     {
+        GameManager.main.gameObject.GetComponent<UIControl>().startObjectiveFade();
         transform.parent.gameObject.SetActive(false);
     }
 }
