@@ -83,33 +83,9 @@ public static class PhaseManager
         captureAnimations.Clear();
         catapultResolutions.Clear();
 
-        //playingAnimation = false;
         GameManager.main.gameLogic.postAnimation();
         
     }
-        
-
-    
-
-    //public static void NodePositions(int f, Node n, Color c) {
-    //    //float scale = 0.3f;
-    //    float sqr = Mathf.Sqrt(f);
-    //    float rounded = Mathf.Ceil(sqr);
-    //    int counter = 0;
-    //    for(int i = 0; i < rounded; i++) {
-    //        for(int j = 0; j < rounded; j++) {
-    //            float offset = (rounded -1)* nodeMultiShipScale / 2f;
-    //            Vector2 pos = new Vector2(j * nodeMultiShipScale - offset,-i * 0.3f);
-    //            pos += n.getRealPos();
-    //            //Debug.DrawLine(pos + Vector2.up * 0.1f,pos + Vector2.down * 0.1f,c);
-    //            //Debug.DrawLine(pos + Vector2.left * 0.1f,pos + Vector2.right * 0.1f,c);
-    //            counter++;
-    //            if(counter >= f) {
-    //                return;
-    //            }
-    //        }
-    //    }
-    //}
 
 
     /// <summary>
@@ -120,15 +96,12 @@ public static class PhaseManager
         float camHeight = Camera.main.orthographicSize * 2f;
         float camWidth = camHeight * Camera.main.aspect;
         Vector2 camPos = Camera.main.transform.position;
-        //Debug.DrawLine(camPos + new Vector2(0,camHeight / 2),camPos + new Vector2(0,-camHeight / 2),Color.red);
-        //Debug.DrawLine(camPos + new Vector2(camWidth / 2,0),camPos + new Vector2(-camWidth / 2,0),Color.blue);
         float canvasWidth = GameObject.Find("OverlayCanvas").GetComponent<RectTransform>().rect.width;
         float canvasHeight = GameObject.Find("OverlayCanvas").GetComponent<RectTransform>().rect.height;
         float sideUIWidth = GameObject.Find("UISidePanel").GetComponent<RectTransform>().rect.width;
         float bottomUIHeight = GameObject.Find("UIBottomPanel").GetComponent<RectTransform>().rect.height;
         float widthRatio = (canvasWidth - sideUIWidth) / canvasWidth;
         float heightRatio = (canvasHeight - bottomUIHeight) / canvasHeight;
-        //Debug.DrawLine(camPos + new Vector2(-camWidth / 2,2),camPos + new Vector2(camWidth * ratio / 2,2),Color.green);
         Vector2[] r = new Vector2[2];
         r[0] = camPos - new Vector2(camWidth / 2,camHeight / -2);
         r[1] = new Vector2(camWidth * widthRatio,camHeight * -heightRatio);

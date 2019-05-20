@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Purpose: Used to manage timing and speed
+/// handles toggling fast and slow animation speeds
+/// </summary>
 public static class SpeedManager {
     static float actionDelay = 0.3f;
     public static float ActionDelay { get { return (fastAnimations) ? actionDelay * fastFactor : actionDelay; } }

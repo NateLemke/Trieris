@@ -18,8 +18,6 @@ public class GameLogic : MonoBehaviour {
     // the number of the current turn
     public int TurnIndex { get { return turnIndex; } set { } }
     private int turnIndex = 1;
-
-    //enum Phases { planning, phaseOne, phaseTwo, phaseThree };
    
     Image[] actionImages = new Image[4];
 
@@ -116,7 +114,7 @@ public class GameLogic : MonoBehaviour {
                     ship.doAction(phase);
                 }
                     
-                //ship.doAction(phase);
+
                 if (ship.needRedirect && ship.team != gameManager.playerTeam)
                 {
                     int newDirection = 0;
@@ -168,8 +166,7 @@ public class GameLogic : MonoBehaviour {
     /// Final check for port capture and ship sinking. Also determines if a win or lose state is reached.
     /// </summary>
     public void postAnimation() {
-        
-        //sinkShips();
+
         executeNextPhase();
     }
 
@@ -259,8 +256,6 @@ public class GameLogic : MonoBehaviour {
                     {
                         ship.capturePort();
                         
-
-                        //ship.canActAfterCollision = true;
                     }
                 }
             }
@@ -291,11 +286,6 @@ public class GameLogic : MonoBehaviour {
                     if (potentialCollisions.Count != 0) {
                         Ship chosenShip = null;
                         if (ship.team == gameManager.playerTeam) {
-
-                            //Debug.Log("potential collision: " + enemyShips[0].team.ToString() + enemyShips[0].getNumeralID());
-                            
-                            //ship.getNode().activateNotification();
-                            //chosenShip = potentialCollisions[0];
                             
                             if(potentialCollisions.Count > 1) {
                                 ship.needRammingChoice = true;
