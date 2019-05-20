@@ -86,6 +86,7 @@ public class InputControl : MonoBehaviour {
             {
                 if (overlayCanvas.transform.Find("HelpPanel").gameObject.active)
                 {
+                    gameObject.GetComponent<UIControl>().startObjectiveFade();
                     overlayCanvas.transform.Find("HelpPanel").gameObject.SetActive(false);
                 }
                 else
@@ -104,10 +105,10 @@ public class InputControl : MonoBehaviour {
             }
         }
 
-        if (Input.GetKeyDown("p") && GameManager.main.gameOver == false)
-        {
-            Time.timeScale = Time.timeScale == 0 ? 1 : 0;
-        }
+        //if (Input.GetKeyDown("p") && GameManager.main.gameOver == false)
+        //{
+        //    Time.timeScale = Time.timeScale == 0 ? 1 : 0;
+        //}
     }
 
     /// <summary>
