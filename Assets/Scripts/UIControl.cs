@@ -428,11 +428,18 @@ public class UIControl : MonoBehaviour
         objectiveColor.a = 0;
     }
 
+    /// <summary>
+    /// Starts the fade out of the objective panel
+    /// </summary>
     public void startObjectiveFade()
     {
         StartCoroutine(objectiveTime());
     }
     
+    /// <summary>
+    /// Waits 2 seconds and then begins the fade of the objective text 
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator objectiveTime()
     {
         yield return new WaitForSeconds(2f);
@@ -442,6 +449,10 @@ public class UIControl : MonoBehaviour
         StartCoroutine(setObjectiveInactive());
     }
 
+    /// <summary>
+    /// Sets the objective panel inactive once the fade out is finished
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator setObjectiveInactive()
     {
         yield return new WaitForSeconds(2f);
