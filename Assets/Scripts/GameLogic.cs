@@ -206,7 +206,10 @@ public class GameLogic : MonoBehaviour {
                     if(t == GameManager.main.playerTeam)
                         gameOver("Victory");
                     else
-                        gameOver("Defeat");
+                    {
+                        string teamname = t.getTeamType().ToString();
+                        gameOver(teamname[0].ToString().ToUpper() + teamname.Substring(1) + " team won");
+                    }
                 }
 
             }
