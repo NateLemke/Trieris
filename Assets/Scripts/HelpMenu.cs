@@ -224,7 +224,7 @@ public class HelpMenu : MonoBehaviour
     /// </summary>
     public void exitHelp()
     {
-        if (GameObject.Find("OverlayCanvas/Objective").gameObject.active)
+        if (GameObject.Find("OverlayCanvas/Objective") != null && GameObject.Find("OverlayCanvas/Objective").gameObject.active)
             GameManager.main.gameObject.GetComponent<UIControl>().startObjectiveFade();
         gameObject.SetActive(false);
     }
