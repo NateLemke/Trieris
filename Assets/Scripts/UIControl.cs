@@ -73,6 +73,10 @@ public class UIControl : MonoBehaviour
 
     public Text GoText {  get { return goText; } }
 
+    public bool fadeObjective;
+
+    private Color objectiveColor;
+
     /// <summary>
     /// basic initialization.
     /// </summary>
@@ -213,6 +217,7 @@ public class UIControl : MonoBehaviour
         phaseAnnouncer = GameObject.Find("PhaseAnnouncer");
         phaseAnnouncer.SetActive(false);
 
+        //fadeObjective = false;
     }
 
     /// <summary>
@@ -227,6 +232,16 @@ public class UIControl : MonoBehaviour
         catapultNotice.SetActive(gameManager.needCatapultChoice);
 
         turnPhase.text = "Turn: " + gameLogic.TurnIndex;
+
+        //if (fadeObjective)
+        //{
+        //    GameObject.Find("OverlayCanvas/Objective").gameObject.GetComponent<Image>().material.color = Color.Lerp(GameObject.Find("OverlayCanvas/Objective").gameObject.GetComponent<Image>().material.color, objectiveColor, 1f * Time.deltaTime);
+        //}
+        //if(GameObject.Find("OverlayCanvas/Objective") != null && GameObject.Find("OverlayCanvas/Objective").gameObject.GetComponent<Image>().material.color == objectiveColor)
+        //{
+        //    GameObject.Find("OverlayCanvas/Objective").gameObject.SetActive(false);
+        //    fadeObjective = false;
+        //}
     }
 
     /// <summary>
@@ -407,8 +422,42 @@ public class UIControl : MonoBehaviour
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
         overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(false);
+
+        overlay.transform.Find("Objective").gameObject.SetActive(true);
+        objectiveColor = overlay.transform.Find("Objective").GetComponent<Image>().material.color;
+        objectiveColor.a = 0;
     }
 
+    /// <summary>
+    /// Starts the fade out of the objective panel
+    /// </summary>
+    public void startObjectiveFade()
+    {
+        StartCoroutine(objectiveTime());
+    }
+    
+    /// <summary>
+    /// Waits 2 seconds and then begins the fade of the objective text 
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator objectiveTime()
+    {
+        yield return new WaitForSeconds(2f);
+        fadeObjective = true;
+        GameObject.Find("OverlayCanvas/Objective").GetComponent<Image>().CrossFadeAlpha(0, 2f, false);
+        GameObject.Find("OverlayCanvas/Objective/Text").GetComponent<Text>().CrossFadeAlpha(0, 2f, false);
+        StartCoroutine(setObjectiveInactive());
+    }
+
+    /// <summary>
+    /// Sets the objective panel inactive once the fade out is finished
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator setObjectiveInactive()
+    {
+        yield return new WaitForSeconds(2f);
+        GameObject.Find("OverlayCanvas/Objective").gameObject.SetActive(false);
+    }
 
     /// <summary>
     /// Sets the current action index of the currently selected ship to the given one.
@@ -743,6 +792,14 @@ public class UIControl : MonoBehaviour
         Color color = selectedOutline.effectColor;
         color.a = 255;
         selectedOutline.effectColor = color;
+    }
+
+    public void openMenu()
+    {
+        GameObject optionsPanel = GameObject.Find("OverlayCanvas").gameObject;
+        optionsPanel = optionsPanel.transform.Find("OptionsMenu").gameObject;
+        optionsPanel.SetActive(true);
+        optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
     }
 }
 

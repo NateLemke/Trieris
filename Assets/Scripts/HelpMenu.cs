@@ -14,7 +14,7 @@ public class HelpMenu : MonoBehaviour
     GameObject mask;
     Vector3 childLocation;
 
-    WindowData minimap = new WindowData(155f, 78f, 126f, 87f, 155f, -78f);
+    WindowData minimap = new WindowData(155f, 78f, 126f, 87f, -155f, -78f);
     WindowData shipTab = new WindowData(155f, 25f, 130f, 30f, -155f, -25f);
     WindowData combatPhase = new WindowData(155f, -31f, 125f, 27f, -155f, 31f);
     WindowData combatDirection = new WindowData(185.5f, -76f, 65f, 72f, -185.5f, 76f);
@@ -216,7 +216,7 @@ public class HelpMenu : MonoBehaviour
         image.transform.localPosition = new Vector3(direction.X2, direction.Y2, 0);
         infoPanel.transform.localPosition = new Vector3(infoMap.X, infoMap.Y, 0);
         infoPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(infoMap.Width, infoMap.Height);
-        infoText.text = "Here you can see directional indicators. Click the direction you wish the ship to face.\nBe careful when setting your ship direction! Your direction can only be changed by turning your ship during your turn, capturing a port, or crashing into land.";
+        infoText.text = "Here you can see directional buttons. Click the direction you wish the ship to face.\nOnce set, your direction can only be changed like this by capturing a port or crashing into land.";
     }
 
     /// <summary>
@@ -224,6 +224,8 @@ public class HelpMenu : MonoBehaviour
     /// </summary>
     public void exitHelp()
     {
+        if (GameObject.Find("OverlayCanvas/Objective") != null && GameObject.Find("OverlayCanvas/Objective").gameObject.active)
+            GameManager.main.gameObject.GetComponent<UIControl>().startObjectiveFade();
         gameObject.SetActive(false);
     }
 }

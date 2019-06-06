@@ -55,7 +55,7 @@ public class GameOver : MonoBehaviour
     /// </summary>
     public void Restart()
     {
-        SceneManager.LoadScene("ThompsonDevScene");
+        SceneManager.LoadScene("GameScene");
     }
 
     /// <summary>
