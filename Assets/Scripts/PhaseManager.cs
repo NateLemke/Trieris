@@ -324,7 +324,9 @@ public static class PhaseManager
         }
         setSubphaseText("choose ramming targets");
         foreach (ShipTargetResolution tr in rammingTargetResolutions) {
-
+            if (tr.attacker == null || tr.targets.Count == 0) {
+                continue;
+            }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
             tr.attacker.ram(chosenTarget);
@@ -365,8 +367,8 @@ public static class PhaseManager
         setSubphaseText("chose catapult targets");
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
-            if (tr.attacker == null || !tr.attacker.CanFire) {
-                yield break;
+            if (tr.attacker == null || !tr.attacker.CanFire || tr.targets.Count == 0) {
+                continue;
             }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
@@ -458,9 +460,9 @@ public static class PhaseManager
                     yield return null;
             }
         }
-        while (GameManager.main.needCaptureChoice) {
-            yield return null;
-        }
+        //while (GameManager.main.needCaptureChoice) {
+        //    yield return null;
+        //}
     }
 
     /// <summary>

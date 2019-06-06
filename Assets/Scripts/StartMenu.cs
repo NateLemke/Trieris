@@ -22,7 +22,7 @@ public class StartMenu : MonoBehaviour
     public void exitGame()
     {
         //For Editor Closing
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
         //For Build Closing
         Application.Quit();
     }

@@ -87,6 +87,7 @@ public class PortPrompt : MonoBehaviour{
     public void decline()
     {        
         portPromptPanel.SetActive(false);
+        currentShip.needCaptureChoice = false;
         GameManager.main.StartCoroutine(declineAnimation());
     }
 

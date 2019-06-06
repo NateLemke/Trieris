@@ -9,7 +9,7 @@ public class ShipTargetResolution
 {
     public Ship attacker;
     public Ship chosenTarget;
-    List<Ship> targets;
+    public List<Ship> targets;
     public List<TargetButton> buttons = new List<TargetButton>();
     string text;
 
