@@ -34,9 +34,12 @@ public class ShipTargetResolution
             yield break;
         }
 
+        
+
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TargetButton");
         float xAverage = 0f;
-        float yHighest = targets[0].Position.y;
+        float yHighest = Mathf.NegativeInfinity;
+        //float yHighest = targets[0].Position.y;
         foreach(Ship t in targets) {
             if(t == null) {
                 continue;

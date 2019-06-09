@@ -173,7 +173,6 @@ public class GameManager : MonoBehaviour {
         if (!gameOver) {
             foreach (TrierisAI ai in getAllAi()) {
                 if(ai.GetTeam() == playerTeam) {
-                    Debug.Log("found a ship");
                     continue;
                 }
                 ai.setNextTurn();

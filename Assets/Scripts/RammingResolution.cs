@@ -31,7 +31,8 @@ public class RammingResolution : CombatResolution
         try {
             A = PhaseManager.actionAnimations[shipA];
         } catch (Exception e) {
-            Debug.LogError("no action animation for attacker");
+            Debug.LogWarning("no action animation for attacker");
+            yield break;
         }
 
         Animation B = null;
@@ -58,7 +59,8 @@ public class RammingResolution : CombatResolution
         }
 
         if (A == null) {
-            Debug.LogError("attacker, " + shipA + " has no animation?");
+            Debug.LogWarning("attacker, " + shipA + " has no animation?");
+            yield break;
         }
 
         if (B == null) {

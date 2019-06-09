@@ -393,7 +393,7 @@ public class Ship : MonoBehaviour {
             life--;
             canAct = false;
             canActAfterCollision = false;
-            Debug.Log("----Ship crashed");
+            //Debug.Log("----Ship crashed");
             needRedirect = true;
             movedForward = false;
             momentum = 0;

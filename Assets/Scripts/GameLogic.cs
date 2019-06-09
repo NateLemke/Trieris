@@ -250,7 +250,7 @@ public class GameLogic : MonoBehaviour {
                 {
                     ship.needCaptureChoice = true;
                     
-                    Debug.Log(ship + " needs port capture choice");
+                    //Debug.Log(ship + " needs port capture choice");
                 }
                 else if(enemyShipNo == 0)
                 {
