@@ -32,6 +32,8 @@ public class RammingResolution : CombatResolution
             A = PhaseManager.actionAnimations[shipA];
         } catch (Exception e) {
             Debug.LogWarning("no action animation for attacker");
+            shipA.disableIcon();
+            shipB.disableIcon();
             yield break;
         }
 
