@@ -353,5 +353,15 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < teams.Count; i++) {
             aiList.Add(new TrierisAI(teams[i]));
         }
-    }    
+    }
+
+    public void changeFXVolume()
+    {
+        gameObject.GetComponents<AudioSource>()[0].volume = GameObject.Find("OverlayCanvas/OptionsMenu/FXVolumeSlider").GetComponent<Slider>().value; ;
+    }
+
+    public void changeMusicVolume()
+    {
+        gameObject.GetComponents<AudioSource>()[1].volume = GameObject.Find("OverlayCanvas/OptionsMenu/MusicVolumeSlider").GetComponent<Slider>().value; ;
+    }
 }
