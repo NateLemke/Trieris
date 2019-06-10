@@ -11,9 +11,15 @@ public class StartMenu : MonoBehaviour
     /// <summary>
     /// Starts the game by loading the main game scene.
     /// </summary>
-    public void startGame()
+    public void singleplayerGame()
     {
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void multiplayerGame()
+    {
+        GameObject parent = GameObject.Find("Canvas").gameObject;
+        parent.transform.Find("MultiplayerPanel").gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -51,5 +57,10 @@ public class StartMenu : MonoBehaviour
     {
         GameObject credits = GameObject.Find("Canvas/Panel");
         credits.transform.Find("Credits").gameObject.SetActive(false);
+    }
+
+    public void CloseMultiplayerPanel()
+    {
+        GameObject.Find("Canvas/MultiplayerPanel").SetActive(false);
     }
 }
