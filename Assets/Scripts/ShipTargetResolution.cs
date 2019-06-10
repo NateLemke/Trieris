@@ -30,11 +30,6 @@ public class ShipTargetResolution
     /// </summary>
     /// <returns></returns>
     public IEnumerator resolve() {
-        if(attacker == null) {
-            yield break;
-        }
-
-        
 
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TargetButton");
         float xAverage = 0f;
@@ -44,7 +39,6 @@ public class ShipTargetResolution
             if(t == null) {
                 continue;
             }
-
 
             if( t.Position.y > yHighest) {
                 yHighest = t.Position.y;
@@ -79,5 +73,32 @@ public class ShipTargetResolution
         foreach (Ship s in targetNode.Ships) {
             s.updateNodePos();
         }
+    }
+
+    /// <summary>
+    /// Checks if this target resolution still needs to be resolved
+    /// Returns true only if the attacking ship is still alive and has more than 1 targets
+    /// </summary>
+    /// <returns></returns>
+    public bool needsResolving() {
+        if(attacker == null) {
+            return false;
+        }
+        int validTargets = 0;
+        Ship target = null;
+        foreach(Ship s in targets) {
+            if(s != null) {
+                target = s;
+                validTargets++;
+            } 
+        }
+        if(validTargets == 0) {
+            return false;
+        }
+        if(validTargets == 1) {
+            PhaseManager.addCatapultAnimation(attacker,target);
+            return false;
+        }
+        return true;
     }
 }

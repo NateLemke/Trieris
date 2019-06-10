@@ -324,7 +324,7 @@ public static class PhaseManager
         }
         setSubphaseText("choose ramming targets");
         foreach (ShipTargetResolution tr in rammingTargetResolutions) {
-            if (tr.attacker == null || tr.targets.Count == 0) {
+            if (!tr.needsResolving()) {
                 continue;
             }
             yield return focus(tr.attacker.Position);
@@ -367,7 +367,7 @@ public static class PhaseManager
         setSubphaseText("chose catapult targets");
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
-            if (tr.attacker == null || !tr.attacker.CanFire || tr.targets.Count == 0) {
+            if (!tr.attacker.CanFire || !tr.needsResolving()) {
                 continue;
             }
             yield return focus(tr.attacker.Position);
