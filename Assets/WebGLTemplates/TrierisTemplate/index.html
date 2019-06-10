@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Trieris Game</title>
+    <script src="Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/4900 Trieris WebGL Test Build.json");
+    </script>
+  </head>
+  <body>
+    <div id="webgl" style="width: 1280px; height: 720px; top: 50%; left: 50%; transform: translate(-50%, -50%); position:absolute;">
+        <div id="gameContainer" style="width: 1280px; height: 720px; margin: 0px; border: 0px; position: relative; display: block;">
+            <canvas id="gameCanvas" width="1280" height="720" display="block"></canvas>
+        </div>
+
+    </div>
+  </body>
+</html>
