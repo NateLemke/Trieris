@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
@@ -363,5 +364,15 @@ public class GameManager : MonoBehaviour {
     public void changeMusicVolume()
     {
         gameObject.GetComponents<AudioSource>()[1].volume = GameObject.Find("OverlayCanvas/OptionsMenu/MusicVolumeSlider").GetComponent<Slider>().value; ;
+    }
+
+    public void restartGame()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void goToStartMenu()
+    {
+        SceneManager.LoadScene("StartMenu");
     }
 }
