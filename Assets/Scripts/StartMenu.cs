@@ -53,7 +53,7 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     public void CreditsButton()
     {
-        GameObject credits = GameObject.Find("Canvas/Panel");
+        GameObject credits = GameObject.Find("Canvas");
         credits.transform.Find("Credits").gameObject.SetActive(true);
     }
 
@@ -62,7 +62,7 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     public void CloseCredits()
     {
-        GameObject credits = GameObject.Find("Canvas/Panel");
+        GameObject credits = GameObject.Find("Canvas");
         credits.transform.Find("Credits").gameObject.SetActive(false);
     }
 

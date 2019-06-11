@@ -912,7 +912,7 @@ GameObject:
   - component: {fileID: 396416411}
   - component: {fileID: 396416410}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: MenuPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -932,7 +932,6 @@ RectTransform:
   - {fileID: 1768777426}
   - {fileID: 1713940848}
   - {fileID: 1502808406}
-  - {fileID: 1552453155}
   m_Father: {fileID: 660165715}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1453,6 +1452,7 @@ RectTransform:
   m_Children:
   - {fileID: 396416409}
   - {fileID: 359105218}
+  - {fileID: 1552453155}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3813,15 +3813,15 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552453154}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1076638280}
   - {fileID: 1372628165}
   - {fileID: 1356858321}
-  m_Father: {fileID: 396416409}
-  m_RootOrder: 3
+  m_Father: {fileID: 660165715}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
