@@ -51,14 +51,6 @@ public class GameOver : MonoBehaviour
     }
 
     /// <summary>
-    /// Restarts the game
-    /// </summary>
-    public void Restart()
-    {
-        SceneManager.LoadScene("GameScene");
-    }
-
-    /// <summary>
     /// Exits the application
     /// </summary>
     public void ExitGame()

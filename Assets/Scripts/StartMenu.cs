@@ -1,19 +1,32 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// Contains functions that are used for the buttons on the main menu.
 /// </summary>
 public class StartMenu : MonoBehaviour
 {
+    void Start()
+    {
+        transform.Find("MP/InputField").gameObject.GetComponent<InputField>().text = Environment.UserName;
+    }
+
     /// <summary>
     /// Starts the game by loading the main game scene.
     /// </summary>
-    public void startGame()
+    public void singleplayerGame()
     {
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void multiplayerGame()
+    {
+        GameObject parent = GameObject.Find("Canvas").gameObject;
+        parent.transform.Find("MultiplayerPanel").gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -51,5 +64,10 @@ public class StartMenu : MonoBehaviour
     {
         GameObject credits = GameObject.Find("Canvas/Panel");
         credits.transform.Find("Credits").gameObject.SetActive(false);
+    }
+
+    public void CloseMultiplayerPanel()
+    {
+        GameObject.Find("Canvas/MultiplayerPanel").SetActive(false);
     }
 }
