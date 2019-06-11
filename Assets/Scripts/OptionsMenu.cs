@@ -11,6 +11,11 @@ public class OptionsMenu : MonoBehaviour
     // reference to the scene's main UI overlay canvas
     GameObject overlay;
 
+    // Value used to confirm going to start menu or restarting the game
+    bool confirmationValue;
+
+    IEnumerator curCoroutine;
+
     /// <summary>
     /// Causes the program to close. Called by the quit game button.s
     /// </summary>
@@ -55,5 +60,51 @@ public class OptionsMenu : MonoBehaviour
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
         overlay.transform.Find("HelpPanel/Rules").gameObject.SetActive(true);
+    }
+
+    public void goToStartMenu()
+    {
+        transform.Find("ConfirmationPanel").gameObject.SetActive(true);
+        curCoroutine = StartMenuEnumerator();
+        StartCoroutine(curCoroutine);
+    }
+
+    public void restartGame()
+    {
+        transform.Find("ConfirmationPanel").gameObject.SetActive(true);
+        curCoroutine = RestartEnumerator();
+        StartCoroutine(curCoroutine);
+    }
+    
+    private IEnumerator StartMenuEnumerator()
+    {
+        while (!confirmationValue)
+        {
+            Debug.Log("blah1");
+            yield return null;
+        }
+        GameManager.main.goToStartMenu();
+    }
+
+    private IEnumerator RestartEnumerator()
+    {
+        while (!confirmationValue)
+        {
+            Debug.Log("blah2");
+            yield return null;
+        }
+        GameManager.main.restartGame();
+    }
+
+    public void confirmConfirmation()
+    {
+        confirmationValue = true;
+        transform.Find("ConfirmationPanel").gameObject.SetActive(false);
+    }
+
+    public void cancelConfirmation()
+    {
+        StopCoroutine(curCoroutine);
+        transform.Find("ConfirmationPanel").gameObject.SetActive(false);
     }
 }
