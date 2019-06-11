@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour {
         createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
+        Time.timeScale = 1;
     }
 
     /// <summary>
