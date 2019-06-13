@@ -9,12 +9,13 @@ using UnityEngine;
 /// Represents one team in the game, and contains it's ships and ports.
 /// There are 6 teams in the game, including the player's team.
 /// </summary>
-public class Team 
-{
-    public enum Type { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
+public class Team {
+    public enum Type { ai, player, empty }
+    public enum Faction { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
     public int shipIdCounter = 0;
 
-    Team.Type teamType;
+    Team.Faction teamFaction;
+    
     public List<Ship> ships { get; set; }
     public List<Port> ports { get; set; }
 
@@ -29,8 +30,8 @@ public class Team
 
     public int portsCaptured() {
         int count = 0;
-        foreach(Port p in GameManager.main.Board.getAllPorts()) {
-            if(p.teamType == teamType) {
+        foreach(Port p in GameManager.main.Board.ports) {
+            if(p.teamType == teamFaction) {
                 count++;
             }
         }
@@ -87,10 +88,10 @@ public class Team
     /// Creates new lists for ports and ships.
     /// </summary>
     /// <param name="t"></param>
-    public Team(Team.Type t) {
+    public Team(Team.Faction t) {
         ships = new List<Ship>();
         ports = new List<Port>();
-        teamType = t;
+        teamFaction = t;
         //loadSprites();
         setPortsAndCapital();
     }
@@ -101,18 +102,18 @@ public class Team
     /// <returns>The port sprite for this team.</returns>
     public Sprite getPortSprite() {
         //return portSprite;
-        switch (teamType) {
-            case Type.red:
+        switch (teamFaction) {
+            case Faction.red:
             return Sprites.main.RedPort;
-            case Type.orange:
+            case Faction.orange:
             return Sprites.main.OrangePort;
-            case Type.yellow:
+            case Faction.yellow:
             return Sprites.main.YellowPort;
-            case Type.green:
+            case Faction.green:
             return Sprites.main.GreenPort;
-            case Type.blue:
+            case Faction.blue:
             return Sprites.main.BluePort;
-            case Type.black:
+            case Faction.black:
             return Sprites.main.BlackPort;
             default:
             return null;
@@ -171,8 +172,8 @@ public class Team
     /// Returns the teamtype for this Team.
     /// </summary>
     /// <returns>The teamtype for this team.</returns>
-    public Type getTeamType() {
-        return teamType;
+    public Faction getTeamType() {
+        return teamFaction;
     }
 
     /// <summary>
@@ -180,18 +181,18 @@ public class Team
     /// </summary>
     /// <returns>The standard colour this team.</returns>
     public Color getColor() {
-        switch (teamType) {
-            case Team.Type.black:
+        switch (teamFaction) {
+            case Team.Faction.black:
             return CustomColor.TeamBlack;
-            case Team.Type.blue:
+            case Team.Faction.blue:
             return CustomColor.TeamBlue;
-            case Team.Type.green:
+            case Team.Faction.green:
             return CustomColor.TeamGreen;
-            case Team.Type.orange:
+            case Team.Faction.orange:
             return CustomColor.TeamOrange;
-            case Team.Type.red:
+            case Team.Faction.red:
             return CustomColor.TeamRed;
-            case Team.Type.yellow:
+            case Team.Faction.yellow:
             return CustomColor.TeamYellow;
             default:
             Debug.LogError("Invalid team type");
@@ -204,18 +205,18 @@ public class Team
     /// </summary>
     /// <returns>The light colour this team.</returns>
     public Color getColorLight() {
-        switch (teamType) {
-            case Team.Type.black:
+        switch (teamFaction) {
+            case Team.Faction.black:
             return CustomColor.TeamBlackLight;
-            case Team.Type.blue:
+            case Team.Faction.blue:
             return CustomColor.TeamBlueLight;
-            case Team.Type.green:
+            case Team.Faction.green:
             return CustomColor.TeamGreenLight;
-            case Team.Type.orange:
+            case Team.Faction.orange:
             return CustomColor.TeamOrangeLight;
-            case Team.Type.red:
+            case Team.Faction.red:
             return CustomColor.TeamRedLight;
-            case Team.Type.yellow:
+            case Team.Faction.yellow:
             return CustomColor.TeamYellowLight;
             default:
             Debug.LogError("Invalid team type");
@@ -228,7 +229,7 @@ public class Team
     /// </summary>
     /// <returns>the string version of the teamtype for this team.</returns>
     public override string ToString() {
-        return teamType.ToString();
+        return teamFaction.ToString();
     }
 
     /// <summary>
@@ -240,7 +241,7 @@ public class Team
             return;
         }
 
-        TextAsset portsFile = Resources.Load<TextAsset>("WorldData/" + teamType.ToString() + "Ports");
+        TextAsset portsFile = Resources.Load<TextAsset>("WorldData/" + teamFaction.ToString() + "Ports");
         string portsText = portsFile.text;
         string[] portsLines = Regex.Split(portsText,"\n");
         foreach (string s in portsLines) {

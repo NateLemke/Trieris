@@ -53,6 +53,7 @@ public class TrierisAI {
             Debug.Log("Assigning an AI a NULL team");
         }
         team = t;
+        team.aiTeam = true;
         if(team.ships.Count == 0) {
             Debug.Log("Assigning an AI a team with no ships");
         }

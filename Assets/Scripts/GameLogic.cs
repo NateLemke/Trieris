@@ -37,7 +37,7 @@ public class GameLogic : MonoBehaviour {
         PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
-        foreach (Ship ship in gameManager.getPlayerShips()) {
+        foreach (Ship ship in gameManager.getHumanShips()) {
             ship.canActAfterCollision = true;
             if (!(ship.ready())) {
                 ship.populateDefaultActions();
@@ -58,38 +58,9 @@ public class GameLogic : MonoBehaviour {
         
         // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
-            
-            determineGameState();
 
-            gameManager.uiControl.enableControls();
+            endTurn();
 
-            GameManager.main.uiControl.GoText.text = "START TURN";
-            PhaseManager.DisablePhaseUI();
-            phaseIndex = 4;
-            resetShips();
-            turnIndex++;
-            foreach(Ship ship in gameManager.getAllShips())
-            {
-                ship.CanFire = true;
-            }
-            foreach (Ship s in gameManager.getPlayerShips()) {
-                s.currentActionIndex = 0;
-                s.catapultIndex = -1;
-                s.catapultDirection = -1;
-                s.actions = new Ship.Action[4];
-                s.populateDefaultActions();
-            }
-
-            Image image;
-            for (int i = 0; i < 4; i++) {
-                image = actionImages[i].GetComponent<Image>();
-                var tempCol = image.color;
-                image.sprite = null;
-                tempCol.a = 0;
-                image.color = tempCol;
-            }
-
-            gameManager.uiControl.setSelection(gameManager.getPlayerShips()[0].Id);
             return false;
         } else {
             phaseIndex++;
@@ -97,6 +68,47 @@ public class GameLogic : MonoBehaviour {
             executePhase(phaseIndex);
             return true;
         }
+    }
+
+    public void endTurn() {
+        determineGameState();
+
+        gameManager.uiControl.enableControls();
+
+        GameManager.main.uiControl.GoText.text = "START TURN";
+        PhaseManager.DisablePhaseUI();
+        phaseIndex = 4;
+        resetShips();
+        turnIndex++;
+        foreach (Ship ship in gameManager.getAllShips()) {
+            ship.CanFire = true;
+        }
+
+        foreach(Team t in gameManager.getHumanTeams()) {
+
+            t.ready = false;
+
+            foreach (Ship s in t.ships) {
+                s.currentActionIndex = 0;
+                s.catapultIndex = -1;
+                s.catapultDirection = -1;
+                s.actions = new Ship.Action[4];
+                s.populateDefaultActions();
+            }
+        }
+
+        
+
+        Image image;
+        for (int i = 0; i < 4; i++) {
+            image = actionImages[i].GetComponent<Image>();
+            var tempCol = image.color;
+            image.sprite = null;
+            tempCol.a = 0;
+            image.color = tempCol;
+        }
+
+        gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
     }
     
     /// <summary>
@@ -115,7 +127,7 @@ public class GameLogic : MonoBehaviour {
                 }
                     
 
-                if (ship.needRedirect && ship.team != gameManager.playerTeam)
+                if (ship.needRedirect && ship.team != GameManager.playerTeam)
                 {
                     int newDirection = 0;
                     newDirection = ship.Ai.setNewShipDirection(ship);
@@ -175,11 +187,11 @@ public class GameLogic : MonoBehaviour {
     /// </summary>
     private void determineGameState()
     {
-        if (GameManager.main.playerTeam.ships.Count == 0)
+        if (GameManager.playerTeam.ships.Count == 0)
         {
             gameOver("Defeat");
         }
-        else if (GameManager.main.getAllShips().Count == GameManager.main.playerTeam.ships.Count)
+        else if (GameManager.main.getAllShips().Count == GameManager.playerTeam.ships.Count)
         {
             gameOver("Victory");
         }
@@ -189,7 +201,7 @@ public class GameLogic : MonoBehaviour {
             {
                 int portCount = 0;
                 bool hasCapital = false;
-                foreach (Port port in GameManager.main.Board.getAllPorts())
+                foreach (Port port in GameManager.main.Board.ports)
                 {
                     if (port.Team == t)
                     {
@@ -203,7 +215,7 @@ public class GameLogic : MonoBehaviour {
                 }
                 if(portCount >= 12)
                 {
-                    if(t == GameManager.main.playerTeam)
+                    if(t == GameManager.playerTeam)
                         gameOver("Victory");
                     else
                     {
@@ -246,7 +258,7 @@ public class GameLogic : MonoBehaviour {
                     if (s.team != ship.team)
                         enemyShipNo++;
                 }
-                if (ship.team == gameManager.playerTeam && enemyShipNo == 0)
+                if (!ship.belongsToAI() && enemyShipNo == 0)
                 {
                     ship.needCaptureChoice = true;
                     
@@ -288,7 +300,7 @@ public class GameLogic : MonoBehaviour {
 
                     if (potentialCollisions.Count != 0) {
                         Ship chosenShip = null;
-                        if (ship.team == gameManager.playerTeam) {
+                        if (!ship.belongsToAI()) {
                             
                             if(potentialCollisions.Count > 1) {
                                 ship.needRammingChoice = true;
@@ -352,7 +364,7 @@ public class GameLogic : MonoBehaviour {
                 }
                 else if(potentialTargets.Count == 1) {
                     chosenShip = potentialTargets[0];
-                } else if (GameManager.main.getPlayerShips().Contains(ship)) {
+                } else if (!ship.belongsToAI()) {
                     if (potentialTargets.Count > 0) {
 
                         // need player ship catapult choice

@@ -397,7 +397,7 @@ public class Ship : MonoBehaviour {
             needRedirect = true;
             movedForward = false;
             momentum = 0;
-            if(team == GameManager.main.playerTeam)
+            if(team == GameManager.playerTeam)
                 activateRedirectNotification();
             return;
         }
@@ -472,7 +472,7 @@ public class Ship : MonoBehaviour {
         if (node != null) {
             node.Ships.Remove(this);
         }
-        if(this.team == GameManager.main.playerTeam)
+        if(this.team == GameManager.playerTeam)
         {
             Button st = GameManager.main.uiControl.ShipTabs[this.Id].GetComponent<Button>();
 
@@ -796,31 +796,30 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Draws debug gizmos for this ship
     /// </summary>
-//    private void OnDrawGizmos() {
-//        
-//        Handles.color = Color.magenta;
-//
-//        if (needRedirect) {
-//            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
-//        }
-//
-//        if (!canAct)
-//        {
-//            Handles.Label(transform.position + new Vector3(0, -0.5f), "cannot act");
-//        }
-//
-//        if (needCaptureChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
-//        }
-//
-//        if (needRammingChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
-//        }
-//
-//        if (needCatapultChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
-//        }       
-//    }
+    private void OnDrawGizmos() {
+
+        Handles.color = Color.magenta;
+
+        if (needRedirect) {
+            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+        }
+
+        if (!canAct) {
+            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
+        }
+
+        if (needCaptureChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
+        }
+
+        if (needRammingChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
+        }
+
+        if (needCatapultChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+        }
+    }
 
     /// <summary>
     /// Initiates the combat damage text for this ship
@@ -989,5 +988,9 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public Vector2 getNodePos() {
         return node.shipNodePos(this); 
+    }
+
+    public bool belongsToAI() {
+        return this.team.aiTeam;
     }
 }

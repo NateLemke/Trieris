@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour {
     public GameLogic gameLogic;
     // private List<Ship> ships = new List<Ship>();
     public UIControl uiControl;
-    private List<TrierisAI> aiList;
+    private List<TrierisAI> aiList = new List<TrierisAI>();
     public bool gameOver = false;
 
     // for moving and flipping the way the board is rendered offscreen
@@ -30,9 +30,9 @@ public class GameManager : MonoBehaviour {
     //public bool needRammingChoice = false;
     //public bool shipCrashed;
     public static GameManager main;
-    public List<Team> teams = new List<Team>();
+    public Team[] teams = new Team[6];
     LineRenderer lineRenderer;
-    public Team playerTeam;
+    //public Team playerTeam;
 
     public bool cameraLock;
 
@@ -40,7 +40,9 @@ public class GameManager : MonoBehaviour {
     //public static int PortsCaptured { get; set; }
 
     // new multiplayer data
-    public static bool[] aiTeams = new bool[6];
+    public static Team playerTeam;
+    public static Team.Faction playerFaction;
+    public static Team.Type[] teamTypes = new Team.Type[6];
 
     // new multiplayer functions
     public bool playersReady() {
@@ -70,6 +72,10 @@ public class GameManager : MonoBehaviour {
 
     public bool needRammingChoice() {
         foreach (Team t in teams) {
+            if(t == null) {
+                continue;
+            }
+
             if (!t.aiTeam && t.needRammingChoice()) {
                 return true;
             }
@@ -79,6 +85,10 @@ public class GameManager : MonoBehaviour {
 
     public bool needCatapultChoice() {
         foreach (Team t in teams) {
+            if (t == null) {
+                continue;
+            }
+
             if (!t.aiTeam && t.needCatapultChoice()) {
                 return true;
             }
@@ -86,10 +96,35 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
-    public void setupGame() {
+    public void setupGame(int playerChoice) {
+
+        for(int i = 0; i < 6; i++) {
+            if(i == playerChoice) {
+                teamTypes[i] = Team.Type.player;
+            } else {
+                teamTypes[i] = Team.Type.ai;
+            }
+        }       
+
+        createTeams();
+
+        playerTeam = teams[(int)playerFaction];
+
+        if (playerTeam == null) {
+            Debug.LogError("Player's team is null");
+        }
+
+        createPorts();
+        createShips();
+
+        assignAI();
+
         promptInitialRedirets();
         revealRedirects();
         setAIDirections();
+
+        cameraLock = false;
+        GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
     }
 
     public void promptInitialRedirets() {
@@ -122,10 +157,8 @@ public class GameManager : MonoBehaviour {
     /// Assigns additional references
     /// </summary>
     private void Start() {
-        createTeams();
-        createPorts();
-        createShips();
-        createAIs();
+
+        //createAIs();
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
         Time.timeScale = 1;
@@ -145,8 +178,12 @@ public class GameManager : MonoBehaviour {
     /// Checks if any ships currently need to be redirected
     /// </summary>
     public bool needRedirect() {
-        foreach (Ship ship in getAllShips()) {
-            if (ship.needRedirect) {
+        foreach (Team t in teams) {
+            if (t == null) {
+                continue;
+            }
+
+            if (t.aiTeam == false && t.needRedirectChoice()) {
                 return true;
             }
         }
@@ -157,8 +194,14 @@ public class GameManager : MonoBehaviour {
     /// Checks if any ships need to make a port capture choice
     /// </summary>
     public bool needCaptureChoice() {
-        foreach (Ship ship in getAllShips()) {
-            if (ship.needCaptureChoice) {
+
+
+        foreach (Team t in teams) {
+            if (t == null) {
+                continue;
+            }
+
+            if (t.aiTeam == false && t.needCaptureChoice()) {
                 return true;
             }
         }
@@ -201,10 +244,24 @@ public class GameManager : MonoBehaviour {
         return r;
     }
 
-    /// <summary>
-    /// returns a reference to the list of ships on the player's team
-    /// </summary>
-    /// <returns></returns>
+    public List<Team> getHumanTeams() {
+        List<Team> teams = new List<Team>();
+        foreach(Team t in this.teams) {
+            if(t != null && !t.aiTeam) {
+                teams.Add(t);
+            }
+        }
+        return teams;
+    }
+
+    public List<Ship> getHumanShips() {
+        List<Ship> ships = new List<Ship>();
+        foreach(Team t in getHumanTeams()) {
+            ships.AddRange(t.ships);
+        }
+        return ships;
+    }
+
     public List<Ship> getPlayerShips() {
         return playerTeam.ships;
     }
@@ -215,7 +272,7 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     public List<Ship> getAllAiShips() {
         List<Ship> r = new List<Ship>();
-        for(int i = 0; i < teams.Count; i++) {
+        for(int i = 0; i < teams.Length; i++) {
             if(i != (int)playerTeam.getTeamType()) {
                 r.AddRange(teams[i].ships);
             }
@@ -279,7 +336,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="t">the team type</param>
     /// <returns>A reference to a team</returns>
-    public Team getTeam (Team.Type t) {
+    public Team getTeam (Team.Faction t) {
         return teams[(int)t];
     }
 
@@ -289,7 +346,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="i">the team index</param>
     /// <returns>A referemce to a team</returns>
     public Team getTeam(int i) {
-        if(i < 0 || i >= teams.Count) {
+        if(i < 0 || i >= teams.Length) {
             Debug.LogError("getTeam argument out of range");
             return null;
         }
@@ -346,7 +403,7 @@ public class GameManager : MonoBehaviour {
     /// Sets the redirect UI to active for all ships that need a redirect choice made
     /// </summary>
     public void revealRedirects() {
-        foreach(Ship s in getPlayerShips()) {
+        foreach(Ship s in getHumanShips()) {
             s.setRedirectUI(true);
         }
     }
@@ -391,8 +448,16 @@ public class GameManager : MonoBehaviour {
     /// Creates the instances of each team type
     /// </summary>
     public void createTeams() {
-        foreach (Team.Type teamType in (Team.Type[])Enum.GetValues(typeof(Team.Type))) {
-            teams.Add(new Team(teamType));
+        foreach (Team.Faction faction in (Team.Faction[])Enum.GetValues(typeof(Team.Faction))) {
+
+            int index = (int)faction;
+
+            if (teamTypes[index] == Team.Type.empty) {
+                continue;
+            }
+            Team t = new Team(faction);
+            teams[index] = t;
+            
         }
     }
 
@@ -418,11 +483,11 @@ public class GameManager : MonoBehaviour {
     /// Create an AI for every team
     /// (player team ignores their AI)
     /// </summary>
-    void createAIs() {
-        aiList = new List<TrierisAI>();
-        for (int i = 0; i < teams.Count; i++) {
-            aiList.Add(new TrierisAI(teams[i]));
-            teams[i].aiTeam = true;
+    void assignAI() {
+        for(int i = 0; i < teamTypes.Length; i++) {
+            if(teamTypes[i] == Team.Type.ai) {
+                aiList.Add(new TrierisAI(teams[i]));
+            }
         }
     }
 
@@ -445,4 +510,6 @@ public class GameManager : MonoBehaviour {
     {
         SceneManager.LoadScene("StartMenu");
     }
+
+
 }

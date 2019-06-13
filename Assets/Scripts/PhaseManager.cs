@@ -331,9 +331,10 @@ public static class PhaseManager
             yield return tr.resolve();
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
+            tr.attacker.needRammingChoice = false;
         }
         while (GameManager.main.needRammingChoice()) {
-            if (!GameManager.main.playerTeam.needRammingChoice()) {
+            if (!GameManager.playerTeam.needRammingChoice()) {
                 // waiting for another player to be ready
             }
             yield return null;
@@ -374,15 +375,17 @@ public static class PhaseManager
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
             if (!tr.attacker.CanFire || !tr.needsResolving()) {
+                tr.attacker.needCatapultChoice = false;
                 continue;
             }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
+            tr.attacker.needCatapultChoice = false;
         }
 
         while (GameManager.main.needCatapultChoice()) {
-            if (!GameManager.main.playerTeam.needCatapultChoice()) {
+            if (!GameManager.playerTeam.needCatapultChoice()) {
                 // waiting for another player to be ready
             }
             yield return null;
@@ -472,7 +475,7 @@ public static class PhaseManager
             }
         }
         while (GameManager.main.needCaptureChoice()) {
-            if (!GameManager.main.playerTeam.needCaptureChoice()) {
+            if (!GameManager.playerTeam.needCaptureChoice()) {
                 // waiting for another player to be ready
             }
             yield return null;
@@ -496,7 +499,7 @@ public static class PhaseManager
         }
         yield return focus(focusTarget.Position);
         while (GameManager.main.needRedirect()) {
-            if (!GameManager.main.playerTeam.needRedirectChoice()) {
+            if (!GameManager.playerTeam.needRedirectChoice()) {
                 // waiting for another player
             }
             yield return null;

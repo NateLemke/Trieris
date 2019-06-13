@@ -16,7 +16,6 @@ public class Board{
     public const int ROW_OF_NODES = 16;
     public const int COLUMN_OF_NODES = 21;
     public List<Port> ports = new List<Port>();
-    private List<Node> portNodes = new List<Node>();
 
     private Node[,] node;
 
@@ -25,22 +24,6 @@ public class Board{
         initialize();
         setIsland();
         setAdjacentNodes();
-    }
-
-    /// <summary>
-    /// Returns all the ports on the board
-    /// </summary>
-    /// <returns>List of ports</returns>
-    public List<Port> getAllPorts() {
-        return ports;
-    }
-
-    /// <summary>
-    /// Returns all the nodes on the board that have a port on it
-    /// </summary>
-    /// <returns>List of Nodes</returns>
-    public List<Node> getAllPortNodes() {
-        return portNodes;
     }
 
     /// <summary>

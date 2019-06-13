@@ -321,6 +321,19 @@ public class UIControl : MonoBehaviour
         selected.redirect(newDirection);
     }
 
+
+    public void toggleReady() {
+        GameManager.playerTeam.ready = !GameManager.playerTeam.ready;
+        if (GameManager.playerTeam.ready) {
+            foreach(Team t in gameManager.getHumanTeams()) {
+                if (!t.ready) {
+                    return;
+                }
+            }
+            startTurn();
+        }
+    }
+
     /// <summary>
     /// Executes the next turn of the game.
     /// Used when the player clicks the start turn button.
@@ -426,7 +439,7 @@ public class UIControl : MonoBehaviour
     public void setTeam(int i)
     {
         TeamSelectUI.SetActive(false);
-        gameManager.setPlayerTeam(i);
+        gameManager.setupGame(i);
 
         setSelection(gameManager.getPlayerShips()[0].Id);
 
@@ -653,14 +666,14 @@ public class UIControl : MonoBehaviour
     {
         int[] scores = new int[6];
 
-        foreach (Port p in GameManager.main.Board.getAllPorts())
+        foreach (Port p in GameManager.main.Board.ports)
         {
             scores[(int)p.Team.getTeamType()]++;
         }
 
         for (int i = 0; i < 6; i++)
         {
-            if (i == (int)gameManager.playerTeam.getTeamType())
+            if (i == (int)GameManager.playerTeam.getTeamType())
                 GameObject.Find("VictoryText").GetComponent<Text>().text = scores[i] + "/12\nports";
             portTexts[i].text = scores[i] + " / 12";
         }
@@ -700,7 +713,7 @@ public class UIControl : MonoBehaviour
     /// </summary>
     public void setShipAttacks()
     {
-        foreach(Ship s in gameManager.getPlayerShips())
+        foreach(Ship s in gameManager.getHumanShips())
         {
             foreach(Ship.Action a in s.actions)
             {

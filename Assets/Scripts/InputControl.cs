@@ -75,7 +75,7 @@ public class InputControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) {
             SpeedManager.skipSubPhase();
         }
-        if (gameManager.playerTeam != null) {
+        if (GameManager.playerTeam != null) {
             shipSelectUpdate();
         }
 

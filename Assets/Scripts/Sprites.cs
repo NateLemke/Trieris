@@ -116,17 +116,17 @@ public class Sprites : MonoBehaviour {
     /// <returns>the port sprite for the given team.</returns>
     public static Sprite getTeamPort(Team team) {
         switch (team.getTeamType()) {
-            case Team.Type.red:
+            case Team.Faction.red:
             return main.RedPort;
-            case Team.Type.orange:
+            case Team.Faction.orange:
             return main.OrangePort;
-            case Team.Type.yellow:
+            case Team.Faction.yellow:
             return main.YellowPort;
-            case Team.Type.green:
+            case Team.Faction.green:
             return main.GreenPort;
-            case Team.Type.blue:
+            case Team.Faction.blue:
             return main.BluePort;
-            case Team.Type.black:
+            case Team.Faction.black:
             return main.BlackPort;
             default:
             return null;

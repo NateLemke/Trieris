@@ -32,7 +32,7 @@
   <Class Name="CatapultResolution">
     <Position X="1.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAgAAgAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAABAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\CatapultResolution.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -87,29 +87,22 @@
   </Class>
   <Class Name="GameLogic">
     <Position X="3.5" Y="15.75" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="GameLogic.Phases" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Assets\Scripts\GameLogic.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>gEAAIAAAAEAAEQCBABAAIEAABAAAYAAAAAABAIAAEMA=</HashCode>
+      <HashCode>gEAAIAAAAEAAEQCBABAEIEAABAAAQAAAAAABAIAAEMA=</HashCode>
       <FileName>Assets\Scripts\GameLogic.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameManager">
     <Position X="2" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AkSECEYAIGpEBCBJAAIEAAgKEBgEAQgAIAAcQAoEAMc=</HashCode>
+      <HashCode>gkYECEUAIGpEACBAAAIGAAgoEBgEIQgAYACQQCoACMU=</HashCode>
       <FileName>Assets\Scripts\GameManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameOver">
     <Position X="16.75" Y="20" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EAAIAAAAQAEAEQAAAAAAAAAAAAAEAAAAAAAAAAAAAUA=</HashCode>
+      <HashCode>AAAIAAAAQAEAEQAAAAAAAAAAAAAEAAAAAAAAAAAAAUA=</HashCode>
       <FileName>Assets\Scripts\GameOver.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -137,14 +130,14 @@
       </Struct>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>IAAIIABAAjAAJAAACEACgAAAEIADQQGAAAAICAAApAA=</HashCode>
+      <HashCode>IAAIIABACjAAJAAACEACoAAAEIADQSGAAABICAIApAA=</HashCode>
       <FileName>Assets\Scripts\HelpMenu.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="InputControl">
     <Position X="8" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEUoAAAgAiAgFgAAAACCABAAggAAEAICBCAAEAAEiEA=</HashCode>
+      <HashCode>AEUoAAAgBiAgFgAAAACCABAAggAAEAICBCAAEAAEiEA=</HashCode>
       <FileName>Assets\Scripts\InputControl.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -158,7 +151,7 @@
   <Class Name="Node">
     <Position X="22.25" Y="15" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAEAAAAQAEAAEAUAAhAKACMACAiAAABigGAJAig=</HashCode>
+      <HashCode>AAAAAAAAAAAQAEAAEAQAAhAMCAIACCCAAAAAAAABYAg=</HashCode>
       <FileName>Assets\Scripts\Node.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -173,7 +166,7 @@
   <Class Name="OptionsMenu">
     <Position X="13.25" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAZAAAAAAABAAAAAAQAAAAAA=</HashCode>
+      <HashCode>AAAAAAAIAAACACQAAAAAAZAAAAAAEAAAQACAQAAAggA=</HashCode>
       <FileName>Assets\Scripts\OptionsMenu.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -187,14 +180,14 @@
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>pSAAAAAhCABCgBCgAAgQQgQEFAgEQRIEABARCoAgREo=</HashCode>
+      <HashCode>pSAAAAAhCABCgBCgAAgAQgQAFAgEQRIEABARCoAgREo=</HashCode>
       <FileName>Assets\Scripts\PhaseManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Port">
     <Position X="25.75" Y="15" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAAACAQAQAQAAABAIAQCAAAEAAIAAAAAAA=</HashCode>
+      <HashCode>AwAAAAABAAAAASAQAQAQAAABAIAQCAAAEAAIAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\Port.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -276,14 +269,14 @@
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>owVOCOROAVAoAGKgdQEQLwAZIAwQEtQsCcTCAUupAsA=</HashCode>
+      <HashCode>owVOCOROAdAoCGKgdQEQLwAZIAwQEtQsCcTCAUupAsA=</HashCode>
       <FileName>Assets\Scripts\Ship.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="ShipTargetResolution" Collapsed="true">
     <Position X="25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAAoAAAAAAAAAAEAAAIAABAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAABAAAAoAAAAAAAACAEAAAIAABAAAAAAAA=</HashCode>
       <FileName>Assets\Scripts\ShipTargetResolution.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -325,7 +318,7 @@
   <Class Name="StartMenu">
     <Position X="13.25" Y="18.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <HashCode>AAAAAAAAACABAAAAABAAAAAAAAACAghAAAAAAAAAQAA=</HashCode>
       <FileName>Assets\Scripts\StartMenu.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -353,9 +346,10 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>QgAAAAAAAgAUBAAEAAgAAAAAABAUABAAAAAAhEAQAAA=</HashCode>
+      <HashCode>QgAAQAQAAwEUBAQECAgAAAAAABAUABAAAAAAhEwQAAA=</HashCode>
       <FileName>Assets\Scripts\Team.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="TempText" Collapsed="true">
     <Position X="25" Y="3" Width="1.5" />
@@ -377,7 +371,7 @@
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>wEQQADDIMyUqAQJhAkAAjBCloJiFhIAAFCNEBoFsGGY=</HashCode>
+      <HashCode>wEQQADFIM2UKAQJhAkAAjBClsJiFBIAAFCNkBoFsGGY=</HashCode>
       <FileName>Assets\Scripts\UIControl.cs</FileName>
     </TypeIdentifier>
   </Class>

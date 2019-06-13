@@ -35,6 +35,7 @@ public class ShipTargetResolution
         float xAverage = 0f;
         float yHighest = Mathf.NegativeInfinity;
         //float yHighest = targets[0].Position.y;
+        int count = 0;
         foreach(Ship t in targets) {
             if(t == null) {
                 continue;
@@ -49,6 +50,10 @@ public class ShipTargetResolution
             tb.parent = this;
             tb.target = t;
             buttons.Add(tb);
+            count++;
+        }
+        if(count == 0) {
+            yield break;
         }
         xAverage = xAverage / targets.Count;
         prefab = Resources.Load<GameObject>("Prefabs/ChooseText");

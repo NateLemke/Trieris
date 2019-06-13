@@ -37,7 +37,7 @@ public class GameOver : MonoBehaviour
         //portsCaptured.text = "Ports Captured: " + GameManager.PortsCaptured.ToString();
 
         portsHeld.text = "Ports Owned: " + countPorts().ToString();
-        shipsAlive.text = "Ships Owned: " + GameManager.main.playerTeam.ships.Count.ToString();
+        shipsAlive.text = "Ships Owned: " + GameManager.playerTeam.ships.Count.ToString();
     }
 
     /// <summary>
@@ -48,7 +48,7 @@ public class GameOver : MonoBehaviour
     {
         int portCount = 0;
         foreach(Port port in GameManager.main.Board.ports)
-            if (port.Team == GameManager.main.playerTeam)
+            if (port.Team == GameManager.playerTeam)
                 portCount++;
         return portCount;
     }
