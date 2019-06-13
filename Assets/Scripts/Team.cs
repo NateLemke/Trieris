@@ -22,6 +22,66 @@ public class Team
     public Sprite PortSprite { get { return Sprites.getTeamPort(this); } }
     public Sprite CapitalSprite { get { return Sprites.getColoredCaptial(this); } }
 
+    // new for multiplayer
+    public bool aiTeam = false;
+
+    public bool ready { get; set; }
+
+    public int portsCaptured() {
+        int count = 0;
+        foreach(Port p in GameManager.main.Board.getAllPorts()) {
+            if(p.teamType == teamType) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void toggleReady() {
+        ready = !ready;
+        if (ready) {
+
+        }
+    }
+
+    public bool needRammingChoice() {
+        foreach(Ship s in ships) {
+            if (s.needRammingChoice) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    internal bool needCatapultChoice() {
+        foreach (Ship s in ships) {
+            if (s.needCatapultChoice) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    internal bool needCaptureChoice() {
+        foreach (Ship s in ships) {
+            if (s.needCaptureChoice) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    internal bool needRedirectChoice() {
+        foreach(Ship s in ships) {
+            if (s.needRedirect) {
+                return true;
+            }
+        }
+        return false;
+    }
+    // end of new for multiplayer
+
+
     /// <summary>
     /// Basic constructor for the team.
     /// Creates new lists for ports and ships.
@@ -204,4 +264,6 @@ public class Team
             GameManager.main.spawnShip(p.node,this);
         }
     }
+
+
 }

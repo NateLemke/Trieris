@@ -77,6 +77,12 @@ public class UIControl : MonoBehaviour
 
     private Color objectiveColor;
 
+
+    // new multiplayer functions
+    
+
+
+
     /// <summary>
     /// basic initialization.
     /// </summary>
@@ -226,10 +232,10 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-        rammingNotice.SetActive(gameManager.needRammingChoice);
-        redirectNotice.SetActive(gameManager.needRedirect);
-        captureNotice.SetActive(gameManager.needCaptureChoice);
-        catapultNotice.SetActive(gameManager.needCatapultChoice);
+        rammingNotice.SetActive(gameManager.needRammingChoice());
+        redirectNotice.SetActive(gameManager.needRedirect());
+        captureNotice.SetActive(gameManager.needCaptureChoice());
+        catapultNotice.SetActive(gameManager.needCatapultChoice());
 
         turnPhase.text = "Turn: " + gameLogic.TurnIndex;
 
@@ -322,7 +328,7 @@ public class UIControl : MonoBehaviour
     /// </summary>
     public void startTurn()
     {
-        if (GameManager.main.needRedirect) {
+        if (GameManager.main.needRedirect()) {
             return;
         }
         disableControls();
@@ -342,6 +348,11 @@ public class UIControl : MonoBehaviour
             Debug.Log("Phase not == 4");
         }
     }
+
+    // new for multiplayer
+    //public void toggleReady() {
+    //    gameManager.playerTeam
+    //}
 
     /// <summary>
     /// Adds the given action to the selected ship's actions.

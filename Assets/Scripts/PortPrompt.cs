@@ -75,7 +75,10 @@ public class PortPrompt : MonoBehaviour{
     {
         foreach (Ship s in currentShip.getNode().Ships)
             s.needCaptureChoice = false;
-        GameManager.PortsCaptured++;
+
+        // needs to be changed for multiplayer
+        //GameManager.PortsCaptured++;
+
         currentShip.playerCapture();
         portPromptPanel.SetActive(false);
         GameManager.main.StartCoroutine(acceptAnimation(currentShip));

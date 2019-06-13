@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
     public Board Board { get { return board; } }
     private Board board;
     public GameLogic gameLogic;
-   // private List<Ship> ships = new List<Ship>();
+    // private List<Ship> ships = new List<Ship>();
     public UIControl uiControl;
     private List<TrierisAI> aiList;
     public bool gameOver = false;
@@ -23,20 +23,85 @@ public class GameManager : MonoBehaviour {
     private bool flipBoard;
 
     public bool processingTurn { get; set; }
-    public bool animationPlaying = false;
-    public bool needRedirect = false;
-    public bool needCaptureChoice = false;
-    public bool needCatapultChoice = false;
-    public bool needRammingChoice = false;
-    public bool shipCrashed;
+    //public bool animationPlaying = false;
+    //public bool needRedirect = false;
+    //public bool needCaptureChoice = false;
+    //public bool needCatapultChoice = false;
+    //public bool needRammingChoice = false;
+    //public bool shipCrashed;
     public static GameManager main;
     public List<Team> teams = new List<Team>();
     LineRenderer lineRenderer;
     public Team playerTeam;
 
     public bool cameraLock;
-    
-    public static int PortsCaptured { get; set; }
+
+    // needs to be changed for multiplayer
+    //public static int PortsCaptured { get; set; }
+
+    // new multiplayer data
+    public static bool[] aiTeams = new bool[6];
+
+    // new multiplayer functions
+    public bool playersReady() {
+        foreach (Team t in teams) {
+            if (!t.aiTeam && !t.ready) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setPlayerReady(Team t,bool ready) {
+        t.ready = ready;
+    }
+
+    public void beginTurn() {
+        if (GameLogic.phaseIndex != 4 || !playersReady()) {
+            return;
+        }
+
+        UIControl.main.disableControls();
+        UIControl.main.setShipAttacks();
+
+        gameLogic.executeTurn();
+    }
+
+
+    public bool needRammingChoice() {
+        foreach (Team t in teams) {
+            if (!t.aiTeam && t.needRammingChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool needCatapultChoice() {
+        foreach (Team t in teams) {
+            if (!t.aiTeam && t.needCatapultChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setupGame() {
+        promptInitialRedirets();
+        revealRedirects();
+        setAIDirections();
+    }
+
+    public void promptInitialRedirets() {
+        foreach(Team t in teams) {
+            if (!t.aiTeam) {
+                foreach(Ship s in t.ships) {
+                    s.needRedirect = true;
+                }
+            }
+        }
+    }
+
 
     /// <summary>
     /// Sets the static reference to the main gamemanager
@@ -71,48 +136,51 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private void Update() {        
 
-        checkForChoices();
+        //checkForChoices();
         //checkForExecuteNextPhase();
-        PhaseManager.drawFocusMargin();
+        //PhaseManager.drawFocusMargin();
     }
 
     /// <summary>
     /// Checks if any ships currently need to be redirected
     /// </summary>
-    public void checkForRedirects() {
+    public bool needRedirect() {
         foreach (Ship ship in getAllShips()) {
-            if (needRedirect = ship.needRedirect) {
-                break;
-
+            if (ship.needRedirect) {
+                return true;
             }
         }
+        return false;
     }
 
     /// <summary>
     /// Checks if any ships need to make a port capture choice
     /// </summary>
-    public void checkForCaptureChoice() {
+    public bool needCaptureChoice() {
         foreach (Ship ship in getAllShips()) {
-            if (needCaptureChoice = ship.needCaptureChoice) {
-                break;
+            if (ship.needCaptureChoice) {
+                return true;
             }
         }
+        return false;
     }
+
+
 
     /// <summary>
     /// Checks for pending redirects or port captures
     /// </summary>
-    public void checkForChoices() {
-        checkForRedirects();
-        checkForCaptureChoice();
-    }
+    //public void checkForChoices() {
+    //    checkForRedirects();
+    //    checkForCaptureChoice();
+    //}
 
     /// <summary>
     /// Checks if the game should execute the next phase
     /// </summary>
     public void checkForExecuteNextPhase() {
         if (processingTurn) {
-            if (!needRedirect && !needCaptureChoice) {
+            if (!needRedirect() && !needCaptureChoice()) {
                 processingTurn = gameLogic.executeNextPhase();
             }
         }
@@ -290,7 +358,8 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="i"></param>
     public void setPlayerTeam(int i) {
-        playerTeam = teams[i];        
+        playerTeam = teams[i];
+        playerTeam.aiTeam = false;
         foreach (Ship ship in playerTeam.ships) {
             ship.needRedirect = true;
         }
@@ -298,7 +367,6 @@ public class GameManager : MonoBehaviour {
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-
     }
 
     /// <summary>
@@ -354,6 +422,7 @@ public class GameManager : MonoBehaviour {
         aiList = new List<TrierisAI>();
         for (int i = 0; i < teams.Count; i++) {
             aiList.Add(new TrierisAI(teams[i]));
+            teams[i].aiTeam = true;
         }
     }
 

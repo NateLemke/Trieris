@@ -32,7 +32,10 @@ public class GameOver : MonoBehaviour
     public void Initialize(string gameOverState)
     {
         title.text = gameOverState;
-        portsCaptured.text = "Ports Captured: " + GameManager.PortsCaptured.ToString();
+
+        // needs to be changed for multiplayer
+        //portsCaptured.text = "Ports Captured: " + GameManager.PortsCaptured.ToString();
+
         portsHeld.text = "Ports Owned: " + countPorts().ToString();
         shipsAlive.text = "Ships Owned: " + GameManager.main.playerTeam.ships.Count.ToString();
     }

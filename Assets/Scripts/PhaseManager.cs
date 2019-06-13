@@ -332,6 +332,12 @@ public static class PhaseManager
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
         }
+        while (GameManager.main.needRammingChoice()) {
+            if (!GameManager.main.playerTeam.needRammingChoice()) {
+                // waiting for another player to be ready
+            }
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -375,7 +381,12 @@ public static class PhaseManager
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
         }
 
-
+        while (GameManager.main.needCatapultChoice()) {
+            if (!GameManager.main.playerTeam.needCatapultChoice()) {
+                // waiting for another player to be ready
+            }
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -444,7 +455,7 @@ public static class PhaseManager
     /// <returns></returns>
     public static IEnumerator portCaptureChoice() {
         subPhaseProgress();
-        if (!GameManager.main.needCaptureChoice) {
+        if (!GameManager.main.needCaptureChoice()) {
             yield break;
         }
         setSubphaseText("choose port capture");
@@ -460,9 +471,12 @@ public static class PhaseManager
                     yield return null;
             }
         }
-        //while (GameManager.main.needCaptureChoice) {
-        //    yield return null;
-        //}
+        while (GameManager.main.needCaptureChoice()) {
+            if (!GameManager.main.playerTeam.needCaptureChoice()) {
+                // waiting for another player to be ready
+            }
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -470,7 +484,7 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator resolveRedirects() {
-        if (!GameManager.main.needRedirect) {
+        if (!GameManager.main.needRedirect()) {
             yield break;
         }
         setSubphaseText("choose redirects");
@@ -481,7 +495,10 @@ public static class PhaseManager
             }
         }
         yield return focus(focusTarget.Position);
-        while (GameManager.main.needRedirect) {
+        while (GameManager.main.needRedirect()) {
+            if (!GameManager.main.playerTeam.needRedirectChoice()) {
+                // waiting for another player
+            }
             yield return null;
         }        
     }
