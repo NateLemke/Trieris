@@ -53,7 +53,7 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     public void CreditsButton()
     {
-        GameObject credits = GameObject.Find("Canvas/Panel");
+        GameObject credits = GameObject.Find("Canvas");
         credits.transform.Find("Credits").gameObject.SetActive(true);
     }
 
@@ -62,12 +62,23 @@ public class StartMenu : MonoBehaviour
     /// </summary>
     public void CloseCredits()
     {
-        GameObject credits = GameObject.Find("Canvas/Panel");
+        GameObject credits = GameObject.Find("Canvas");
         credits.transform.Find("Credits").gameObject.SetActive(false);
     }
 
     public void CloseMultiplayerPanel()
     {
         GameObject.Find("Canvas/MultiplayerPanel").SetActive(false);
+    }
+
+    public void LeaveRoom()
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").gameObject.SetActive(false);
+    }
+
+    public void OpenRoom()
+    {
+        GameObject mpPanel = GameObject.Find("Canvas/MultiplayerPanel").gameObject;
+        mpPanel.transform.Find("RoomPanel").gameObject.SetActive(true);
     }
 }
