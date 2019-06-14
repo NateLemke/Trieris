@@ -70,4 +70,15 @@ public class StartMenu : MonoBehaviour
     {
         GameObject.Find("Canvas/MultiplayerPanel").SetActive(false);
     }
+
+    public void LeaveRoom()
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").gameObject.SetActive(false);
+    }
+
+    public void OpenRoom()
+    {
+        GameObject mpPanel = GameObject.Find("Canvas/MultiplayerPanel").gameObject;
+        mpPanel.transform.Find("RoomPanel").gameObject.SetActive(true);
+    }
 }

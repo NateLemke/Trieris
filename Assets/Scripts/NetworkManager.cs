@@ -99,4 +99,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //{
     //    base.OnCreatedRoom();
     //}
+
+    public void OnClickDisconnect()
+    {
+        PhotonNetwork.Disconnect();
+    }
 }
