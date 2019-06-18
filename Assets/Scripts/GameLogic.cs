@@ -199,21 +199,21 @@ public class GameLogic : MonoBehaviour {
         {
             foreach(Team t in GameManager.main.teams)
             {
-                int portCount = 0;
-                bool hasCapital = false;
-                foreach (Port port in GameManager.main.Board.ports)
-                {
-                    if (port.Team == t)
-                    {
-                        portCount++;
+                //int portCount = 0;
+                //bool hasCapital = false;
+                //foreach (Port port in GameManager.main.Board.ports)
+                //{
+                //    if (port.Team == t)
+                //    {
+                //        portCount++;
 
-                        if (port.IsCapital && port.OriginalTeam == t)
-                        {
-                            hasCapital = true;
-                        }
-                    }
-                }
-                if(portCount >= 12)
+                //        if (port.IsCapital && port.OriginalTeam == t)
+                //        {
+                //            hasCapital = true;
+                //        }
+                //    }
+                //}
+                if(t.portsCaptured() >= 12)
                 {
                     if(t == GameManager.playerTeam)
                         gameOver("Victory");

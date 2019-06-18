@@ -30,7 +30,7 @@ public class ShipTargetResolution
     /// </summary>
     /// <returns></returns>
     public IEnumerator resolve() {
-
+        PhaseManager.chosenTarget = null;
         GameObject prefab = Resources.Load<GameObject>("Prefabs/TargetButton");
         float xAverage = 0f;
         float yHighest = Mathf.NegativeInfinity;

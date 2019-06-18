@@ -31,7 +31,7 @@ public class Team {
     public int portsCaptured() {
         int count = 0;
         foreach(Port p in GameManager.main.Board.ports) {
-            if(p.teamType == teamFaction) {
+            if(p.teamFaction == teamFaction) {
                 count++;
             }
         }

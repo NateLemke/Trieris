@@ -329,6 +329,9 @@ public static class PhaseManager
             }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
+            if (chosenTarget == null) {
+                continue;
+            }
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
             tr.attacker.needRammingChoice = false;
@@ -380,6 +383,11 @@ public static class PhaseManager
             }
             yield return focus(tr.attacker.Position);
             yield return tr.resolve();
+            if(chosenTarget == null) {
+                continue;
+            }
+
+
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
             tr.attacker.needCatapultChoice = false;
         }
