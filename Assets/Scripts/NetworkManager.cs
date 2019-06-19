@@ -84,7 +84,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Players: ");
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
-            Debug.Log(PhotonNetwork.PlayerList[i].UserId);
+            Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
         }
         Debug.Log("List End.");
     }
