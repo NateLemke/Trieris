@@ -22,7 +22,7 @@ public class RoomHandling : MonoBehaviour
         {
             foreach(Player p in PhotonNetwork.PlayerList)
             {
-                thisRoom.transform.Find("Teams/Team" + p.ActorNumber + "/InformationPanel/Name/Text").GetComponent<Text>().text = PhotonNetwork.LocalPlayer.NickName;
+                thisRoom.transform.Find("Teams/Team" + p.ActorNumber + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
             }
         }
     }
