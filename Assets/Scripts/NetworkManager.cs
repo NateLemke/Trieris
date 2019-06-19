@@ -79,7 +79,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         ConnectingToRoom = false;
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
-        SceneManager.LoadScene("Network");
+        GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
+        //listAllPlayersInRoom();
+        Debug.Log("Players: ");
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            Debug.Log(PhotonNetwork.PlayerList[i].UserId);
+        }
+        Debug.Log("List End.");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -103,5 +110,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnClickDisconnect()
     {
         PhotonNetwork.Disconnect();
+    }
+    
+    public void listAllPlayersInRoom()
+    {
+        //Debug.Log("Players: ");
+        //for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+        //{
+        //    Debug.Log(playerList.playerName);
+        //}
+        //Debug.Log("List End.");
     }
 }
