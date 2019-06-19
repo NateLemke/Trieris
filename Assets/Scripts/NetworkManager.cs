@@ -60,6 +60,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(false);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().multiplayerGame();
+        PhotonNetwork.LocalPlayer.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField/Text").GetComponent<Text>().text;
         Debug.Log("Connected to server");
     }
 
@@ -74,19 +75,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom();
     }
 
+    public void OnClickLeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         ConnectingToRoom = false;
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
-        //listAllPlayersInRoom();
-        Debug.Log("Players: ");
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
-        }
-        Debug.Log("List End.");
+        listAllPlayersInRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -114,11 +114,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public void listAllPlayersInRoom()
     {
-        //Debug.Log("Players: ");
-        //for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
-        //{
-        //    Debug.Log(playerList.playerName);
-        //}
-        //Debug.Log("List End.");
+        Debug.Log("Players: ");
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
+        }
+        Debug.Log("List End.");
     }
 }
