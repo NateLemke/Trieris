@@ -132,11 +132,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.InLobby)
         {
+            foreach (Transform child in thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform)
+            {
+                Destroy(child.gameObject);
+            }
             foreach (RoomInfo r in roomList)
             {
                 GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                roomItem.transform.parent = thisLobby.transform.Find("RoomList/ScrollView/Content").transform;
-
+                roomItem.transform.parent = thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform;
+                roomItem.GetComponent<Button>().onClick.AddListener(OnClickConnectToRoom);
             }
         }
     }
