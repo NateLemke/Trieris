@@ -139,7 +139,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             foreach (RoomInfo r in roomList)
             {
                 GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                roomItem.transform.parent = thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform;
+                roomItem.transform.SetParent(thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform, false);
                 roomItem.GetComponent<Button>().onClick.AddListener(OnClickConnectToRoom);
             }
         }

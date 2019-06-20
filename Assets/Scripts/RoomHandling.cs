@@ -20,10 +20,27 @@ public class RoomHandling : MonoBehaviour
     {
         if (PhotonNetwork.IsConnected)
         {
+            for(int i = 1; i < 6; i++)
+            {
+                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
+            }
             foreach(Player p in PhotonNetwork.PlayerList)
             {
-                thisRoom.transform.Find("Teams/Team" + p.ActorNumber + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
+                thisRoom.transform.Find("Teams/Team" + getRealId(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
             }
         }
+    }
+
+    private int getRealId(Player inPlayer)
+    {
+        List<int> tempPlayerList = new List<int>();
+        if (PhotonNetwork.IsConnected)
+        {
+            foreach (Player p in PhotonNetwork.PlayerList)
+            {
+                tempPlayerList.Add(p.ActorNumber);
+            }
+        }
+        return tempPlayerList.IndexOf(inPlayer.ActorNumber) + 1;
     }
 }
