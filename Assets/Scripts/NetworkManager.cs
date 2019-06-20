@@ -14,12 +14,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public bool ConnectingToMaster;
     public bool ConnectingToRoom;
+
+    public GameObject roomItem;
+    GameObject thisLobby;
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         ConnectingToMaster = false;
         ConnectingToRoom = false;
+        thisLobby = GameObject.Find("Canvas").gameObject;
+        thisLobby = thisLobby.transform.Find("MultiplayerPanel/Lobby").gameObject;
     }
 
     // Update is called once per frame
@@ -61,6 +66,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(false);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().multiplayerGame();
         PhotonNetwork.LocalPlayer.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField/Text").GetComponent<Text>().text;
+        PhotonNetwork.JoinLobby();
         Debug.Log("Connected to server");
     }
 
@@ -120,5 +126,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
         }
         Debug.Log("List End.");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        if (PhotonNetwork.InLobby)
+        {
+            foreach (RoomInfo r in roomList)
+            {
+                GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                roomItem.transform.parent = thisLobby.transform.Find("RoomList/ScrollView/Content").transform;
+
+            }
+        }
     }
 }
