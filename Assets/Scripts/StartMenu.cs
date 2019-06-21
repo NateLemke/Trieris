@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Contains functions that are used for the buttons on the main menu.
 /// </summary>
-public class StartMenu : MonoBehaviourPun
+public class StartMenu : MonoBehaviour
 {
     void Start()
     {
