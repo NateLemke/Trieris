@@ -19,15 +19,15 @@ public class StartMenu : MonoBehaviour
     /// <summary>
     /// Starts the game by loading the main game scene.
     /// </summary>
+    [PunRPC]
     public void startGame()
     {
         SceneManager.LoadScene("GameScene");
     }
 
-    [PunRPC]
     public void startMultiplayerGame()
     {
-        SceneManager.LoadScene("GameScene");
+        PhotonView.Get(this).RPC("startGame", RpcTarget.All);
     }
 
     public void multiplayerGame()
