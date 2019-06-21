@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -90,5 +91,16 @@ public class StartMenu : MonoBehaviourPun
         mpPanel.transform.Find("RoomPanel").gameObject.SetActive(true);
         //RoomHandling rh = mpPanel.transform.Find("RoomPanel").GetComponent<RoomHandling>();
         //rh.setLocalPlayerTeam();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            foreach(Player p in PhotonNetwork.PlayerList)
+            {
+                Debug.Log((string)p.CustomProperties["Team"]);
+            }
+        }
     }
 }
