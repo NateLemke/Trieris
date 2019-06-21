@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,13 @@ public class StartMenu : MonoBehaviour
     /// <summary>
     /// Starts the game by loading the main game scene.
     /// </summary>
-    public void singleplayerGame()
+    public void startGame()
+    {
+        SceneManager.LoadScene("GameScene");
+    }
+
+    [PunRPC]
+    public void startMultiplayerGame()
     {
         SceneManager.LoadScene("GameScene");
     }
