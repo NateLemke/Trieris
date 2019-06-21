@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +10,24 @@ using UnityEngine.UI;
 /// <summary>
 /// Contains functions that are used for the buttons on the main menu.
 /// </summary>
-public class StartMenu : MonoBehaviour
+public class StartMenu : MonoBehaviourPun
 {
     void Start()
     {
         transform.Find("MP/InputField").gameObject.GetComponent<InputField>().text = Environment.UserName;
     }
+    
+    public void startMultiplayerGame()
+    {
+        Debug.Log(RpcTarget.All);
+        PhotonView.Get(this).RPC("startGame", RpcTarget.All);
+    }
 
     /// <summary>
     /// Starts the game by loading the main game scene.
     /// </summary>
-    public void singleplayerGame()
+    [PunRPC]
+    public void startGame()
     {
         SceneManager.LoadScene("GameScene");
     }
@@ -80,5 +89,18 @@ public class StartMenu : MonoBehaviour
     {
         GameObject mpPanel = GameObject.Find("Canvas/MultiplayerPanel").gameObject;
         mpPanel.transform.Find("RoomPanel").gameObject.SetActive(true);
+        //RoomHandling rh = mpPanel.transform.Find("RoomPanel").GetComponent<RoomHandling>();
+        //rh.setLocalPlayerTeam();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            foreach(Player p in PhotonNetwork.PlayerList)
+            {
+                Debug.Log((string)p.CustomProperties["Team"]);
+            }
+        }
     }
 }
