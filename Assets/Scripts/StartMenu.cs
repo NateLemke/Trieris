@@ -80,5 +80,7 @@ public class StartMenu : MonoBehaviour
     {
         GameObject mpPanel = GameObject.Find("Canvas/MultiplayerPanel").gameObject;
         mpPanel.transform.Find("RoomPanel").gameObject.SetActive(true);
+        //RoomHandling rh = mpPanel.transform.Find("RoomPanel").GetComponent<RoomHandling>();
+        //rh.setLocalPlayerTeam();
     }
 }
