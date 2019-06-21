@@ -9,11 +9,17 @@ using UnityEngine.UI;
 /// <summary>
 /// Contains functions that are used for the buttons on the main menu.
 /// </summary>
-public class StartMenu : MonoBehaviour
+public class StartMenu : MonoBehaviourPun
 {
     void Start()
     {
         transform.Find("MP/InputField").gameObject.GetComponent<InputField>().text = Environment.UserName;
+    }
+    
+    public void startMultiplayerGame()
+    {
+        Debug.Log(RpcTarget.All);
+        PhotonView.Get(this).RPC("startGame", RpcTarget.All);
     }
 
     /// <summary>
@@ -23,11 +29,6 @@ public class StartMenu : MonoBehaviour
     public void startGame()
     {
         SceneManager.LoadScene("GameScene");
-    }
-
-    public void startMultiplayerGame()
-    {
-        PhotonView.Get(this).RPC("startGame", RpcTarget.All);
     }
 
     public void multiplayerGame()
