@@ -325,7 +325,7 @@ public class UIControl : MonoBehaviour
 
     public void readyBtnClick()
     {
-        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All);
+        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, GameManager.playerTeam);
     }
 
     [PunRPC]
