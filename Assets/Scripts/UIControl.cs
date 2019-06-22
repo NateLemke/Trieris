@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -321,8 +323,18 @@ public class UIControl : MonoBehaviour
         selected.redirect(newDirection);
     }
 
+    [PunRPC]
+    public void toggleReady(int teamValue) {
 
-    public void toggleReady() {
+        foreach (Team t in gameManager.teams)
+        {
+            if (t.getTeamType() == (Team.Faction)teamValue)
+            {
+                t.ready = !t.ready;
+                return;
+            }
+        }
+
         GameManager.playerTeam.ready = !GameManager.playerTeam.ready;
         if (GameManager.playerTeam.ready) {
             foreach(Team t in gameManager.getHumanTeams()) {
@@ -438,7 +450,8 @@ public class UIControl : MonoBehaviour
     /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
     public void setTeam(int i)
     {
-        TeamSelectUI.SetActive(false);
+        if(TeamSelectUI != null)
+            TeamSelectUI.SetActive(false);
         gameManager.setupGame(i);
 
         setSelection(gameManager.getPlayerShips()[0].Id);

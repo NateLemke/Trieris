@@ -26,7 +26,13 @@ public class Team {
     // new for multiplayer
     public bool aiTeam = false;
 
-    public bool ready { get; set; }
+    public bool ready {
+        get { return ready; }
+        set
+        {
+            GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
+        }
+    }
 
     public int portsCaptured() {
         int count = 0;

@@ -65,9 +65,9 @@ public class RoomHandling : MonoBehaviour
     {
         ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
-        customProperties.Add("Team", thisDropdown.options[thisDropdown.value].text);
+        customProperties.Add("TeamInt", thisDropdown.value);
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
-        Debug.Log("Player " + slotNumber + ", team changed to " + thisDropdown.options[thisDropdown.value].text);
+        Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamInt"]);
     }
 
     public void setLocalPlayerTeam()

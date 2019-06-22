@@ -34,5 +34,6 @@ MonoBehaviour:
   - RespawnSpaceship
   - startMultiplayerGame
   - startGame
+  - toggleReady
   DisableAutoOpenWizard: 1
   ShowSettings: 1
