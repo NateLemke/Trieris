@@ -323,6 +323,11 @@ public class UIControl : MonoBehaviour
         selected.redirect(newDirection);
     }
 
+    public void readyBtnClick()
+    {
+        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All);
+    }
+
     [PunRPC]
     public void toggleReady(int teamValue) {
 
