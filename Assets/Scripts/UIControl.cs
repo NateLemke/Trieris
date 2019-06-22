@@ -358,6 +358,11 @@ public class UIControl : MonoBehaviour
     /// </summary>
     public void startTurn()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            readyBtnClick();
+            return;
+        }
         if (GameManager.main.needRedirect()) {
             return;
         }
