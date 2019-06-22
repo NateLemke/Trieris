@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour {
     // new multiplayer functions
     public bool playersReady() {
         foreach (Team t in teams) {
-            if (!t.aiTeam && !t.ready) {
+            if (!t.aiTeam && !t.Ready) {
                 return false;
             }
         }
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void setPlayerReady(Team t,bool ready) {
-        t.ready = ready;
+        t.Ready = ready;
     }
 
     public void beginTurn() {

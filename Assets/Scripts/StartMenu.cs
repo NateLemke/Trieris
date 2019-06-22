@@ -99,7 +99,7 @@ public class StartMenu : MonoBehaviourPun
         {
             foreach(Player p in PhotonNetwork.PlayerList)
             {
-                Debug.Log((string)p.CustomProperties["Team"]);
+                Debug.Log((string)p.CustomProperties["TeamInt"]);
             }
         }
     }

@@ -86,7 +86,7 @@ public class GameLogic : MonoBehaviour {
 
         foreach(Team t in gameManager.getHumanTeams()) {
 
-            t.ready = false;
+            t.Ready = false;
 
             foreach (Ship s in t.ships) {
                 s.currentActionIndex = 0;

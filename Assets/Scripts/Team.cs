@@ -26,10 +26,12 @@ public class Team {
     // new for multiplayer
     public bool aiTeam = false;
 
-    public bool ready {
+    private bool ready;
+    public bool Ready {
         get { return ready; }
         set
         {
+            ready = value;
             GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
         }
     }

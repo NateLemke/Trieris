@@ -325,7 +325,7 @@ public class UIControl : MonoBehaviour
 
     public void readyBtnClick()
     {
-        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, GameManager.playerTeam);
+        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.getTeamType());
     }
 
     [PunRPC]
@@ -335,15 +335,15 @@ public class UIControl : MonoBehaviour
         {
             if (t.getTeamType() == (Team.Faction)teamValue)
             {
-                t.ready = !t.ready;
+                t.Ready = !t.Ready;
                 return;
             }
         }
 
-        GameManager.playerTeam.ready = !GameManager.playerTeam.ready;
-        if (GameManager.playerTeam.ready) {
+        GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
+        if (GameManager.playerTeam.Ready) {
             foreach(Team t in gameManager.getHumanTeams()) {
-                if (!t.ready) {
+                if (!t.Ready) {
                     return;
                 }
             }
