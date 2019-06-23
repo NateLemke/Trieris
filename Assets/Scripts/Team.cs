@@ -14,7 +14,7 @@ public class Team {
     public enum Faction { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
     public int shipIdCounter = 0;
 
-    Team.Faction teamFaction;
+    public Team.Faction teamFaction;
     
     public List<Ship> ships { get; set; }
     public List<Port> ports { get; set; }
@@ -28,10 +28,25 @@ public class Team {
 
     public bool ready { get; set; }
 
+    public bool eliminated = false;
+
+    /// <summary>
+    /// Basic constructor for the team.
+    /// Creates new lists for ports and ships.
+    /// </summary>
+    /// <param name="t"></param>
+    public Team(Team.Faction t) {
+        ships = new List<Ship>();
+        ports = new List<Port>();
+        teamFaction = t;
+        //loadSprites();
+        setPortsAndCapital();
+    }
+
     public int portsCaptured() {
         int count = 0;
         foreach(Port p in GameManager.main.Board.ports) {
-            if(p.teamFaction == teamFaction) {
+            if(p.Team.teamFaction == teamFaction) {
                 count++;
             }
         }
@@ -83,18 +98,7 @@ public class Team {
     // end of new for multiplayer
 
 
-    /// <summary>
-    /// Basic constructor for the team.
-    /// Creates new lists for ports and ships.
-    /// </summary>
-    /// <param name="t"></param>
-    public Team(Team.Faction t) {
-        ships = new List<Ship>();
-        ports = new List<Port>();
-        teamFaction = t;
-        //loadSprites();
-        setPortsAndCapital();
-    }
+
 
     /// <summary>
     /// Returns the port sprite for this particular team.

@@ -457,7 +457,6 @@ public class GameManager : MonoBehaviour {
             }
             Team t = new Team(faction);
             teams[index] = t;
-            
         }
     }
 
