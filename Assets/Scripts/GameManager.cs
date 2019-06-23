@@ -467,7 +467,12 @@ public class GameManager : MonoBehaviour {
             }
             Team t = new Team(faction);
             teams[index] = t;
-            
+            Debug.Log(teams[index].ToString());
+        }
+        Debug.Log(teams.Length);
+        foreach(Team t in teams)
+        {
+            Debug.Log(t.TeamFaction.ToString());
         }
     }
 

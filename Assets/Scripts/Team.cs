@@ -15,10 +15,10 @@ public class Team {
     public int shipIdCounter = 0;
 
     Team.Faction teamFaction;
-    public Team.Faction TeamFaction{ get; }
+    public Team.Faction TeamFaction { get { return teamFaction; } }
 
     Team.Type teamType;
-    public Team.Type TeamType{ get; }
+    public Team.Type TeamType{ get { return teamType; } }
     
     public List<Ship> ships { get; set; }
     public List<Port> ports { get; set; }
