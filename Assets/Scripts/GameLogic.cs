@@ -219,7 +219,7 @@ public class GameLogic : MonoBehaviour {
                         gameOver("Victory");
                     else
                     {
-                        string teamname = t.getTeamType().ToString();
+                        string teamname = t.TeamType.ToString();
                         gameOver(teamname[0].ToString().ToUpper() + teamname.Substring(1) + " team won");
                     }
                 }

@@ -15,6 +15,10 @@ public class Team {
     public int shipIdCounter = 0;
 
     Team.Faction teamFaction;
+    public Team.Faction TeamFaction{ get; }
+
+    Team.Type teamType;
+    public Team.Type TeamType{ get; }
     
     public List<Ship> ships { get; set; }
     public List<Port> ports { get; set; }
@@ -180,8 +184,13 @@ public class Team {
     /// Returns the teamtype for this Team.
     /// </summary>
     /// <returns>The teamtype for this team.</returns>
-    public Faction getTeamType() {
-        return teamFaction;
+    //public Faction getTeamType() {
+    //    return teamFaction;
+    //}
+    
+    public void setTeamType(Type input)
+    {
+        teamType = input;
     }
 
     /// <summary>

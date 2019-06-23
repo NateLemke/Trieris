@@ -283,7 +283,7 @@ public class GameManager : MonoBehaviour {
     public List<Ship> getAllAiShips() {
         List<Ship> r = new List<Ship>();
         for(int i = 0; i < teams.Length; i++) {
-            if(i != (int)playerTeam.getTeamType()) {
+            if(i != (int)playerTeam.TeamFaction) {
                 r.AddRange(teams[i].ships);
             }
         }
@@ -336,7 +336,7 @@ public class GameManager : MonoBehaviour {
         //Debug.Log("can act: "+ship.getCanActa());
         //ships.Add(ship);
         ship.intialize(team,node);
-        ship.name = team.getTeamType().ToString() + " ship " + ship.Id;
+        ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
 
         return ship;
     }
