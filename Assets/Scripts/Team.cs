@@ -13,6 +13,7 @@ public class Team {
     public enum Type { ai, player, empty }
     public enum Faction { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
     public int shipIdCounter = 0;
+    public string playerName;
 
     Team.Faction teamFaction;
     
@@ -39,7 +40,7 @@ public class Team {
     public int portsCaptured() {
         int count = 0;
         foreach(Port p in GameManager.main.Board.ports) {
-            if(p.teamFaction == teamFaction) {
+            if(p.Team.teamFaction == teamFaction) {
                 count++;
             }
         }

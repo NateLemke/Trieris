@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
         }       
 
         createTeams();
-
+        playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
         if (playerTeam == null) {
