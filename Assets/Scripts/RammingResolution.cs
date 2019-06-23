@@ -22,6 +22,14 @@ public class RammingResolution : CombatResolution
     /// <returns></returns>
     public override IEnumerator resolve() {
 
+        if(shipA == null || shipA.gameObject == null) {
+            yield break;
+        }
+
+        if (shipB == null || shipB.gameObject == null) {
+            yield break;
+        }
+
         yield return PhaseManager.focus(shipA.getNode().getRealPos());
 
         shipA.setIcon(Sprites.main.AttackIcon);

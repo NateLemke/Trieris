@@ -490,7 +490,7 @@ public class Ship : MonoBehaviour {
         //node = null;
         team.ships.Remove(this);
 
-        if(this == GameManager.main.uiControl.Selected)
+        if(team.ships.Count != 0 && this == GameManager.main.uiControl.Selected)
         {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
         }

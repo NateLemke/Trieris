@@ -108,7 +108,9 @@ public class GameLogic : MonoBehaviour {
             image.color = tempCol;
         }
 
-        gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        if(GameManager.playerTeam.ships.Count != 0) {
+            gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        }
     }
     
     /// <summary>
