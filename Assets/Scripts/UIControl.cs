@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -321,12 +323,27 @@ public class UIControl : MonoBehaviour
         selected.redirect(newDirection);
     }
 
+    public void readyBtnClick()
+    {
+        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.getTeamType());
+    }
 
-    public void toggleReady() {
-        GameManager.playerTeam.ready = !GameManager.playerTeam.ready;
-        if (GameManager.playerTeam.ready) {
+    [PunRPC]
+    public void toggleReady(int teamValue) {
+
+        foreach (Team t in gameManager.teams)
+        {
+            if (t.getTeamType() == (Team.Faction)teamValue)
+            {
+                t.Ready = !t.Ready;
+                return;
+            }
+        }
+
+        GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
+        if (GameManager.playerTeam.Ready) {
             foreach(Team t in gameManager.getHumanTeams()) {
-                if (!t.ready) {
+                if (!t.Ready) {
                     return;
                 }
             }
@@ -341,6 +358,11 @@ public class UIControl : MonoBehaviour
     /// </summary>
     public void startTurn()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            readyBtnClick();
+            return;
+        }
         if (GameManager.main.needRedirect()) {
             return;
         }
@@ -438,7 +460,8 @@ public class UIControl : MonoBehaviour
     /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
     public void setTeam(int i)
     {
-        TeamSelectUI.SetActive(false);
+        if(TeamSelectUI != null)
+            TeamSelectUI.SetActive(false);
         gameManager.setupGame(i);
 
         setSelection(gameManager.getPlayerShips()[0].Id);

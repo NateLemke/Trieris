@@ -13,6 +13,7 @@ public class Team {
     public enum Type { ai, player, empty }
     public enum Faction { red = 0 , orange = 1, yellow =2, green=3, blue=4, black=5 }
     public int shipIdCounter = 0;
+    public string playerName;
 
     public Team.Faction teamFaction;
     
@@ -26,7 +27,15 @@ public class Team {
     // new for multiplayer
     public bool aiTeam = false;
 
-    public bool ready { get; set; }
+    private bool ready;
+    public bool Ready {
+        get { return ready; }
+        set
+        {
+            ready = value;
+            GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
+        }
+    }
 
     public bool eliminated = false;
 

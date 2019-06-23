@@ -14,12 +14,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public bool ConnectingToMaster;
     public bool ConnectingToRoom;
+
+    public GameObject roomItem;
+    GameObject thisLobby;
     // Start is called before the first frame update
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         ConnectingToMaster = false;
         ConnectingToRoom = false;
+        thisLobby = GameObject.Find("Canvas").gameObject;
+        thisLobby = thisLobby.transform.Find("MultiplayerPanel/Lobby").gameObject;
     }
 
     // Update is called once per frame
@@ -60,6 +65,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(false);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().multiplayerGame();
+        PhotonNetwork.LocalPlayer.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField/Text").GetComponent<Text>().text;
+        PhotonNetwork.JoinLobby();
         Debug.Log("Connected to server");
     }
 
@@ -74,12 +81,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom();
     }
 
+    public void OnClickLeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         ConnectingToRoom = false;
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
-        SceneManager.LoadScene("Network");
+        GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
+        listAllPlayersInRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -103,5 +116,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnClickDisconnect()
     {
         PhotonNetwork.Disconnect();
+    }
+    
+    public void listAllPlayersInRoom()
+    {
+        Debug.Log("Players: ");
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
+        }
+        Debug.Log("List End.");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        if (PhotonNetwork.InLobby)
+        {
+            foreach (Transform child in thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform)
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (RoomInfo r in roomList)
+            {
+                GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
+                roomItem.transform.SetParent(thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform, false);
+                roomItem.GetComponent<Button>().onClick.AddListener(OnClickConnectToRoom);
+            }
+        }
     }
 }

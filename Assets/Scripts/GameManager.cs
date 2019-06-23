@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour {
     // new multiplayer functions
     public bool playersReady() {
         foreach (Team t in teams) {
-            if (!t.aiTeam && !t.ready) {
+            if (!t.aiTeam && !t.Ready) {
                 return false;
             }
         }
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void setPlayerReady(Team t,bool ready) {
-        t.ready = ready;
+        t.Ready = ready;
     }
 
     public void beginTurn() {
@@ -107,7 +109,7 @@ public class GameManager : MonoBehaviour {
         }       
 
         createTeams();
-
+        playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
         if (playerTeam == null) {
@@ -162,6 +164,14 @@ public class GameManager : MonoBehaviour {
         gameLogic = GetComponent<GameLogic>();
         uiControl = GetComponent<UIControl>();
         Time.timeScale = 1;
+
+        if (PhotonNetwork.IsConnected)
+        {
+            GameObject.Find("OverlayCanvas/TeamSelectPanel").gameObject.SetActive(false);
+            playerFaction = (Team.Faction)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"];
+            teamTypes[(int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]] = (Team.Type)1;
+            uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+        }
     }
 
     /// <summary>
