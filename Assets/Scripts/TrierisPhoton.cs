@@ -20,6 +20,7 @@ public class TrierisPhoton : MonoBehaviour, IPunObservable {
         pv.RPC("LogMessage",RpcTarget.MasterClient);
     }
 
+    public void LogMessage() {
         Debug.Log("Photon Message Received!");
     }
 
