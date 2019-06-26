@@ -11,7 +11,7 @@ public class Port{
 
     public Team OriginalTeam { get { return originalTeam; } }
 
-    public Team.Faction teamFaction { get; set; }
+    //public Team.Faction teamFaction { get; set; }
     public Team Team {
         get {
             return team;

@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour {
         }       
 
         createTeams();
-
+        playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
         if (playerTeam == null) {
@@ -467,12 +467,6 @@ public class GameManager : MonoBehaviour {
             }
             Team t = new Team(faction);
             teams[index] = t;
-            Debug.Log(teams[index].ToString());
-        }
-        Debug.Log(teams.Length);
-        foreach(Team t in teams)
-        {
-            Debug.Log(t.TeamFaction.ToString());
         }
     }
 

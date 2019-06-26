@@ -858,5 +858,9 @@ public class UIControl : MonoBehaviour
         optionsPanel.SetActive(true);
         optionsPanel.GetComponent<OptionsMenu>().OpenOptions();
     }
+
+    public void closeEliminationNotice() {
+        GameObject.Find("EliminationScreen").SetActive(false);
+    }
 }
 

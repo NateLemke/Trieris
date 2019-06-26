@@ -108,7 +108,9 @@ public class GameLogic : MonoBehaviour {
             image.color = tempCol;
         }
 
-        gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        if(GameManager.playerTeam.ships.Count != 0) {
+            gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        }
     }
     
     /// <summary>
@@ -186,58 +188,61 @@ public class GameLogic : MonoBehaviour {
     /// Checks to see if any victory/defeat conditions have been met
     /// </summary>
     private void determineGameState()
-    {
-        if (GameManager.playerTeam.ships.Count == 0)
-        {
-            gameOver("Defeat");
-        }
-        else if (GameManager.main.getAllShips().Count == GameManager.playerTeam.ships.Count)
-        {
-            gameOver("Victory");
-        }
-        else
-        {
-            foreach(Team t in GameManager.main.teams)
-            {
-                //int portCount = 0;
-                //bool hasCapital = false;
-                //foreach (Port port in GameManager.main.Board.ports)
-                //{
-                //    if (port.Team == t)
-                //    {
-                //        portCount++;
+    {   
 
-                //        if (port.IsCapital && port.OriginalTeam == t)
-                //        {
-                //            hasCapital = true;
-                //        }
-                //    }
-                //}
-                if(t.portsCaptured() >= 12)
-                {
-                    if(t == GameManager.playerTeam)
-                        gameOver("Victory");
-                    else
-                    {
-                        string teamname = t.TeamType.ToString();
-                        gameOver(teamname[0].ToString().ToUpper() + teamname.Substring(1) + " team won");
-                    }
-                }
+        foreach (Team t in GameManager.main.teams) {
 
+            if (t.eliminated) {
+                continue;
+            }
+
+            // check if the only the teams's ships remain
+            if (GameManager.main.getAllShips().Count == t.ships.Count) {
+                gameOverElimination(t);
+                return;
+            }
+
+            // check if the player has captured 12 ports or not
+            if (t.portsCaptured() >= 12) {
+                if (t == GameManager.playerTeam)
+                    gameOverCapture(t);
+                return;
+            }            
+        }
+
+        foreach(Team t in gameManager.teams) {
+            // check if the player has lost all their ships
+            if (t.ships.Count == 0) {
+                eliminatePlayer(t);
             }
         }
+    }
 
+    private void eliminatePlayer(Team t) {
+        t.eliminated = true;
+        if(t == GameManager.playerTeam) {
+            GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+            gameOverObj.transform.Find("EliminationScreen").gameObject.SetActive(true);
+        }
     }
 
     /// <summary>
     /// Ends the game and brings up the game over screen
     /// </summary>
     /// <param name="gamestate">the specific game over state (victory/defeat)</param>
-    private void gameOver(string gamestate)
+    private void gameOverElimination(Team t)
     {
         GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
-        gameOverObj.transform.Find("Screen").gameObject.SetActive(true);
-        gameOverObj.GetComponent<GameOver>().Initialize(gamestate);
+        gameOverObj.transform.Find("GameoverScreen").gameObject.SetActive(true);
+        gameOverObj.GetComponent<GameOver>().gameOverElimination(t);
+        GameManager.main.gameOver = true;
+        Time.timeScale = 0;
+    }
+
+    private void gameOverCapture(Team t) {
+        GameObject gameOverObj = GameObject.Find("GameOver").gameObject;
+        gameOverObj.transform.Find("GameoverScreen").gameObject.SetActive(true);
+        gameOverObj.GetComponent<GameOver>().gameOverCapture(t);
         GameManager.main.gameOver = true;
         Time.timeScale = 0;
     }

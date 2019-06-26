@@ -19,24 +19,38 @@ public class GameOver : MonoBehaviour
     /// </summary>
     void Awake()
     {
-        title = transform.Find("Screen/Title/Text").GetComponent<Text>();
-        portsHeld = transform.Find("Screen/Stats/PortsHeld").GetComponent<Text>();
-        portsCaptured = transform.Find("Screen/Stats/PortsCapTotal").GetComponent<Text>();
-        shipsAlive = transform.Find("Screen/Stats/ShipsAlive").GetComponent<Text>();
+        title = transform.Find("GameoverScreen/Title/Text").GetComponent<Text>();
+        portsHeld = transform.Find("GameoverScreen/Stats/PortsHeld").GetComponent<Text>();
+        portsCaptured = transform.Find("GameoverScreen/Stats/PortsCapTotal").GetComponent<Text>();
+        shipsAlive = transform.Find("GameoverScreen/Stats/ShipsAlive").GetComponent<Text>();
     }
+
+    public void gameOverCapture(Team t) {
+        Initialize();
+        if (t == GameManager.playerTeam) {
+            title.text = "Victory, you've captured 12 ports";
+        } else {
+            title.text = t.getTeamType().ToString() + " team won by capturng 12 ports";
+        }
+    }
+
+    public void gameOverElimination(Team t) {
+        Initialize();
+        if (t == GameManager.playerTeam) {
+            title.text = "Victory, you've destroyed all other ships";
+        } else {
+            title.text = t.getTeamType().ToString() + " team won by destroying all other ships";
+        }
+    }
+
 
     /// <summary>
     /// Sets the test for the game over screen
     /// </summary>
     /// <param name="gameOverState">Whether the player as won or lost</param>
-    public void Initialize(string gameOverState)
+    public void Initialize()
     {
-        title.text = gameOverState;
-
-        // needs to be changed for multiplayer
-        //portsCaptured.text = "Ports Captured: " + GameManager.PortsCaptured.ToString();
-
-        portsHeld.text = "Ports Owned: " + countPorts().ToString();
+        portsHeld.text = "Ports Owned: " + GameManager.playerTeam.ports.Count.ToString();
         shipsAlive.text = "Ships Owned: " + GameManager.playerTeam.ships.Count.ToString();
     }
 
