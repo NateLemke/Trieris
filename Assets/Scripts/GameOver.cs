@@ -30,7 +30,7 @@ public class GameOver : MonoBehaviour
         if (t == GameManager.playerTeam) {
             title.text = "Victory, you've captured 12 ports";
         } else {
-            title.text = t.getTeamType().ToString() + " team won by capturng 12 ports";
+            title.text = t.TeamFaction.ToString() + " team won by capturng 12 ports";
         }
     }
 
@@ -39,7 +39,7 @@ public class GameOver : MonoBehaviour
         if (t == GameManager.playerTeam) {
             title.text = "Victory, you've destroyed all other ships";
         } else {
-            title.text = t.getTeamType().ToString() + " team won by destroying all other ships";
+            title.text = t.TeamFaction.ToString() + " team won by destroying all other ships";
         }
     }
 
