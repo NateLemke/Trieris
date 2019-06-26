@@ -111,7 +111,8 @@ public class GameManager : MonoBehaviour {
         createTeams();
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
-
+        if(PhotonNetwork.IsConnected)
+            PhotonView.Get(this).RPC("teamIsHuman", RpcTarget.All, playerChoice);
         if (playerTeam == null) {
             Debug.LogError("Player's team is null");
         }
@@ -127,6 +128,12 @@ public class GameManager : MonoBehaviour {
 
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+    }
+
+    [PunRPC]
+    public void teamIsHuman(int i)
+    {
+        teams[i].setTeamType((Team.Type) 1);
     }
 
     public void promptInitialRedirets() {
