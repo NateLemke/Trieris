@@ -98,15 +98,25 @@ public class GameManager : MonoBehaviour {
         return false;
     }
 
+    public void setupGamePhoton() {
+        createTeamsPhoton();
+    }
+
+    public void createTeamsPhoton() {
+
+    }
+
     public void setupGame(int playerChoice) {
 
-        for(int i = 0; i < 6; i++) {
-            if(i == playerChoice) {
-                teamTypes[i] = Team.Type.player;
-            } else {
-                teamTypes[i] = Team.Type.ai;
+        if (!PhotonNetwork.IsConnected) {
+            for (int i = 0; i < 6; i++) {
+                if (i == playerChoice) {
+                    teamTypes[i] = Team.Type.player;
+                } else {
+                    teamTypes[i] = Team.Type.ai;
+                }
             }
-        }       
+        }   
 
         createTeams();
         playerFaction = (Team.Faction)playerChoice;
@@ -115,16 +125,31 @@ public class GameManager : MonoBehaviour {
         if (playerTeam == null) {
             Debug.LogError("Player's team is null");
         }
-
-        createPorts();
+        
         createShips();
 
         assignAI();
 
-        promptInitialRedirets();
-        revealRedirects();
         setAIDirections();
 
+        if (PhotonNetwork.IsConnected) {
+            PhotonView photonView = PhotonView.Get(this);
+            photonView.RPC("CopyTeams",RpcTarget.All,teams);
+        }
+    }
+
+    public void CopyTeams(Team[] t) {
+        teams = t;
+        PostSetup();
+    }
+
+    public void PostSetup() {
+        createPorts();
+        uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+        promptInitialRedirets();
+        revealRedirects();
+        
+        uiControl.setSelection(getPlayerShips()[0].Id);
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
     }
@@ -171,7 +196,14 @@ public class GameManager : MonoBehaviour {
             playerFaction = (Team.Faction)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"];
             teamTypes[(int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]] = (Team.Type)1;
             uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-        }
+
+            if (PhotonNetwork.IsMasterClient) {
+                Debug.Log("Im the master client!");
+                setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+            } else {
+                Debug.Log("Im NOT the master client");
+            }
+        } 
     }
 
     /// <summary>
@@ -330,7 +362,15 @@ public class GameManager : MonoBehaviour {
             parent.name = "Ships";
         }
         GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
-        GameObject spawn = Instantiate(shipPrefab,node.getBoardPosition(),Quaternion.identity);
+
+        GameObject spawn = null;
+
+        if (PhotonNetwork.IsConnected) {
+            spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getBoardPosition(),Quaternion.identity);
+        } else {
+            spawn = Instantiate(shipPrefab,node.getBoardPosition(),Quaternion.identity);
+        }
+
         spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
         //Debug.Log("can act: "+ship.getCanActa());

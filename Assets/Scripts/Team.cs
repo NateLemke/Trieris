@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -274,6 +275,11 @@ public class Team {
     /// Creates all the ships belonging to this team and places them on each port.
     /// </summary>
     public void createShips() {
+
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+
+        }
+
         foreach(Port p in ports) {
             GameManager.main.spawnShip(p.node,this);
         }
