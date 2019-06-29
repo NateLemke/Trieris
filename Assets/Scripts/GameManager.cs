@@ -132,10 +132,10 @@ public class GameManager : MonoBehaviour {
 
         setAIDirections();
 
-        if (PhotonNetwork.IsConnected) {
-            PhotonView photonView = PhotonView.Get(this);
-            photonView.RPC("CopyTeams",RpcTarget.All,teams);
-        }
+        //if (PhotonNetwork.IsConnected) {
+        //    PhotonView photonView = PhotonView.Get(this);
+        //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
+        //}
     }
 
     public void CopyTeams(Team[] t) {
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour {
             GameObject.Find("OverlayCanvas/TeamSelectPanel").gameObject.SetActive(false);
             playerFaction = (Team.Faction)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"];
             teamTypes[(int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]] = (Team.Type)1;
-            uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+            //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
 
             if (PhotonNetwork.IsMasterClient) {
                 Debug.Log("Im the master client!");
