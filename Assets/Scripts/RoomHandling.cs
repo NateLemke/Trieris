@@ -31,7 +31,7 @@ public class RoomHandling : MonoBehaviour
     {
         if (PhotonNetwork.IsConnected)
         {
-            for(int i = 1; i < 6; i++)
+            for(int i = 1; i <= 6; i++)
             {
                 thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
             }
