@@ -123,7 +123,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnClickCreateRoom(int privacy)
     {
         RoomOptions options = new RoomOptions();
-        options.IsVisible = privacy == 0;
+        options.IsVisible = true;
         options.IsOpen = privacy == 0;
         options.MaxPlayers = 6;
         string[] customProps = { "MasterName", "RoomName" };
