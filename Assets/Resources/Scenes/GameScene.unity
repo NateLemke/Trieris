@@ -5005,8 +5005,6 @@ GameObject:
   - component: {fileID: 535529814}
   - component: {fileID: 535529815}
   - component: {fileID: 535529816}
-  - component: {fileID: 535529818}
-  - component: {fileID: 535529817}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5474,40 +5472,6 @@ MonoBehaviour:
   viewIdField: 1
   InstantiationId: 1
   isRuntimeInstantiated: 0
---- !u!114 &535529817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 535529805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 535529818}
-  viewIdField: 2
-  InstantiationId: 1
-  isRuntimeInstantiated: 0
---- !u!114 &535529818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 535529805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe6613c7c6b6c55469fcb2554d3e0ffe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &542641031
 GameObject:
   m_ObjectHideFlags: 0
@@ -15566,7 +15530,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 535529818}
+      - m_Target: {fileID: 0}
         m_MethodName: PhotonMessage
         m_Mode: 1
         m_Arguments:
