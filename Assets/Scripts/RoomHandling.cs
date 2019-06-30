@@ -12,18 +12,18 @@ public class RoomHandling : MonoBehaviour
 {
     GameObject thisRoom;
     public Toggle privateGame;
+
+
     // Start is called before the first frame update
     void Start()
     {
         thisRoom = GameObject.Find("Canvas").gameObject;
         thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
-        privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
     }
 
     void OnEnable()
     {
         setLocalPlayerTeam();
-        privateGame.isOn = !PhotonNetwork.CurrentRoom.IsOpen;
     }
 
     // Update is called once per frame

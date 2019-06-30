@@ -105,13 +105,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         base.OnJoinRandomFailed(returnCode, message);
-        RoomOptions options = new RoomOptions();
-        options.IsVisible = true;
-        options.IsOpen = true;
-        options.MaxPlayers = 6;
-        string[] customProps = { "MasterName", "RoomName" };
-        options.CustomRoomPropertiesForLobby = customProps;
-        PhotonNetwork.CreateRoom(null, options);
+        OnClickCreateRoom(0);
     }
 
     /// <summary>
@@ -128,7 +122,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         options.MaxPlayers = 6;
         string[] customProps = { "MasterName", "RoomName" };
         options.CustomRoomPropertiesForLobby = customProps;
+
+        setPrivacyToggle(privacy);
+
         PhotonNetwork.CreateRoom(null, options);
+    }
+
+    private void setPrivacyToggle(int privacy)
+    {
+        GameObject thisRoom = GameObject.Find("Canvas").gameObject;
+        thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
+        thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
+        thisRoom.GetComponent<RoomHandling>().privateGame.isOn = privacy == 1;
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
