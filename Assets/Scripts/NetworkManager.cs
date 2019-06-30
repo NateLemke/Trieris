@@ -17,7 +17,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool ConnectingToMaster;
     public bool ConnectingToRoom;
 
-    public GameObject roomItem;
     GameObject thisLobby;
     // Start is called before the first frame update
     void Start()
@@ -95,10 +94,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
 
-        Hashtable roomMaster = new Hashtable();
-        roomMaster.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(roomMaster);
+        Hashtable roominfo = new Hashtable();
+        roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
+        roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
 
         listAllPlayersInRoom();
     }
@@ -134,22 +133,5 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
         }
         Debug.Log("List End.");
-    }
-
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        if (PhotonNetwork.InLobby)
-        {
-            foreach (Transform child in thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform)
-            {
-                Destroy(child.gameObject);
-            }
-            foreach (RoomInfo r in roomList)
-            {
-                GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                roomItem.transform.SetParent(thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform, false);
-                roomItem.GetComponent<Button>().onClick.AddListener(OnClickConnectToRoom);
-            }
-        }
     }
 }
