@@ -99,6 +99,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
 
+        setPrivacyToggle(PhotonNetwork.IsConnected ? 0 : 1);
+
         listAllPlayersInRoom();
     }
 
