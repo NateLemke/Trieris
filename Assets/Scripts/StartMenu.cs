@@ -20,7 +20,6 @@ public class StartMenu : MonoBehaviourPun
     public void startMultiplayerGame()
     {
         Debug.Log(RpcTarget.All);
-        setPlayerTeams();
         PhotonView.Get(this).RPC("startGame", RpcTarget.All);
     }
 
@@ -30,6 +29,8 @@ public class StartMenu : MonoBehaviourPun
     [PunRPC]
     public void startGame()
     {
+        if (PhotonNetwork.IsConnected)
+            setPlayerTeams();
         SceneManager.LoadScene("GameScene");
     }
 
