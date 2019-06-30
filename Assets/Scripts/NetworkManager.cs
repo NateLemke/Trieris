@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     //public Button BtnConnectMaster;
@@ -39,7 +41,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnClickConnectToMaster()
     {
         PhotonNetwork.OfflineMode = false;
-        PhotonNetwork.NickName = Environment.UserName;
+        PhotonNetwork.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField").gameObject.GetComponent<InputField>().text;
         //PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "v1";
 
@@ -92,6 +94,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToRoom = false;
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
+
+        Hashtable roomMaster = new Hashtable();
+        roomMaster.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomMaster);
+
         listAllPlayersInRoom();
     }
 

@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 public class RoomHandling : MonoBehaviour
 {
     GameObject thisRoom;
@@ -63,7 +65,7 @@ public class RoomHandling : MonoBehaviour
 
     public void setPlayerTeam(int slotNumber)
     {
-        ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+        Hashtable customProperties = new Hashtable();
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
         customProperties.Add("TeamInt", thisDropdown.value);
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
