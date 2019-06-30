@@ -78,6 +78,14 @@ public class InputControl : MonoBehaviour {
         if (GameManager.playerTeam != null) {
             shipSelectUpdate();
         }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Debug.Log("Team types:");
+            foreach (Team t in gameManager.teams)
+            {
+                Debug.Log(t.TeamFaction.ToString() + " is a/an " + t.TeamType);
+            }
+        }
 
         if (Input.GetKeyDown("escape") && GameManager.main.gameOver == false)
         {

@@ -204,10 +204,34 @@ public class GameManager : MonoBehaviour {
     }
 
     public void createTeamsPhoton() {
+    public void setupGame(int playerChoice) {
+
+        for(int i = 0; i < 6; i++) {
+            if(i == playerChoice) {
+                teamTypes[i] = Team.Type.player;
+            } else {
+                teamTypes[i] = Team.Type.ai;
+            }
+        }       
+
+        createTeams();
+        playerFaction = (Team.Faction)playerChoice;
+        playerTeam = teams[(int)playerFaction];
+        if(PhotonNetwork.IsConnected)
+            PhotonView.Get(this).RPC("teamIsHuman", RpcTarget.All, playerChoice);
+        if (playerTeam == null) {
+            Debug.LogError("Player's team is null");
+        }
 
     }
 
 
+
+    [PunRPC]
+    public void teamIsHuman(int i)
+    {
+        teams[i].setTeamType((Team.Type) 1);
+    }
 
     public void promptInitialRedirets() {
         foreach(Team t in teams) {
@@ -333,7 +357,7 @@ public class GameManager : MonoBehaviour {
     public List<Ship> getAllAiShips() {
         List<Ship> r = new List<Ship>();
         for(int i = 0; i < teams.Length; i++) {
-            if(i != (int)playerTeam.getTeamType()) {
+            if(i != (int)playerTeam.TeamFaction) {
                 r.AddRange(teams[i].ships);
             }
         }
@@ -394,7 +418,7 @@ public class GameManager : MonoBehaviour {
         //Debug.Log("can act: "+ship.getCanActa());
         //ships.Add(ship);
         ship.intialize(team,node);
-        ship.name = team.getTeamType().ToString() + " ship " + ship.Id;
+        ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
 
         return ship;
     }

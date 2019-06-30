@@ -115,7 +115,7 @@ public class Sprites : MonoBehaviour {
     /// <param name="team">The team you want the port sprite for.</param>
     /// <returns>the port sprite for the given team.</returns>
     public static Sprite getTeamPort(Team team) {
-        switch (team.getTeamType()) {
+        switch (team.TeamFaction) {
             case Team.Faction.red:
             return main.RedPort;
             case Team.Faction.orange:
@@ -139,7 +139,7 @@ public class Sprites : MonoBehaviour {
     /// <param name="team">The team you want the ship sprite for.</param>
     /// <returns>the ship sprite for the given team.</returns>
     public static Sprite getTeamShip(Team team) {
-        return main.TeamShips[(int)team.getTeamType()];
+        return main.TeamShips[(int)team.TeamFaction];
     }
 
 }

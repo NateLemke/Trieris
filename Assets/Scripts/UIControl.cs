@@ -329,7 +329,7 @@ public class UIControl : MonoBehaviour
 
     public void readyBtnClick()
     {
-        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.getTeamType());
+        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.TeamFaction);
     }
 
     [PunRPC]
@@ -337,22 +337,32 @@ public class UIControl : MonoBehaviour
 
         foreach (Team t in gameManager.teams)
         {
-            if (t.getTeamType() == (Team.Faction)teamValue)
+            if (t.TeamFaction == (Team.Faction)teamValue)
             {
                 t.Ready = !t.Ready;
+                break;
+            }
+        }
+        foreach(Team t in gameManager.teams)
+        {
+            if(t.TeamType == (Team.Type) 1 && t.Ready == false)
+            {
+                Debug.Log("Team " + t.TeamFaction.ToString() + " is not ready");
                 return;
             }
         }
 
-        GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
-        if (GameManager.playerTeam.Ready) {
-            foreach(Team t in gameManager.getHumanTeams()) {
-                if (!t.Ready) {
-                    return;
-                }
-            }
-            startTurn();
-        }
+        startTurn(1);
+
+        //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
+        //if (GameManager.playerTeam.Ready) {
+        //    foreach(Team t in gameManager.getHumanTeams()) {
+        //        if (!t.Ready) {
+        //            return;
+        //        }
+        //    }
+        //    startTurn();
+        //}
     }
 
     /// <summary>
@@ -360,9 +370,9 @@ public class UIControl : MonoBehaviour
     /// Used when the player clicks the start turn button.
     /// Disables ship controls (besides ship tabs) during turn.
     /// </summary>
-    public void startTurn()
+    public void startTurn(int input)
     {
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected && input == 0)
         {
             readyBtnClick();
             return;
@@ -703,12 +713,12 @@ public class UIControl : MonoBehaviour
 
         foreach (Port p in GameManager.main.Board.ports)
         {
-            scores[(int)p.Team.getTeamType()]++;
+            scores[(int)p.Team.TeamFaction]++;
         }
 
         for (int i = 0; i < 6; i++)
         {
-            if (i == (int)GameManager.playerTeam.getTeamType())
+            if (i == (int)GameManager.playerTeam.TeamFaction)
                 GameObject.Find("VictoryText").GetComponent<Text>().text = scores[i] + "/12\nports";
             portTexts[i].text = scores[i] + " / 12";
         }
