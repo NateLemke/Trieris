@@ -4030,6 +4030,7 @@ GameObject:
   - component: {fileID: 359105218}
   - component: {fileID: 359105220}
   - component: {fileID: 359105219}
+  - component: {fileID: 359105221}
   m_Layer: 5
   m_Name: MultiplayerPanel
   m_TagString: Untagged
@@ -4095,6 +4096,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 359105217}
   m_CullTransparentMesh: 0
+--- !u!114 &359105221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 359105217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dd53c9b6f759034a98b5465c5875019, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roomItem: {fileID: 0}
 --- !u!1 &364073467
 GameObject:
   m_ObjectHideFlags: 0
@@ -11237,8 +11251,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ConnectingToMaster: 0
   ConnectingToRoom: 0
-  roomItem: {fileID: 5590436513026675010, guid: dce8252f1d183f04184ba360d8b9c683,
-    type: 3}
 --- !u!4 &1100863498
 Transform:
   m_ObjectHideFlags: 0

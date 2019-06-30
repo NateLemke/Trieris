@@ -16,7 +16,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
 
     public string roomName;
 
-    RoomInfo currentRoom;
+    public RoomInfo currentRoom;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,13 +40,18 @@ public class RoomListing : MonoBehaviourPunCallbacks
             name.text = currentRoom.Name;
             creator.text = (string)currentRoom.CustomProperties["MasterName"];
             slots.text = currentRoom.PlayerCount + " / " + currentRoom.MaxPlayers;
-            privacy.text = "public";
+            privacy.text = currentRoom.IsOpen ? "Public" : "Private";
+        }
+        else
+        {
+            Debug.Log("room not set");
         }
     }
 
     public void setRoomName(string input)
     {
         roomName = input;
+        Debug.Log("name set");
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -55,8 +60,13 @@ public class RoomListing : MonoBehaviourPunCallbacks
         {
             if(r.Name == roomName)
             {
+                Debug.Log("room found");
                 currentRoom = r;
                 break;
+            }
+            else
+            {
+                Debug.Log("room not found");
             }
         }
     }

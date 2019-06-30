@@ -26,15 +26,18 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.InLobby)
         {
-            foreach (Transform child in transform.Find("RoomList/ScrollView/Viewport/Content").transform)
+            foreach (Transform child in transform.Find("Lobby/RoomList/ScrollView/Viewport/Content").transform)
             {
                 Destroy(child.gameObject);
             }
             foreach (RoomInfo r in roomList)
             {
                 GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                roomItem.transform.SetParent(transform.Find("RoomList/ScrollView/Viewport/Content").transform, false);
-                roomItem.GetComponent<Button>().onClick.AddListener(() => OnClickConnectToRoom((string) r.CustomProperties["RoomName"]));
+                roomItem.transform.SetParent(transform.Find("Lobby/RoomList/ScrollView/Viewport/Content").transform, false);
+                roomItem.GetComponent<Button>().onClick.AddListener(() => OnClickConnectToRoom((string) r.Name));
+                roomItem.GetComponent<RoomListing>().currentRoom = r;
+                roomItem.GetComponent<RoomListing>().setRoomName((string)r.CustomProperties["RoomName"]);
+                Debug.Log("Master Name: " + (string)r.CustomProperties["MasterName"]);
             }
         }
     }
