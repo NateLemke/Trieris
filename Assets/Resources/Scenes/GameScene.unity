@@ -327,12 +327,12 @@ PrefabInstance:
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -124.4
+      value: -124.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -124.4
+      value: -124.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581861702021, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -357,7 +357,7 @@ PrefabInstance:
     - target: {fileID: 4608405581332513921, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -29.500008
+      value: -29.5
       objectReference: {fileID: 0}
     - target: {fileID: 4608405581332513921, guid: fa7595ffb6a924b42a6de858c5d5bc64,
         type: 3}
@@ -5472,7 +5472,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   viewIdField: 1
-  InstantiationId: 2
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!114 &535529817
 MonoBehaviour:
@@ -5494,7 +5494,7 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 535529818}
   viewIdField: 2
-  InstantiationId: 2
+  InstantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!114 &535529818
 MonoBehaviour:
@@ -15505,7 +15505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1956131261
 RectTransform:
   m_ObjectHideFlags: 0

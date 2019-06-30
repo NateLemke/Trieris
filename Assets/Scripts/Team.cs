@@ -285,5 +285,13 @@ public class Team {
         }
     }
 
+    public void FindShips() {
+        for(int i = 0; i < 5; i++) {
+            Ship s = GameObject.Find(teamFaction.ToString() + " ship " + i).GetComponent<Ship>();
+            ships.Add(s);
+            s.team = this;
+        }
+    }
+
 
 }

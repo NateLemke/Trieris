@@ -102,6 +102,10 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Start()
     {
+
+    }
+
+    public void SetUpUI() {
         Selected = null;
 
         actionImages[0] = GameObject.Find("ActionImage1").GetComponent<Image>();
@@ -147,41 +151,41 @@ public class UIControl : MonoBehaviour
         tabTexts[3] = GameObject.Find("TabText4").GetComponent<Text>();
         tabTexts[4] = GameObject.Find("TabText5").GetComponent<Text>();
 
-        bottomIcons[0, 0] = GameObject.Find("BottomRed1").GetComponent<Image>();
-        bottomIcons[0, 1] = GameObject.Find("BottomRed2").GetComponent<Image>();
-        bottomIcons[0, 2] = GameObject.Find("BottomRed3").GetComponent<Image>();
-        bottomIcons[0, 3] = GameObject.Find("BottomRed4").GetComponent<Image>();
-        bottomIcons[0, 4] = GameObject.Find("BottomRed5").GetComponent<Image>();
+        bottomIcons[0,0] = GameObject.Find("BottomRed1").GetComponent<Image>();
+        bottomIcons[0,1] = GameObject.Find("BottomRed2").GetComponent<Image>();
+        bottomIcons[0,2] = GameObject.Find("BottomRed3").GetComponent<Image>();
+        bottomIcons[0,3] = GameObject.Find("BottomRed4").GetComponent<Image>();
+        bottomIcons[0,4] = GameObject.Find("BottomRed5").GetComponent<Image>();
 
-        bottomIcons[1, 0] = GameObject.Find("BottomOrange1").GetComponent<Image>();
-        bottomIcons[1, 1] = GameObject.Find("BottomOrange2").GetComponent<Image>();
-        bottomIcons[1, 2] = GameObject.Find("BottomOrange3").GetComponent<Image>();
-        bottomIcons[1, 3] = GameObject.Find("BottomOrange4").GetComponent<Image>();
-        bottomIcons[1, 4] = GameObject.Find("BottomOrange5").GetComponent<Image>();
+        bottomIcons[1,0] = GameObject.Find("BottomOrange1").GetComponent<Image>();
+        bottomIcons[1,1] = GameObject.Find("BottomOrange2").GetComponent<Image>();
+        bottomIcons[1,2] = GameObject.Find("BottomOrange3").GetComponent<Image>();
+        bottomIcons[1,3] = GameObject.Find("BottomOrange4").GetComponent<Image>();
+        bottomIcons[1,4] = GameObject.Find("BottomOrange5").GetComponent<Image>();
 
-        bottomIcons[2, 0] = GameObject.Find("BottomYellow1").GetComponent<Image>();
-        bottomIcons[2, 1] = GameObject.Find("BottomYellow2").GetComponent<Image>();
-        bottomIcons[2, 2] = GameObject.Find("BottomYellow3").GetComponent<Image>();
-        bottomIcons[2, 3] = GameObject.Find("BottomYellow4").GetComponent<Image>();
-        bottomIcons[2, 4] = GameObject.Find("BottomYellow5").GetComponent<Image>();
+        bottomIcons[2,0] = GameObject.Find("BottomYellow1").GetComponent<Image>();
+        bottomIcons[2,1] = GameObject.Find("BottomYellow2").GetComponent<Image>();
+        bottomIcons[2,2] = GameObject.Find("BottomYellow3").GetComponent<Image>();
+        bottomIcons[2,3] = GameObject.Find("BottomYellow4").GetComponent<Image>();
+        bottomIcons[2,4] = GameObject.Find("BottomYellow5").GetComponent<Image>();
 
-        bottomIcons[3, 0] = GameObject.Find("BottomGreen1").GetComponent<Image>();
-        bottomIcons[3, 1] = GameObject.Find("BottomGreen2").GetComponent<Image>();
-        bottomIcons[3, 2] = GameObject.Find("BottomGreen3").GetComponent<Image>();
-        bottomIcons[3, 3] = GameObject.Find("BottomGreen4").GetComponent<Image>();
-        bottomIcons[3, 4] = GameObject.Find("BottomGreen5").GetComponent<Image>();
+        bottomIcons[3,0] = GameObject.Find("BottomGreen1").GetComponent<Image>();
+        bottomIcons[3,1] = GameObject.Find("BottomGreen2").GetComponent<Image>();
+        bottomIcons[3,2] = GameObject.Find("BottomGreen3").GetComponent<Image>();
+        bottomIcons[3,3] = GameObject.Find("BottomGreen4").GetComponent<Image>();
+        bottomIcons[3,4] = GameObject.Find("BottomGreen5").GetComponent<Image>();
 
-        bottomIcons[4, 0] = GameObject.Find("BottomBlue1").GetComponent<Image>();
-        bottomIcons[4, 1] = GameObject.Find("BottomBlue2").GetComponent<Image>();
-        bottomIcons[4, 2] = GameObject.Find("BottomBlue3").GetComponent<Image>();
-        bottomIcons[4, 3] = GameObject.Find("BottomBlue4").GetComponent<Image>();
-        bottomIcons[4, 4] = GameObject.Find("BottomBlue5").GetComponent<Image>();
+        bottomIcons[4,0] = GameObject.Find("BottomBlue1").GetComponent<Image>();
+        bottomIcons[4,1] = GameObject.Find("BottomBlue2").GetComponent<Image>();
+        bottomIcons[4,2] = GameObject.Find("BottomBlue3").GetComponent<Image>();
+        bottomIcons[4,3] = GameObject.Find("BottomBlue4").GetComponent<Image>();
+        bottomIcons[4,4] = GameObject.Find("BottomBlue5").GetComponent<Image>();
 
-        bottomIcons[5, 0] = GameObject.Find("BottomBlack1").GetComponent<Image>();
-        bottomIcons[5, 1] = GameObject.Find("BottomBlack2").GetComponent<Image>();
-        bottomIcons[5, 2] = GameObject.Find("BottomBlack3").GetComponent<Image>();
-        bottomIcons[5, 3] = GameObject.Find("BottomBlack4").GetComponent<Image>();
-        bottomIcons[5, 4] = GameObject.Find("BottomBlack5").GetComponent<Image>();
+        bottomIcons[5,0] = GameObject.Find("BottomBlack1").GetComponent<Image>();
+        bottomIcons[5,1] = GameObject.Find("BottomBlack2").GetComponent<Image>();
+        bottomIcons[5,2] = GameObject.Find("BottomBlack3").GetComponent<Image>();
+        bottomIcons[5,3] = GameObject.Find("BottomBlack4").GetComponent<Image>();
+        bottomIcons[5,4] = GameObject.Find("BottomBlack5").GetComponent<Image>();
 
         portTexts[0] = GameObject.Find("BottomPortsRed").GetComponent<Text>();
         portTexts[1] = GameObject.Find("BottomPortsOrange").GetComponent<Text>();
@@ -197,7 +201,7 @@ public class UIControl : MonoBehaviour
         attackUnclicked = attackPanels[0].colors.normalColor;
         attackClicked = attackPanels[0].colors.pressedColor;
         arrowYellow = attackArrows[0].colors.normalColor;
-        greyedOut = new Color(50, 50, 50, 255);
+        greyedOut = new Color(50,50,50,255);
 
         straightArrow = Sprites.main.StraightArrow;
         curvedArrow = Sprites.main.CurvedArrow;
@@ -460,9 +464,14 @@ public class UIControl : MonoBehaviour
     /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
     public void setTeam(int i)
     {
-        if(TeamSelectUI != null)
+        gameManager.setupGame(i);
+        PostTeamSelection();
+    }
+
+    public void PostTeamSelection() {
+        if (TeamSelectUI != null)
             TeamSelectUI.SetActive(false);
-        gameManager.setupGame(i);              
+                    
 
         GameObject overlay = GameObject.Find("OverlayCanvas");
         overlay.transform.Find("HelpPanel").gameObject.SetActive(true);
@@ -471,6 +480,8 @@ public class UIControl : MonoBehaviour
         overlay.transform.Find("Objective").gameObject.SetActive(true);
         objectiveColor = overlay.transform.Find("Objective").GetComponent<Image>().material.color;
         objectiveColor.a = 0;
+
+        setSelection(gameManager.getPlayerShips()[0].Id);
     }
 
     /// <summary>
@@ -605,6 +616,9 @@ public class UIControl : MonoBehaviour
     /// </summary>
     private void setUndamaged()
     {
+        if(selected == null) {
+            Debug.Log("Selected is null");
+        }
         actionPanels[selected.currentActionIndex].GetComponent<Button>().interactable = true;
         Image i = actionPanels[selected.currentActionIndex].GetComponent<Image>();
         i.color = defaultGreen;

@@ -46,6 +46,107 @@ public class GameManager : MonoBehaviour {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
+    /// <summary>
+    /// Creates teams, ports, and ships
+    /// Assigns additional references
+    /// </summary>
+    private void Start() {
+        GetComponent<UIControl>().SetUpUI();
+
+        //createAIs();
+        gameLogic = GetComponent<GameLogic>();
+        uiControl = GetComponent<UIControl>();
+        Time.timeScale = 1;
+
+        if (PhotonNetwork.IsConnected) {
+            GameObject.Find("OverlayCanvas/TeamSelectPanel").gameObject.SetActive(false);
+            //playerFaction = (Team.Faction)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"];
+            //teamTypes[(int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]] = (Team.Type)1;
+            //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+
+            if (PhotonNetwork.IsMasterClient) {
+                Debug.Log("Im the master client!");
+
+            } else {
+                Debug.Log("Im NOT the master client");
+            }
+
+            setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+        }
+    }
+
+    public void setupGame(int playerChoice) {
+
+        if (!PhotonNetwork.IsConnected) {
+            for (int i = 0; i < 6; i++) {
+                if (i == playerChoice) {
+                    teamTypes[i] = Team.Type.player;
+                } else {
+                    teamTypes[i] = Team.Type.ai;
+                }
+            }
+        }
+
+        //for (int i = 0; i < 6; i++) {
+        //    if (i == playerChoice) {
+        //        teamTypes[i] = Team.Type.player;
+        //    } else {
+        //        teamTypes[i] = Team.Type.ai;
+        //    }
+        //}
+
+        createTeams();
+        createPorts();
+        playerFaction = (Team.Faction)playerChoice;
+        playerTeam = teams[(int)playerFaction];
+
+        if (playerTeam == null) {
+            Debug.LogError("Player's team is null");
+        }
+
+        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
+            createShips();
+
+            assignAI();
+
+            setAIDirections();
+
+            if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+                FindShips();
+            }
+
+            uiControl.PostTeamSelection();
+        }
+
+
+
+        //if (PhotonNetwork.IsConnected) {
+        //    PhotonView photonView = PhotonView.Get(this);
+        //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
+        //}
+
+        
+        
+        //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+        promptInitialRedirets();
+        revealRedirects();
+
+
+        cameraLock = false;
+        GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+        
+    }
+
+    /// <summary>
+    /// Checks every frame if there are pending redirects or port captures
+    /// </summary>
+    private void Update() {
+
+        //checkForChoices();
+        //checkForExecuteNextPhase();
+        //PhaseManager.drawFocusMargin();
+    }
+
     // new multiplayer functions
     public bool playersReady() {
         foreach (Team t in teams) {
@@ -106,53 +207,7 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    public void setupGame(int playerChoice) {
 
-        if (!PhotonNetwork.IsConnected) {
-            for (int i = 0; i < 6; i++) {
-                if (i == playerChoice) {
-                    teamTypes[i] = Team.Type.player;
-                } else {
-                    teamTypes[i] = Team.Type.ai;
-                }
-            }
-        }   
-
-        createTeams();
-        playerFaction = (Team.Faction)playerChoice;
-        playerTeam = teams[(int)playerFaction];
-
-        if (playerTeam == null) {
-            Debug.LogError("Player's team is null");
-        }
-        
-        createShips();
-
-        assignAI();
-
-        setAIDirections();
-
-        //if (PhotonNetwork.IsConnected) {
-        //    PhotonView photonView = PhotonView.Get(this);
-        //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
-        //}
-    }
-
-    public void CopyTeams(Team[] t) {
-        teams = t;
-        PostSetup();
-    }
-
-    public void PostSetup() {
-        createPorts();
-        uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-        promptInitialRedirets();
-        revealRedirects();
-        
-        uiControl.setSelection(getPlayerShips()[0].Id);
-        cameraLock = false;
-        GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-    }
 
     public void promptInitialRedirets() {
         foreach(Team t in teams) {
@@ -177,43 +232,6 @@ public class GameManager : MonoBehaviour {
         board.CreateGridVisuals();       
 
         cameraLock = true;
-    }
-
-    /// <summary>
-    /// Creates teams, ports, and ships
-    /// Assigns additional references
-    /// </summary>
-    private void Start() {
-
-        //createAIs();
-        gameLogic = GetComponent<GameLogic>();
-        uiControl = GetComponent<UIControl>();
-        Time.timeScale = 1;
-
-        if (PhotonNetwork.IsConnected)
-        {
-            GameObject.Find("OverlayCanvas/TeamSelectPanel").gameObject.SetActive(false);
-            playerFaction = (Team.Faction)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"];
-            teamTypes[(int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]] = (Team.Type)1;
-            //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-
-            if (PhotonNetwork.IsMasterClient) {
-                Debug.Log("Im the master client!");
-                setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-            } else {
-                Debug.Log("Im NOT the master client");
-            }
-        } 
-    }
-
-    /// <summary>
-    /// Checks every frame if there are pending redirects or port captures
-    /// </summary>
-    private void Update() {        
-
-        //checkForChoices();
-        //checkForExecuteNextPhase();
-        //PhaseManager.drawFocusMargin();
     }
 
     /// <summary>
@@ -507,6 +525,12 @@ public class GameManager : MonoBehaviour {
             }
             Team t = new Team(faction);
             teams[index] = t;
+        }
+    }
+
+    public void FindShips() {
+        foreach(Team t in teams) {
+            t.FindShips();
         }
     }
 
