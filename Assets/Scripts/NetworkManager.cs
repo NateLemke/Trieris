@@ -114,6 +114,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, options);
     }
 
+    /// <summary>
+    /// Creates a room
+    /// public room: privacy = 0
+    /// private room: privacy = 1
+    /// </summary>
+    /// <param name="privacy"></param>
+    public void OnClickCreateRoom(int privacy)
+    {
+        RoomOptions options = new RoomOptions();
+        options.IsVisible = privacy == 0;
+        options.IsOpen = privacy == 0;
+        options.MaxPlayers = 6;
+        string[] customProps = { "MasterName", "RoomName" };
+        options.CustomRoomPropertiesForLobby = customProps;
+        PhotonNetwork.CreateRoom(null, options);
+    }
+
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         base.OnCreateRoomFailed(returnCode, message);
