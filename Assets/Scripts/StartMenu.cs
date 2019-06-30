@@ -20,6 +20,7 @@ public class StartMenu : MonoBehaviourPun
     public void startMultiplayerGame()
     {
         Debug.Log(RpcTarget.All);
+        setPlayerTeams();
         PhotonView.Get(this).RPC("startGame", RpcTarget.All);
     }
 
@@ -30,6 +31,18 @@ public class StartMenu : MonoBehaviourPun
     public void startGame()
     {
         SceneManager.LoadScene("GameScene");
+    }
+
+    /// <summary>
+    /// Sets the teams that are currently assigned
+    /// </summary>
+    private void setPlayerTeams()
+    {
+        for (int i = 1; i < 6; i++)
+        {
+            Debug.Log("Set team " + i + " as human");
+            GameManager.teamTypes[int.Parse(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams /Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text)] = (Team.Type)1;
+        }
     }
 
     public void multiplayerGame()
