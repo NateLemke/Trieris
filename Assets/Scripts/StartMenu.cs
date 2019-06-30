@@ -42,7 +42,10 @@ public class StartMenu : MonoBehaviourPun
         for (int i = 1; i < 6; i++)
         {
             Debug.Log("Set team " + i + " as human");
-            GameManager.teamTypes[int.Parse(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams /Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text)] = (Team.Type)1;
+            if(!GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text.Equals("Empty"))
+            {
+                GameManager.teamTypes[i - 1] = (Team.Type)1;
+            }
         }
     }
 

@@ -35,5 +35,6 @@ MonoBehaviour:
   - startMultiplayerGame
   - startGame
   - toggleReady
+  - teamIsHuman
   DisableAutoOpenWizard: 1
   ShowSettings: 1
