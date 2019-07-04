@@ -114,16 +114,18 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
+        createShips();
+
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-            createShips();
+            
 
             assignAI();
 
             setAIDirections();
 
-            if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-                FindShips();
-            }
+            //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            //    FindShips();
+            //}
 
             uiControl.PostTeamSelection();
         }
@@ -387,20 +389,31 @@ public class GameManager : MonoBehaviour {
         }
         GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
 
-        GameObject spawn = null;
+        GameObject spawn = Instantiate(shipPrefab,node.getRealPos(),Quaternion.identity);
 
-        if (PhotonNetwork.IsConnected) {
-            spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getBoardPosition(),Quaternion.identity);
-        } else {
-            spawn = Instantiate(shipPrefab,node.getBoardPosition(),Quaternion.identity);
-        }
-
-        spawn.transform.parent = parent.transform;
         Ship ship = spawn.GetComponent<Ship>();
-        //Debug.Log("can act: "+ship.getCanActa());
-        //ships.Add(ship);
+
         ship.intialize(team,node);
         ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
+
+        PhotonView pv = GetComponent<PhotonView>();
+        pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
+
+        Debug.Log((int)(team.TeamFaction + 1) * 100 + (ship.Id + 1) * 10);
+        Debug.Log(pv.ViewID);
+
+        if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+            pv.TransferOwnership(PhotonNetwork.MasterClient);
+            //spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
+        } else {
+            
+        }
+
+        
+        
+
+        spawn.transform.parent = parent.transform;
+
 
         return ship;
     }
