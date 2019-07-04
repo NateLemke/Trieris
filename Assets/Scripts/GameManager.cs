@@ -101,9 +101,8 @@ public class GameManager : MonoBehaviour {
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
-        // TEMPORARY
-        if (PhotonNetwork.IsConnected)
-            PhotonView.Get(this).RPC("teamIsHuman",RpcTarget.All,playerChoice);
+        //if (PhotonNetwork.IsConnected)
+        //    PhotonView.Get(this).RPC("teamIsHuman",RpcTarget.All,playerChoice);
         if (playerTeam == null) {
             Debug.LogError("Player's team is null");
         }
@@ -209,52 +208,6 @@ public class GameManager : MonoBehaviour {
         }
         return false;
     }
-
-    //public void setupGamePhoton() {
-    //    createTeamsPhoton();
-    //}
-    public void setupGame(int playerChoice) {
-
-        for(int i = 0; i < 6; i++) {
-            if(i == playerChoice) {
-                teamTypes[i] = Team.Type.player;
-            } else {
-                teamTypes[i] = Team.Type.ai;
-            }
-        }       
-
-        createTeams();
-        playerFaction = (Team.Faction)playerChoice;
-        playerTeam = teams[(int)playerFaction];
-        //if(PhotonNetwork.IsConnected)
-        //    PhotonView.Get(this).RPC("teamIsHuman", RpcTarget.All, (int)playerChoice);
-        if (playerTeam == null) {
-            Debug.LogError("Player's team is null");
-        }
-
-    //public void createTeamsPhoton() {
-    //public void setupGame(int playerChoice) {
-
-    //    for(int i = 0; i < 6; i++) {
-    //        if(i == playerChoice) {
-    //            teamTypes[i] = Team.Type.player;
-    //        } else {
-    //            teamTypes[i] = Team.Type.ai;
-    //        }
-    //    }       
-
-    //    createTeams();
-    //    playerFaction = (Team.Faction)playerChoice;
-    //    playerTeam = teams[(int)playerFaction];
-    //    if(PhotonNetwork.IsConnected)
-    //        PhotonView.Get(this).RPC("teamIsHuman", RpcTarget.All, playerChoice);
-    //    if (playerTeam == null) {
-    //        Debug.LogError("Player's team is null");
-    //    }
-
-    //}
-
-
 
     //[PunRPC]
     //public void teamIsHuman(int i)
