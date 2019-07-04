@@ -29,7 +29,23 @@ public class StartMenu : MonoBehaviourPun
     [PunRPC]
     public void startGame()
     {
+        if (PhotonNetwork.IsConnected)
+            setPlayerTeams();
         SceneManager.LoadScene("GameScene");
+    }
+
+    /// <summary>
+    /// Sets the teams that are currently assigned
+    /// </summary>
+    private void setPlayerTeams()
+    {
+        for (int i = 1; i <= 6; i++)
+        {
+            if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text != "Empty")
+            {
+                GameManager.teamTypes[i - 1] = (Team.Type)1;
+            }
+        }
     }
 
     public void multiplayerGame()

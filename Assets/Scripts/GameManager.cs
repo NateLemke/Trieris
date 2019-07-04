@@ -213,6 +213,24 @@ public class GameManager : MonoBehaviour {
     //public void setupGamePhoton() {
     //    createTeamsPhoton();
     //}
+    public void setupGame(int playerChoice) {
+
+        for(int i = 0; i < 6; i++) {
+            if(i == playerChoice) {
+                teamTypes[i] = Team.Type.player;
+            } else {
+                teamTypes[i] = Team.Type.ai;
+            }
+        }       
+
+        createTeams();
+        playerFaction = (Team.Faction)playerChoice;
+        playerTeam = teams[(int)playerFaction];
+        //if(PhotonNetwork.IsConnected)
+        //    PhotonView.Get(this).RPC("teamIsHuman", RpcTarget.All, (int)playerChoice);
+        if (playerTeam == null) {
+            Debug.LogError("Player's team is null");
+        }
 
     //public void createTeamsPhoton() {
     //public void setupGame(int playerChoice) {
@@ -238,11 +256,11 @@ public class GameManager : MonoBehaviour {
 
 
 
-    [PunRPC]
-    public void teamIsHuman(int i)
-    {
-        teams[i].setTeamType((Team.Type) 1);
-    }
+    //[PunRPC]
+    //public void teamIsHuman(int i)
+    //{
+    //    teams[i].setTeamType((Team.Type) 1);
+    //}
 
     public void promptInitialRedirets() {
         foreach(Team t in teams) {

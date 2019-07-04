@@ -6,9 +6,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 public class RoomHandling : MonoBehaviour
 {
     GameObject thisRoom;
+    public Toggle privateGame;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,12 +21,17 @@ public class RoomHandling : MonoBehaviour
         thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
     }
 
+    void OnEnable()
+    {
+        setLocalPlayerTeam();
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (PhotonNetwork.IsConnected)
         {
-            for(int i = 1; i < 6; i++)
+            for(int i = 1; i <= 6; i++)
             {
                 thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
             }
@@ -63,7 +73,7 @@ public class RoomHandling : MonoBehaviour
 
     public void setPlayerTeam(int slotNumber)
     {
-        ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+        Hashtable customProperties = new Hashtable();
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
         customProperties.Add("TeamInt", thisDropdown.value);
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
@@ -74,10 +84,5 @@ public class RoomHandling : MonoBehaviour
     {
         Debug.Log(getSlotPosition(PhotonNetwork.LocalPlayer));
         setPlayerTeam(getSlotPosition(PhotonNetwork.LocalPlayer));
-    }
-
-    void OnEnable()
-    {
-        setLocalPlayerTeam();
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     //public Button BtnConnectMaster;
@@ -15,7 +17,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool ConnectingToMaster;
     public bool ConnectingToRoom;
 
-    public GameObject roomItem;
     GameObject thisLobby;
     // Start is called before the first frame update
     void Start()
@@ -39,7 +40,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void OnClickConnectToMaster()
     {
         PhotonNetwork.OfflineMode = false;
-        PhotonNetwork.NickName = Environment.UserName;
+        PhotonNetwork.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField").gameObject.GetComponent<InputField>().text;
         //PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "v1";
 
@@ -92,13 +93,49 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToRoom = false;
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
+
+        Hashtable roominfo = new Hashtable();
+        roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
+        roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
+
+        setPrivacyToggle(PhotonNetwork.IsConnected ? 0 : 1);
+
         listAllPlayersInRoom();
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         base.OnJoinRandomFailed(returnCode, message);
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = 6 });
+        OnClickCreateRoom(0);
+    }
+
+    /// <summary>
+    /// Creates a room
+    /// public room: privacy = 0
+    /// private room: privacy = 1
+    /// </summary>
+    /// <param name="privacy"></param>
+    public void OnClickCreateRoom(int privacy)
+    {
+        RoomOptions options = new RoomOptions();
+        options.IsVisible = true;
+        options.IsOpen = privacy == 0;
+        options.MaxPlayers = 6;
+        string[] customProps = { "MasterName", "RoomName" };
+        options.CustomRoomPropertiesForLobby = customProps;
+
+        setPrivacyToggle(privacy);
+
+        PhotonNetwork.CreateRoom(null, options);
+    }
+
+    private void setPrivacyToggle(int privacy)
+    {
+        GameObject thisRoom = GameObject.Find("Canvas").gameObject;
+        thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
+        thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
+        thisRoom.GetComponent<RoomHandling>().privateGame.isOn = privacy == 1;
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -126,22 +163,5 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log(PhotonNetwork.PlayerList[i].ActorNumber);
         }
         Debug.Log("List End.");
-    }
-
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        if (PhotonNetwork.InLobby)
-        {
-            foreach (Transform child in thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform)
-            {
-                Destroy(child.gameObject);
-            }
-            foreach (RoomInfo r in roomList)
-            {
-                GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
-                roomItem.transform.SetParent(thisLobby.transform.Find("RoomList/ScrollView/Viewport/Content").transform, false);
-                roomItem.GetComponent<Button>().onClick.AddListener(OnClickConnectToRoom);
-            }
-        }
     }
 }

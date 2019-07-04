@@ -5,13 +5,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoomListing : MonoBehaviour
+public class RoomListing : MonoBehaviourPunCallbacks
 {
-    Text info;
+    //Text info;
+
+    Text name;
+    Text creator;
+    Text slots;
+    Text privacy;
+
+    public string roomName;
+
+    public RoomInfo currentRoom;
     // Start is called before the first frame update
     void Start()
     {
-        transform.Find("RoomInfo").GetComponent<Text>();
+        //info = transform.Find("RoomInfo").GetComponent<Text>();
+        name = transform.Find("Name/Text").GetComponent<Text>();
+        creator = transform.Find("Creator/Text").GetComponent<Text>();
+        slots = transform.Find("Slots/Text").GetComponent<Text>();
+        privacy = transform.Find("Privacy/Text").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -22,5 +35,39 @@ public class RoomListing : MonoBehaviour
         //r.MaxPlayers;
         ////Room Master
         //r.GetPlayer(1);
+        if(currentRoom != null)
+        {
+            name.text = currentRoom.Name;
+            creator.text = (string)currentRoom.CustomProperties["MasterName"];
+            slots.text = currentRoom.PlayerCount + " / " + currentRoom.MaxPlayers;
+            privacy.text = currentRoom.IsOpen ? "Public" : "Private";
+        }
+        else
+        {
+            Debug.Log("room not set");
+        }
+    }
+
+    public void setRoomName(string input)
+    {
+        roomName = input;
+        Debug.Log("name set");
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach(RoomInfo r in roomList)
+        {
+            if(r.Name == roomName)
+            {
+                Debug.Log("room found");
+                currentRoom = r;
+                break;
+            }
+            else
+            {
+                Debug.Log("room not found");
+            }
+        }
     }
 }
