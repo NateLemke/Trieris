@@ -285,10 +285,6 @@ public class Team {
     /// </summary>
     public void createShips() {
 
-        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-
-        }
-
         foreach(Port p in ports) {
             GameManager.main.spawnShip(p.node,this);
         }

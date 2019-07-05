@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour {
         createShips();
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-            
+            SyncShipPhotonID();
 
             assignAI();
 
@@ -147,6 +147,23 @@ public class GameManager : MonoBehaviour {
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
         
+    }
+
+    public void SyncShipPhotonID() {
+        int[] ids = new int[getAllShips().Count];
+        int i = 0;
+        foreach(Ship s in getAllShips()) {
+            ids[0] = s.GetComponent<PhotonView>().ViewID;
+        }
+        PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
+    }
+
+    public void SetShipPhotonID(int[] ids) {
+        int i = 0;
+        foreach(Ship s in getAllShips()) {
+            s.GetComponent<PhotonView>().ViewID = ids[i];
+            i++;
+        }
     }
 
     /// <summary>
@@ -396,18 +413,31 @@ public class GameManager : MonoBehaviour {
         ship.intialize(team,node);
         ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
 
-        PhotonView pv = GetComponent<PhotonView>();
-        pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
+        PhotonView pv = spawn.AddComponent<PhotonView>();
+        PhotonTransformView ptv = spawn.AddComponent<PhotonTransformView>();
+        pv.ObservedComponents = new List<Component>();
+        pv.ObservedComponents.Add(ptv);
+        pv.OwnershipTransfer = OwnershipOption.Takeover;
+        //pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
 
-        Debug.Log((int)(team.TeamFaction + 1) * 100 + (ship.Id + 1) * 10);
-        Debug.Log(pv.ViewID);
+        if (PhotonNetwork.IsConnected) {
+            if (PhotonNetwork.IsMasterClient) {
+                if (!PhotonNetwork.AllocateSceneViewID(pv)) {
+                    Debug.LogError("Failed to allocated viewID for ship");
+                }
+            } else {
+                pv.TransferOwnership(PhotonNetwork.MasterClient);
+            }
+        }
+
+
+        //    Debug.Log((int)(team.TeamFaction + 1) * 100 + (ship.Id + 1) * 10);
+        //Debug.Log(pv.ViewID);
 
         if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
             pv.TransferOwnership(PhotonNetwork.MasterClient);
             //spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
-        } else {
-            
-        }
+        } 
 
         
         
