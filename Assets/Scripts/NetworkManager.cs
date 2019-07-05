@@ -128,7 +128,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         options.IsVisible = true;
         options.IsOpen = true;
         options.MaxPlayers = 6;
-        string[] customProps = { "MasterName", "RoomName", "Privacy" };
+        string[] customProps = { "MasterName", "RoomName", "Privacy", "Password" };
         options.CustomRoomPropertiesForLobby = customProps;
 
         //setPrivacyToggle(privacy);
@@ -143,6 +143,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
         roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
         roominfo.Add("Privacy", recentRoomPrivacy);
+        roominfo.Add("Password", PhotonNetwork.CurrentRoom.Name.SubString(0, 5));
         PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
     }
 

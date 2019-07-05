@@ -63,7 +63,7 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
 
     public void CheckPassword(string roomName, string password)
     {
-        if (privatePanel.transform.Find("InputField").gameObject.GetComponent<InputField>().text == password)
+        if (privatePanel.transform.Find("Window/InputField").gameObject.GetComponent<InputField>().text == password)
             OnClickConnectToRoom(roomName);
         else
         {

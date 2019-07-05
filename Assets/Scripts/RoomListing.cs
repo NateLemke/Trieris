@@ -40,7 +40,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
             name.text = currentRoom.Name;
             creator.text = (string)currentRoom.CustomProperties["MasterName"];
             slots.text = currentRoom.PlayerCount + " / " + currentRoom.MaxPlayers;
-            privacy.text = currentRoom.IsOpen ? "Public" : "Private";
+            privacy.text = (bool) currentRoom.CustomProperties["Privacy"] ? "Private" : "Public";
         }
         else
         {
