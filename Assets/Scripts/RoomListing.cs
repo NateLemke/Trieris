@@ -9,7 +9,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
 {
     //Text info;
 
-    Text name;
+    //Text name;
     Text creator;
     Text slots;
     Text privacy;
@@ -21,7 +21,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
     void Start()
     {
         //info = transform.Find("RoomInfo").GetComponent<Text>();
-        name = transform.Find("Name/Text").GetComponent<Text>();
+        //name = transform.Find("Name/Text").GetComponent<Text>();
         creator = transform.Find("Creator/Text").GetComponent<Text>();
         slots = transform.Find("Slots/Text").GetComponent<Text>();
         privacy = transform.Find("Privacy/Text").GetComponent<Text>();
@@ -30,14 +30,9 @@ public class RoomListing : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        //r.Name;
-        //r.PlayerCount;
-        //r.MaxPlayers;
-        ////Room Master
-        //r.GetPlayer(1);
         if(currentRoom != null)
         {
-            name.text = currentRoom.Name;
+            //name.text = currentRoom.Name;
             creator.text = (string)currentRoom.CustomProperties["MasterName"];
             slots.text = currentRoom.PlayerCount + " / " + currentRoom.MaxPlayers;
             privacy.text = (bool) currentRoom.CustomProperties["Privacy"] ? "Private" : "Public";

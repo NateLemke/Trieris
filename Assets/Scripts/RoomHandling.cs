@@ -39,7 +39,14 @@ public class RoomHandling : MonoBehaviour
             {
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
             }
+            setRoomName();
         }
+    }
+
+    public void setRoomName()
+    {
+        thisRoom.transform.Find("RoomName/InputField");
+        thisRoom.transform.Find("RoomName/InputField").gameObject.GetComponent<InputField>().text = PhotonNetwork.CurrentRoom.Name;
     }
 
     public int getSlotPosition(Player inPlayer)

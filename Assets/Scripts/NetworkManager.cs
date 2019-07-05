@@ -143,7 +143,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
         roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
         roominfo.Add("Privacy", recentRoomPrivacy);
-        roominfo.Add("Password", PhotonNetwork.CurrentRoom.Name.SubString(0, 5));
+        roominfo.Add("Password", PhotonNetwork.CurrentRoom.Name.Substring(0, 5));
         PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
     }
 
@@ -153,6 +153,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
         thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
         thisRoom.GetComponent<RoomHandling>().privateGame.isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
+        //thisRoom.GetComponent<RoomHandling>().setRoomName();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
