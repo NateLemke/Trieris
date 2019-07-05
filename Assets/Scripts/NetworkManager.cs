@@ -17,6 +17,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public bool ConnectingToMaster;
     public bool ConnectingToRoom;
 
+    private bool recentRoomPrivacy;
+
     GameObject thisLobby;
     // Start is called before the first frame update
     void Start()
@@ -79,7 +81,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
 
         ConnectingToRoom = true;
-        PhotonNetwork.JoinRandomRoom();
+
+        Hashtable privacyHash = new Hashtable() { { "Privacy" , false } };
+        PhotonNetwork.JoinRandomRoom(privacyHash, 0);
     }
 
     public void OnClickLeaveRoom()
@@ -94,12 +98,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("Master: " + PhotonNetwork.IsMasterClient + " | Players in room: " + PhotonNetwork.CurrentRoom.PlayerCount + " | Name: " + PhotonNetwork.CurrentRoom.Name);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().OpenRoom();
 
-        Hashtable roominfo = new Hashtable();
-        roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
-        roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
-        PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
+        //Hashtable roominfo = new Hashtable();
+        //roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
+        //roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
+        //PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
 
-        setPrivacyToggle(PhotonNetwork.IsConnected ? 0 : 1);
+        Debug.Log("Privacy? " + PhotonNetwork.CurrentRoom.CustomProperties["Privacy"]);
+
+        setPrivacyToggle();
 
         listAllPlayersInRoom();
     }
@@ -120,22 +126,32 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         RoomOptions options = new RoomOptions();
         options.IsVisible = true;
-        options.IsOpen = privacy == 0;
+        options.IsOpen = true;
         options.MaxPlayers = 6;
-        string[] customProps = { "MasterName", "RoomName" };
+        string[] customProps = { "MasterName", "RoomName", "Privacy" };
         options.CustomRoomPropertiesForLobby = customProps;
 
-        setPrivacyToggle(privacy);
+        //setPrivacyToggle(privacy);
+        recentRoomPrivacy = privacy == 1;
 
         PhotonNetwork.CreateRoom(null, options);
     }
 
-    private void setPrivacyToggle(int privacy)
+    public override void OnCreatedRoom()
+    {
+        Hashtable roominfo = new Hashtable();
+        roominfo.Add("MasterName", PhotonNetwork.CurrentRoom.GetPlayer(1).NickName);
+        roominfo.Add("RoomName", PhotonNetwork.CurrentRoom.Name);
+        roominfo.Add("Privacy", recentRoomPrivacy);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
+    }
+
+    private void setPrivacyToggle()
     {
         GameObject thisRoom = GameObject.Find("Canvas").gameObject;
         thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
         thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
-        thisRoom.GetComponent<RoomHandling>().privateGame.isOn = privacy == 1;
+        thisRoom.GetComponent<RoomHandling>().privateGame.isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
