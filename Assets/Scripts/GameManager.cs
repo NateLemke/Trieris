@@ -187,10 +187,12 @@ public class GameManager : MonoBehaviour {
         int[] ids = new int[getAllShips().Count];
         int i = 0;
         foreach(Ship s in getAllShips()) {
-            ids[0] = s.GetComponent<PhotonView>().ViewID;
+            ids[i] = s.GetComponent<PhotonView>().ViewID;
+            i++;
         }
         PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
         shipsSynced = true;
+        Debug.Log("Syncing ships");
     }
 
     [PunRPC]
