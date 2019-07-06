@@ -130,6 +130,9 @@ public class GameManager : MonoBehaviour {
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
+        Debug.Log("My playerFaction is " + playerFaction.ToString());
+        Debug.Log("My team is " + playerTeam.TeamFaction.ToString());
+
         //if (PhotonNetwork.IsConnected)
         //    PhotonView.Get(this).RPC("teamIsHuman",RpcTarget.All,playerChoice);
         if (playerTeam == null) {
