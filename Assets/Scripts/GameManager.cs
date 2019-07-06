@@ -451,6 +451,7 @@ public class GameManager : MonoBehaviour {
         pv.ObservedComponents = new List<Component>();
         pv.ObservedComponents.Add(ptv);
         pv.OwnershipTransfer = OwnershipOption.Takeover;
+        pv.Synchronization = ViewSynchronization.Unreliable;
         //pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
 
         if (PhotonNetwork.IsConnected) {
