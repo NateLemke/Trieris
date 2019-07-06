@@ -193,6 +193,7 @@ public class GameManager : MonoBehaviour {
         shipsSynced = true;
     }
 
+    [PunRPC]
     public void SetShipPhotonID(int[] ids) {
         int i = 0;
         foreach(Ship s in getAllShips()) {
