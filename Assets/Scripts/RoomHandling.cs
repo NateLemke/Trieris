@@ -76,6 +76,7 @@ public class RoomHandling : MonoBehaviour
         Hashtable customProperties = new Hashtable();
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
         customProperties.Add("TeamInt", thisDropdown.value);
+        customProperties.Add("LoadedGame",false);
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
         Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamInt"]);
     }

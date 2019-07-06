@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
+    bool shipsSynced = false;
+
     /// <summary>
     /// Creates teams, ports, and ships
     /// Assigns additional references
@@ -73,6 +75,33 @@ public class GameManager : MonoBehaviour {
 
             setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
         }
+    }
+
+    /// <summary>
+    /// Checks every frame if there are pending redirects or port captures
+    /// </summary>
+    private void Update() {
+
+        //checkForChoices();
+        //checkForExecuteNextPhase();
+        //PhaseManager.drawFocusMargin();
+
+
+        if (PhotonNetwork.IsMasterClient) {
+            CheckPlayersReady();
+        }
+    }
+
+    public void CheckPlayersReady() {
+        if (shipsSynced)
+            return;
+        Player[] players = PhotonNetwork.PlayerList;
+        foreach(Player p in players) {
+            if (!(bool)p.CustomProperties["LoadedGame"]) {
+                return;
+            }
+        }
+        SyncShipPhotonID();
     }
 
     public void setupGame(int playerChoice) {
@@ -117,7 +146,7 @@ public class GameManager : MonoBehaviour {
         createShips();
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-            SyncShipPhotonID();
+            
 
             assignAI();
 
@@ -130,6 +159,11 @@ public class GameManager : MonoBehaviour {
             uiControl.PostTeamSelection();
         }
 
+        if(PhotonNetwork.IsConnected) {
+            ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.LocalPlayer.CustomProperties;
+            ht["LoadedGame"] = true;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+        }
 
 
         //if (PhotonNetwork.IsConnected) {
@@ -156,6 +190,7 @@ public class GameManager : MonoBehaviour {
             ids[0] = s.GetComponent<PhotonView>().ViewID;
         }
         PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
+        shipsSynced = true;
     }
 
     public void SetShipPhotonID(int[] ids) {
@@ -166,15 +201,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Checks every frame if there are pending redirects or port captures
-    /// </summary>
-    private void Update() {
 
-        //checkForChoices();
-        //checkForExecuteNextPhase();
-        //PhaseManager.drawFocusMargin();
-    }
 
     // new multiplayer functions
     public bool playersReady() {
