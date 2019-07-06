@@ -553,7 +553,7 @@ public class GameManager : MonoBehaviour {
     /// Sets the redirect UI to active for all ships that need a redirect choice made
     /// </summary>
     public void revealRedirects() {
-        foreach(Ship s in getHumanShips()) {
+        foreach(Ship s in playerTeam.ships) {
             s.setRedirectUI(true);
         }
     }
