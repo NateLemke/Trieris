@@ -439,20 +439,27 @@ public class GameManager : MonoBehaviour {
         }
         //GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
 
-        GameObject spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
+        if (PhotonNetwork.IsConnected)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameObject spawn = PhotonNetwork.Instantiate("Prefabs/Ship", node.getRealPos(), Quaternion.identity);
 
-        Ship ship = spawn.GetComponent<Ship>();
+                Ship ship = spawn.GetComponent<Ship>();
 
-        ship.intialize(team,node);
-        ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
+                ship.intialize(team, node);
+                ship.name = team.TeamFaction.ToString() + " ship " + ship.Id;
 
-        PhotonView pv = spawn.AddComponent<PhotonView>();
-        PhotonTransformView ptv = spawn.AddComponent<PhotonTransformView>();
-        pv.ObservedComponents = new List<Component>();
-        pv.ObservedComponents.Add(ptv);
-        pv.OwnershipTransfer = OwnershipOption.Takeover;
-        pv.Synchronization = ViewSynchronization.Unreliable;
-        //pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
+                PhotonView pv = spawn.AddComponent<PhotonView>();
+                PhotonTransformView ptv = spawn.AddComponent<PhotonTransformView>();
+                pv.ObservedComponents = new List<Component>();
+                pv.ObservedComponents.Add(ptv);
+                pv.OwnershipTransfer = OwnershipOption.Takeover;
+                pv.Synchronization = ViewSynchronization.Unreliable;
+                //pv.ViewID = (int)(team.TeamFaction+1) * 100 + (ship.Id+1) * 10;
+            }
+        }
+               
 
         if (PhotonNetwork.IsConnected) {
             if (PhotonNetwork.IsMasterClient) {
