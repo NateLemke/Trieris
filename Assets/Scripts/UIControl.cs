@@ -414,7 +414,7 @@ public class UIControl : MonoBehaviour
     {
         if (PhotonNetwork.IsConnected)
         {
-            SendMPActions();
+            SendMPActions(i);
         }
         if (i == 5)
         {
@@ -461,8 +461,7 @@ public class UIControl : MonoBehaviour
             }
         }
     }
-
-    [PunRPC]
+    
     public void SendMPActions(int i)
     {
         if (i == 5)
@@ -471,7 +470,7 @@ public class UIControl : MonoBehaviour
             {
                 if (selected.actions[selected.currentActionIndex - 1].actionIndex == 4)
                 {
-                    selected.setAction(selected.currentActionIndex, i, -1);
+                    PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
                     setActionImages(i);
 
                     if (selected.currentActionIndex < (selected.life - 1))
@@ -481,7 +480,7 @@ public class UIControl : MonoBehaviour
                         color.a = 0;
                         selectedOutline.effectColor = color;
 
-                        selected.currentActionIndex++;
+                        PhotonView.Get(selected.gameObject).RPC("incrementActionIndex", RpcTarget.MasterClient);
 
                         selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
                         color.a = 255;
@@ -492,7 +491,7 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            selected.setAction(selected.currentActionIndex, i, -1);
+            PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
             setActionImages(i);
 
             if (selected.currentActionIndex < (selected.life - 1))
@@ -502,7 +501,7 @@ public class UIControl : MonoBehaviour
                 color.a = 0;
                 selectedOutline.effectColor = color;
 
-                selected.currentActionIndex++;
+                PhotonView.Get(selected.gameObject).RPC("incrementActionIndex", RpcTarget.MasterClient);
 
                 selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
                 color.a = 255;

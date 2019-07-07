@@ -11,6 +11,7 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
     public GameObject roomItem;
 
     GameObject privatePanel;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
     
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("Roomlist updated");
         if (PhotonNetwork.InLobby)
         {
             foreach (Transform child in transform.Find("Lobby/RoomList/ScrollView/Viewport/Content").transform)
@@ -35,11 +37,17 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
             }
             foreach (RoomInfo r in roomList)
             {
+                Debug.Log(r.ToString());
+            }
+
+            foreach (RoomInfo r in roomList)
+            {
                 GameObject roomItem = Instantiate(this.roomItem, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
                 roomItem.transform.SetParent(transform.Find("Lobby/RoomList/ScrollView/Viewport/Content").transform, false);
 
                 roomItem.GetComponent<Button>().onClick.RemoveAllListeners();
-                if (!(bool) r.CustomProperties["Privacy"])
+                if(true)
+                //if (!(bool) r.CustomProperties["Privacy"])
                     roomItem.GetComponent<Button>().onClick.AddListener(() => OnClickConnectToRoom((string) r.Name));
                 else
                 {
