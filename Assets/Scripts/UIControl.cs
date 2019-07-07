@@ -408,6 +408,10 @@ public class UIControl : MonoBehaviour
     /// <param name="i">The action to be set. Forward=1, Turn left=2, Turn right=3, Hold=4, Reverse=5</param>
     public void setAction(int i)
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            SendMPActions();
+        }
         if (i == 5)
         {
             if(selected.currentActionIndex > 0)
@@ -452,7 +456,55 @@ public class UIControl : MonoBehaviour
                 selectedOutline.effectColor = color;
             }
         }
+    }
 
+    [PunRPC]
+    public void SendMPActions(int i)
+    {
+        if (i == 5)
+        {
+            if (selected.currentActionIndex > 0)
+            {
+                if (selected.actions[selected.currentActionIndex - 1].actionIndex == 4)
+                {
+                    selected.setAction(selected.currentActionIndex, i, -1);
+                    setActionImages(i);
+
+                    if (selected.currentActionIndex < (selected.life - 1))
+                    {
+                        Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                        Color color = selectedOutline.effectColor;
+                        color.a = 0;
+                        selectedOutline.effectColor = color;
+
+                        selected.currentActionIndex++;
+
+                        selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                        color.a = 255;
+                        selectedOutline.effectColor = color;
+                    }
+                }
+            }
+        }
+        else
+        {
+            selected.setAction(selected.currentActionIndex, i, -1);
+            setActionImages(i);
+
+            if (selected.currentActionIndex < (selected.life - 1))
+            {
+                Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                Color color = selectedOutline.effectColor;
+                color.a = 0;
+                selectedOutline.effectColor = color;
+
+                selected.currentActionIndex++;
+
+                selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
+                color.a = 255;
+                selectedOutline.effectColor = color;
+            }
+        }
     }
 
     /// <summary>
