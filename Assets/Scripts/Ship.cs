@@ -1,5 +1,3 @@
-using Photon.Pun;
-using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using UnityEngine.UI;
 /// <summary>
 /// This class is used to control and calculate actions for a single Trieris ship
 /// </summary>
-public class Ship : MonoBehaviourPunCallbacks {
+public class Ship : MonoBehaviour {
 
     public const int FORWARD = 1;
     public const int PORT = 2;
@@ -146,7 +144,6 @@ public class Ship : MonoBehaviourPunCallbacks {
     /// <param name="index">the phase for the action</param>
     /// <param name="actionNum">the action number the determines the type of action</param>
     /// <param name="firingDirection">whether or not the ship is firing this turn, and in which direction</param>
-    [PunRPC]
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
         if (index > life - 1 || index < 0) {
             //throw new InvalidActionIndexException();
@@ -158,12 +155,6 @@ public class Ship : MonoBehaviourPunCallbacks {
             Action a = getAction(actionNum,firingDirection);
             actions[index] = a;
         }
-    }
-
-    [PunRPC]
-    public void incrementActionIndex()
-    {
-        currentActionIndex++;
     }
 
     /// <summary>

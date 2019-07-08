@@ -437,9 +437,9 @@ public class GameManager : MonoBehaviour {
             parent = Instantiate(new GameObject());
             parent.name = "Ships";
         }
-        //GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
+        GameObject shipPrefab = Resources.Load("Prefabs/Ship") as GameObject;
 
-        GameObject spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
+        GameObject spawn = Instantiate(shipPrefab,node.getRealPos(),Quaternion.identity);
 
         Ship ship = spawn.GetComponent<Ship>();
 
@@ -463,7 +463,8 @@ public class GameManager : MonoBehaviour {
                 pv.TransferOwnership(PhotonNetwork.MasterClient);
             }
         }
-        
+
+
         //    Debug.Log((int)(team.TeamFaction + 1) * 100 + (ship.Id + 1) * 10);
         //Debug.Log(pv.ViewID);
 
@@ -472,8 +473,12 @@ public class GameManager : MonoBehaviour {
             //spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
         } 
 
-        spawn.transform.parent = parent.transform;
         
+        
+
+        spawn.transform.parent = parent.transform;
+
+
         return ship;
     }
 
