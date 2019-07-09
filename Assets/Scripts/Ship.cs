@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Realtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +23,8 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
     public int catapultIndex;
     public int catapultDirection;
-    
+
+    public bool testbool;
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
     bool canFire;
@@ -144,6 +147,7 @@ public class Ship : MonoBehaviour {
     /// <param name="index">the phase for the action</param>
     /// <param name="actionNum">the action number the determines the type of action</param>
     /// <param name="firingDirection">whether or not the ship is firing this turn, and in which direction</param>
+    [PunRPC]
     public void setAction(int index,int actionNum,int firingDirection) {                   // throws CannotReverseException, InvalidActionException, InvalidActionIndexException
         if (index > life - 1 || index < 0) {
             //throw new InvalidActionIndexException();
@@ -155,6 +159,12 @@ public class Ship : MonoBehaviour {
             Action a = getAction(actionNum,firingDirection);
             actions[index] = a;
         }
+    }
+
+    [PunRPC]
+    public void testTheBool()
+    {
+        testbool = !testbool;
     }
 
     /// <summary>
