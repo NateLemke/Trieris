@@ -255,15 +255,12 @@ public class UIControl : MonoBehaviour
         //    fadeObjective = false;
         //}
 
-        if (PhotonNetwork.IsConnected)
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
             foreach (Team t in gameManager.teams)
             {
                 if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                {
-                    Debug.Log("Team " + t.TeamFaction.ToString() + " is not ready");
                     return;
-                }
             }
             startTurn(1);
         }
@@ -417,18 +414,16 @@ public class UIControl : MonoBehaviour
     /// <param name="i">The action to be set. Forward=1, Turn left=2, Turn right=3, Hold=4, Reverse=5</param>
     public void setAction(int i)
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            SendMPActions(selected, i);
-            return;
-        }
         if (i == 5)
         {
             if(selected.currentActionIndex > 0)
             {
                 if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
                 {
-                    selected.setAction(selected.currentActionIndex, i, -1);
+                    if (PhotonNetwork.IsConnected)
+                        PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+                    else
+                        selected.setAction(selected.currentActionIndex, i, -1);
                     setActionImages(i);
 
                     if (selected.currentActionIndex < (selected.life - 1))
@@ -449,8 +444,10 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            selected.setAction(selected.currentActionIndex, i, -1);
-            setActionImages(i);
+            if (PhotonNetwork.IsConnected)
+                PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+            else
+                selected.setAction(selected.currentActionIndex, i, -1);
 
             if (selected.currentActionIndex < (selected.life - 1))
             {
@@ -462,55 +459,6 @@ public class UIControl : MonoBehaviour
                 selected.currentActionIndex++;
 
                 selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
-                color.a = 255;
-                selectedOutline.effectColor = color;
-            }
-        }
-    }
-    
-    public void SendMPActions(Ship currentShip, int i)
-    {
-        if (i == 5)
-        {
-            if (currentShip.currentActionIndex > 0)
-            {
-                if (currentShip.actions[currentShip.currentActionIndex - 1].actionIndex == 4)
-                {
-                    PhotonView.Get(currentShip.gameObject).RPC("setAction", RpcTarget.MasterClient, currentShip.currentActionIndex, i, -1);
-                    //currentShip.setAction(currentShip.currentActionIndex, i, -1);
-                    setActionImages(i);
-
-                    if (currentShip.currentActionIndex < (currentShip.life - 1))
-                    {
-                        Outline selectedOutline = actionPanels[currentShip.currentActionIndex].GetComponent<Outline>();
-                        Color color = selectedOutline.effectColor;
-                        color.a = 0;
-                        selectedOutline.effectColor = color;
-
-                        currentShip.currentActionIndex++;
-
-                        selectedOutline = actionPanels[currentShip.currentActionIndex].GetComponent<Outline>();
-                        color.a = 255;
-                        selectedOutline.effectColor = color;
-                    }
-                }
-            }
-        }
-        else
-        {
-            currentShip.setAction(currentShip.currentActionIndex, i, -1);
-            setActionImages(i);
-
-            if (currentShip.currentActionIndex < (currentShip.life - 1))
-            {
-                Outline selectedOutline = actionPanels[currentShip.currentActionIndex].GetComponent<Outline>();
-                Color color = selectedOutline.effectColor;
-                color.a = 0;
-                selectedOutline.effectColor = color;
-
-                currentShip.currentActionIndex++;
-
-                selectedOutline = actionPanels[currentShip.currentActionIndex].GetComponent<Outline>();
                 color.a = 255;
                 selectedOutline.effectColor = color;
             }
