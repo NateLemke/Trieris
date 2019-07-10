@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class RPCManager : MonoBehaviourPunCallbacks
 {
-    public void ReadyUp()
-    {
-
-    }
 
     //Send local actions to master client
 

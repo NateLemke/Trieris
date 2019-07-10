@@ -24,8 +24,6 @@ public class Ship : MonoBehaviour {
     public int catapultIndex;
     public int catapultDirection;
 
-    public bool testbool;
-
     public bool CanFire { get { return canFire; } set { canFire = value; } }
     bool canFire;
 
@@ -159,12 +157,6 @@ public class Ship : MonoBehaviour {
             Action a = getAction(actionNum,firingDirection);
             actions[index] = a;
         }
-    }
-
-    [PunRPC]
-    public void testTheBool()
-    {
-        testbool = !testbool;
     }
 
     /// <summary>

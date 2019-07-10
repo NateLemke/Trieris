@@ -255,10 +255,19 @@ public class UIControl : MonoBehaviour
         //    fadeObjective = false;
         //}
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (PhotonNetwork.IsConnected)
         {
-            selected.testTheBool();
+            foreach (Team t in gameManager.teams)
+            {
+                if (t.TeamType == (Team.Type)1 && t.Ready == false)
+                {
+                    Debug.Log("Team " + t.TeamFaction.ToString() + " is not ready");
+                    return;
+                }
+            }
+            startTurn(1);
         }
+        
     }
 
     /// <summary>
@@ -348,16 +357,7 @@ public class UIControl : MonoBehaviour
                 break;
             }
         }
-        foreach(Team t in gameManager.teams)
-        {
-            if(t.TeamType == (Team.Type) 1 && t.Ready == false)
-            {
-                Debug.Log("Team " + t.TeamFaction.ToString() + " is not ready");
-                return;
-            }
-        }
-
-        startTurn(1);
+        
 
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
         //if (GameManager.playerTeam.Ready) {
@@ -420,6 +420,7 @@ public class UIControl : MonoBehaviour
         if (PhotonNetwork.IsConnected)
         {
             SendMPActions(selected, i);
+            return;
         }
         if (i == 5)
         {
@@ -466,8 +467,7 @@ public class UIControl : MonoBehaviour
             }
         }
     }
-
-    [PunRPC]
+    
     public void SendMPActions(Ship currentShip, int i)
     {
         if (i == 5)
