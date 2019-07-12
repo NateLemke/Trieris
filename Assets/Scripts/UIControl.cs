@@ -448,7 +448,7 @@ public class UIControl : MonoBehaviour
                 PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
             else
                 selected.setAction(selected.currentActionIndex, i, -1);
-
+            setActionImages(i);
             if (selected.currentActionIndex < (selected.life - 1))
             {
                 Outline selectedOutline = actionPanels[selected.currentActionIndex].GetComponent<Outline>();
