@@ -117,13 +117,13 @@ public class GameManager : MonoBehaviour {
         //}
 
         // TEMPORARY
-        for (int i = 0; i < 6; i++) {
-            if (i == playerChoice) {
-                teamTypes[i] = Team.Type.player;
-            } else {
-                teamTypes[i] = Team.Type.ai;
-            }
-        }
+        //for (int i = 0; i < 6; i++) {
+        //    if (i == playerChoice) {
+        //        teamTypes[i] = Team.Type.player;
+        //    } else {
+        //        teamTypes[i] = Team.Type.ai;
+        //    }
+        //}
                
         createTeams();
 
@@ -154,6 +154,7 @@ public class GameManager : MonoBehaviour {
             {
                 if (teamTypes[i] == (Team.Type)1)
                 {
+                    Debug.Log("Team " + (i + 1) + " is human");
                     teams[i].setTeamType((Team.Type)1);
                 }
             }
