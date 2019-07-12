@@ -37,5 +37,10 @@ MonoBehaviour:
   - toggleReady
   - teamIsHuman
   - SetShipPhotonID
+  - DisableShipIcon
+  - InitRammingAnimation
+  - SetIconAttack
+  - SpawnFireball
+  - SyncDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 1

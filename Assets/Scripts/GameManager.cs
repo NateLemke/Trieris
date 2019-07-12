@@ -667,5 +667,46 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene("StartMenu");
     }
 
+    public Ship GetShip(int shipID, int team) {
+        foreach(Ship s in teams[team].ships) {
+            if (s.Id == shipID)
+                return s;
+        }
+        return null;
+    }
+
+    [PunRPC]
+    public void SyncDamage(int dmg,int shipID,int team) {
+        GameManager.main.GetShip(shipID,team).life -= dmg;
+    }
+
+    [PunRPC]
+    public void SetIconAttack(int shipID, int team) {
+        GameManager.main.GetShip(shipID,team).setIcon(Sprites.main.AttackIcon);
+    }
+
+    [PunRPC]
+    public void InitRammingAnimation(int shipID, int team) {
+        GameManager.main.GetShip(shipID,team).GetComponent<Animator>().SetTrigger("Collision");
+    }
+
+    [PunRPC]
+    public void DisableShipIcon(int shipID,int team) {
+        GameManager.main.GetShip(shipID,team).disableIcon();
+    }
+
+    [PunRPC]
+    public void SpawnFireball(float startX, float startY, float endX, float endY) {
+        Vector2 start = new Vector2(startX,startY);
+
+        GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
+        CatapultBullet bullet = GameObject.Instantiate(go,start,Quaternion.identity).GetComponent<CatapultBullet>();
+
+        bullet.startPos = start;
+        bullet.endPos = new Vector2(endX,endY);
+    }
+
+    
+
 
 }

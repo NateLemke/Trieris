@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -993,4 +995,13 @@ public class Ship : MonoBehaviour {
     public bool belongsToAI() {
         return this.team.aiTeam;
     }
+
+    public void TakeDamage(int dmg) {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("SyncDamage",RpcTarget.Others,dmg,id,(int)team.TeamFaction);
+        }
+        life -= dmg;
+    }
+
+
 }
