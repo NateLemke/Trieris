@@ -764,8 +764,16 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="newDirection">the new direction for this ship to face</param>
     public void redirect(int newDirection) {
-        setDirection(newDirection);
-        needRedirect = false;
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonView.Get(this).RPC("setDirection", RpcTarget.MasterClient, newDirection);
+            PhotonView.Get(this).RPC("setNeedRedirect", RpcTarget.MasterClient, false);
+        }
+        else
+        {
+            setDirection(newDirection);
+            needRedirect = false;
+        }
         Destroy(directionLabel);
         redirectUI.SetActive(false);
     }
@@ -774,9 +782,16 @@ public class Ship : MonoBehaviour {
     /// Sets this ship's facing
     /// </summary>
     /// <param name="newDirection">the new direction for this ship to face</param>
-    private void setDirection(int newDirection) {
+    [PunRPC]
+    protected void setDirection(int newDirection) {
         front = newDirection;
         setSpriteRotation();
+    }
+
+    [PunRPC]
+    protected void setNeedRedirect(bool input)
+    {
+        needRedirect = input;
     }
 
      /// <summary>

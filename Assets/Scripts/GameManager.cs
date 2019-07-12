@@ -157,6 +157,10 @@ public class GameManager : MonoBehaviour {
                     Debug.Log("Team " + (i + 1) + " is human");
                     teams[i].setTeamType((Team.Type)1);
                 }
+                else
+                {
+                    teams[i].setTeamType((Team.Type)0);
+                }
             }
 
             foreach (Team t in teams)
