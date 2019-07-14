@@ -42,5 +42,8 @@ MonoBehaviour:
   - SetIconAttack
   - SpawnFireball
   - SyncDamage
+  - disableIcon
+  - playRandomCrunch
+  - SetIconTarget
   DisableAutoOpenWizard: 1
   ShowSettings: 1

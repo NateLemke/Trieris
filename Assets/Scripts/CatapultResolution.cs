@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,9 +27,9 @@ public class CatapultResolution : CombatResolution
         }
 
         Vector2 focusPos;
-        shipA.setIcon(Sprites.main.AttackIcon);
+        shipA.SetIconAttack();
         if(missedNode == null) {
-            shipB.setIcon(Sprites.main.TargetIcon);
+            shipB.SetIconTarget();
             focusPos = (shipA.Position + shipB.Position) / 2;
         } else {
             focusPos = (shipA.Position + (Vector3)missedNode.getRealPos()) / 2;
@@ -42,7 +43,7 @@ public class CatapultResolution : CombatResolution
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
         CatapultBullet bullet = GameObject.Instantiate(go,shipA.transform.position,Quaternion.identity).GetComponent<CatapultBullet>();
-        
+
         if (missedNode == null) {
             bullet.endPos = shipB.Position;
             if(shipA.getNode() == shipB.getNode()) {
@@ -58,8 +59,10 @@ public class CatapultResolution : CombatResolution
         }
         
         bullet.startPos = shipA.transform.position;
-        
-           
+
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("SpawnFireBall",RpcTarget.Others,bullet.startPos.x,bullet.startPos.y,bullet.endPos.x,bullet.endPos.y);
+        }
         
 
         while (!bullet.impacted) {
@@ -69,7 +72,8 @@ public class CatapultResolution : CombatResolution
 
 
         if (missedNode == null) {
-            shipB.life -= damageToB;
+            //shipB.life -= damageToB;
+            shipB.TakeDamage(damageToB);
         }
         
         if (missedNode == null && shipB.life == 0) {

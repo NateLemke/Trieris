@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,9 +33,9 @@ public class RammingResolution : CombatResolution
 
         yield return PhaseManager.focus(shipA.getNode().getRealPos());
 
-        shipA.setIcon(Sprites.main.AttackIcon);
-        shipB.setIcon(Sprites.main.AttackIcon);
-               
+        shipA.SetIconAttack();
+        shipB.SetIconAttack();
+
         Animation A = null;
         try {
             A = PhaseManager.actionAnimations[shipA];
@@ -42,6 +43,7 @@ public class RammingResolution : CombatResolution
             Debug.LogWarning("no action animation for attacker");
             shipA.disableIcon();
             shipB.disableIcon();
+
             yield break;
         }
 
@@ -91,8 +93,11 @@ public class RammingResolution : CombatResolution
             Sounds.main.playRandomCrunch();
         }
 
-        shipB.life -= damageToB;
-        shipA.life -= damageToA;
+        shipA.TakeDamage(damageToA);
+        shipB.TakeDamage(damageToB);
+
+        //shipB.life -= damageToB;
+        //shipA.life -= damageToA;
 
         shipB.CanFire = false;
         shipA.CanFire = false;

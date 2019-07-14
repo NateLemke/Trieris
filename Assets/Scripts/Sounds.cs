@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class Sounds : MonoBehaviour
 {
@@ -64,7 +66,13 @@ public class Sounds : MonoBehaviour
         source.PlayOneShot(c,volume);
     }
 
+    [PunRPC]
     public void playRandomCrunch(float volume = 1f) {
+
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("playRandomCrunch",RpcTarget.Others,volume);
+        }
+
         AudioClip c = Impacts[Random.Range(0,Impacts.Count)];
         source.PlayOneShot(c,volume);
     }

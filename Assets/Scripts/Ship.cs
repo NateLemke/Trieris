@@ -23,7 +23,7 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
     public int catapultIndex;
     public int catapultDirection;
-    
+
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
     bool canFire;
@@ -32,7 +32,7 @@ public class Ship : MonoBehaviour {
     public GameObject CBTprefab;
 
     public Action[] actions;
-    private Node node;    
+    private Node node;
 
     public int momentum { get; set; }
 
@@ -67,27 +67,21 @@ public class Ship : MonoBehaviour {
         set {
             transform.position = value;
         }
-    }   
+    }
 
     private int lifeValue;
-    public int life
-    {
-        get
-        {
+    public int life {
+        get {
             return lifeValue;
         }
-        set
-        {
-            if (value < lifeValue)
-            {
+        set {
+            if (value < lifeValue) {
                 InitCBT((lifeValue - value).ToString());
                 lifeValue = value;
-                if(lifeValue <= 0) {
-                    Sounds.main.playClip(Sounds.main.LongRip, 0.8f);
+                if (lifeValue <= 0) {
+                    Sounds.main.playClip(Sounds.main.LongRip,0.8f);
                 }
-            }
-            else
-            {
+            } else {
                 lifeValue = value;
             }
             setHealthBar();
@@ -135,7 +129,7 @@ public class Ship : MonoBehaviour {
         icon = transform.Find("ShipUI/NonRotation/Icon").GetComponent<Image>();
         icon.GetComponentInChildren<Text>().gameObject.SetActive(false);
         icon.gameObject.SetActive(false);
-        
+
         redirectNotification = transform.Find("ShipUI/RedirectNotification").gameObject;
         redirectUI = transform.Find("ShipUI/Direction").gameObject;
     }
@@ -171,13 +165,13 @@ public class Ship : MonoBehaviour {
     /// Abstract classed used for different action
     /// ALSO STORES CATAPULT SHOOTING DIRECTION FOR THE PHASE
     /// </summary>
-    public  abstract class Action {
+    public abstract class Action {
         public int catapultDirection = -1;
         public bool reverseReady = false;
         public int actionIndex;
         protected Ship ship;
 
-        public Action(int catapultDirection, Ship ship, int index) {
+        public Action(int catapultDirection,Ship ship,int index) {
             this.ship = ship;
             this.catapultDirection = catapultDirection;
             actionIndex = index;
@@ -192,10 +186,9 @@ public class Ship : MonoBehaviour {
 
         protected abstract void affectShip();      // throws ShipCrashedException
 
-        public void setCatapult(int i)
-        {
+        public void setCatapult(int i) {
             catapultDirection = i;
-        } 
+        }
 
     }
 
@@ -204,14 +197,14 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public class ForwardAction : Action {
 
-        public ForwardAction(int catapultDirection, Ship ship, int index) : base(catapultDirection,ship,index) {
+        public ForwardAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
 
         }
 
         protected override void affectShip() {           // throws ShipCrashedException 
             ship.speedup();
             ship.move(ship.front);
-            
+
         }
     }
 
@@ -220,7 +213,7 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public class ReverseAction : Action {
 
-        public ReverseAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
+        public ReverseAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
 
         }
 
@@ -251,8 +244,8 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public class StarboardAction : Action {
 
-        public StarboardAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
-            
+        public StarboardAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
+
         }
 
         protected override void affectShip() {
@@ -265,8 +258,8 @@ public class Ship : MonoBehaviour {
     /// </summary>
     public class PortAction : Action {
 
-        public PortAction(int catapultDirection, Ship ship,int index) : base(catapultDirection,ship,index) {
-            
+        public PortAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
+
         }
 
         protected override void affectShip() {
@@ -277,18 +270,14 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Default action for an action that has not yet been set, counts as a hold
     /// </summary>
-    public class EmptyAction : Action
-    {
-        public EmptyAction(int catapultDirection, Ship ship, int index) : base(catapultDirection, ship, index)
-        {
+    public class EmptyAction : Action {
+        public EmptyAction(int catapultDirection,Ship ship,int index) : base(catapultDirection,ship,index) {
             reverseReady = true;
         }
 
-        protected override void affectShip()
-        {
+        protected override void affectShip() {
             ship.hold();
-            if (catapultDirection == -1)
-            {
+            if (catapultDirection == -1) {
                 ship.repair();
             }
         }
@@ -399,11 +388,11 @@ public class Ship : MonoBehaviour {
             needRedirect = true;
             movedForward = false;
             momentum = 0;
-            if(team == GameManager.playerTeam)
+            if (team == GameManager.playerTeam)
                 activateRedirectNotification();
             return;
         }
-       
+
 
         Node startNode = node;
 
@@ -413,7 +402,7 @@ public class Ship : MonoBehaviour {
         bool reverse = direction == getRelativeDirection(-4);
 
         PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,momentum,reverse));
-        
+
     }
 
     /// <summary>
@@ -474,8 +463,7 @@ public class Ship : MonoBehaviour {
         if (node != null) {
             node.Ships.Remove(this);
         }
-        if(this.team == GameManager.playerTeam)
-        {
+        if (this.team == GameManager.playerTeam) {
             Button st = GameManager.main.uiControl.ShipTabs[this.Id].GetComponent<Button>();
 
             ColorBlock cb = st.colors;
@@ -492,23 +480,19 @@ public class Ship : MonoBehaviour {
         //node = null;
         team.ships.Remove(this);
 
-        if(team.ships.Count != 0 && this == GameManager.main.uiControl.Selected)
-        {
+        if (team.ships.Count != 0 && this == GameManager.main.uiControl.Selected) {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
         }
 
-        if (this.getNode().Ships.Contains(this))
-        {
+        if (this.getNode().Ships.Contains(this)) {
             this.getNode().Ships.Remove(this);
         }
 
-        if (this.getNode().Port != null)
-        {
+        if (this.getNode().Port != null) {
             this.getNode().Port.setTransparency();
         }
 
-        foreach (Ship s in this.getNode().Ships)
-        {
+        foreach (Ship s in this.getNode().Ships) {
             s.updateNodePos();
         }
 
@@ -520,19 +504,18 @@ public class Ship : MonoBehaviour {
     /// Sets ship stats according to capture rules
     /// </summary>
     public void capturePort() {
-        
+
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
         momentum = 0;
         PhaseManager.addCaptureAnimation(this);
     }
-    
+
     /// <summary>
     /// Used when the a player ship captures a port, activates port capture UI
     /// </summary>
-    public void playerCapture()
-    {
+    public void playerCapture() {
         needCaptureChoice = false;
         canActAfterCollision = false;
         canAct = false;
@@ -633,9 +616,8 @@ public class Ship : MonoBehaviour {
     /// Disables catapults for the current turn for both this ship and its target
     /// </summary>
     /// <param name="target">the target to also disable catapults this turn</param>
-    private void disableCatapults(Ship target)
-    {
-        foreach(Action action in actions)
+    private void disableCatapults(Ship target) {
+        foreach (Action action in actions)
             action.setCatapult(-1);
         foreach (Action action in target.actions)
             action.setCatapult(-1);
@@ -657,8 +639,8 @@ public class Ship : MonoBehaviour {
     /// <param name="s">this ships target</param>
     /// <param name="phase">the phase to check for</param>
     /// <returns>True if the two ships are in adajcent nodes and moving towards each other</returns>
-    public bool AdjHeadOnRamCheck(Ship s, int phase) {
-        return (Mathf.Abs(getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction" && actions[phase].GetType().Name == "ForwardAction");            
+    public bool AdjHeadOnRamCheck(Ship s,int phase) {
+        return (Mathf.Abs(getFront() - s.getFront()) == 4 && s.actions[phase].GetType().Name == "ForwardAction" && actions[phase].GetType().Name == "ForwardAction");
     }
 
     /// <summary>
@@ -676,7 +658,7 @@ public class Ship : MonoBehaviour {
             PhaseManager.addAdjHeadOnRamming(this,target);
         } else {
             PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
-        }        
+        }
     }
 
     /// <summary>
@@ -703,7 +685,7 @@ public class Ship : MonoBehaviour {
     public string toString() {
         return team.ToString() + " Ship " + id;
     }
-    
+
     /// <summary>
     /// Checks if the player has selected another redirect UI this frame
     /// </summary>
@@ -714,8 +696,7 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Scales the ship's redirect UI to the camera
     /// </summary>
-    public void scaleToCamera()
-    {
+    public void scaleToCamera() {
         float currentSize = (Camera.main.orthographicSize / 3) - 1F;
         float maxUISize = 1.25F;
         if (currentSize > maxUISize)
@@ -723,40 +704,36 @@ public class Ship : MonoBehaviour {
         else if (currentSize < 1)
             currentSize = 1F;
 
-        transform.Find("ShipUI/Direction").gameObject.transform.localScale = new Vector3(currentSize, currentSize, 0);
-        transform.Find("ShipUI/Controls").gameObject.transform.localScale = new Vector3(currentSize, currentSize, 0);
+        transform.Find("ShipUI/Direction").gameObject.transform.localScale = new Vector3(currentSize,currentSize,0);
+        transform.Find("ShipUI/Controls").gameObject.transform.localScale = new Vector3(currentSize,currentSize,0);
 
         float btnCurSize = 1F / 4;
         if (currentSize > 1F)
-            btnCurSize = 1F/4 + (currentSize-1)/4;
+            btnCurSize = 1F / 4 + (currentSize - 1) / 4;
 
-        for (int i = 0; i < transform.Find("ShipUI/Direction").childCount; i++)
-        {
-            transform.Find("ShipUI/Direction").GetChild(i).gameObject.transform.localScale = new Vector3(btnCurSize, btnCurSize, 0);
+        for (int i = 0; i < transform.Find("ShipUI/Direction").childCount; i++) {
+            transform.Find("ShipUI/Direction").GetChild(i).gameObject.transform.localScale = new Vector3(btnCurSize,btnCurSize,0);
         }
 
-        for (int i = 0; i < transform.Find("ShipUI/Controls").childCount; i++)
-        {
-            transform.Find("ShipUI/Controls").GetChild(i).gameObject.transform.localScale = new Vector3(btnCurSize, btnCurSize, 0);
+        for (int i = 0; i < transform.Find("ShipUI/Controls").childCount; i++) {
+            transform.Find("ShipUI/Controls").GetChild(i).gameObject.transform.localScale = new Vector3(btnCurSize,btnCurSize,0);
         }
     }
 
-   /// <summary>
-   /// Disables this ship's redirect UI
-   /// </summary>
-    public void chooseDirection()
-    {
-        if (needRedirect)
-        {
+    /// <summary>
+    /// Disables this ship's redirect UI
+    /// </summary>
+    public void chooseDirection() {
+        if (needRedirect) {
             transform.Find("ShipUI/RedirectNotification").gameObject.SetActive(true);
         }
     }
- 
+
     /// <summary>
     /// Sets the rotation of the ships sprite according to its front facing
     /// </summary>
     public void setSpriteRotation() {
-        transform.eulerAngles = new Vector3(0,0,(front)*-45);
+        transform.eulerAngles = new Vector3(0,0,(front) * -45);
     }
 
     /// <summary>
@@ -779,19 +756,17 @@ public class Ship : MonoBehaviour {
         setSpriteRotation();
     }
 
-     /// <summary>
-     /// enables this ship's UI
-     /// </summary>
-    public void shipUIOn()
-    {
+    /// <summary>
+    /// enables this ship's UI
+    /// </summary>
+    public void shipUIOn() {
         transform.Find("ShipUI").gameObject.SetActive(true);
     }
 
     /// <summary>
     /// disables this ship's UI
     /// </summary>
-    public void shipUIOff()
-    {
+    public void shipUIOff() {
         transform.Find("ShipUI").gameObject.SetActive(false);
     }
 
@@ -827,8 +802,7 @@ public class Ship : MonoBehaviour {
     /// Initiates the combat damage text for this ship
     /// </summary>
     /// <param name="text">the text to display</param>
-    void InitCBT(string text)
-    {
+    void InitCBT(string text) {
         GameObject temp = Instantiate(CBTprefab) as GameObject;
         RectTransform tempRect = temp.GetComponent<RectTransform>();
         temp.transform.SetParent(transform.Find("ShipUI"));
@@ -838,7 +812,7 @@ public class Ship : MonoBehaviour {
 
         temp.GetComponent<Text>().text = text;
         temp.GetComponent<Animator>().SetTrigger("Hit");
-        Destroy(temp.gameObject, 2);
+        Destroy(temp.gameObject,2);
     }
 
     /// <summary>
@@ -847,7 +821,7 @@ public class Ship : MonoBehaviour {
     void setHealthBar() {
         GameObject healthBar = transform.Find("ShipUI/NonRotation/NewHealthBar").gameObject;
         Image[] healthBoxes = healthBar.transform.GetComponentsInChildren<Image>();
-        for(int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 4; i++) {
             healthBoxes[i].color = (i <= life) ? team.getColorLight() : Color.black;
         }
     }
@@ -860,12 +834,11 @@ public class Ship : MonoBehaviour {
         redirectNotification.SetActive(b);
     }
 
-    public void repositionIcon()
-    {
+    public void repositionIcon() {
         if (redirectNotification.activeSelf)
-            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.6f);
+            icon.gameObject.transform.position = new Vector2(Position.x,Position.y + 0.6f);
         else
-            icon.gameObject.transform.position = new Vector2(Position.x, Position.y + 0.486f);
+            icon.gameObject.transform.position = new Vector2(Position.x,Position.y + 0.486f);
     }
 
     /// <summary>
@@ -888,26 +861,31 @@ public class Ship : MonoBehaviour {
         icon.color = Color.white;
         icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
         icon.gameObject.SetActive(true);
-        icon.sprite = sprite;        
+        icon.sprite = sprite;
     }
 
     /// <summary>
     /// Disables the ship's icon. Sets the icon to active if the ship is currently selected.
     /// </summary>
+    [PunRPC]
     public void disableIcon() {
-        if(UIControl.main.Selected == this) {
+
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("DisableIcon",RpcTarget.Others);
+        }
+
+        if (UIControl.main.Selected == this) {
             setIconString(getNumeralID());
         } else {
             icon.gameObject.SetActive(false);
             icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
-        }        
+        }
     }
 
     /// <summary>
     /// Sets this ship to be the currently selected ship
     /// </summary>
-    public void selectThisShip()
-    {
+    public void selectThisShip() {
         GameObject.Find("GameManager").GetComponent<UIControl>().Selected = this;
     }
 
@@ -929,25 +907,23 @@ public class Ship : MonoBehaviour {
             case 1:
             return "I";
             case 2:
-            return "II"; 
+            return "II";
             case 3:
-            return "III"; 
+            return "III";
             case 4:
-            return "IV"; 
+            return "IV";
             case 5:
-            return "V"; 
+            return "V";
             default:
             return null;
         }
     }
-    
+
     /// <summary>
     /// Checks if another ship has had its redirection UI enabled
     /// </summary>
-    private void CheckUnfocus()
-    {
-        if (Input.GetMouseButton(0) && redirectUI.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(redirectUI.GetComponent<RectTransform>(), Input.mousePosition, Camera.main))
-        {
+    private void CheckUnfocus() {
+        if (Input.GetMouseButton(0) && redirectUI.activeSelf && !RectTransformUtility.RectangleContainsScreenPoint(redirectUI.GetComponent<RectTransform>(),Input.mousePosition,Camera.main)) {
             activateRedirectNotification();
         }
     }
@@ -955,8 +931,7 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Activates the redirection notification UI
     /// </summary>
-    public void activateRedirectNotification()
-    {
+    public void activateRedirectNotification() {
         Destroy(directionLabel);
         redirectNotification.SetActive(true);
         redirectUI.SetActive(false);
@@ -965,12 +940,11 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Activates the redirection notification panel
     /// </summary>
-    public void activateRedirectPanel()
-    {
+    public void activateRedirectPanel() {
         icon.gameObject.SetActive(false);
 
         GameObject prefab = Resources.Load<GameObject>("Prefabs/ChooseText");
-        directionLabel = GameObject.Instantiate(prefab, new Vector2(Position.x, Position.y + 1f), Quaternion.identity);
+        directionLabel = GameObject.Instantiate(prefab,new Vector2(Position.x,Position.y + 1f),Quaternion.identity);
         directionLabel.GetComponentInChildren<Text>().text = "Set Direction";
         directionLabel.GetComponent<Canvas>().sortingOrder = 8;
 
@@ -981,7 +955,7 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Used to set the ship's position on a node, spacing it out with any other ships sharing the node
     /// </summary>
-    public void updateNodePos(float xSpacing = Node.shipSpacingX, float ySpacing = Node.shipSpacingY) {
+    public void updateNodePos(float xSpacing = Node.shipSpacingX,float ySpacing = Node.shipSpacingY) {
         Position = node.shipNodePos(this,xSpacing,ySpacing);
     }
 
@@ -989,7 +963,7 @@ public class Ship : MonoBehaviour {
     /// Used to get this ship's intended position on its node, without updating its actual position
     /// </summary>
     public Vector2 getNodePos() {
-        return node.shipNodePos(this); 
+        return node.shipNodePos(this);
     }
 
     public bool belongsToAI() {
@@ -1003,5 +977,21 @@ public class Ship : MonoBehaviour {
         life -= dmg;
     }
 
+    [PunRPC]
+    public void SetIconAttack() {
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("SetIconAttack",RpcTarget.Others);
+        }
 
+        setIcon(Sprites.main.AttackIcon);
+    }
+
+    [PunRPC]
+    public void SetIconTarget() {
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("SetIconTarget",RpcTarget.Others);
+        }
+
+        setIcon(Sprites.main.TargetIcon);
+    }
 }
