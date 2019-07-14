@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -109,6 +111,7 @@ public class Port{
     /// Activates the port capture prompt UI attached to this port
     /// </summary>
     /// <param name="s">The particular ship the prompt is for</param>
+    [PunRPC]
     public void activatePrompt(Ship s) {
         go.GetComponent<PortPrompt>().activateNotification(this,s);
     }

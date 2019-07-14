@@ -186,8 +186,6 @@ public class GameManager : MonoBehaviour {
             ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.LocalPlayer.CustomProperties;
             ht["LoadedGame"] = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
-
-            
         }
 
 
@@ -668,6 +666,17 @@ public class GameManager : MonoBehaviour {
                 aiList.Add(new TrierisAI(teams[i]));
             }
         }
+    }
+
+    public Player findOwnerOfShip(Ship inputShip)
+    {
+        Team curT = inputShip.team;
+        foreach(Player p in PhotonNetwork.PlayerList)
+        {
+            if ((int)p.CustomProperties["TeamNum"] == (int)curT.TeamFaction)
+                return p;
+        }
+        return null;
     }
 
     public void changeFXVolume()

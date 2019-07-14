@@ -399,6 +399,10 @@ public class Ship : MonoBehaviour {
             needRedirect = true;
             movedForward = false;
             momentum = 0;
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonView.Get(this).RPC("activateRedirectNotification", RpcTarget.All);
+            }
             if(team == GameManager.playerTeam)
                 activateRedirectNotification();
             return;
@@ -970,8 +974,19 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Activates the redirection notification UI
     /// </summary>
+    [PunRPC]
     public void activateRedirectNotification()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
+            {
+                Destroy(directionLabel);
+                redirectNotification.SetActive(true);
+                redirectUI.SetActive(false);
+                return;
+            }
+        }
         Destroy(directionLabel);
         redirectNotification.SetActive(true);
         redirectUI.SetActive(false);
