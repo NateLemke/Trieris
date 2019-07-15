@@ -381,7 +381,8 @@ public class Ship : MonoBehaviour {
         DebugControl.log("action","----moving ship");
         Node destNode = node.getAdjacentNode(direction);
         if (destNode == null) {
-            life--;
+            //life--;
+            TakeDamage(1);
             canAct = false;
             canActAfterCollision = false;
             //Debug.Log("----Ship crashed");
@@ -972,7 +973,7 @@ public class Ship : MonoBehaviour {
 
     public void TakeDamage(int dmg) {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("SyncDamage",RpcTarget.Others,dmg,id,(int)team.TeamFaction);
+            PhotonView.Get(this).RPC("TakeDamage",RpcTarget.Others,dmg);
         }
         life -= dmg;
     }

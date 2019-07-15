@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour {
         if (shipsSynced)
             return;
         Player[] players = PhotonNetwork.PlayerList;
-        foreach(Player p in players) {
+        foreach (Player p in players) {
             if (!(bool)p.CustomProperties["LoadedGame"]) {
                 return;
             }
@@ -124,7 +124,7 @@ public class GameManager : MonoBehaviour {
                 teamTypes[i] = Team.Type.ai;
             }
         }
-               
+
         createTeams();
 
         playerFaction = (Team.Faction)playerChoice;
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour {
         createShips();
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-            
+
 
             assignAI();
 
@@ -162,7 +162,7 @@ public class GameManager : MonoBehaviour {
             uiControl.PostTeamSelection();
         }
 
-        if(PhotonNetwork.IsConnected) {
+        if (PhotonNetwork.IsConnected) {
             ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.LocalPlayer.CustomProperties;
             ht["LoadedGame"] = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
@@ -174,8 +174,8 @@ public class GameManager : MonoBehaviour {
         //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
         //}
 
-        
-        
+
+
         //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
         promptInitialRedirets();
         revealRedirects();
@@ -183,13 +183,13 @@ public class GameManager : MonoBehaviour {
 
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-        
+
     }
 
     public void SyncShipPhotonID() {
         int[] ids = new int[getAllShips().Count];
         int i = 0;
-        foreach(Ship s in getAllShips()) {
+        foreach (Ship s in getAllShips()) {
             ids[i] = s.GetComponent<PhotonView>().ViewID;
             i++;
         }
@@ -201,7 +201,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SetShipPhotonID(int[] ids) {
         int i = 0;
-        foreach(Ship s in getAllShips()) {
+        foreach (Ship s in getAllShips()) {
             s.GetComponent<PhotonView>().ViewID = ids[i];
             i++;
         }
@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour {
 
     public bool needRammingChoice() {
         foreach (Team t in teams) {
-            if(t == null) {
+            if (t == null) {
                 continue;
             }
 
@@ -268,9 +268,9 @@ public class GameManager : MonoBehaviour {
     //}
 
     public void promptInitialRedirets() {
-        foreach(Team t in teams) {
+        foreach (Team t in teams) {
             if (!t.aiTeam) {
-                foreach(Ship s in t.ships) {
+                foreach (Ship s in t.ships) {
                     s.needRedirect = true;
                 }
             }
@@ -287,7 +287,7 @@ public class GameManager : MonoBehaviour {
         lineRenderer = GetComponent<LineRenderer>();
         main = this;
         board = new Board();
-        board.CreateGridVisuals();       
+        board.CreateGridVisuals();
 
         cameraLock = true;
     }
@@ -353,9 +353,9 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     public List<Ship> getAllShips() {
 
-        List<Ship> r = new List<Ship>(); 
+        List<Ship> r = new List<Ship>();
 
-        foreach(Team t in teams) {
+        foreach (Team t in teams) {
             r.AddRange(t.ships);
         }
 
@@ -364,8 +364,8 @@ public class GameManager : MonoBehaviour {
 
     public List<Team> getHumanTeams() {
         List<Team> teams = new List<Team>();
-        foreach(Team t in this.teams) {
-            if(t != null && !t.aiTeam) {
+        foreach (Team t in this.teams) {
+            if (t != null && !t.aiTeam) {
                 teams.Add(t);
             }
         }
@@ -374,7 +374,7 @@ public class GameManager : MonoBehaviour {
 
     public List<Ship> getHumanShips() {
         List<Ship> ships = new List<Ship>();
-        foreach(Team t in getHumanTeams()) {
+        foreach (Team t in getHumanTeams()) {
             ships.AddRange(t.ships);
         }
         return ships;
@@ -390,8 +390,8 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     public List<Ship> getAllAiShips() {
         List<Ship> r = new List<Ship>();
-        for(int i = 0; i < teams.Length; i++) {
-            if(i != (int)playerTeam.TeamFaction) {
+        for (int i = 0; i < teams.Length; i++) {
+            if (i != (int)playerTeam.TeamFaction) {
                 r.AddRange(teams[i].ships);
             }
         }
@@ -406,7 +406,7 @@ public class GameManager : MonoBehaviour {
     /// Executes the next turn
     /// </summary>
     /// <returns></returns>
-    public bool executeTurn() { 
+    public bool executeTurn() {
         gameLogic.executeTurn();
         return true;
     }
@@ -417,12 +417,12 @@ public class GameManager : MonoBehaviour {
     public void setAIActions() {
         if (!gameOver) {
             foreach (TrierisAI ai in getAllAi()) {
-                if(ai.GetTeam() == playerTeam) {
+                if (ai.GetTeam() == playerTeam) {
                     continue;
                 }
                 ai.setNextTurn();
             }
-        }    
+        }
     }
 
     /// <summary>
@@ -471,10 +471,10 @@ public class GameManager : MonoBehaviour {
         if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
             pv.TransferOwnership(PhotonNetwork.MasterClient);
             //spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
-        } 
+        }
 
-        
-        
+
+
 
         spawn.transform.parent = parent.transform;
 
@@ -487,7 +487,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="t">the team type</param>
     /// <returns>A reference to a team</returns>
-    public Team getTeam (Team.Faction t) {
+    public Team getTeam(Team.Faction t) {
         return teams[(int)t];
     }
 
@@ -497,13 +497,13 @@ public class GameManager : MonoBehaviour {
     /// <param name="i">the team index</param>
     /// <returns>A referemce to a team</returns>
     public Team getTeam(int i) {
-        if(i < 0 || i >= teams.Length) {
+        if (i < 0 || i >= teams.Length) {
             Debug.LogError("getTeam argument out of range");
             return null;
         }
         return teams[i];
     }
-    
+
 
     private void OnDrawGizmos() {
 
@@ -523,7 +523,7 @@ public class GameManager : MonoBehaviour {
         //    }
         //}
 
-        
+
     }
 
     private void drawBoardGizmos() {
@@ -554,7 +554,7 @@ public class GameManager : MonoBehaviour {
     /// Sets the redirect UI to active for all ships that need a redirect choice made
     /// </summary>
     public void revealRedirects() {
-        foreach(Ship s in playerTeam.ships) {
+        foreach (Ship s in playerTeam.ships) {
             s.setRedirectUI(true);
         }
     }
@@ -583,7 +583,7 @@ public class GameManager : MonoBehaviour {
     void setAIDirections() {
         foreach (TrierisAI ai in getAllAi()) {
             if (ai.GetTeam() == playerTeam) {
-                continue;                
+                continue;
             }
             foreach (Ship ship in ai.GetTeam().ships) {
 
@@ -612,7 +612,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void FindShips() {
-        foreach(Team t in teams) {
+        foreach (Team t in teams) {
             t.FindShips();
         }
     }
@@ -621,7 +621,7 @@ public class GameManager : MonoBehaviour {
     /// Creates each 5 ports for each team
     /// </summary>
     public void createPorts() {
-        foreach(Team t in teams) {
+        foreach (Team t in teams) {
             t.createPorts();
         }
     }
@@ -640,35 +640,31 @@ public class GameManager : MonoBehaviour {
     /// (player team ignores their AI)
     /// </summary>
     void assignAI() {
-        for(int i = 0; i < teamTypes.Length; i++) {
-            if(teamTypes[i] == Team.Type.ai) {
+        for (int i = 0; i < teamTypes.Length; i++) {
+            if (teamTypes[i] == Team.Type.ai) {
                 aiList.Add(new TrierisAI(teams[i]));
             }
         }
     }
 
-    public void changeFXVolume()
-    {
+    public void changeFXVolume() {
         gameObject.GetComponents<AudioSource>()[0].volume = GameObject.Find("OverlayCanvas/OptionsMenu/FXVolumeSlider").GetComponent<Slider>().value; ;
     }
 
-    public void changeMusicVolume()
-    {
+    public void changeMusicVolume() {
         gameObject.GetComponents<AudioSource>()[1].volume = GameObject.Find("OverlayCanvas/OptionsMenu/MusicVolumeSlider").GetComponent<Slider>().value; ;
     }
 
-    public void restartGame()
-    {
+    public void restartGame() {
         SceneManager.LoadScene("GameScene");
     }
 
-    public void goToStartMenu()
-    {
+    public void goToStartMenu() {
         SceneManager.LoadScene("StartMenu");
     }
 
-    public Ship GetShip(int shipID, int team) {
-        foreach(Ship s in teams[team].ships) {
+    public Ship GetShip(int shipID,int team) {
+        foreach (Ship s in teams[team].ships) {
             if (s.Id == shipID)
                 return s;
         }
@@ -696,7 +692,7 @@ public class GameManager : MonoBehaviour {
     //}
 
     [PunRPC]
-    public void SpawnFireball(float startX, float startY, float endX, float endY) {
+    public void SpawnFireball(float startX,float startY,float endX,float endY) {
         Vector2 start = new Vector2(startX,startY);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
@@ -706,7 +702,51 @@ public class GameManager : MonoBehaviour {
         bullet.endPos = new Vector2(endX,endY);
     }
 
-    
+    [PunRPC]
+    public void LaunchSound() {
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("LaunchSound",RpcTarget.Others);
+        }
+
+        Sounds.main.playClip(Sounds.main.Launch);
+    }
+
+    [PunRPC]
+    public void PlaySplash() {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("PlaySplash",RpcTarget.Others);
+        }
+
+        Sounds.main.playClip(Sounds.main.Splash);
+    }
+
+    [PunRPC]
+    public void PlayFireball() {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("PlayFireball",RpcTarget.Others);
+        }
+
+        Sounds.main.playClip(Sounds.main.Fireball);
+    }
+
+    [PunRPC]
+    public void PlayWhistle() {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("PlayWhistle",RpcTarget.Others);
+        }
+
+        Sounds.main.playClip(Sounds.main.Whistle,0.4f);
+    }
+
+    [PunRPC]
+    public void PlayRandomCrunch() {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("PlayRandomCrunch",RpcTarget.Others);
+        }
+
+        Sounds.main.playRandomCrunch();
+    }
+
 
 
 }

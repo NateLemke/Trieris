@@ -38,7 +38,9 @@ public class CatapultResolution : CombatResolution
         yield return PhaseManager.focus(focusPos);
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
-        Sounds.main.playClip(Sounds.main.Launch);
+        GameManager.main.LaunchSound();
+
+        //Sounds.main.playClip(Sounds.main.Launch);
         yield return new WaitForSeconds(SpeedManager.CatapultLaunchDelay);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
