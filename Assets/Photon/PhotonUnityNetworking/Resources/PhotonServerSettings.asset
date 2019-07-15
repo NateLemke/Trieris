@@ -45,5 +45,11 @@ MonoBehaviour:
   - disableIcon
   - playRandomCrunch
   - SetIconTarget
+  - LaunchSound
+  - PlayFireball
+  - PlayRandomCrunch
+  - PlaySplash
+  - PlayWhistle
+  - setAction
   DisableAutoOpenWizard: 1
   ShowSettings: 1
