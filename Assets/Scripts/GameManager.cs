@@ -166,6 +166,22 @@ public class GameManager : MonoBehaviour {
             ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.LocalPlayer.CustomProperties;
             ht["LoadedGame"] = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+
+            for(int i = 0; i< teamTypes.Length; i++)
+            {
+                if(teamTypes[i] == (Team.Type)1)
+                {
+                    teams[i].setTeamType((Team.Type)1);
+                }
+            }
+
+            foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type) 1)
+                {
+                    t.aiTeam = false;
+                }
+            }
         }
 
 
@@ -211,7 +227,9 @@ public class GameManager : MonoBehaviour {
 
     // new multiplayer functions
     public bool playersReady() {
+        Debug.Log("are the teams ready?");
         foreach (Team t in teams) {
+            Debug.Log(t.aiTeam);
             if (!t.aiTeam && !t.Ready) {
                 return false;
             }
@@ -300,7 +318,6 @@ public class GameManager : MonoBehaviour {
             if (t == null) {
                 continue;
             }
-
             if (t.aiTeam == false && t.needRedirectChoice()) {
                 return true;
             }

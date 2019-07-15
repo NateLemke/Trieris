@@ -254,6 +254,17 @@ public class UIControl : MonoBehaviour
         //    GameObject.Find("OverlayCanvas/Objective").gameObject.SetActive(false);
         //    fadeObjective = false;
         //}
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            foreach (Team t in gameManager.teams)
+            {
+                if (t.TeamType == (Team.Type)1 && t.Ready == false)
+                    return;
+            }
+            startTurn(1);
+        }
+        
     }
 
     /// <summary>
@@ -343,16 +354,7 @@ public class UIControl : MonoBehaviour
                 break;
             }
         }
-        foreach(Team t in gameManager.teams)
-        {
-            if(t.TeamType == (Team.Type) 1 && t.Ready == false)
-            {
-                Debug.Log("Team " + t.TeamFaction.ToString() + " is not ready");
-                return;
-            }
-        }
-
-        startTurn(1);
+        
 
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
         //if (GameManager.playerTeam.Ready) {
@@ -418,7 +420,10 @@ public class UIControl : MonoBehaviour
             {
                 if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
                 {
-                    selected.setAction(selected.currentActionIndex, i, -1);
+                    if (PhotonNetwork.IsConnected)
+                        PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+                    else
+                        selected.setAction(selected.currentActionIndex, i, -1);
                     setActionImages(i);
 
                     if (selected.currentActionIndex < (selected.life - 1))
@@ -439,8 +444,10 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            selected.setAction(selected.currentActionIndex, i, -1);
-            setActionImages(i);
+            if (PhotonNetwork.IsConnected)
+                PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+            else
+                selected.setAction(selected.currentActionIndex, i, -1);
 
             if (selected.currentActionIndex < (selected.life - 1))
             {
@@ -456,7 +463,6 @@ public class UIControl : MonoBehaviour
                 selectedOutline.effectColor = color;
             }
         }
-
     }
 
     /// <summary>

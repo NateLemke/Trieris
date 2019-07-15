@@ -6,14 +6,8 @@ using UnityEngine;
 
 public class RPCManager : MonoBehaviourPunCallbacks
 {
-    public void ReadyUp()
-    {
-
-    }
 
     //Send local actions to master client
-
-    //Send Animations from master client to every player
 
     //Figure out a way to detect port capture and redirects and get only the player whose ship it is to display the notification.
     ///1. Show the exclaimation mark on all instances (?)
