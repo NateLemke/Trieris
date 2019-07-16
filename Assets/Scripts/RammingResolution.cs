@@ -41,8 +41,8 @@ public class RammingResolution : CombatResolution
             A = PhaseManager.actionAnimations[shipA];
         } catch (Exception e) {
             Debug.LogWarning("no action animation for attacker");
-            shipA.disableIcon();
-            shipB.disableIcon();
+            shipA.DisableIcon();
+            shipB.DisableIcon();
 
             yield break;
         }
@@ -110,8 +110,8 @@ public class RammingResolution : CombatResolution
         shipB.setSpriteRotation();
         shipA.setSpriteRotation();
 
-        shipB.disableIcon();
-        shipA.disableIcon();
+        shipB.DisableIcon();
+        shipA.DisableIcon();
         if(shipA.life == 0 || shipB.life == 0) {
             yield return new WaitForSeconds(SpeedManager.CombatPostDelay * 2);
 

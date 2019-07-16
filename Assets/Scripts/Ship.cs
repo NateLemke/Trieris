@@ -868,24 +868,6 @@ public class Ship : MonoBehaviour {
     }
 
     /// <summary>
-    /// Disables the ship's icon. Sets the icon to active if the ship is currently selected.
-    /// </summary>
-    [PunRPC]
-    public void disableIcon() {
-
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("disableIcon",RpcTarget.Others);
-        }
-
-        if (UIControl.main.Selected == this) {
-            setIconString(getNumeralID());
-        } else {
-            icon.gameObject.SetActive(false);
-            icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
-        }
-    }
-
-    /// <summary>
     /// Sets this ship to be the currently selected ship
     /// </summary>
     public void selectThisShip() {
@@ -983,19 +965,37 @@ public class Ship : MonoBehaviour {
 
     [PunRPC]
     public void SetIconAttack() {
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("SetIconAttack",RpcTarget.Others);
-        }
+        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+        //    PhotonView.Get(this).RPC("SetIconAttack",RpcTarget.Others);
+        //}
 
         setIcon(Sprites.main.AttackIcon);
     }
 
     [PunRPC]
     public void SetIconTarget() {
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("SetIconTarget",RpcTarget.Others);
-        }
+        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+        //    PhotonView.Get(this).RPC("SetIconTarget",RpcTarget.Others);
+        //}
 
         setIcon(Sprites.main.TargetIcon);
+    }
+
+    /// <summary>
+    /// Disables the ship's icon. Sets the icon to active if the ship is currently selected.
+    /// </summary>
+    [PunRPC]
+    public void DisableIcon() {
+
+        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+        //    PhotonView.Get(this).RPC("DisableIcon",RpcTarget.Others);
+        //}
+
+        if (UIControl.main.Selected == this) {
+            setIconString(getNumeralID());
+        } else {
+            icon.gameObject.SetActive(false);
+            icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
+        }
     }
 }
