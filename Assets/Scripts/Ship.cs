@@ -391,7 +391,11 @@ public class Ship : MonoBehaviour {
             needRedirect = true;
             movedForward = false;
             momentum = 0;
-            if (team == GameManager.playerTeam)
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonView.Get(this).RPC("activateRedirectNotification", RpcTarget.All);
+            }
+            if(team == GameManager.playerTeam)
                 activateRedirectNotification();
             return;
         }
@@ -744,8 +748,16 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="newDirection">the new direction for this ship to face</param>
     public void redirect(int newDirection) {
-        setDirection(newDirection);
-        needRedirect = false;
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonView.Get(this).RPC("setDirection", RpcTarget.MasterClient, newDirection);
+            PhotonView.Get(this).RPC("setNeedRedirect", RpcTarget.MasterClient, false);
+        }
+        else
+        {
+            setDirection(newDirection);
+            needRedirect = false;
+        }
         Destroy(directionLabel);
         redirectUI.SetActive(false);
     }
@@ -754,15 +766,23 @@ public class Ship : MonoBehaviour {
     /// Sets this ship's facing
     /// </summary>
     /// <param name="newDirection">the new direction for this ship to face</param>
-    private void setDirection(int newDirection) {
+    [PunRPC]
+    protected void setDirection(int newDirection) {
         front = newDirection;
         setSpriteRotation();
     }
 
-    /// <summary>
-    /// enables this ship's UI
-    /// </summary>
-    public void shipUIOn() {
+    [PunRPC]
+    protected void setNeedRedirect(bool input)
+    {
+        needRedirect = input;
+    }
+
+     /// <summary>
+     /// enables this ship's UI
+     /// </summary>
+    public void shipUIOn()
+    {
         transform.Find("ShipUI").gameObject.SetActive(true);
     }
 
@@ -916,7 +936,19 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Activates the redirection notification UI
     /// </summary>
-    public void activateRedirectNotification() {
+    [PunRPC]
+    public void activateRedirectNotification()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
+            {
+                Destroy(directionLabel);
+                redirectNotification.SetActive(true);
+                redirectUI.SetActive(false);
+                return;
+            }
+        }
         Destroy(directionLabel);
         redirectNotification.SetActive(true);
         redirectUI.SetActive(false);

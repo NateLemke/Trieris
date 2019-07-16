@@ -117,15 +117,46 @@ public class GameManager : MonoBehaviour {
         //}
 
         // TEMPORARY
-        for (int i = 0; i < 6; i++) {
-            if (i == playerChoice) {
-                teamTypes[i] = Team.Type.player;
-            } else {
-                teamTypes[i] = Team.Type.ai;
+        if (!PhotonNetwork.IsConnected)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == playerChoice)
+                {
+                    teamTypes[i] = Team.Type.player;
+                }
+                else
+                {
+                    teamTypes[i] = Team.Type.ai;
+                }
             }
         }
 
         createTeams();
+
+        if (PhotonNetwork.IsConnected)
+        {
+            for (int i = 0; i < teamTypes.Length; i++)
+            {
+                if (teamTypes[i] == (Team.Type)1)
+                {
+                    Debug.Log("Team " + (i + 1) + " is human");
+                    teams[i].setTeamType((Team.Type)1);
+                }
+                else
+                {
+                    teams[i].setTeamType((Team.Type)0);
+                }
+            }
+
+            foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type)1)
+                {
+                    t.aiTeam = false;
+                }
+            }
+        }
 
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
@@ -148,9 +179,12 @@ public class GameManager : MonoBehaviour {
 
         createShips();
 
+        
+
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
 
 
+            
             assignAI();
 
             setAIDirections();
@@ -166,22 +200,6 @@ public class GameManager : MonoBehaviour {
             ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.LocalPlayer.CustomProperties;
             ht["LoadedGame"] = true;
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
-
-            for(int i = 0; i< teamTypes.Length; i++)
-            {
-                if(teamTypes[i] == (Team.Type)1)
-                {
-                    teams[i].setTeamType((Team.Type)1);
-                }
-            }
-
-            foreach (Team t in teams)
-            {
-                if (t.TeamType == (Team.Type) 1)
-                {
-                    t.aiTeam = false;
-                }
-            }
         }
 
 
@@ -664,7 +682,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void changeFXVolume() {
+    public Player findOwnerOfShip(Ship inputShip)
+    {
+        Team curT = inputShip.team;
+        foreach(Player p in PhotonNetwork.PlayerList)
+        {
+            if ((int)p.CustomProperties["TeamNum"] == (int)curT.TeamFaction)
+                return p;
+        }
+        return null;
+    }
+
+    public void changeFXVolume()
+    {
         gameObject.GetComponents<AudioSource>()[0].volume = GameObject.Find("OverlayCanvas/OptionsMenu/FXVolumeSlider").GetComponent<Slider>().value; ;
     }
 

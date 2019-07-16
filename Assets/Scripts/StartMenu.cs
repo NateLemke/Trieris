@@ -43,9 +43,21 @@ public class StartMenu : MonoBehaviourPun
         {
             if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text != "Empty")
             {
+                Debug.Log("set team " + i + " to be human");
+                foreach (Player p in PhotonNetwork.PlayerList)
+                {
+                    if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
+                    {
+                        ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
+                        ht["TeamNum"] = i-1;
+                        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+                        break;
+                    }
+                }
                 GameManager.teamTypes[i - 1] = (Team.Type)1;
             }
         }
+        
     }
 
     public void multiplayerGame()

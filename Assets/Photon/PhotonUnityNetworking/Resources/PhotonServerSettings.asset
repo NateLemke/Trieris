@@ -53,5 +53,8 @@ MonoBehaviour:
   - setAction
   - TakeDamage
   - DisableIcon
+  - setAction
+  - setDirection
+  - setNeedRedirect
   DisableAutoOpenWizard: 1
   ShowSettings: 1

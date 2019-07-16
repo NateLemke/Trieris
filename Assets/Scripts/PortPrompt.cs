@@ -78,7 +78,7 @@ public class PortPrompt : MonoBehaviour{
 
         // needs to be changed for multiplayer
         //GameManager.PortsCaptured++;
-
+        
         currentShip.playerCapture();
         portPromptPanel.SetActive(false);
         GameManager.main.StartCoroutine(acceptAnimation(currentShip));

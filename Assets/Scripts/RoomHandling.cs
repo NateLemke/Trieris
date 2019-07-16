@@ -54,7 +54,7 @@ public class RoomHandling : MonoBehaviour
         return orderedActorNumbers().IndexOf(inPlayer.ActorNumber) + 1;
     }
 
-    private List<int> orderedActorNumbers()
+    public List<int> orderedActorNumbers()
     {
         List<int> tempPlayerList = new List<int>();
         if (PhotonNetwork.IsConnected)
@@ -68,7 +68,7 @@ public class RoomHandling : MonoBehaviour
         return tempPlayerList;
     }
 
-    private Player playerInSlot(int slotNumber)
+    public Player playerInSlot(int slotNumber)
     {
         foreach(Player p in PhotonNetwork.PlayerList)
         {
