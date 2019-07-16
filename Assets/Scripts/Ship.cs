@@ -973,6 +973,7 @@ public class Ship : MonoBehaviour {
         return this.team.aiTeam;
     }
 
+    [PunRPC]
     public void TakeDamage(int dmg) {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(this).RPC("TakeDamage",RpcTarget.Others,dmg);
