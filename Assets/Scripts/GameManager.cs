@@ -117,15 +117,46 @@ public class GameManager : MonoBehaviour {
         //}
 
         // TEMPORARY
-        //for (int i = 0; i < 6; i++) {
-        //    if (i == playerChoice) {
-        //        teamTypes[i] = Team.Type.player;
-        //    } else {
-        //        teamTypes[i] = Team.Type.ai;
-        //    }
-        //}
+        if (!PhotonNetwork.IsConnected)
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (i == playerChoice)
+                {
+                    teamTypes[i] = Team.Type.player;
+                }
+                else
+                {
+                    teamTypes[i] = Team.Type.ai;
+                }
+            }
+        }
                
         createTeams();
+
+        if (PhotonNetwork.IsConnected)
+        {
+            for (int i = 0; i < teamTypes.Length; i++)
+            {
+                if (teamTypes[i] == (Team.Type)1)
+                {
+                    Debug.Log("Team " + (i + 1) + " is human");
+                    teams[i].setTeamType((Team.Type)1);
+                }
+                else
+                {
+                    teams[i].setTeamType((Team.Type)0);
+                }
+            }
+
+            foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type)1)
+                {
+                    t.aiTeam = false;
+                }
+            }
+        }
 
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
@@ -148,29 +179,10 @@ public class GameManager : MonoBehaviour {
 
         createShips();
 
+        
+
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-
-            for (int i = 0; i < teamTypes.Length; i++)
-            {
-                if (teamTypes[i] == (Team.Type)1)
-                {
-                    Debug.Log("Team " + (i + 1) + " is human");
-                    teams[i].setTeamType((Team.Type)1);
-                }
-                else
-                {
-                    teams[i].setTeamType((Team.Type)0);
-                }
-            }
-
-            foreach (Team t in teams)
-            {
-                if (t.TeamType == (Team.Type)1)
-                {
-                    t.aiTeam = false;
-                }
-            }
-
+            
             assignAI();
 
             setAIDirections();
