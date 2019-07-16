@@ -874,7 +874,7 @@ public class Ship : MonoBehaviour {
     public void disableIcon() {
 
         if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("DisableIcon",RpcTarget.Others);
+            PhotonView.Get(this).RPC("disableIcon",RpcTarget.Others);
         }
 
         if (UIControl.main.Selected == this) {
