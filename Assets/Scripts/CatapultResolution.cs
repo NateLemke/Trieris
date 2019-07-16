@@ -86,12 +86,12 @@ public class CatapultResolution : CombatResolution
 
         }
 
-        shipA.disableIcon();
+        shipA.DisableIcon();
         shipA.CanFire = false;
 
 
         if (missedNode == null) {
-            shipB.disableIcon();
+            shipB.DisableIcon();
         }
         
 

@@ -23,7 +23,7 @@ public class SinkAnimation : Animation {
 
         GameManager.main.uiControl.setDead((int)ship.team.TeamFaction, ship.Id);
 
-        ship.disableIcon();
+        ship.DisableIcon();
         ship.sink();
 
         yield return null;

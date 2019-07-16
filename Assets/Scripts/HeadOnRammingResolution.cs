@@ -64,8 +64,8 @@ public class HeadOnRammingResolution : RammingResolution {
         shipB.life -= damageToB;
         shipA.life -= damageToA;
 
-        shipB.disableIcon();
-        shipA.disableIcon();
+        shipB.DisableIcon();
+        shipA.DisableIcon();
 
 
         startTime = Time.time;
