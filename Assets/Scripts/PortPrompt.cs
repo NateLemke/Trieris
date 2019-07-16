@@ -1,6 +1,4 @@
-﻿using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -80,11 +78,7 @@ public class PortPrompt : MonoBehaviour{
 
         // needs to be changed for multiplayer
         //GameManager.PortsCaptured++;
-
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonView.Get(currentShip).RPC("playerCapture", RpcTarget.MasterClient);
-        }
+        
         currentShip.playerCapture();
         portPromptPanel.SetActive(false);
         GameManager.main.StartCoroutine(acceptAnimation(currentShip));
