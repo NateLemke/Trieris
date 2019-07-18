@@ -56,5 +56,6 @@ MonoBehaviour:
   - setAction
   - setDirection
   - setNeedRedirect
+  - activateRedirectNotification
   DisableAutoOpenWizard: 1
   ShowSettings: 1
