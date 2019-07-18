@@ -37,8 +37,25 @@ MonoBehaviour:
   - toggleReady
   - teamIsHuman
   - SetShipPhotonID
+  - DisableShipIcon
+  - InitRammingAnimation
+  - SetIconAttack
+  - SpawnFireball
+  - SyncDamage
+  - disableIcon
+  - playRandomCrunch
+  - SetIconTarget
+  - LaunchSound
+  - PlayFireball
+  - PlayRandomCrunch
+  - PlaySplash
+  - PlayWhistle
+  - setAction
+  - TakeDamage
+  - DisableIcon
   - setAction
   - setDirection
   - setNeedRedirect
+  - activateRedirectNotification
   DisableAutoOpenWizard: 1
   ShowSettings: 1

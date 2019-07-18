@@ -283,7 +283,7 @@ public class UIControl : MonoBehaviour
             onShipSelection();
             if (previous != null)
             {
-                previous.disableIcon();
+                previous.DisableIcon();
             }
 
             updateActionUI();
@@ -310,7 +310,7 @@ public class UIControl : MonoBehaviour
         onShipSelection();
 
         if (previous != null) {
-            previous.disableIcon();
+            previous.DisableIcon();
         }
 
         updateActionUI();
