@@ -997,18 +997,18 @@ public class Ship : MonoBehaviour {
 
     [PunRPC]
     public void SetIconAttack() {
-        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-        //    PhotonView.Get(this).RPC("SetIconAttack",RpcTarget.Others);
-        //}
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("SetIconAttack",RpcTarget.Others);
+        }
 
         setIcon(Sprites.main.AttackIcon);
     }
 
     [PunRPC]
     public void SetIconTarget() {
-        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-        //    PhotonView.Get(this).RPC("SetIconTarget",RpcTarget.Others);
-        //}
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("SetIconTarget",RpcTarget.Others);
+        }
 
         setIcon(Sprites.main.TargetIcon);
     }
@@ -1019,9 +1019,9 @@ public class Ship : MonoBehaviour {
     [PunRPC]
     public void DisableIcon() {
 
-        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-        //    PhotonView.Get(this).RPC("DisableIcon",RpcTarget.Others);
-        //}
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("DisableIcon",RpcTarget.Others);
+        }
 
         if (UIControl.main.Selected == this) {
             setIconString(getNumeralID());
