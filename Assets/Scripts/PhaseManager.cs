@@ -236,6 +236,7 @@ public static class PhaseManager
     /// </summary>
     /// <param name="v">the position to focus on</param>
     /// <returns></returns>
+    [PunRPC]
     public static IEnumerator focus(Vector2 v) {
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {

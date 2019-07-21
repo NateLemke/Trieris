@@ -61,8 +61,8 @@ public class HeadOnRammingResolution : RammingResolution {
         }
         Sounds.main.playRandomCrunch();
 
-        shipB.life -= damageToB;
-        shipA.life -= damageToA;
+        shipB.TakeDamage(damageToB); 
+        shipA.TakeDamage(damageToA); 
 
         shipB.DisableIcon();
         shipA.DisableIcon();

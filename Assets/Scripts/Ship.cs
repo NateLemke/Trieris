@@ -451,12 +451,12 @@ public class Ship : MonoBehaviour {
         if (node.Port != null && node.Port.Team == team) {
             if (node.Port.IsCapital && node.Port.Team == team) {
                 if (life < MAX_HEALTH)
-                    life++;
+                    Heal(1);
             } else {
                 portRepairCount++;
                 if (portRepairCount == life) {
                     if (life < MAX_HEALTH)
-                        life++;
+                        Heal(1);
                     portRepairCount = 0;
                 }
             }
@@ -466,6 +466,7 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Adds an animation to sink this ship
     /// </summary>
+    [PunRPC]
     public void sink() {
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
@@ -1000,6 +1001,14 @@ public class Ship : MonoBehaviour {
             PhotonView.Get(this).RPC("TakeDamage",RpcTarget.Others,dmg);
         }
         life -= dmg;
+    }
+
+    [PunRPC]
+    public void Heal(int heal) {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("Heal",RpcTarget.Others,heal);
+        }
+        life += heal;
     }
 
     [PunRPC]

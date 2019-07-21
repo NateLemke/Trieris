@@ -60,5 +60,7 @@ MonoBehaviour:
   - CheckPortTransparency
   - focus
   - SetIconSink
+  - Heal
+  - sink
   DisableAutoOpenWizard: 1
   ShowSettings: 1
