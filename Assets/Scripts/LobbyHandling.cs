@@ -134,10 +134,13 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
     public void CheckPassword(string roomName, string password)
     {
         if (privatePanel.transform.Find("Window/InputField").gameObject.GetComponent<InputField>().text == password)
-            OnClickConnectToRoom(roomName);
-        else
         {
-            privatePanel.transform.Find("Window/InvalidPassPanel").gameObject.SetActive(true);
+            privatePanel.transform.Find("Window/Invalid").gameObject.SetActive(false);
+            privatePanel.SetActive(false);
+            OnClickConnectToRoom(roomName);
+        }else
+        {
+            privatePanel.transform.Find("Window/Invalid").gameObject.SetActive(true);
         }
 
     }
@@ -145,11 +148,6 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
     public void CancelPrivateRoom()
     {
         privatePanel.SetActive(false);
-    }
-
-    public void CloseInvalidPassPanel()
-    {
-        privatePanel.transform.Find("Window/InvalidPassPanel").gameObject.SetActive(false);
     }
 
     public void OnClickConnectToRoom(string input)
