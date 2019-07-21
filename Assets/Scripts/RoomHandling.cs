@@ -11,7 +11,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class RoomHandling : MonoBehaviour
 {
     GameObject thisRoom;
-    public Toggle privateGame;
+    public GameObject privateGame;
 
 
     // Start is called before the first frame update
@@ -24,6 +24,7 @@ public class RoomHandling : MonoBehaviour
     void OnEnable()
     {
         setLocalPlayerTeam();
+        privateGame.GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
     }
 
     // Update is called once per frame
@@ -41,6 +42,11 @@ public class RoomHandling : MonoBehaviour
             }
             setRoomName();
         }
+    }
+
+    public void setRoomPrivacy()
+    {
+        PhotonNetwork.CurrentRoom.CustomProperties["Privacy"] = privateGame.GetComponent<Toggle>().isOn;
     }
 
     public void setRoomName()

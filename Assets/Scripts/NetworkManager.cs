@@ -105,7 +105,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         Debug.Log("Privacy? " + PhotonNetwork.CurrentRoom.CustomProperties["Privacy"]);
 
-        setPrivacyToggle();
+        //setPrivacyToggle();
 
         listAllPlayersInRoom();
     }
@@ -148,14 +148,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(roominfo);
     }
 
-    private void setPrivacyToggle()
-    {
-        GameObject thisRoom = GameObject.Find("Canvas").gameObject;
-        thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
-        thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
-        thisRoom.GetComponent<RoomHandling>().privateGame.isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
-        //thisRoom.GetComponent<RoomHandling>().setRoomName();
-    }
+    //private void setPrivacyToggle()
+    //{
+    //    GameObject thisRoom = GameObject.Find("Canvas").gameObject;
+    //    thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
+    //    thisRoom.GetComponent<RoomHandling>().privateGame = thisRoom.transform.Find("FilterPanel/PrivateGameFilter").gameObject.GetComponent<Toggle>();
+    //    thisRoom.GetComponent<RoomHandling>().privateGame.isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
+    //    //thisRoom.GetComponent<RoomHandling>().setRoomName();
+    //}
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {

@@ -91,10 +91,12 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
             if (r.CustomProperties["Privacy"] != null)
             {
                 Debug.Log("displayroomcheck 1");
-                Debug.Log(((bool)r.CustomProperties["Privacy"] == showPrivate.GetComponent<Toggle>().isOn));
-                Debug.Log((showFullRoom.GetComponent<Toggle>().isOn && (r.MaxPlayers == r.PlayerCount)));
-                Debug.Log((showInProgress.GetComponent<Toggle>().isOn && (bool)r.CustomProperties["InProgress"]));
-                if (((bool)r.CustomProperties["Privacy"] == showPrivate.GetComponent<Toggle>().isOn) && (showFullRoom.GetComponent<Toggle>().isOn && (r.MaxPlayers == r.PlayerCount)) && (showInProgress.GetComponent<Toggle>().isOn && (bool)r.CustomProperties["InProgress"]) ){
+                Debug.Log((showPrivate.GetComponent<Toggle>().isOn || (!showPrivate.GetComponent<Toggle>().isOn && !(bool)r.CustomProperties["Privacy"])));
+                Debug.Log(((showFullRoom.GetComponent<Toggle>().isOn && (r.PlayerCount <= r.MaxPlayers)) || (!showFullRoom.GetComponent<Toggle>().isOn && (r.PlayerCount >= r.MaxPlayers))));
+                Debug.Log((showInProgress.GetComponent<Toggle>().isOn || (!showInProgress.GetComponent<Toggle>().isOn && !(bool)r.CustomProperties["InProgress"])));
+                if ((showPrivate.GetComponent<Toggle>().isOn || (!showPrivate.GetComponent<Toggle>().isOn && !(bool)r.CustomProperties["Privacy"]))
+                    && ((showFullRoom.GetComponent<Toggle>().isOn && (r.PlayerCount <= r.MaxPlayers)) || (!showFullRoom.GetComponent<Toggle>().isOn && (r.PlayerCount >= r.MaxPlayers))) 
+                    && (showInProgress.GetComponent<Toggle>().isOn ||(!showInProgress.GetComponent<Toggle>().isOn && !(bool)r.CustomProperties["InProgress"]) )){
 
                     Debug.Log("displayroomcheck 2");
                     instantiateRoomItem(r);
