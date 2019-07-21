@@ -46,7 +46,9 @@ public class RoomHandling : MonoBehaviour
 
     public void setRoomPrivacy()
     {
-        PhotonNetwork.CurrentRoom.CustomProperties["Privacy"] = privateGame.GetComponent<Toggle>().isOn;
+        ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Privacy"] = privateGame.GetComponent<Toggle>().isOn;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 
     public void setRoomName()
