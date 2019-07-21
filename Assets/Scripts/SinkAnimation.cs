@@ -14,9 +14,12 @@ public class SinkAnimation : Animation {
         }
 
         yield return PhaseManager.focus(ship.Position);
-        yield return new WaitForSeconds(SpeedManager.CombatDelay);        
+        yield return new WaitForSeconds(SpeedManager.CombatDelay);
 
-        ship.setIcon(Sprites.main.SinkIcon);
+        ship.SetIconSink();
+
+
+
         InitSinkAnimation();
         
         yield return new WaitForSeconds(SpeedManager.CombatSinking);

@@ -19,6 +19,8 @@ public class Board{
 
     private Node[,] node;
 
+    public static int portIDCounter = 0;
+
     public Board() {
         node = new Node[ROW_OF_NODES,COLUMN_OF_NODES];
         initialize();
@@ -66,6 +68,7 @@ public class Board{
     /// Creates the nodes on the board
     /// </summary>
     private void initialize() {
+        int id = 0;
         for (int row = 0; row < ROW_OF_NODES; row++) {
             for (int col = 0; col < COLUMN_OF_NODES; col++) {
                 node[row,col] = new Node(row,col);

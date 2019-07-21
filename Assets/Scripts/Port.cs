@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Port{
+
+    public int id;
 
     public bool IsCapital { get; set; }
 
@@ -103,6 +106,11 @@ public class Port{
             c.a = 0.5f;
         }
         spriteRenderer.color = c;
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("CheckPortTransparency",RpcTarget.Others,id);
+        }
+        
     }
 
     /// <summary>

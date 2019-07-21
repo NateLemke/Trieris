@@ -274,6 +274,8 @@ public class Team {
             bool isCapital = !(int.Parse(split[2]) == 0);
             //Debug.Log("Making new port!");
             Port p = new Port(new Vector2Int(x,y),this,isCapital);
+            p.id = Board.portIDCounter;
+            Board.portIDCounter++;
             ports.Add(p);
             GameManager.main.Board.getNodeAt(x,y).Port = p;
             GameManager.main.Board.ports.Add(p);

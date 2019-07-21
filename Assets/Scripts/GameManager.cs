@@ -794,6 +794,19 @@ public class GameManager : MonoBehaviour {
         Sounds.main.playRandomCrunch();
     }
 
+    [PunRPC]
+    public void CheckPortTransparency(int portID) {
+        foreach(Port p in board.ports) {
+            if(p.id == portID) {
+                p.setTransparency();
+                return;
+            }
+        }
+        Debug.LogError("No port found with given ID for port transparency RPC call");
+    }
 
-
+    [PunRPC]
+    public IEnumerator focus(float x,float y) {
+        yield return PhaseManager.focus(new Vector2(x,y));
+    }
 }

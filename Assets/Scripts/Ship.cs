@@ -467,6 +467,13 @@ public class Ship : MonoBehaviour {
     /// Adds an animation to sink this ship
     /// </summary>
     public void sink() {
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("sink",RpcTarget.Others);
+        }
+
+
+
         if (node != null) {
             node.Ships.Remove(this);
         }
@@ -1029,5 +1036,14 @@ public class Ship : MonoBehaviour {
             icon.gameObject.SetActive(false);
             icon.GetComponentInChildren<Text>(true).gameObject.SetActive(false);
         }
+    }
+
+    [PunRPC]
+    public void SetIconSink() {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(this).RPC("SetIconSink",RpcTarget.Others);
+        }
+
+        setIcon(Sprites.main.SinkIcon);
     }
 }

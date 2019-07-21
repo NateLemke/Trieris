@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -237,6 +238,10 @@ public static class PhaseManager
     /// <returns></returns>
     public static IEnumerator focus(Vector2 v) {
 
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("focus",RpcTarget.Others,v.x,v.y);
+        }
+
         if (outOfFocus(v)) {
 
             Vector2[] bv = getBoardView();
@@ -247,6 +252,7 @@ public static class PhaseManager
             Camera.main.transform.position = pos;
         }
     }
+
 
     /// <summary>
     /// Moves the camera to the given position over over a given time of seconds
