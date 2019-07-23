@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,8 +31,64 @@ public class StartMenu : MonoBehaviourPun
     public void startGame()
     {
         if (PhotonNetwork.IsConnected)
-            setPlayerTeams();
-        SceneManager.LoadScene("GameScene");
+        {
+            List<int> selectedTeams = new List<int>();
+            for(int i = 1; i <= 6; i++)
+            {
+                selectedTeams.Add(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
+            }
+            if(selectedTeams.Count == selectedTeams.Distinct().Count())
+            {
+                setPlayerTeams();
+                SceneManager.LoadScene("GameScene");
+            }
+            else
+            {
+                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
+                startDuplicatePanelFade();
+            }
+        }
+        else
+        {
+            SceneManager.LoadScene("GameScene");
+        }
+        
+    }
+
+    /// <summary>
+    /// Starts the fade out of the objective panel
+    /// </summary>
+    public void startDuplicatePanelFade()
+    {
+        StartCoroutine(duplicatePanelTime());
+    }
+
+    /// <summary>
+    /// Waits 2 seconds and then begins the fade of the objective text 
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator duplicatePanelTime()
+    {
+        yield return new WaitForSeconds(2f);
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().CrossFadeAlpha(0, 2f, false);
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().CrossFadeAlpha(0, 2f, false);
+        StartCoroutine(setDuplicatePanelInactive());
+    }
+
+    /// <summary>
+    /// Sets the objective panel inactive once the fade out is finished
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator setDuplicatePanelInactive()
+    {
+        yield return new WaitForSeconds(2f);
+        var tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color;
+        tempColor.a = 1.0f;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color = tempColor;
+        tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Image>().color;
+        tempColor.a = 1.0f;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Image>().color = tempColor;
+        GameObject.Find("OverlayCanvas/Objective").gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -49,7 +106,7 @@ public class StartMenu : MonoBehaviourPun
                     if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
                     {
                         ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
-                        ht["TeamNum"] = i-1;
+                        ht["TeamNum"] = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
                         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
                         break;
                     }

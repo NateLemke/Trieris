@@ -68,7 +68,9 @@ public class GameManager : MonoBehaviour {
 
             if (PhotonNetwork.IsMasterClient) {
                 Debug.Log("Im the master client!");
-
+                ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+                ht["InProgress"] = true;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
             } else {
                 Debug.Log("Im NOT the master client");
             }
