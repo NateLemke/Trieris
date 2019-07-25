@@ -164,6 +164,18 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToRoom = false;
     }
 
+    public void ChangeTeamImage(int slot)
+    {
+        int inputTeamNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
+        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.All, slot, inputTeamNum);
+    }
+
+    [PunRPC]
+    public void SendTeamImage(int slot, int inputTeamNum)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamNum;
+    }
+
     //public override void OnCreatedRoom()
     //{
     //    base.OnCreatedRoom();
