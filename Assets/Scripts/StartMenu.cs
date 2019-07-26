@@ -85,10 +85,10 @@ public class StartMenu : MonoBehaviourPun
         var tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color;
         tempColor.a = 1.0f;
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color = tempColor;
-        tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Image>().color;
+        tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().color;
         tempColor.a = 1.0f;
-        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Image>().color = tempColor;
-        GameObject.Find("OverlayCanvas/Objective").gameObject.SetActive(false);
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().color = tempColor;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").gameObject.SetActive(false);
     }
 
     /// <summary>
