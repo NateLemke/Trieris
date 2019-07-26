@@ -809,6 +809,6 @@ public class GameManager : MonoBehaviour {
 
     [PunRPC]
     public IEnumerator focus(float x,float y) {
-        yield return PhaseManager.focus(new Vector2(x,y));
+        yield return StartCoroutine(PhaseManager.focus(new Vector2(x,y)));
     }
 }

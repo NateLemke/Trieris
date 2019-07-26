@@ -63,7 +63,7 @@ public class CatapultResolution : CombatResolution
         bullet.startPos = shipA.transform.position;
 
         if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("SpawnFireBall",RpcTarget.Others,bullet.startPos.x,bullet.startPos.y,bullet.endPos.x,bullet.endPos.y);
+            PhotonView.Get(GameManager.main).RPC("SpawnFireball",RpcTarget.Others,bullet.startPos.x,bullet.startPos.y,bullet.endPos.x,bullet.endPos.y);
         }
         
 
