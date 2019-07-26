@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,10 @@ public class PortCaptureAnimation : Animation {
 
         if(ship == null) {
             yield break;
+        }
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("RunPortCaptureAnimation",RpcTarget.Others,(int)ship.team.TeamFaction,ship.Id);
         }
 
         yield return PhaseManager.focus(focusPoint);

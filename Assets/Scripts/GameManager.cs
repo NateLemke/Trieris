@@ -808,7 +808,14 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public IEnumerator focus(float x,float y) {
-        yield return StartCoroutine(PhaseManager.focus(new Vector2(x,y)));
+    public void focus(float x,float y) {
+        StartCoroutine(PhaseManager.focus(new Vector2(x,y)));
+    }
+    
+    [PunRPC]
+    public void RunPortCaptureAnimation(int team, int shipID) {
+        Ship ship = GetShip(shipID,team);
+        PortCaptureAnimation anim = new PortCaptureAnimation(ship);
+        StartCoroutine(anim.playAnimation());
     }
 }
