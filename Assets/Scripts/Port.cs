@@ -62,8 +62,8 @@ public class Port{
             parent = GameObject.Instantiate(new GameObject());
             parent.name = "Ports";
         }
-        go.transform.SetParent(parent.transform);        
-        setTransparency();
+        go.transform.SetParent(parent.transform);
+        updateTransparency();
     }
 
     public GameObject getGameObject()
@@ -99,18 +99,22 @@ public class Port{
     /// Checks if a ship is present on the node and sets the sprite to be transparent if so
     /// </summary>
     public void setTransparency() {
-        Color c = spriteRenderer.color;
-        if(node.getNumberOfShips() == 0) {
-            c.a = 1;
-        } else {
-            c.a = 0.5f;
-        }
-        spriteRenderer.color = c;
+        updateTransparency();
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(GameManager.main).RPC("CheckPortTransparency",RpcTarget.Others,id);
         }
         
+    }
+
+    void updateTransparency() {
+        Color c = spriteRenderer.color;
+        if (node.getNumberOfShips() == 0) {
+            c.a = 1;
+        } else {
+            c.a = 0.5f;
+        }
+        spriteRenderer.color = c;
     }
 
     /// <summary>
