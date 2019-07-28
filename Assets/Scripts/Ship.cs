@@ -758,6 +758,7 @@ public class Ship : MonoBehaviour {
     public void redirect(int newDirection) {
         if (PhotonNetwork.IsConnected)
         {
+            Debug.Log("REDIRECT HAS BEEN ACTIVATED");
             PhotonView.Get(this).RPC("setDirection", RpcTarget.MasterClient, newDirection);
             PhotonView.Get(this).RPC("setNeedRedirect", RpcTarget.MasterClient, false);
         }
