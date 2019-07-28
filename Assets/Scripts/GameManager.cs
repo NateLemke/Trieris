@@ -275,6 +275,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void setAllTeamsUnready()
     {
+        Debug.Log("Ready Reset");
         foreach(Team t in teams)
         {
             t.Ready = false;
