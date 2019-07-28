@@ -758,7 +758,6 @@ public class Ship : MonoBehaviour {
     public void redirect(int newDirection) {
         if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("REDIRECT HAS BEEN ACTIVATED");
             PhotonView.Get(this).RPC("setDirection", RpcTarget.MasterClient, newDirection);
             PhotonView.Get(this).RPC("setNeedRedirect", RpcTarget.MasterClient, false);
         }
@@ -952,15 +951,19 @@ public class Ship : MonoBehaviour {
         {
             if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
             {
+                Debug.Log((int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
                 Destroy(directionLabel);
                 redirectNotification.SetActive(true);
                 redirectUI.SetActive(false);
                 return;
             }
         }
-        Destroy(directionLabel);
-        redirectNotification.SetActive(true);
-        redirectUI.SetActive(false);
+        else
+        {
+            Destroy(directionLabel);
+            redirectNotification.SetActive(true);
+            redirectUI.SetActive(false);
+        }
     }
 
     /// <summary>
