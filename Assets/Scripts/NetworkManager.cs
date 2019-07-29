@@ -174,6 +174,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void SendTeamImage(int slot, int inputTeamNum)
     {
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamNum;
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + slot + "Int"] = (int)inputTeamNum;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 
     //public override void OnCreatedRoom()
