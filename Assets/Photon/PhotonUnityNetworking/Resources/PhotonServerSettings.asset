@@ -64,5 +64,6 @@ MonoBehaviour:
   - sink
   - RunPortCaptureAnimation
   - SendTeamImage
+  - SetPortTeam
   DisableAutoOpenWizard: 1
   ShowSettings: 1

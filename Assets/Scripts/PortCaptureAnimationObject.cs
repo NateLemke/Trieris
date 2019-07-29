@@ -23,10 +23,11 @@ public class PortCaptureAnimationObject : MonoBehaviour
         }
         else if (Time.time < timeStamp + SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed) {
             getUpperImg().fillAmount = (timeStamp + SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed - Time.time) / SpeedManager.CaptureSpeed;
-        } else if (Time.time > timeStamp + SpeedManager.CaptureDelay * 2 + SpeedManager.CaptureSpeed) {
-            Destroy(gameObject);
-        } else {
+        } else if (Time.time < timeStamp + SpeedManager.CaptureDelay * 2 + SpeedManager.CaptureSpeed) {
             getUpperImg().fillAmount = 0f;
+        } else {
+            
+            Destroy(gameObject);
         }
     }
 

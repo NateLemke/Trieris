@@ -48,8 +48,9 @@ public class PortCaptureAnimation : Animation {
         animObj.SetLowerImg(ship.team.getPortSprite());
             
 
-        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);       
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);
 
+        ship.getNode().Port.Team = ship.team;
 
         if (!GameManager.main.getPlayerShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
             int direction = ship.Ai.setNewShipDirection(ship);
@@ -57,8 +58,7 @@ public class PortCaptureAnimation : Animation {
             ship.setSpriteRotation();
         }
 
-        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
-        GameObject.Destroy(animObj);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);       
         GameManager.main.uiControl.updatePortsUI();
         yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
     }

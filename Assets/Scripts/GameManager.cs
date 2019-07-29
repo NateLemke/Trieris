@@ -828,4 +828,10 @@ public class GameManager : MonoBehaviour {
         animObj.SetLowerImg(ship.team.getPortSprite());
 
     }
+
+    [PunRPC]
+    public void SetPortTeam(int portID, int team) {
+
+        board.ports[portID].Team = teams[team];
+    }
 }

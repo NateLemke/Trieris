@@ -22,6 +22,9 @@ public class Port{
         set {
             team = value;
             setSprite(team);
+            if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+
+            }
         }
     }
     private Team team;
