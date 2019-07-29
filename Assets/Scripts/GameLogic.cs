@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,6 +49,16 @@ public class GameLogic : MonoBehaviour {
         phaseIndex = 0;
         executePhase(phaseIndex);
     }
+    
+    [PunRPC]
+    public void setAllTeamsUnready()
+    {
+        Debug.Log("Ready Reset");
+        foreach (Team t in gameManager.teams)
+        {
+            t.Ready = false;
+        }
+    }
 
     /// <summary>
     /// Executes the next phase, ends the turn if the phase index is at 3
@@ -58,7 +70,7 @@ public class GameLogic : MonoBehaviour {
         
         // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
-
+            PhotonView.Get(this).RPC("setAllTeamsUnready", RpcTarget.All);
             endTurn();
 
             return false;

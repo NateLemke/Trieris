@@ -271,17 +271,6 @@ public class GameManager : MonoBehaviour {
         gameLogic.executeTurn();
     }
 
-    [PunRPC]
-    public void setAllTeamsUnready()
-    {
-        Debug.Log("Ready Reset");
-        foreach(Team t in teams)
-        {
-            t.Ready = false;
-        }
-    }
-
-
     public bool needRammingChoice() {
         foreach (Team t in teams) {
             if (t == null) {
