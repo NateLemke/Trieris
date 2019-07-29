@@ -396,7 +396,7 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            Debug.Log("Phase not == 4");
+            //Debug.Log("Phase not == 4");
         }
     }
 
