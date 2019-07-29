@@ -33,7 +33,7 @@ public class PortCaptureAnimation : Animation {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(GameManager.main).RPC("RunPortCaptureAnimation",RpcTarget.Others,(int)ship.team.TeamFaction,ship.Id);
         }
-        Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}",(int)ship.team.TeamFaction,ship.team.TeamFaction,ship.getNode().Port.id);
+        Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,ship.team.TeamFaction,ship.getNode().Port.id,ship.Id);
 
         yield return PhaseManager.focus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
