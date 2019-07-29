@@ -815,7 +815,17 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void RunPortCaptureAnimation(int team, int shipID) {
         Ship ship = GetShip(shipID,team);
-        PortCaptureAnimation anim = new PortCaptureAnimation(ship);
-        StartCoroutine(anim.playAnimation());
+
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
+
+        PortCaptureAnimationObject animObj;
+
+        GameObject go = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
+
+        animObj = go.GetComponent<PortCaptureAnimationObject>();
+
+        animObj.SetUpperImg(ship.getNode().Port.Team.getPortSprite());
+        animObj.SetLowerImg(ship.team.getPortSprite());
+
     }
 }

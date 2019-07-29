@@ -36,29 +36,19 @@ public class PortCaptureAnimation : Animation {
 
         yield return PhaseManager.focus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
-        GameObject animObj = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
-        animObj.GetComponent<Canvas>().sortingLayerName = "UILayer";
-        animObj.GetComponent<Canvas>().sortingOrder = 10;
-        Image lowerImg = animObj.transform.Find("LowerImage").GetComponent<Image>();
-        Image upperImg = animObj.transform.Find("LowerImage").transform.Find("UpperImage").GetComponent<Image>();
 
-        upperImg.sprite = ship.getNode().Port.Team.getPortSprite();
-        lowerImg.sprite = ship.team.getPortSprite();
+        PortCaptureAnimationObject animObj;
 
-        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
 
-        float timeStamp = Time.time + SpeedManager.CaptureSpeed;
+        GameObject go = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
 
-        float fill = 1f;
+        animObj = go.GetComponent<PortCaptureAnimationObject>();
 
-        while(Time.time < timeStamp) {
-            fill = (timeStamp - Time.time) / SpeedManager.CaptureSpeed;
-            upperImg.fillAmount = fill;
-            yield return null;
-        }
-        upperImg.fillAmount = 0;
-        ship.getNode().Port.setTeam(ship.team);
-        
+        animObj.SetUpperImg( ship.getNode().Port.Team.getPortSprite());
+        animObj.SetLowerImg(ship.team.getPortSprite());
+            
+
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);       
 
 
         if (!GameManager.main.getPlayerShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
