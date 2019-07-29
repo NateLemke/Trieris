@@ -265,7 +265,6 @@ public class GameManager : MonoBehaviour {
         if (GameLogic.phaseIndex != 4 || !playersReady()) {
             return;
         }
-        PhotonView.Get(this).RPC("setAllTeamsUnready", RpcTarget.All);
         UIControl.main.disableControls();
         UIControl.main.setShipAttacks();
 

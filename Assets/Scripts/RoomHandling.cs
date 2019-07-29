@@ -28,6 +28,7 @@ public class RoomHandling : MonoBehaviour
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
             for(int i = 1; i<=6; i++)
             {
+                Debug.Log("Team" + i + "Int set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
                 ht["Team" + i + "Int"] = (int) GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
             }
             PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
@@ -36,6 +37,7 @@ public class RoomHandling : MonoBehaviour
         {
             for (int i = 1; i <= 6; i++)
             {
+                Debug.Log("Image set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " for Team" + i);
                 GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (int)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Int"];
             }
         }
