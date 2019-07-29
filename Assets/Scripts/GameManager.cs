@@ -814,7 +814,10 @@ public class GameManager : MonoBehaviour {
     
     [PunRPC]
     public void RunPortCaptureAnimation(int team, int shipID) {
+
         Ship ship = GetShip(shipID,team);
+
+        Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}",team,ship.team.TeamFaction,ship.getNode().Port.id);
 
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
 
