@@ -65,7 +65,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         base.OnConnectedToMaster();
         ConnectingToMaster = false;
-
+        Debug.Log("Region: " + PhotonNetwork.CloudRegion);
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(false);
         GameObject.Find("Canvas/MenuPanel/Menu").gameObject.GetComponent<StartMenu>().multiplayerGame();
         PhotonNetwork.LocalPlayer.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField/Text").GetComponent<Text>().text;
