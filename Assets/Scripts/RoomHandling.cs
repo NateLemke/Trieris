@@ -23,6 +23,24 @@ public class RoomHandling : MonoBehaviour
 
     void OnEnable()
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            for(int i = 1; i<=6; i++)
+            {
+                Debug.Log("Team" + i + "Int set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
+                ht["Team" + i + "Int"] = (int) GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
+            }
+            PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        }
+        else
+        {
+            for (int i = 1; i <= 6; i++)
+            {
+                Debug.Log("Image set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " for Team" + i);
+                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (int)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Int"];
+            }
+        }
         setLocalPlayerTeam();
         privateGame.GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
     }
@@ -46,7 +64,7 @@ public class RoomHandling : MonoBehaviour
 
     public void setRoomPrivacy()
     {
-        ExitGames.Client.Photon.Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Privacy"] = privateGame.GetComponent<Toggle>().isOn;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }

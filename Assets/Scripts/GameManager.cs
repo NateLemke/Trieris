@@ -265,13 +265,11 @@ public class GameManager : MonoBehaviour {
         if (GameLogic.phaseIndex != 4 || !playersReady()) {
             return;
         }
-
         UIControl.main.disableControls();
         UIControl.main.setShipAttacks();
 
         gameLogic.executeTurn();
     }
-
 
     public bool needRammingChoice() {
         foreach (Team t in teams) {
