@@ -13,6 +13,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
     Text creator;
     Text slots;
     Text privacy;
+    Text inProgress;
 
     public string roomName;
 
@@ -25,6 +26,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
         creator = transform.Find("Creator/Text").GetComponent<Text>();
         slots = transform.Find("Slots/Text").GetComponent<Text>();
         privacy = transform.Find("Privacy/Text").GetComponent<Text>();
+        inProgress = transform.Find("InProgress/Text").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -36,6 +38,7 @@ public class RoomListing : MonoBehaviourPunCallbacks
             creator.text = (string)currentRoom.CustomProperties["MasterName"];
             slots.text = currentRoom.PlayerCount + " / " + currentRoom.MaxPlayers;
             privacy.text = (bool) currentRoom.CustomProperties["Privacy"] ? "Private" : "Public";
+            inProgress.text = (bool) currentRoom.CustomProperties["InProgress"] ? "In Game" : "In Lobby";
         }
         else
         {
