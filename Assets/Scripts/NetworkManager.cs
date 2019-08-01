@@ -51,6 +51,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(true);
 
         PhotonNetwork.ConnectUsingSettings();
+        //PhotonNetwork.ConnectToRegion("usw");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
