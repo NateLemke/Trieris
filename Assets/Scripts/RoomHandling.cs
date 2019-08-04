@@ -23,6 +23,10 @@ public class RoomHandling : MonoBehaviour
 
     void OnEnable()
     {
+        for (int i = 1; i <= 6; i++)
+        {
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = i-1;
+        }
         if (PhotonNetwork.IsMasterClient)
         {
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
