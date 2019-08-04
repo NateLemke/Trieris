@@ -811,22 +811,22 @@ public class GameManager : MonoBehaviour {
     }
     
     [PunRPC]
-    public void RunPortCaptureAnimation(int team, int shipID) {
+    public void RunPortCaptureAnimation(int team1 , int team2 , int x, int y) {
 
-        Ship ship = GetShip(shipID,team);
+        //Ship ship = GetShip(shipID,team);
 
-        Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,ship.team.TeamFaction,ship.getNode().Port.id,ship.Id);
+        //Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,ship.team.TeamFaction,ship.getNode().Port.id,ship.Id);
 
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
 
         PortCaptureAnimationObject animObj;
 
-        GameObject go = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
+        GameObject go = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.identity);
 
         animObj = go.GetComponent<PortCaptureAnimationObject>();
 
-        animObj.SetUpperImg(ship.getNode().Port.Team.getPortSprite());
-        animObj.SetLowerImg(ship.team.getPortSprite());
+        animObj.SetUpperImg(teams[team1].getPortSprite());
+        animObj.SetLowerImg(teams[team2].getPortSprite());
 
     }
 
@@ -834,5 +834,25 @@ public class GameManager : MonoBehaviour {
     public void SetPortTeam(int portID, int team) {
 
         board.ports[portID].Team = teams[team];
+    }
+
+    [PunRPC]
+    public void CreateRotationArrow(int team,float x,float y,float rotation,bool portTurn) {
+        GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
+        GameObject arrow = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.Euler(0,0,rotation));
+        arrow.GetComponent<AnimArrow>().Initialize(teams[team]);
+        if (portTurn) {
+            arrow.transform.localScale = new Vector3(-1,1,1);
+        }
+    }
+
+    [PunRPC]
+    public void CreateMovementArrow(int team,float x,float y,float rotation,int momentum = 0,bool reverse = false) {
+        GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
+        GameObject arrow = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.Euler(0,0,rotation));
+        arrow.GetComponent<AnimArrow>().Initialize(teams[team],momentum);
+        if (reverse) {
+            arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
+        }        
     }
 }

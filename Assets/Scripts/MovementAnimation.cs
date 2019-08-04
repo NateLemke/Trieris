@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,15 +46,22 @@ public class MovementAnimation : Animation {
         }        
 
         yield return PhaseManager.focus(focusPoint);
-        GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
-        GameObject arrow = GameObject.Instantiate(prefab,focusPoint,ship.transform.rotation);
-        if (reverse) {
-            arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
+
+        Vector2 position = ship.transform.position;
+
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("CreateMovementArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
         }
-        arrow.GetComponentInChildren<SpriteRenderer>().color = ship.team.getColorLight();
-        arrow.GetComponentInChildren<Text>().text = (momentum > 1) ? momentum.ToString() : "";
-        arrow.GetComponentInChildren<Text>().text = (momentum > 1) ? momentum.ToString() : "";
-        arrow.GetComponentInChildren<Text>().color = ship.team.getColorLight();
+        GameManager.main.CreateMovementArrow((int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
+
+        //GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
+        //GameObject arrow = GameObject.Instantiate(prefab,focusPoint,ship.transform.rotation);
+        //if (reverse) {
+        //    arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
+        //}
+        //arrow.GetComponentInChildren<SpriteRenderer>().color = ship.team.getColorLight();
+        //arrow.GetComponentInChildren<Text>().text = (momentum > 1) ? momentum.ToString() : "";
+        //arrow.GetComponentInChildren<Text>().color = ship.team.getColorLight();
         yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
             startTime = Time.time;
@@ -70,7 +78,7 @@ public class MovementAnimation : Animation {
             }
             complete = true;
             ship.transform.position = endPos;
-            GameObject.Destroy(arrow);
+            //GameObject.Destroy(arrow);
             updatePositionOnNode(endNode);
         }        
     }

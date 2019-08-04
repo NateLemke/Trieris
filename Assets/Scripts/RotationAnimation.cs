@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,12 +40,14 @@ public class RotationAnimation : Animation {
         }
 
         yield return PhaseManager.focus(focusPoint);
-        GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
-        GameObject arrow = GameObject.Instantiate(prefab,ship.transform);
-        if (portTurn) {
-            arrow.transform.localScale = new Vector3(-1,1,1);
+
+        Vector2 position = ship.transform.position;
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,portTurn);
         }
-        arrow.GetComponentInChildren<SpriteRenderer>().color = ship.team.getColorLight();
+        PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,portTurn);
+        
         yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
             startTime = Time.time;
@@ -55,7 +58,6 @@ public class RotationAnimation : Animation {
             }
             complete = true;
             ship.transform.rotation = endRotation;
-            GameObject.Destroy(arrow);
         }
     }
 }
