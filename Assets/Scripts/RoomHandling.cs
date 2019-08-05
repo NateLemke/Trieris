@@ -112,10 +112,10 @@ public class RoomHandling : MonoBehaviour
     {
         Hashtable customProperties = playerInSlot(slotNumber).CustomProperties;
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
-        customProperties["TeamInt"] = thisDropdown.value;
+        customProperties["TeamNum"] = thisDropdown.value;
         customProperties["LoadedGame"] = false;
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
-        Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamInt"]);
+        Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamNum"]);
     }
 
     public void setLocalPlayerTeam()
@@ -123,4 +123,5 @@ public class RoomHandling : MonoBehaviour
         Debug.Log(getSlotPosition(PhotonNetwork.LocalPlayer));
         setPlayerTeam(getSlotPosition(PhotonNetwork.LocalPlayer));
     }
+
 }

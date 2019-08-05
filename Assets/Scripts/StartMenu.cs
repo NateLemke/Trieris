@@ -20,8 +20,16 @@ public class StartMenu : MonoBehaviourPun
     
     public void startMultiplayerGame()
     {
-        Debug.Log(RpcTarget.All);
-        PhotonView.Get(this).RPC("startGame", RpcTarget.All);
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
+            startNotMasterFade();
+        }
+        else
+        {
+            Debug.Log(RpcTarget.All);
+            PhotonView.Get(this).RPC("startGame", RpcTarget.All);
+        }
     }
 
     /// <summary>
@@ -37,24 +45,19 @@ public class StartMenu : MonoBehaviourPun
             {
                 selectedTeams.Add(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
             }
-            if (PhotonNetwork.IsMasterClient)
+            
+            if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
-                if (selectedTeams.Count == selectedTeams.Distinct().Count())
-                {
+                if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
-                    SceneManager.LoadScene("GameScene");
-                }
-                else
-                {
-                    GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
-                    startDuplicatePanelFade();
-                }
+                SceneManager.LoadScene("GameScene");
             }
             else
             {
-                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
-                startNotMasterFade();
+                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
+                startDuplicatePanelFade();
             }
+            
         }
         else
         {
