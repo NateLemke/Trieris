@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public void setupGame(int playerChoice) {
-
+        Debug.Log("Setup for " + playerChoice);
         //if (!PhotonNetwork.IsConnected) {
         //    for (int i = 0; i < 6; i++) {
         //        if (i == playerChoice) {
