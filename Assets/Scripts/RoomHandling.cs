@@ -57,9 +57,11 @@ public class RoomHandling : MonoBehaviour
             for(int i = 1; i <= 6; i++)
             {
                 thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
+                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
             }
             foreach(Player p in PhotonNetwork.PlayerList)
             {
+                Debug.Log(p.NickName);
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
             }
