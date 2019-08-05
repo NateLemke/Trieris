@@ -138,6 +138,19 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, options);
     }
 
+    public void OnMasterClientSwitched()
+    {
+        foreach(KeyValuePair<int, Player> p in PhotonNetwork.CurrentRoom.Players)
+        {
+            if (p.Value.IsMasterClient)
+            {
+                Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+                ht["MasterName"] = p.Value.NickName;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+            }
+        }
+    }
+
     public override void OnCreatedRoom()
     {
         Hashtable roominfo = new Hashtable();
