@@ -108,6 +108,7 @@ public class StartMenu : MonoBehaviourPun
                         ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
                         ht["TeamNum"] = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
                         PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+                        Debug.Log("Set " + p.NickName + " to " + p.CustomProperties["TeamNum"]);
                         break;
                     }
                 }

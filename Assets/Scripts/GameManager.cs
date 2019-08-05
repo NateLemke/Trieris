@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
                 Debug.Log("Im NOT the master client");
             }
 
-            setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+            setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
         }
     }
 
