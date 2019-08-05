@@ -138,17 +138,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, options);
     }
 
-    public void OnMasterClientSwitched()
+    public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        foreach(KeyValuePair<int, Player> p in PhotonNetwork.CurrentRoom.Players)
-        {
-            if (p.Value.IsMasterClient)
-            {
-                Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-                ht["MasterName"] = p.Value.NickName;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
-            }
-        }
+        
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["MasterName"] = newMasterClient.NickName;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        Debug.Log(PhotonNetwork.CurrentRoom.Name + " Master is now " + newMasterClient.NickName);
     }
 
     public override void OnCreatedRoom()
