@@ -50,6 +50,11 @@ public class StartMenu : MonoBehaviourPun
             {
                 //if (PhotonNetwork.IsMasterClient)
                 //    setPlayerTeams();
+
+                for (int i = 1; i <= 6; i++)
+                {
+                    GameManager.teamTypes[i - 1] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
+                }
                 SceneManager.LoadScene("GameScene");
             }
             else
