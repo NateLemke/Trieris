@@ -37,15 +37,23 @@ public class StartMenu : MonoBehaviourPun
             {
                 selectedTeams.Add(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
             }
-            if(selectedTeams.Count == selectedTeams.Distinct().Count())
+            if (PhotonNetwork.IsMasterClient)
             {
-                setPlayerTeams();
-                SceneManager.LoadScene("GameScene");
+                if (selectedTeams.Count == selectedTeams.Distinct().Count())
+                {
+                    setPlayerTeams();
+                    SceneManager.LoadScene("GameScene");
+                }
+                else
+                {
+                    GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
+                    startDuplicatePanelFade();
+                }
             }
             else
             {
-                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
-                startDuplicatePanelFade();
+                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
+                startNotMasterFade();
             }
         }
         else
@@ -54,19 +62,12 @@ public class StartMenu : MonoBehaviourPun
         }
         
     }
-
-    /// <summary>
-    /// Starts the fade out of the objective panel
-    /// </summary>
+    
     public void startDuplicatePanelFade()
     {
         StartCoroutine(duplicatePanelTime());
     }
 
-    /// <summary>
-    /// Waits 2 seconds and then begins the fade of the objective text 
-    /// </summary>
-    /// <returns></returns>
     public IEnumerator duplicatePanelTime()
     {
         yield return new WaitForSeconds(2f);
@@ -74,12 +75,33 @@ public class StartMenu : MonoBehaviourPun
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().CrossFadeAlpha(0, 2f, false);
         StartCoroutine(setDuplicatePanelInactive());
     }
-
-    /// <summary>
-    /// Sets the objective panel inactive once the fade out is finished
-    /// </summary>
-    /// <returns></returns>
+    
     public IEnumerator setDuplicatePanelInactive()
+    {
+        yield return new WaitForSeconds(2f);
+        var tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color;
+        tempColor.a = 1.0f;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color = tempColor;
+        tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().color;
+        tempColor.a = 1.0f;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().color = tempColor;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").gameObject.SetActive(false);
+    }
+
+    public void startNotMasterFade()
+    {
+        StartCoroutine(duplicatePanelTime());
+    }
+
+    public IEnumerator notMasterTime()
+    {
+        yield return new WaitForSeconds(2f);
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().CrossFadeAlpha(0, 2f, false);
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().CrossFadeAlpha(0, 2f, false);
+        StartCoroutine(setDuplicatePanelInactive());
+    }
+
+    public IEnumerator setNotMasterInactive()
     {
         yield return new WaitForSeconds(2f);
         var tempColor = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().color;
