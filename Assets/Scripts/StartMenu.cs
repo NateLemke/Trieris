@@ -48,8 +48,8 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
-                if (PhotonNetwork.IsMasterClient)
-                    setPlayerTeams();
+                //if (PhotonNetwork.IsMasterClient)
+                //    setPlayerTeams();
                 SceneManager.LoadScene("GameScene");
             }
             else
@@ -210,7 +210,7 @@ public class StartMenu : MonoBehaviourPun
         {
             foreach(Player p in PhotonNetwork.PlayerList)
             {
-                Debug.Log((string)p.CustomProperties["TeamInt"]);
+                Debug.Log((string)p.CustomProperties["TeamNum"]);
             }
         }
     }
