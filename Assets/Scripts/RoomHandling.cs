@@ -119,6 +119,7 @@ public class RoomHandling : MonoBehaviour
         Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamNum"]);
     }
 
+    [PunRPC]
     public void setLocalPlayerTeam()
     {
         Debug.Log(getSlotPosition(PhotonNetwork.LocalPlayer));

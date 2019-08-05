@@ -145,6 +145,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ht["MasterName"] = newMasterClient.NickName;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
         Debug.Log(PhotonNetwork.CurrentRoom.Name + " Master is now " + newMasterClient.NickName);
+
+        PhotonView.Get(this).RPC("setLocalPlayerTeam", RpcTarget.All);
     }
 
     public override void OnCreatedRoom()
