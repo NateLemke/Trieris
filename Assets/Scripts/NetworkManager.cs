@@ -138,6 +138,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(null, options);
     }
 
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["MasterName"] = newMasterClient.NickName;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        Debug.Log(PhotonNetwork.CurrentRoom.Name + " Master is now " + newMasterClient.NickName);
+
+        PhotonView.Get(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").gameObject).RPC("setLocalPlayerTeam", RpcTarget.All);
+    }
+
     public override void OnCreatedRoom()
     {
         Hashtable roominfo = new Hashtable();

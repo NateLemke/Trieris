@@ -57,10 +57,12 @@ public class RoomHandling : MonoBehaviour
             for(int i = 1; i <= 6; i++)
             {
                 thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
+                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
             }
             foreach(Player p in PhotonNetwork.PlayerList)
             {
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
+                thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
             }
             setRoomName();
         }
@@ -112,15 +114,17 @@ public class RoomHandling : MonoBehaviour
     {
         Hashtable customProperties = playerInSlot(slotNumber).CustomProperties;
         Dropdown thisDropdown = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slotNumber + "/TeamImage/Dropdown").GetComponent<Dropdown>();
-        customProperties["TeamInt"] = thisDropdown.value;
+        customProperties["TeamNum"] = thisDropdown.value;
         customProperties["LoadedGame"] = false;
         playerInSlot(slotNumber).SetCustomProperties(customProperties);
-        Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamInt"]);
+        Debug.Log("Player " + slotNumber + ", team changed to " + playerInSlot(slotNumber).CustomProperties["TeamNum"]);
     }
 
+    [PunRPC]
     public void setLocalPlayerTeam()
     {
         Debug.Log(getSlotPosition(PhotonNetwork.LocalPlayer));
         setPlayerTeam(getSlotPosition(PhotonNetwork.LocalPlayer));
     }
+
 }

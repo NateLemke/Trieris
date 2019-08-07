@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
                 Debug.Log("Im NOT the master client");
             }
 
-            setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
+            setupGame((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
         }
     }
 
@@ -107,7 +107,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void setupGame(int playerChoice) {
-
+        Debug.Log(PhotonNetwork.LocalPlayer.NickName + " " + PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
+        Debug.Log("Setup for " + playerChoice);
         //if (!PhotonNetwork.IsConnected) {
         //    for (int i = 0; i < 6; i++) {
         //        if (i == playerChoice) {
