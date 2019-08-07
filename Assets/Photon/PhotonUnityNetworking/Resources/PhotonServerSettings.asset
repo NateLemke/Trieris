@@ -67,5 +67,7 @@ MonoBehaviour:
   - setAllTeamsUnready
   - SetPortTeam
   - CreateAnimArrow
+  - CreateMovementArrow
+  - CreateRotationArrow
   DisableAutoOpenWizard: 1
   ShowSettings: 1
