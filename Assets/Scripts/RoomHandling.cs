@@ -61,7 +61,6 @@ public class RoomHandling : MonoBehaviour
             }
             foreach(Player p in PhotonNetwork.PlayerList)
             {
-                Debug.Log(p.NickName);
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
             }
