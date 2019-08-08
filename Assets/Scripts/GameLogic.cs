@@ -139,9 +139,10 @@ public class GameLogic : MonoBehaviour {
                 if (!checkAdjHRam(ship,phase)) {
                     ship.doAction(phase);
                 }
-                    
 
-                if (ship.needRedirect && ship.team != GameManager.playerTeam)
+
+                //if (ship.needRedirect && ship.team != GameManager.playerTeam)
+                if (ship.needRedirect && ship.team.TeamType == Team.Type.ai)
                 {
                     int newDirection = 0;
                     newDirection = ship.Ai.setNewShipDirection(ship);
