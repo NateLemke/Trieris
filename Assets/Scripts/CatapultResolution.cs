@@ -35,7 +35,7 @@ public class CatapultResolution : CombatResolution
             focusPos = (shipA.Position + (Vector3)missedNode.getRealPos()) / 2;
         }
         
-        yield return PhaseManager.focus(focusPos);
+        yield return PhaseManager.SyncFocus(focusPos);
 
         yield return new WaitForSeconds(SpeedManager.CombatDelay);
         GameManager.main.LaunchSound();

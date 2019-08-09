@@ -39,7 +39,7 @@ public class RotationAnimation : Animation {
             yield break;
         }
 
-        yield return PhaseManager.focus(focusPoint);
+        yield return PhaseManager.SyncFocus(focusPoint);
 
         Vector2 position = ship.transform.position;
 

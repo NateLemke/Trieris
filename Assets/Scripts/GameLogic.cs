@@ -76,7 +76,7 @@ public class GameLogic : MonoBehaviour {
             return false;
         } else {
             phaseIndex++;
-            PhaseManager.updateText();
+            PhaseManager.updateText(GameLogic.phaseIndex);
             executePhase(phaseIndex);
             return true;
         }

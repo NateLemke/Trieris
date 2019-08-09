@@ -69,8 +69,9 @@ public static class PhaseManager
         subPhaseIndex = 0;
         yield return null;
 
-        subPhaseProgress();
-        updateText();
+        updateText(GameLogic.phaseIndex);
+        subPhaseProgress(subPhaseIndex);
+        
 
         foreach(subPhase s in subPhaseOrder) {
             yield return s();
@@ -230,18 +231,28 @@ public static class PhaseManager
 
         return (v.x < xMin || v.x > xMax || v.y < yMin || v.y > yMax);
     }
+    
 
     /// <summary>
     /// Checks if the coordinate is out of focus, and moves the camera to that position if it is
     /// </summary>
     /// <param name="v">the position to focus on</param>
     /// <returns></returns>
-    [PunRPC]
-    public static IEnumerator focus(Vector2 v) {
+    public static IEnumerator SyncFocus(Vector2 v) {
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(GameManager.main).RPC("focus",RpcTarget.Others,v.x,v.y);
         }
+
+        yield return Focus(v);
+    }
+
+    /// <summary>
+    /// Checks if the coordinate is out of focus, and moves the camera to that position if it is
+    /// </summary>
+    /// <param name="v">the position to focus on</param>
+    /// <returns></returns>
+    public static IEnumerator Focus(Vector2 v) {
 
         if (outOfFocus(v)) {
 
@@ -311,7 +322,7 @@ public static class PhaseManager
             }
 
             if (foundFocus) {
-                yield return focus(closestToCamera.focusPoint);            
+                yield return SyncFocus(closestToCamera.focusPoint);            
             }
         }
 
@@ -334,7 +345,7 @@ public static class PhaseManager
             if (!tr.needsResolving()) {
                 continue;
             }
-            yield return focus(tr.attacker.Position);
+            yield return SyncFocus(tr.attacker.Position);
             yield return tr.resolve();
             if (chosenTarget == null) {
                 continue;
@@ -356,7 +367,7 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     static IEnumerator resolveRamming() {
-        subPhaseProgress();
+        subPhaseProgress(subPhaseIndex);
         if (rammingResolutions.Count == 0) {
             yield break;
         }
@@ -377,7 +388,7 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator catapultChoices() {
-        subPhaseProgress();
+        subPhaseProgress(subPhaseIndex);
         if (catapultTargetResolutions.Count == 0) {
             yield break;
         }
@@ -388,7 +399,7 @@ public static class PhaseManager
                 tr.attacker.needCatapultChoice = false;
                 continue;
             }
-            yield return focus(tr.attacker.Position);
+            yield return SyncFocus(tr.attacker.Position);
             yield return tr.resolve();
             if(chosenTarget == null) {
                 continue;
@@ -472,7 +483,7 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator portCaptureChoice() {
-        subPhaseProgress();
+        subPhaseProgress(subPhaseIndex);
         if (!GameManager.main.needCaptureChoice()) {
             yield break;
         }
@@ -484,7 +495,7 @@ public static class PhaseManager
             if (s.needCaptureChoice) {
                 focusTarget = s;
                 s.getNode().Port.activatePrompt(s);
-                yield return focus(focusTarget.Position);
+                yield return SyncFocus(focusTarget.Position);
                 while (s.needCaptureChoice || s.needRedirect)
                     yield return null;
             }
@@ -512,7 +523,7 @@ public static class PhaseManager
                 focusTarget = s;
             }
         }
-        yield return focus(focusTarget.Position);
+        yield return SyncFocus(focusTarget.Position);
         while (GameManager.main.needRedirect()) {
             if (!GameManager.playerTeam.needRedirectChoice()) {
                 // waiting for another player
@@ -524,14 +535,26 @@ public static class PhaseManager
     /// <summary>
     /// Enables the phase UI
     /// </summary>
+    [PunRPC]
     public static void EnablePhaseUI() {
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("PhaseManager.EnablePhaseUI",RpcTarget.Others);
+        }
+
         UIControl.main.phaseAnnouncer.SetActive(true);
     }
 
     /// <summary>
     /// Disables the phase UI
     /// </summary>
+    [PunRPC]
     public static void DisablePhaseUI() {
+
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("PhaseManager.DisablePhaseUI",RpcTarget.Others);
+        }
+
         UIControl.main.phaseAnnouncer.SetActive(false);
     }
 
@@ -539,16 +562,27 @@ public static class PhaseManager
     /// Sets the subphase text in the phase UI
     /// </summary>
     /// <param name="s"></param>
-    public static void setSubphaseText(string s) {        
+    [PunRPC]
+    public static void setSubphaseText(string s) {
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("PhaseManager.setSubphaseText",RpcTarget.Others,s);
+        }
+
         UIControl.main.subPhase.GetComponentInChildren<Text>().text = s;
     }
 
     /// <summary>
     /// Updates the UI to display the proper phase index
     /// </summary>
-    public static void updateText() {
-        int phase = GameLogic.phaseIndex;
-        
+    [PunRPC]
+    public static void updateText(int phase) {
+        //int phase = GameLogic.phaseIndex;
+
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("PhaseManager.updateText",RpcTarget.Others,phase);
+        }
+
         GameObject phaseObj = UIControl.main.phase;
         phaseObj.SetActive(true);
         phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase + 1);
@@ -599,12 +633,12 @@ public static class PhaseManager
     /// <summary>
     /// Used to display the progress in the subphase icons
     /// </summary>
-    public static void subPhaseProgress() {
+    public static void subPhaseProgress(int index) {
 
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
         
-        switch (subPhaseIndex) {
+        switch (index) {
             case 0:
             subPhaseIcon = GameObject.Find("actionphase"); break;
             case 1:

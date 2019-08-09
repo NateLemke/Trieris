@@ -809,7 +809,7 @@ public class GameManager : MonoBehaviour {
 
     [PunRPC]
     public void focus(float x,float y) {
-        StartCoroutine(PhaseManager.focus(new Vector2(x,y)));
+        StartCoroutine(PhaseManager.Focus(new Vector2(x,y)));
     }
     
     [PunRPC]

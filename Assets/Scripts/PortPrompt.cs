@@ -111,7 +111,7 @@ public class PortPrompt : MonoBehaviour{
         yield return new PortCaptureAnimation(s).playAnimation();
         foreach (Ship ps in GameManager.main.getPlayerShips()) {
             if (ps.needCaptureChoice) {
-                yield return PhaseManager.focus(ps.Position);
+                yield return PhaseManager.SyncFocus(ps.Position);
                 break;
             }
         }
@@ -126,7 +126,7 @@ public class PortPrompt : MonoBehaviour{
         yield return new WaitForSeconds(0.5f);
         foreach (Ship ps in GameManager.main.getPlayerShips()) {
             if (ps.needCaptureChoice) {
-                yield return PhaseManager.focus(ps.Position);
+                yield return PhaseManager.SyncFocus(ps.Position);
                 break;
             }
         }

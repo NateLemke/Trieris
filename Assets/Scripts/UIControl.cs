@@ -323,7 +323,7 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void onShipSelection() {
         if(selected != null) {
-            StartCoroutine(PhaseManager.focus(selected.Position));
+            StartCoroutine(PhaseManager.Focus(selected.Position));
             selected.setIconString(selected.getNumeralID());
         }
     }
