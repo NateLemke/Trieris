@@ -330,7 +330,7 @@ public class GameLogic : MonoBehaviour {
                         } else {
                             chosenShip = ship.Ai.selectShip(potentialCollisions);
                         }
-                        Debug.LogFormat("Ship from team {0} rammed ship from team {1}",ship.team.TeamFaction,ship.team.TeamFaction);
+                        Debug.LogFormat("Ship from team {0} rammed ship from team {1}",ship.team.TeamFaction,chosenShip.team.TeamFaction);
                         ship.ram(chosenShip);
                     }
                 }
