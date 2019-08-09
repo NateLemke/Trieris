@@ -238,12 +238,26 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-        rammingNotice.SetActive(gameManager.needRammingChoice());
-        redirectNotice.SetActive(gameManager.needRedirect());
-        captureNotice.SetActive(gameManager.needCaptureChoice());
-        catapultNotice.SetActive(gameManager.needCatapultChoice());
+        if (!PhotonNetwork.IsConnected)
+        {
+            rammingNotice.SetActive(gameManager.needRammingChoice());
+            redirectNotice.SetActive(gameManager.needRedirect());
+            captureNotice.SetActive(gameManager.needCaptureChoice());
+            catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-        turnPhase.text = "Turn: " + gameLogic.TurnIndex;
+            turnPhase.text = "Turn: " + gameLogic.TurnIndex;
+            
+        }
+        else if(PhotonNetwork.IsMasterClient)
+        {
+            PhotonView.Get(this).RPC("setRammingNotice", RpcTarget.All, gameManager.needRammingChoice());
+            PhotonView.Get(this).RPC("setRedirectNotice", RpcTarget.All, gameManager.needRedirect());
+            PhotonView.Get(this).RPC("setCaptureNotice", RpcTarget.All, gameManager.needCaptureChoice());
+            PhotonView.Get(this).RPC("setCatapultNotice", RpcTarget.All, gameManager.needCatapultChoice());
+
+            PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
+        }
+        
 
         //if (fadeObjective)
         //{
@@ -265,6 +279,36 @@ public class UIControl : MonoBehaviour
             startTurn(1);
         }
         
+    }
+
+    [PunRPC]
+    public void setRammingNotice(bool input)
+    {
+        rammingNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setRedirectNotice(bool input)
+    {
+        redirectNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setCaptureNotice(bool input)
+    {
+        captureNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setCatapultNotice(bool input)
+    {
+        catapultNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setTurnPhaseText(int input)
+    {
+        turnPhase.text = "Turn: " + input;
     }
 
     /// <summary>

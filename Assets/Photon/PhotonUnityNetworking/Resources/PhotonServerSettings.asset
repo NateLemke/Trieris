@@ -76,5 +76,10 @@ MonoBehaviour:
   - DisablePhaseUI
   - EnablePhaseUI
   - subPhaseProgress
+  - setCaptureNotice
+  - setCatapultNotice
+  - setRammingNotice
+  - setRedirectNotice
+  - setTurnPhaseText
   DisableAutoOpenWizard: 1
   ShowSettings: 1
