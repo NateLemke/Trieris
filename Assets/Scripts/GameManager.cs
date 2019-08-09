@@ -813,7 +813,7 @@ public class GameManager : MonoBehaviour {
     }
     
     [PunRPC]
-    public void RunPortCaptureAnimation(int team1 , int team2 , int x, int y) {
+    public void RunPortCaptureAnimation(int team1 , int team2 , float x, float y) {
 
         //Ship ship = GetShip(shipID,team);
 
