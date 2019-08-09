@@ -248,7 +248,7 @@ public class UIControl : MonoBehaviour
             turnPhase.text = "Turn: " + gameLogic.TurnIndex;
             
         }
-        else if(PhotonNetwork.IsMasterClient)
+        else if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
         {
             PhotonView.Get(this).RPC("setRammingNotice", RpcTarget.All, gameManager.needRammingChoice());
             PhotonView.Get(this).RPC("setRedirectNotice", RpcTarget.All, gameManager.needRedirect());

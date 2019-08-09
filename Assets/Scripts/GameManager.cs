@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    bool shipsSynced = false;
+    public bool shipsSynced = false;
 
     /// <summary>
     /// Creates teams, ports, and ships
