@@ -25,6 +25,7 @@ public class Port{
             if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
                 PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.Others,id,(int)team.TeamFaction);
             }
+            go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColor();
         }
     }
     private Team team;

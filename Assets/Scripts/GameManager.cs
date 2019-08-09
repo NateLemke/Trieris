@@ -889,4 +889,9 @@ public class GameManager : MonoBehaviour {
     public void updateText(int phase) {
         PhaseManager.updateText(phase);
     }
+
+    [PunRPC]
+    public void subPhaseProgress(int index) {
+        PhaseManager.subPhaseProgress(index);
+    }
 }

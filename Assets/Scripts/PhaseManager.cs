@@ -635,6 +635,11 @@ public static class PhaseManager
     /// </summary>
     public static void subPhaseProgress(int index) {
 
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
+        }
+
+
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
         

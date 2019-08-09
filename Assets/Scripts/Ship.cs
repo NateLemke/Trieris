@@ -778,6 +778,7 @@ public class Ship : MonoBehaviour {
     protected void setDirection(int newDirection) {
         front = newDirection;
         setSpriteRotation();
+
     }
 
     [PunRPC]
