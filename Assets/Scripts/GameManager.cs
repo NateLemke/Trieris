@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour {
             }
         }
         SyncShipPhotonID();
+        SetPortTransparency();
     }
 
     public void setupGame(int playerChoice) {
@@ -832,9 +833,9 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void SetPortTeam(int portID, int team) {
+    public void SetPortTeam(int portID, int teamId) {
 
-        board.ports[portID].Team = teams[team];
+        board.ports[portID].Team = teams[teamId];
     }
 
     [PunRPC]
@@ -855,5 +856,16 @@ public class GameManager : MonoBehaviour {
         if (reverse) {
             arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
         }        
+    }
+
+    void SyncPortTransparency() {
+        PhotonView.Get(this).RPC("SetPortTransparency",RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void SetPortTransparency() {
+        foreach (Port p in board.ports) {
+            p.setTransparency();
+        }
     }
 }

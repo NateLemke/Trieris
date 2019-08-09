@@ -23,7 +23,7 @@ public class Port{
             team = value;
             setSprite(team);
             if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-
+                PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.Others,id,(int)team.TeamFaction);
             }
         }
     }
@@ -66,7 +66,7 @@ public class Port{
             parent.name = "Ports";
         }
         go.transform.SetParent(parent.transform);
-        updateTransparency();
+        //updateTransparency();
     }
 
     public GameObject getGameObject()
