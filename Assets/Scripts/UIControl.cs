@@ -306,7 +306,7 @@ public class UIControl : MonoBehaviour
     }
 
     [PunRPC]
-    public void setTurnPhaseText(string input)
+    public void setTurnPhaseText(int input)
     {
         turnPhase.text = "Turn: " + input;
     }
