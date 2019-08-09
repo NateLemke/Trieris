@@ -44,9 +44,9 @@ public class RotationAnimation : Animation {
         Vector2 position = ship.transform.position;
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,portTurn);
+            PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.All,(int)ship.team.TeamFaction,focusPoint.x,focusPoint.y,ship.transform.rotation.eulerAngles.z,portTurn);
         }
-        PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,portTurn);
+        //PhotonView.Get(GameManager.main).RPC("CreateRotationArrow",RpcTarget.Others,(int)ship.team.TeamFaction,focusPoint.x,position.y,ship.transform.rotation.eulerAngles.z,portTurn);
         
         yield return new WaitForSeconds(SpeedManager.ActionDelay);
         if (!complete) {
