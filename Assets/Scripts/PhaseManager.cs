@@ -539,7 +539,7 @@ public static class PhaseManager
     public static void EnablePhaseUI() {
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("PhaseManager.EnablePhaseUI",RpcTarget.Others);
+            PhotonView.Get(GameManager.main).RPC("EnablePhaseUI",RpcTarget.Others);
         }
 
         UIControl.main.phaseAnnouncer.SetActive(true);
@@ -552,7 +552,7 @@ public static class PhaseManager
     public static void DisablePhaseUI() {
 
         if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("PhaseManager.DisablePhaseUI",RpcTarget.Others);
+            PhotonView.Get(GameManager.main).RPC("DisablePhaseUI",RpcTarget.Others);
         }
 
         UIControl.main.phaseAnnouncer.SetActive(false);
@@ -566,7 +566,7 @@ public static class PhaseManager
     public static void setSubphaseText(string s) {
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("PhaseManager.setSubphaseText",RpcTarget.Others,s);
+            PhotonView.Get(GameManager.main).RPC("setSubphaseText",RpcTarget.Others,s);
         }
 
         UIControl.main.subPhase.GetComponentInChildren<Text>().text = s;
@@ -580,7 +580,7 @@ public static class PhaseManager
         //int phase = GameLogic.phaseIndex;
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("PhaseManager.updateText",RpcTarget.Others,phase);
+            PhotonView.Get(GameManager.main).RPC("updateText",RpcTarget.Others,phase);
         }
 
         GameObject phaseObj = UIControl.main.phase;

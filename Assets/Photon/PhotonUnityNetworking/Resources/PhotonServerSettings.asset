@@ -71,9 +71,9 @@ MonoBehaviour:
   - CreateRotationArrow
   - setLocalPlayerTeam
   - SetPortTransparency
-  - PhaseManager.setSubphaseText
-  - PhaseManager.updateText
-  - PhaseManager.DisablePhaseUI
-  - PhaseManager.EnablePhaseUI
+  - setSubphaseText
+  - updateText
+  - DisablePhaseUI
+  - EnablePhaseUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1

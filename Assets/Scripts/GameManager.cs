@@ -869,4 +869,24 @@ public class GameManager : MonoBehaviour {
             p.setTransparency();
         }
     }
+
+    [PunRPC]
+    public void DisablePhaseUI() {
+        PhaseManager.DisablePhaseUI();
+    }
+
+    [PunRPC]
+    public void EnablePhaseUI() {
+        PhaseManager.EnablePhaseUI();
+    }
+
+    [PunRPC]
+    public void setSubphaseText(string s) {
+        PhaseManager.setSubphaseText(s);
+    }
+
+    [PunRPC]
+    public void updateText(int phase) {
+        PhaseManager.updateText(phase);
+    }
 }
