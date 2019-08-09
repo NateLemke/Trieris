@@ -50,9 +50,9 @@ public class MovementAnimation : Animation {
         Vector2 position = ship.transform.position;
 
         if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("CreateMovementArrow",RpcTarget.Others,(int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
+            PhotonView.Get(GameManager.main).RPC("CreateMovementArrow",RpcTarget.All,(int)ship.team.TeamFaction,focusPoint.x,focusPoint.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
         }
-        GameManager.main.CreateMovementArrow((int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
+        //GameManager.main.CreateMovementArrow((int)ship.team.TeamFaction,position.x,position.y,ship.transform.rotation.eulerAngles.z,momentum,reverse);
 
         //GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
         //GameObject arrow = GameObject.Instantiate(prefab,focusPoint,ship.transform.rotation);
