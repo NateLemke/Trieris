@@ -112,9 +112,9 @@ public class Ship : MonoBehaviour {
 
         this.node = node;
         node.Ships.Add(this);
-        if (node.Port != null) {
-            node.Port.setTransparency();
-        }
+        //if (node.Port != null) {
+        //    node.Port.setTransparency();
+        //}
         gameObject.transform.position = node.getRealPos();
 
         actions = new Action[4];
