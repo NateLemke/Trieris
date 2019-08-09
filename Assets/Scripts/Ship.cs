@@ -530,14 +530,32 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Used when the a player ship captures a port, activates port capture UI
     /// </summary>
-    public void playerCapture() {
-        needCaptureChoice = false;
-        canActAfterCollision = false;
-        canAct = false;
-        movedForward = false;
-        needRedirect = true;
-        portRepairCount = -5;
-        activateRedirectNotification();
+    [PunRPC]
+    public void playerCapture()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
+            {
+                needCaptureChoice = false;
+                canActAfterCollision = false;
+                canAct = false;
+                movedForward = false;
+                needRedirect = true;
+                portRepairCount = -5;
+                activateRedirectNotification();
+            }
+        }
+        else
+        {
+            needCaptureChoice = false;
+            canActAfterCollision = false;
+            canAct = false;
+            movedForward = false;
+            needRedirect = true;
+            portRepairCount = -5;
+            activateRedirectNotification();
+        }
     }
 
     /// <summary>
