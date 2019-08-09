@@ -22,9 +22,10 @@ public class AnimArrow : MonoBehaviour
     }
 
     public void Initialize(Team t, int momentum = 0) {
-        GetComponentInChildren<SpriteRenderer>().color = t.getColor();        
-        GetComponentInChildren<Text>().color = t.getColorLight();
+        GetComponentInChildren<SpriteRenderer>().color = t.getColor();     
+        
         if(momentum > 1) {
+            GetComponentInChildren<Text>().color = t.getColorLight();
             GetComponentInChildren<Text>().text = momentum.ToString();
         }        
     }
