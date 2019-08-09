@@ -26,9 +26,12 @@ public class AnimArrow : MonoBehaviour
         
         if(momentum > 1) {
             Text text = GetComponentInChildren<Text>();
-            text.enabled = true;
             text.color = t.getColorLight();
             text.text = momentum.ToString();
+        } else {
+            if(GetComponentInChildren<Text>() != null) {
+                GetComponentInChildren<Text>().enabled = false;
+            }
         }      
     }
 

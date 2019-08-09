@@ -859,7 +859,8 @@ public class GameManager : MonoBehaviour {
     }
 
     void SyncPortTransparency() {
-        PhotonView.Get(this).RPC("SetPortTransparency",RpcTarget.All);
+        PhotonView.Get(this).RPC("SetPortTransparency",RpcTarget.Others);
+        SetPortTransparency();
     }
 
     [PunRPC]
