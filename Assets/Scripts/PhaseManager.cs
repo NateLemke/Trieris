@@ -554,7 +554,7 @@ public static class PhaseManager
         if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(GameManager.main).RPC("DisablePhaseUI",RpcTarget.Others);
         }
-
+        GameManager.main.uiControl.GoText.text = "START TURN";
         UIControl.main.phaseAnnouncer.SetActive(false);
     }
 

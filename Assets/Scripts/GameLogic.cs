@@ -87,7 +87,7 @@ public class GameLogic : MonoBehaviour {
 
         gameManager.uiControl.enableControls();
 
-        GameManager.main.uiControl.GoText.text = "START TURN";
+        
         PhaseManager.DisablePhaseUI();
         phaseIndex = 4;
         resetShips();
