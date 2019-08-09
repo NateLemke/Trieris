@@ -23,7 +23,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         ConnectingToMaster = false;
         ConnectingToRoom = false;
         thisLobby = GameObject.Find("Canvas").gameObject;
@@ -195,7 +195,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     //{
     //    base.OnCreatedRoom();
     //}
-
     public void OnClickDisconnect()
     {
         PhotonNetwork.Disconnect();
