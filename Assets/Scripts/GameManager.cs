@@ -827,8 +827,8 @@ public class GameManager : MonoBehaviour {
 
         animObj = go.GetComponent<PortCaptureAnimationObject>();
 
-        animObj.SetUpperImg(teams[team1].getPortSprite());
-        animObj.SetLowerImg(teams[team2].getPortSprite());
+        animObj.SetLowerImg(teams[team1].getPortSprite());
+        animObj.SetUpperImg(teams[team2].getPortSprite());
 
     }
 
