@@ -62,13 +62,6 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
         privatePanel = GameObject.Find("Canvas/MultiplayerPanel/Lobby").gameObject;
         privatePanel = privatePanel.transform.Find("PrivateRoomPanel").gameObject;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-        
-    }
     
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {

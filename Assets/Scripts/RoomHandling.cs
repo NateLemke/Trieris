@@ -8,14 +8,14 @@ using UnityEngine.UI;
 
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class RoomHandling : MonoBehaviour
+public class RoomHandling : MonoBehaviourPunCallbacks
 {
-    GameObject thisRoom;
+    public GameObject thisRoom;
     public GameObject privateGame;
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         thisRoom = GameObject.Find("Canvas").gameObject;
         thisRoom = thisRoom.transform.Find("MultiplayerPanel/RoomPanel").gameObject;
@@ -46,26 +46,33 @@ public class RoomHandling : MonoBehaviour
                 GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (int)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Int"];
             }
         }
+        UpdatePlayerList();
+        setRoomName();
         setLocalPlayerTeam();
         privateGame.GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
-        if (PhotonNetwork.IsConnected)
+        UpdatePlayerList();
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        UpdatePlayerList();
+    }
+
+    public void UpdatePlayerList()
+    {
+        for (int i = 1; i <= 6; i++)
         {
-            for(int i = 1; i <= 6; i++)
-            {
-                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
-                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
-            }
-            foreach(Player p in PhotonNetwork.PlayerList)
-            {
-                thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
-                thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
-            }
-            setRoomName();
+            thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
+            thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
+        }
+        foreach (Player p in PhotonNetwork.PlayerList)
+        {
+            thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
+            thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
         }
     }
 
