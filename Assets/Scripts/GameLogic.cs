@@ -82,6 +82,7 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
+    [PunRPC]
     public void endTurn() {
         determineGameState();
 
@@ -122,6 +123,11 @@ public class GameLogic : MonoBehaviour {
 
         if(GameManager.playerTeam.ships.Count != 0) {
             gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonView.Get(this).RPC("endTurn", RpcTarget.Others);
         }
     }
     

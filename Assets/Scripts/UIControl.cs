@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Contains the functions that are used by the UI to set ship actions, selected ship, attacks.
@@ -257,7 +258,7 @@ public class UIControl : MonoBehaviour
 
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
         }
-        
+
 
         //if (fadeObjective)
         //{
@@ -269,16 +270,25 @@ public class UIControl : MonoBehaviour
         //    fadeObjective = false;
         //}
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Connection: " + PhotonNetwork.IsConnected);
+            Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
+            Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
+            Debug.Log("In Room: " + PhotonNetwork.InRoom);
+        }
+
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
             foreach (Team t in gameManager.teams)
             {
                 if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                    return;
+                    break;
             }
             startTurn(1);
         }
         
+
     }
 
     [PunRPC]
@@ -465,9 +475,8 @@ public class UIControl : MonoBehaviour
             {
                 if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
                 {
-                    if (PhotonNetwork.IsConnected)
-                        PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
-                    else
+                    PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+                    if (!PhotonNetwork.IsMasterClient)
                         selected.setAction(selected.currentActionIndex, i, -1);
                     setActionImages(i);
 
@@ -489,9 +498,8 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            if (PhotonNetwork.IsConnected)
-                PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
-            else
+            PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+            if (!PhotonNetwork.IsMasterClient)
                 selected.setAction(selected.currentActionIndex, i, -1);
             setActionImages(i);
             if (selected.currentActionIndex < (selected.life - 1))

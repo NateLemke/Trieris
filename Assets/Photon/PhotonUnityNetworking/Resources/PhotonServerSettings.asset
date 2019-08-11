@@ -83,5 +83,7 @@ MonoBehaviour:
   - setTurnPhaseText
   - SendTargetInfo
   - SyncTargetChoice
+  - endTurn
+  - SendTeamTypeDropdown
   DisableAutoOpenWizard: 1
   ShowSettings: 1

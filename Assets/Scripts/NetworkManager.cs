@@ -28,6 +28,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToRoom = false;
         thisLobby = GameObject.Find("Canvas").gameObject;
         thisLobby = thisLobby.transform.Find("MultiplayerPanel/Lobby").gameObject;
+
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +43,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         //    BtnConnectMaster.gameObject.SetActive(!PhotonNetwork.IsConnected && !ConnectingToMaster);
         //if (BtnConnectRoom != null)
         //    BtnConnectRoom.gameObject.SetActive(PhotonNetwork.IsConnected && !ConnectingToMaster && !ConnectingToRoom);
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Connection: " + PhotonNetwork.IsConnected);
+            Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
+            Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
+            Debug.Log("In Room: " + PhotonNetwork.InRoom);
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            PhotonNetwork.Disconnect();
+        }
     }
 
     public void OnClickConnectToMaster()
@@ -110,6 +127,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         listAllPlayersInRoom();
     }
+    
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+    }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -179,7 +206,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ChangeTeamImage(int slot)
     {
         int inputTeamNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
-        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.All, slot, inputTeamNum);
+        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.Others, slot, inputTeamNum);
     }
 
     [PunRPC]
@@ -188,6 +215,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamNum;
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Team" + slot + "Int"] = (int)inputTeamNum;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+    }
+
+    public void ChangeTeamTypeDropdown(int slot)
+    {
+        if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 2)
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
+        else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1 && slot > PhotonNetwork.CountOfPlayers)
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
+        //int inputTeamTypeNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
+        //PhotonView.Get(this).RPC("SendTeamTypeDropdown", RpcTarget.Others, slot, inputTeamTypeNum);
+    }
+
+    [PunRPC]
+    public void SendTeamTypeDropdown(int slot, int inputTeamTypeNum)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = inputTeamTypeNum;
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + slot + "Type"] = (int)inputTeamTypeNum;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 

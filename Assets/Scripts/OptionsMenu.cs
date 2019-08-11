@@ -84,14 +84,15 @@ public class OptionsMenu : MonoBehaviour
         {
             yield return null;
         }
-        curCoroutine = DisconnectEnumerator();
-        StartCoroutine(curCoroutine);
+
+        GameManager.main.goToStartMenu();
+        //curCoroutine = DisconnectEnumerator();
+        //StartCoroutine(DisconnectEnumerator());
     }
 
     private IEnumerator DisconnectEnumerator()
     {
-        if (PhotonNetwork.IsConnected)
-            PhotonNetwork.Disconnect();
+        PhotonNetwork.Disconnect();
         while (PhotonNetwork.IsConnected)
             yield return null;
         GameManager.main.goToStartMenu();
@@ -101,7 +102,6 @@ public class OptionsMenu : MonoBehaviour
     {
         while (!confirmationValue)
         {
-            Debug.Log("blah2");
             yield return null;
         }
         GameManager.main.restartGame();
