@@ -229,7 +229,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = inputTeamTypeNum;
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-        ht["Team" + slot + "Int"] = (int)inputTeamTypeNum;
+        ht["Team" + slot + "Type"] = (int)inputTeamTypeNum;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 
