@@ -128,12 +128,16 @@ public class StartMenu : MonoBehaviourPun
     {
         for (int i = 1; i <= 6; i++)
         {
-            if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text != "Empty")
+            if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 0)
+            {
+                GameManager.teamTypes[i - 1] = (Team.Type)0;
+            }
+            else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1)
             {
                 Debug.Log("set team " + i + " to be human");
                 foreach (Player p in PhotonNetwork.PlayerList)
                 {
-                    if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
+                    if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
                     {
                         ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
                         ht["TeamNum"] = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
@@ -143,6 +147,10 @@ public class StartMenu : MonoBehaviourPun
                     }
                 }
                 GameManager.teamTypes[i - 1] = (Team.Type)1;
+            }
+            else
+            {
+                GameManager.teamTypes[i - 1] = (Team.Type)2;
             }
         }
         
