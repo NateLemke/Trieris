@@ -81,5 +81,7 @@ MonoBehaviour:
   - setRammingNotice
   - setRedirectNotice
   - setTurnPhaseText
+  - endTurn
+  - SendTeamTypeDropdown
   DisableAutoOpenWizard: 1
   ShowSettings: 1

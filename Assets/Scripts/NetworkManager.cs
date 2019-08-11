@@ -218,6 +218,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 
+    public void ChangeTeamTypeDropdown(int slot)
+    {
+        int inputTeamTypeNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
+        PhotonView.Get(this).RPC("SendTeamTypeDropdown", RpcTarget.All, slot, inputTeamTypeNum);
+    }
+
+    [PunRPC]
+    public void SendTeamTypeDropdown(int slot, int inputTeamTypeNum)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamTypeNum;
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + slot + "Int"] = (int)inputTeamTypeNum;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+    }
+
     //public override void OnCreatedRoom()
     //{
     //    base.OnCreatedRoom();
