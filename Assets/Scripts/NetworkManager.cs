@@ -127,6 +127,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         listAllPlayersInRoom();
     }
+    
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+    }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+    }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {

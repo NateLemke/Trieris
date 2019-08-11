@@ -52,16 +52,6 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         privateGame.GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Privacy"];
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
-    {
-        UpdatePlayerList();
-    }
-
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
-    {
-        UpdatePlayerList();
-    }
-
     public void UpdatePlayerList()
     {
         for (int i = 1; i <= 6; i++)
