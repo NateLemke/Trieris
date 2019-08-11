@@ -28,6 +28,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToRoom = false;
         thisLobby = GameObject.Find("Canvas").gameObject;
         thisLobby = thisLobby.transform.Find("MultiplayerPanel/Lobby").gameObject;
+
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.LeaveRoom();
+            PhotonNetwork.Disconnect();
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +43,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         //    BtnConnectMaster.gameObject.SetActive(!PhotonNetwork.IsConnected && !ConnectingToMaster);
         //if (BtnConnectRoom != null)
         //    BtnConnectRoom.gameObject.SetActive(PhotonNetwork.IsConnected && !ConnectingToMaster && !ConnectingToRoom);
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Connection: " + PhotonNetwork.IsConnected);
+            Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
+            Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
+            Debug.Log("In Room: " + PhotonNetwork.InRoom);
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            PhotonNetwork.Disconnect();
+        }
     }
 
     public void OnClickConnectToMaster()

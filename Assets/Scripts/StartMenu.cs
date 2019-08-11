@@ -208,15 +208,5 @@ public class StartMenu : MonoBehaviourPun
         //RoomHandling rh = mpPanel.transform.Find("RoomPanel").GetComponent<RoomHandling>();
         //rh.setLocalPlayerTeam();
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            foreach(Player p in PhotonNetwork.PlayerList)
-            {
-                Debug.Log((string)p.CustomProperties["TeamNum"]);
-            }
-        }
-    }
+    
 }
