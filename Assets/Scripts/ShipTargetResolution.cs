@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -61,10 +62,10 @@ public class ShipTargetResolution
         textObj.GetComponentInChildren<Text>().text = text;
         textObj.GetComponent<Canvas>().sortingOrder = 10;
 
-        Node targetNode = targets[0].getNode();
-        foreach (Ship s in targetNode.Ships) {
-            s.updateNodePos(0.6f,0.6f);
-        }
+        //Node targetNode = targets[0].getNode();
+        //foreach (Ship s in targetNode.Ships) {
+        //    s.updateNodePos(0.6f,0.6f);
+        //}
 
         while (chosenTarget == null) {
             yield return null;
@@ -75,9 +76,14 @@ public class ShipTargetResolution
         buttons.Clear();
         GameObject.Destroy(textObj);
         PhaseManager.chosenTarget = chosenTarget;
-        foreach (Ship s in targetNode.Ships) {
-            s.updateNodePos();
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(GameManager.main).RPC("SyncTargetChoice",RpcTarget.MasterClient,chosenTarget.Id,(int)chosenTarget.team.TeamFaction);
         }
+
+        //foreach (Ship s in targetNode.Ships) {
+        //    s.updateNodePos();
+        //}
     }
 
     /// <summary>

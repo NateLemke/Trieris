@@ -81,5 +81,7 @@ MonoBehaviour:
   - setRammingNotice
   - setRedirectNotice
   - setTurnPhaseText
+  - SendTargetInfo
+  - SyncTargetChoice
   DisableAutoOpenWizard: 1
   ShowSettings: 1

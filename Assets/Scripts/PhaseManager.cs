@@ -346,20 +346,28 @@ public static class PhaseManager
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
-            yield return tr.resolve();
-            if (chosenTarget == null) {
-                continue;
-            }
+            if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
+
+                SendTargetChoiceInfo(tr);
+
+                while (chosenTarget == null) {
+                    yield return null;
+                }
+
+            } else {
+                yield return tr.resolve();                
+            }       
+
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
             tr.attacker.needRammingChoice = false;
         }
-        while (GameManager.main.needRammingChoice()) {
-            if (!GameManager.playerTeam.needRammingChoice()) {
-                // waiting for another player to be ready
-            }
-            yield return null;
-        }
+        //while (GameManager.main.needRammingChoice()) {
+        //    if (!GameManager.playerTeam.needRammingChoice()) {
+        //        // waiting for another player to be ready
+        //    }
+        //    yield return null;
+        //}
     }
 
     /// <summary>
@@ -400,9 +408,17 @@ public static class PhaseManager
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
-            yield return tr.resolve();
-            if(chosenTarget == null) {
-                continue;
+
+            if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
+
+                SendTargetChoiceInfo(tr);
+
+                while (chosenTarget == null) {
+                    yield return null;
+                }
+
+            } else {
+                yield return tr.resolve();
             }
 
 
@@ -410,12 +426,12 @@ public static class PhaseManager
             tr.attacker.needCatapultChoice = false;
         }
 
-        while (GameManager.main.needCatapultChoice()) {
-            if (!GameManager.playerTeam.needCatapultChoice()) {
-                // waiting for another player to be ready
-            }
-            yield return null;
-        }
+        //while (GameManager.main.needCatapultChoice()) {
+        //    if (!GameManager.playerTeam.needCatapultChoice()) {
+        //        // waiting for another player to be ready
+        //    }
+        //    yield return null;
+        //}
     }
 
     /// <summary>
@@ -728,6 +744,20 @@ public static class PhaseManager
         if (!foundPair) {
             rammingResolutions.Add(new HeadOnRammingResolution(a,b,dmg));
         }
+    }
+
+    public static void SendTargetChoiceInfo(ShipTargetResolution tr) {
+
+        int shipID = tr.attacker.Id;
+        int teamID = (int)tr.attacker.team.TeamFaction;
+        int[] targetIds = new int[tr.targets.Count];
+        int[] targetTeamIDs = new int[tr.targets.Count];
+        for (int i = 0; i < tr.targets.Count; i++) {
+            targetIds[i] = tr.targets[i].Id;
+            targetTeamIDs[i] = (int)tr.targets[i].team.TeamFaction;
+        }
+        PhotonView.Get(GameManager.main).RPC("SendTargetInfo",RpcTarget.Others,shipID,teamID,targetIds,targetTeamIDs);
+
     }
 
 }

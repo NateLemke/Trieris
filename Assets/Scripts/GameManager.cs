@@ -894,4 +894,30 @@ public class GameManager : MonoBehaviour {
     public void subPhaseProgress(int index) {
         PhaseManager.subPhaseProgress(index);
     }
+
+    [PunRPC]
+    public void SendTargetInfo(int shipID,int teamID,int[] targetIDs,int[] targetTeamIDs) {
+
+        if(teamID != (int)playerTeam.TeamFaction) {
+            return;
+        }
+
+
+        Ship attacker = GetShip(shipID,teamID);
+        List<Ship> targets = new List<Ship>();
+        for(int i = 0; i < targetIDs.Length; i++) {
+            targets.Add(GetShip(targetIDs[i],targetTeamIDs[i]));
+        }
+
+        //List<ShipTargetResolution> targetChoices = new List<ShipTargetResolution>();
+
+        ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
+        targetChoice.resolve();
+    }
+
+    [PunRPC]
+    public void SyncTargetChoice(int shipID, int teamID) {
+        PhaseManager.chosenTarget = GetShip(shipID,teamID);
+    }
+
 }
