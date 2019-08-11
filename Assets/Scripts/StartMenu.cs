@@ -48,8 +48,8 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
-                //if (PhotonNetwork.IsMasterClient)
-                //    setPlayerTeams();
+                if (PhotonNetwork.IsMasterClient)
+                    setPlayerTeams();
 
                 for (int i = 1; i <= 6; i++)
                 {
