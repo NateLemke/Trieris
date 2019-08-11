@@ -348,6 +348,8 @@ public static class PhaseManager
             yield return SyncFocus(tr.attacker.Position);
             if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
 
+                chosenTarget = null;
+
                 SendTargetChoiceInfo(tr);
 
                 while (chosenTarget == null) {
@@ -410,6 +412,8 @@ public static class PhaseManager
             yield return SyncFocus(tr.attacker.Position);
 
             if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
+
+                chosenTarget = null;
 
                 SendTargetChoiceInfo(tr);
 
