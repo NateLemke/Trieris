@@ -206,7 +206,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ChangeTeamImage(int slot)
     {
         int inputTeamNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
-        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.All, slot, inputTeamNum);
+        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.Others, slot, inputTeamNum);
     }
 
     [PunRPC]
@@ -221,7 +221,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ChangeTeamTypeDropdown(int slot)
     {
         int inputTeamTypeNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
-        PhotonView.Get(this).RPC("SendTeamTypeDropdown", RpcTarget.All, slot, inputTeamTypeNum);
+        PhotonView.Get(this).RPC("SendTeamTypeDropdown", RpcTarget.Others, slot, inputTeamTypeNum);
     }
 
     [PunRPC]
