@@ -309,7 +309,7 @@ public class GameManager : MonoBehaviour {
         foreach (Team t in teams) {
             if (!t.aiTeam) {
                 foreach (Ship s in t.ships) {
-                    s.needRedirect = true;
+                    s.NeedRedirect = true;
                 }
             }
         }
@@ -606,7 +606,7 @@ public class GameManager : MonoBehaviour {
         playerTeam = teams[i];
         playerTeam.aiTeam = false;
         foreach (Ship ship in playerTeam.ships) {
-            ship.needRedirect = true;
+            ship.NeedRedirect = true;
         }
         revealRedirects();
         setAIDirections();
@@ -626,7 +626,7 @@ public class GameManager : MonoBehaviour {
 
                 int direction = ship.Ai.setNewShipDirection(ship);
                 ship.setFront(direction);
-                ship.needRedirect = false;
+                ship.NeedRedirect = false;
                 ship.setSpriteRotation();
             }
         }

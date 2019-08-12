@@ -362,7 +362,7 @@ public static class PhaseManager
 
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
-            tr.attacker.needRammingChoice = false;
+            tr.attacker.NeedRammingChoice = false;
         }
         //while (GameManager.main.needRammingChoice()) {
         //    if (!GameManager.playerTeam.needRammingChoice()) {
@@ -406,7 +406,7 @@ public static class PhaseManager
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
             if (!tr.attacker.CanFire || !tr.needsResolving()) {
-                tr.attacker.needCatapultChoice = false;
+                tr.attacker.NeedCatapultChoice = false;
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
@@ -427,7 +427,7 @@ public static class PhaseManager
 
 
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
-            tr.attacker.needCatapultChoice = false;
+            tr.attacker.NeedCatapultChoice = false;
         }
 
         //while (GameManager.main.needCatapultChoice()) {
@@ -512,11 +512,11 @@ public static class PhaseManager
         Ship focusTarget = null;
         foreach(Ship s in GameManager.main.getPlayerShips()) {
             
-            if (s.needCaptureChoice) {
+            if (s.NeedCaptureChoice) {
                 focusTarget = s;
                 s.getNode().Port.activatePrompt(s);
                 yield return SyncFocus(focusTarget.Position);
-                while (s.needCaptureChoice || s.needRedirect)
+                while (s.NeedCaptureChoice || s.NeedRedirect)
                     yield return null;
             }
         }
@@ -539,7 +539,7 @@ public static class PhaseManager
         setSubphaseText("choose redirects");
         Ship focusTarget = null;
         foreach (Ship s in GameManager.main.getPlayerShips()) {
-            if (s.needRedirect) {
+            if (s.NeedRedirect) {
                 focusTarget = s;
             }
         }

@@ -76,7 +76,7 @@ public class Team {
 
     public bool needRammingChoice() {
         foreach(Ship s in ships) {
-            if (s.needRammingChoice) {
+            if (s.NeedRammingChoice) {
                 return true;
             }
         }
@@ -85,7 +85,7 @@ public class Team {
 
     internal bool needCatapultChoice() {
         foreach (Ship s in ships) {
-            if (s.needCatapultChoice) {
+            if (s.NeedCatapultChoice) {
                 return true;
             }
         }
@@ -94,7 +94,7 @@ public class Team {
 
     internal bool needCaptureChoice() {
         foreach (Ship s in ships) {
-            if (s.needCaptureChoice) {
+            if (s.NeedCaptureChoice) {
                 return true;
             }
         }
@@ -103,7 +103,7 @@ public class Team {
 
     internal bool needRedirectChoice() {
         foreach(Ship s in ships) {
-            if (s.needRedirect) {
+            if (s.NeedRedirect) {
                 return true;
             }
         }

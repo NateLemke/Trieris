@@ -51,10 +51,37 @@ public class Ship : MonoBehaviour {
     private int id = -1;
     public TrierisAI Ai { get; set; }
 
-    public bool needRedirect = true;
-    public bool needCaptureChoice;
-    public bool needRammingChoice;
-    public bool needCatapultChoice;
+    public bool NeedRedirect {
+        get { return needRedirect; }
+        set { needRedirect = value;
+            PhotonView.Get(this).RPC("SyncNeedRedirect",RpcTarget.Others,value);
+        }
+    }
+    private bool needRedirect = true;
+
+    public bool NeedCaptureChoice {
+        get { return needCaptureChocie; }
+        set { needCaptureChocie = value;
+            PhotonView.Get(this).RPC("SyncNeedCaptureChoice",RpcTarget.Others,value);
+        }
+    }
+    private bool needCaptureChocie;
+
+    public bool NeedRammingChoice {
+        get { return needRammingChoice; }
+        set { needRammingChoice = value;
+            PhotonView.Get(this).RPC("SyncNeedRammingChoice",RpcTarget.Others,value);
+        }
+    }
+    private bool needRammingChoice;
+
+    public bool NeedCatapultChoice {
+        get { return needCatapultChoice; }
+        set { needCatapultChoice = value;
+            PhotonView.Get(this).RPC("SyncNeedCatapultChoice",RpcTarget.Others,value);
+        }
+    }
+    private bool needCatapultChoice;
 
     public Image icon;
 
@@ -388,7 +415,7 @@ public class Ship : MonoBehaviour {
             canAct = false;
             canActAfterCollision = false;
             //Debug.Log("----Ship crashed");
-            needRedirect = true;
+            NeedRedirect = true;
             movedForward = false;
             momentum = 0;
             if (PhotonNetwork.IsConnected)
@@ -531,11 +558,11 @@ public class Ship : MonoBehaviour {
     /// Used when the a player ship captures a port, activates port capture UI
     /// </summary>
     public void playerCapture() {
-        needCaptureChoice = false;
+        NeedCaptureChoice = false;
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
-        needRedirect = true;
+        NeedRedirect = true;
         portRepairCount = -5;
         activateRedirectNotification();
     }
@@ -739,7 +766,7 @@ public class Ship : MonoBehaviour {
     /// Disables this ship's redirect UI
     /// </summary>
     public void chooseDirection() {
-        if (needRedirect) {
+        if (NeedRedirect) {
             transform.Find("ShipUI/RedirectNotification").gameObject.SetActive(true);
         }
     }
@@ -764,7 +791,7 @@ public class Ship : MonoBehaviour {
         else
         {
             setDirection(newDirection);
-            needRedirect = false;
+            NeedRedirect = false;
         }
         Destroy(directionLabel);
         redirectUI.SetActive(false);
@@ -784,7 +811,7 @@ public class Ship : MonoBehaviour {
     [PunRPC]
     protected void setNeedRedirect(bool input)
     {
-        needRedirect = input;
+        NeedRedirect = input;
     }
 
      /// <summary>
@@ -1059,5 +1086,24 @@ public class Ship : MonoBehaviour {
         }
 
         setIcon(Sprites.main.SinkIcon);
+    }
+
+    [PunRPC]
+    private void SyncNeedRedirect(bool b) {
+        needRedirect = b;
+    }
+
+    [PunRPC]
+    private void SyncNeedCaptureChoice(bool b) {
+        needCaptureChocie = b;
+    }
+
+    [PunRPC]
+    private void SyncNeedRammingChoice(bool b) {
+        needRammingChoice = b;
+    }
+    [PunRPC]
+    private void SyncNeedCatapultChoice(bool b) {
+        needCatapultChoice = b;
     }
 }

@@ -148,7 +148,7 @@ public class GameLogic : MonoBehaviour {
 
 
                 //if (ship.needRedirect && ship.team != GameManager.playerTeam)
-                if (ship.needRedirect && ship.team.TeamType == Team.Type.ai)
+                if (ship.NeedRedirect && ship.team.TeamType == Team.Type.ai)
                 {
                     int newDirection = 0;
                     newDirection = ship.Ai.setNewShipDirection(ship);
@@ -284,7 +284,7 @@ public class GameLogic : MonoBehaviour {
                 }
                 if (!ship.belongsToAI() && enemyShipNo == 0)
                 {
-                    ship.needCaptureChoice = true;
+                    ship.NeedCaptureChoice = true;
                     
                     //Debug.Log(ship + " needs port capture choice");
                 }
@@ -327,7 +327,7 @@ public class GameLogic : MonoBehaviour {
                         if (!ship.belongsToAI()) {
                             
                             if(potentialCollisions.Count > 1) {
-                                ship.needRammingChoice = true;
+                                ship.NeedRammingChoice = true;
                                 PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
                                 PhaseManager.involvedInRamming.Add(ship);
                             } else {
@@ -393,7 +393,7 @@ public class GameLogic : MonoBehaviour {
                     if (potentialTargets.Count > 0) {
 
                         // need player ship catapult choice
-                        ship.needCatapultChoice = true;
+                        ship.NeedCatapultChoice = true;
 
                         PhaseManager.catapultTargetResolutions.Add(new ShipTargetResolution(ship,potentialTargets));
                     }
