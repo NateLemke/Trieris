@@ -105,20 +105,13 @@ public class GameManager : MonoBehaviour {
         }
         SyncShipPhotonID();
         SetPortTransparency();
+        promptInitialRedirets();
+        revealRedirects();
     }
 
     public void setupGame(int playerChoice) {
         Debug.Log(PhotonNetwork.LocalPlayer.NickName + " " + PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
         Debug.Log("Setup for " + playerChoice);
-        //if (!PhotonNetwork.IsConnected) {
-        //    for (int i = 0; i < 6; i++) {
-        //        if (i == playerChoice) {
-        //            teamTypes[i] = Team.Type.player;
-        //        } else {
-        //            teamTypes[i] = Team.Type.ai;
-        //        }
-        //    }
-        //}
 
         // TEMPORARY
         if (!PhotonNetwork.IsConnected)
@@ -181,21 +174,13 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();
-
-        
+        createShips();        
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-
-
             
             assignAI();
 
             setAIDirections();
-
-            //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            //    FindShips();
-            //}
 
             uiControl.PostTeamSelection();
         }
@@ -206,22 +191,8 @@ public class GameManager : MonoBehaviour {
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
         }
 
-
-        //if (PhotonNetwork.IsConnected) {
-        //    PhotonView photonView = PhotonView.Get(this);
-        //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
-        //}
-
-
-
-        //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-        promptInitialRedirets();
-        revealRedirects();
-
-
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-
     }
 
     public void SyncShipPhotonID() {
