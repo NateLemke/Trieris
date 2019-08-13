@@ -130,7 +130,8 @@ public class StartMenu : MonoBehaviourPun
         {
             if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 0)
             {
-                GameManager.teamTypes[i - 1] = (Team.Type)0;
+                Debug.Log("set team " + i + " to be ai");
+                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)0;
             }
             else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1)
             {
@@ -146,11 +147,12 @@ public class StartMenu : MonoBehaviourPun
                 //        break;
                 //    }
                 //}
-                GameManager.teamTypes[i - 1] = (Team.Type)1;
+                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)1;
             }
             else
             {
-                GameManager.teamTypes[i - 1] = (Team.Type)2;
+                Debug.Log("set team " + i + " to be off");
+                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)2;
             }
         }
         
