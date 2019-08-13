@@ -105,7 +105,9 @@ public class GameManager : MonoBehaviour {
         }
         SyncShipPhotonID();
         SetPortTransparency();
-        SetInitialRedirects();
+        //SetInitialRedirects();
+        PhotonView.Get(this).RPC("SetInitialRedirects",RpcTarget.All);
+
         PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.All);
         //RevealRedirects();
     }
@@ -321,12 +323,8 @@ public class GameManager : MonoBehaviour {
     //}
 
     public void SetInitialRedirects() {
-        foreach (Team t in teams) {
-            if (!t.aiTeam) {
-                foreach (Ship s in t.ships) {
-                    s.NeedRedirect = true;
-                }
-            }
+        foreach (Ship s in playerTeam.ships) {
+            s.NeedRedirect = true;
         }
     }
 

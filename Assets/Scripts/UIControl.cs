@@ -239,23 +239,14 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            rammingNotice.SetActive(gameManager.needRammingChoice());
-            redirectNotice.SetActive(gameManager.needRedirect());
-            captureNotice.SetActive(gameManager.needCaptureChoice());
-            catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-            turnPhase.text = "Turn: " + gameLogic.TurnIndex;
-            
-        }
-        else if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
-        {
-            PhotonView.Get(this).RPC("setRammingNotice", RpcTarget.All, gameManager.needRammingChoice());
-            PhotonView.Get(this).RPC("setRedirectNotice", RpcTarget.All, gameManager.needRedirect());
-            PhotonView.Get(this).RPC("setCaptureNotice", RpcTarget.All, gameManager.needCaptureChoice());
-            PhotonView.Get(this).RPC("setCatapultNotice", RpcTarget.All, gameManager.needCatapultChoice());
+        rammingNotice.SetActive(gameManager.needRammingChoice());
+        redirectNotice.SetActive(gameManager.needRedirect());
+        captureNotice.SetActive(gameManager.needCaptureChoice());
+        catapultNotice.SetActive(gameManager.needCatapultChoice());
 
+        if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
+        {
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
         }
 
