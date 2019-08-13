@@ -85,5 +85,9 @@ MonoBehaviour:
   - SyncTargetChoice
   - endTurn
   - SendTeamTypeDropdown
+  - SyncNeedCaptureChoice
+  - SyncNeedCatapultChoice
+  - SyncNeedRammingChoice
+  - SyncNeedRedirect
   DisableAutoOpenWizard: 1
   ShowSettings: 1
