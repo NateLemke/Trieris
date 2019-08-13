@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     public bool needCaptureChoice() {
 
-        return playerTeam.needRedirectChoice();
+        return playerTeam.needCaptureChoice();
 
         //foreach (Team t in teams) {
         //    if (t == null) {

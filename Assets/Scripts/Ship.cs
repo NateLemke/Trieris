@@ -60,12 +60,12 @@ public class Ship : MonoBehaviour {
     private bool needRedirect = true;
 
     public bool NeedCaptureChoice {
-        get { return needCaptureChocie; }
-        set { needCaptureChocie = value;
+        get { return needCaptureChoice; }
+        set { needCaptureChoice = value;
             PhotonView.Get(this).RPC("SyncNeedCaptureChoice",RpcTarget.Others,value);
         }
     }
-    private bool needCaptureChocie;
+    private bool needCaptureChoice;
 
     public bool NeedRammingChoice {
         get { return needRammingChoice; }
@@ -832,30 +832,30 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Draws debug gizmos for this ship
     /// </summary>
-//    private void OnDrawGizmos() {
-//
-//        Handles.color = Color.magenta;
-//
-//        if (needRedirect) {
-//            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
-//        }
-//
-//        if (!canAct) {
-//            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
-//        }
-//
-//        if (needCaptureChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
-//        }
-//
-//        if (needRammingChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
-//        }
-//
-//        if (needCatapultChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
-//        }
-//    }
+    private void OnDrawGizmos() {
+
+        Handles.color = Color.magenta;
+
+        if (needRedirect) {
+            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+        }
+
+        if (!canAct) {
+            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
+        }
+
+        if (needCaptureChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
+        }
+
+        if (needRammingChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
+        }
+
+        if (needCatapultChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+        }
+    }
 
     /// <summary>
     /// Initiates the combat damage text for this ship
@@ -1095,7 +1095,7 @@ public class Ship : MonoBehaviour {
 
     [PunRPC]
     private void SyncNeedCaptureChoice(bool b) {
-        needCaptureChocie = b;
+        needCaptureChoice = b;
     }
 
     [PunRPC]
