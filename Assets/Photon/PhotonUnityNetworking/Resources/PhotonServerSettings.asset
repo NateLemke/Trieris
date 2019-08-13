@@ -89,5 +89,6 @@ MonoBehaviour:
   - SyncNeedCatapultChoice
   - SyncNeedRammingChoice
   - SyncNeedRedirect
+  - RevealRedirects
   DisableAutoOpenWizard: 1
   ShowSettings: 1
