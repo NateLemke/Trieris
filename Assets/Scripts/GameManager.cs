@@ -245,30 +245,73 @@ public class GameManager : MonoBehaviour {
         gameLogic.executeTurn();
     }
 
-    public bool needRammingChoice() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
+    /// <summary>
+    /// Checks if any ships currently need to be redirected
+    /// </summary>
+    public bool needRedirect() {
 
-            if (!t.aiTeam && t.needRammingChoice()) {
-                return true;
-            }
-        }
-        return false;
+        return playerTeam.needRedirectChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+        //    if (t.aiTeam == false && t.needRedirectChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
+    }
+
+    /// <summary>
+    /// Checks if any ships need to make a port capture choice
+    /// </summary>
+    public bool needCaptureChoice() {
+
+        return playerTeam.needRedirectChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (t.aiTeam == false && t.needCaptureChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
+    }
+
+    public bool needRammingChoice() {
+
+        return playerTeam.needRammingChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (!t.aiTeam && t.needRammingChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
     }
 
     public bool needCatapultChoice() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
 
-            if (!t.aiTeam && t.needCatapultChoice()) {
-                return true;
-            }
-        }
-        return false;
+        return playerTeam.needCatapultChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (!t.aiTeam && t.needCatapultChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
     }
 
     //[PunRPC]
@@ -302,38 +345,7 @@ public class GameManager : MonoBehaviour {
         cameraLock = true;
     }
 
-    /// <summary>
-    /// Checks if any ships currently need to be redirected
-    /// </summary>
-    public bool needRedirect() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-            if (t.aiTeam == false && t.needRedirectChoice()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    /// <summary>
-    /// Checks if any ships need to make a port capture choice
-    /// </summary>
-    public bool needCaptureChoice() {
-
-
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-
-            if (t.aiTeam == false && t.needCaptureChoice()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 
