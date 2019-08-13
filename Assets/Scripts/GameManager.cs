@@ -105,8 +105,9 @@ public class GameManager : MonoBehaviour {
         }
         SyncShipPhotonID();
         SetPortTransparency();
-        promptInitialRedirets();
-        revealRedirects();
+        SetInitialRedirects();
+        PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.All);
+        //RevealRedirects();
     }
 
     public void setupGame(int playerChoice) {
@@ -276,7 +277,7 @@ public class GameManager : MonoBehaviour {
     //    teams[i].setTeamType((Team.Type) 1);
     //}
 
-    public void promptInitialRedirets() {
+    public void SetInitialRedirects() {
         foreach (Team t in teams) {
             if (!t.aiTeam) {
                 foreach (Ship s in t.ships) {
@@ -561,7 +562,8 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Sets the redirect UI to active for all ships that need a redirect choice made
     /// </summary>
-    public void revealRedirects() {
+    [PunRPC]
+    public void RevealRedirects() {
         foreach (Ship s in playerTeam.ships) {
             s.setRedirectUI(true);
         }
@@ -579,7 +581,7 @@ public class GameManager : MonoBehaviour {
         foreach (Ship ship in playerTeam.ships) {
             ship.NeedRedirect = true;
         }
-        revealRedirects();
+        RevealRedirects();
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
