@@ -322,6 +322,7 @@ public class GameManager : MonoBehaviour {
     //    teams[i].setTeamType((Team.Type) 1);
     //}
 
+    [PunRPC]
     public void SetInitialRedirects() {
         foreach (Ship s in playerTeam.ships) {
             s.NeedRedirect = true;

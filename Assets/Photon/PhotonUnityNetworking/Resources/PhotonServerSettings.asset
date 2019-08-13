@@ -90,5 +90,6 @@ MonoBehaviour:
   - SyncNeedRammingChoice
   - SyncNeedRedirect
   - RevealRedirects
+  - SetInitialRedirects
   DisableAutoOpenWizard: 1
   ShowSettings: 1
