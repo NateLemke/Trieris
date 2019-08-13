@@ -57,7 +57,7 @@ public class Ship : MonoBehaviour {
             PhotonView.Get(this).RPC("SyncNeedRedirect",RpcTarget.Others,value);
         }
     }
-    private bool needRedirect = true;
+    private bool needRedirect;
 
     public bool NeedCaptureChoice {
         get { return needCaptureChoice; }
