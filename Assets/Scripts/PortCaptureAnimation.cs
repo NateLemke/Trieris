@@ -31,35 +31,27 @@ public class PortCaptureAnimation : Animation {
         }
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("RunPortCaptureAnimation",RpcTarget.Others,(int)ship.team.TeamFaction,ship.Id);
+            PhotonView.Get(GameManager.main).RPC("RunPortCaptureAnimation",RpcTarget.Others,(int)ship.team.TeamFaction,(int)ship.getNode().Port.Team.TeamFaction, ship.Position.x,ship.Position.y);
         }
+        //ship.team.TeamFactionDebug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,(int)ship.getNode().Port.Team.TeamFaction,ship.getNode().Port.id,ship.Id);
 
-        yield return PhaseManager.focus(focusPoint);
+        yield return PhaseManager.SyncFocus(focusPoint);
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
-        GameObject animObj = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
-        animObj.GetComponent<Canvas>().sortingLayerName = "UILayer";
-        animObj.GetComponent<Canvas>().sortingOrder = 10;
-        Image lowerImg = animObj.transform.Find("LowerImage").GetComponent<Image>();
-        Image upperImg = animObj.transform.Find("LowerImage").transform.Find("UpperImage").GetComponent<Image>();
 
-        upperImg.sprite = ship.getNode().Port.Team.getPortSprite();
-        lowerImg.sprite = ship.team.getPortSprite();
+        PortCaptureAnimationObject animObj;
 
-        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
 
-        float timeStamp = Time.time + SpeedManager.CaptureSpeed;
+        GameObject go = GameObject.Instantiate(prefab,ship.getNode().getRealPos(),Quaternion.identity);
 
-        float fill = 1f;
+        animObj = go.GetComponent<PortCaptureAnimationObject>();
 
-        while(Time.time < timeStamp) {
-            fill = (timeStamp - Time.time) / SpeedManager.CaptureSpeed;
-            upperImg.fillAmount = fill;
-            yield return null;
-        }
-        upperImg.fillAmount = 0;
-        ship.getNode().Port.setTeam(ship.team);
-        
+        animObj.SetUpperImg( ship.getNode().Port.Team.getPortSprite());
+        animObj.SetLowerImg(ship.team.getPortSprite());
+            
 
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);
+
+        ship.getNode().Port.Team = ship.team;
 
         if (!GameManager.main.getPlayerShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
             int direction = ship.Ai.setNewShipDirection(ship);
@@ -67,8 +59,7 @@ public class PortCaptureAnimation : Animation {
             ship.setSpriteRotation();
         }
 
-        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
-        GameObject.Destroy(animObj);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);       
         GameManager.main.uiControl.updatePortsUI();
         yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
     }

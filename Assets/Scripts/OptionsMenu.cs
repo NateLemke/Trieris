@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using Photon.Realtime;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,7 +70,7 @@ public class OptionsMenu : MonoBehaviour
         curCoroutine = StartMenuEnumerator();
         StartCoroutine(curCoroutine);
     }
-
+    
     public void restartGame()
     {
         transform.Find("ConfirmationPanel").gameObject.SetActive(true);
@@ -80,9 +82,19 @@ public class OptionsMenu : MonoBehaviour
     {
         while (!confirmationValue)
         {
-            Debug.Log("blah1");
             yield return null;
         }
+
+        GameManager.main.goToStartMenu();
+        //curCoroutine = DisconnectEnumerator();
+        //StartCoroutine(DisconnectEnumerator());
+    }
+
+    private IEnumerator DisconnectEnumerator()
+    {
+        PhotonNetwork.Disconnect();
+        while (PhotonNetwork.IsConnected)
+            yield return null;
         GameManager.main.goToStartMenu();
     }
 
@@ -90,7 +102,6 @@ public class OptionsMenu : MonoBehaviour
     {
         while (!confirmationValue)
         {
-            Debug.Log("blah2");
             yield return null;
         }
         GameManager.main.restartGame();

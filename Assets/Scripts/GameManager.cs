@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    bool shipsSynced = false;
+    public bool shipsSynced = false;
 
     /// <summary>
     /// Creates teams, ports, and ships
@@ -104,6 +104,7 @@ public class GameManager : MonoBehaviour {
             }
         }
         SyncShipPhotonID();
+        SetPortTransparency();
     }
 
     public void setupGame(int playerChoice) {
@@ -808,13 +809,115 @@ public class GameManager : MonoBehaviour {
 
     [PunRPC]
     public void focus(float x,float y) {
-        StartCoroutine(PhaseManager.focus(new Vector2(x,y)));
+        StartCoroutine(PhaseManager.Focus(new Vector2(x,y)));
     }
     
     [PunRPC]
-    public void RunPortCaptureAnimation(int team, int shipID) {
-        Ship ship = GetShip(shipID,team);
-        PortCaptureAnimation anim = new PortCaptureAnimation(ship);
-        StartCoroutine(anim.playAnimation());
+    public void RunPortCaptureAnimation(int team1 , int team2 , float x, float y) {
+
+        //Ship ship = GetShip(shipID,team);
+
+        //Debug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,ship.team.TeamFaction,ship.getNode().Port.id,ship.Id);
+
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
+
+        PortCaptureAnimationObject animObj;
+
+        GameObject go = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.identity);
+
+        animObj = go.GetComponent<PortCaptureAnimationObject>();
+
+        animObj.SetLowerImg(teams[team1].getPortSprite());
+        animObj.SetUpperImg(teams[team2].getPortSprite());
+
     }
+
+    [PunRPC]
+    public void SetPortTeam(int portID, int teamId) {
+
+        board.ports[portID].Team = teams[teamId];
+    }
+
+    [PunRPC]
+    public void CreateRotationArrow(int team,float x,float y,float rotation,bool portTurn) {
+        GameObject prefab = Resources.Load<GameObject>("prefabs/RotationArrow");
+        GameObject arrow = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.Euler(0,0,rotation));
+        arrow.GetComponent<AnimArrow>().Initialize(teams[team]);
+        if (portTurn) {
+            arrow.transform.localScale = new Vector3(-1,1,1);
+        }
+    }
+
+    [PunRPC]
+    public void CreateMovementArrow(int team,float x,float y,float rotation,int momentum = 0,bool reverse = false) {
+        GameObject prefab = Resources.Load<GameObject>("prefabs/MovementArrow");
+        GameObject arrow = GameObject.Instantiate(prefab,new Vector3(x,y),Quaternion.Euler(0,0,rotation));
+        arrow.GetComponent<AnimArrow>().Initialize(teams[team],momentum);
+        if (reverse) {
+            arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
+        }        
+    }
+
+    void SyncPortTransparency() {
+        PhotonView.Get(this).RPC("SetPortTransparency",RpcTarget.Others);
+        SetPortTransparency();
+    }
+
+    [PunRPC]
+    public void SetPortTransparency() {
+        foreach (Port p in board.ports) {
+            p.setTransparency();
+        }
+    }
+
+    [PunRPC]
+    public void DisablePhaseUI() {
+        PhaseManager.DisablePhaseUI();
+    }
+
+    [PunRPC]
+    public void EnablePhaseUI() {
+        PhaseManager.EnablePhaseUI();
+    }
+
+    [PunRPC]
+    public void setSubphaseText(string s) {
+        PhaseManager.setSubphaseText(s);
+    }
+
+    [PunRPC]
+    public void updateText(int phase) {
+        PhaseManager.updateText(phase);
+    }
+
+    [PunRPC]
+    public void subPhaseProgress(int index) {
+        PhaseManager.subPhaseProgress(index);
+    }
+
+    [PunRPC]
+    public void SendTargetInfo(int shipID,int teamID,int[] targetIDs,int[] targetTeamIDs) {
+
+        if(teamID != (int)playerTeam.TeamFaction) {
+            return;
+        }
+
+
+        Ship attacker = GetShip(shipID,teamID);
+        List<Ship> targets = new List<Ship>();
+        for(int i = 0; i < targetIDs.Length; i++) {
+            targets.Add(GetShip(targetIDs[i],targetTeamIDs[i]));
+        }
+
+        //List<ShipTargetResolution> targetChoices = new List<ShipTargetResolution>();
+
+        ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
+        targetChoice.resolve();
+    }
+
+    [PunRPC]
+    public void SyncTargetChoice(int shipID, int teamID) {
+        PhaseManager.chosenTarget = GetShip(shipID,teamID);
+    }
+
 }

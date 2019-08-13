@@ -22,6 +22,10 @@ public class Port{
         set {
             team = value;
             setSprite(team);
+            if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+                PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.Others,id,(int)team.TeamFaction);
+            }
+            go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColor();
         }
     }
     private Team team;
@@ -63,7 +67,7 @@ public class Port{
             parent.name = "Ports";
         }
         go.transform.SetParent(parent.transform);
-        updateTransparency();
+        //updateTransparency();
     }
 
     public GameObject getGameObject()
@@ -76,11 +80,11 @@ public class Port{
     /// also changes the sprite and minimap sprite
     /// </summary>
     /// <param name="t"></param>
-    public void setTeam(Team t) {
-        team = t;
-        setSprite(team);
-        go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
-    }
+    //public void setTeam(Team t) {
+    //    team = t;
+    //    setSprite(team);
+    //    go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = t.getColor();
+    //}
 
     //public void setColor(Color color) {
     //    this.color = color;

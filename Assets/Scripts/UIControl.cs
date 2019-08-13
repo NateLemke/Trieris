@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Contains the functions that are used by the UI to set ship actions, selected ship, attacks.
@@ -238,12 +239,26 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-        rammingNotice.SetActive(gameManager.needRammingChoice());
-        redirectNotice.SetActive(gameManager.needRedirect());
-        captureNotice.SetActive(gameManager.needCaptureChoice());
-        catapultNotice.SetActive(gameManager.needCatapultChoice());
+        if (!PhotonNetwork.IsConnected)
+        {
+            rammingNotice.SetActive(gameManager.needRammingChoice());
+            redirectNotice.SetActive(gameManager.needRedirect());
+            captureNotice.SetActive(gameManager.needCaptureChoice());
+            catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-        turnPhase.text = "Turn: " + gameLogic.TurnIndex;
+            turnPhase.text = "Turn: " + gameLogic.TurnIndex;
+            
+        }
+        else if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
+        {
+            PhotonView.Get(this).RPC("setRammingNotice", RpcTarget.All, gameManager.needRammingChoice());
+            PhotonView.Get(this).RPC("setRedirectNotice", RpcTarget.All, gameManager.needRedirect());
+            PhotonView.Get(this).RPC("setCaptureNotice", RpcTarget.All, gameManager.needCaptureChoice());
+            PhotonView.Get(this).RPC("setCatapultNotice", RpcTarget.All, gameManager.needCatapultChoice());
+
+            PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
+        }
+
 
         //if (fadeObjective)
         //{
@@ -255,16 +270,55 @@ public class UIControl : MonoBehaviour
         //    fadeObjective = false;
         //}
 
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Connection: " + PhotonNetwork.IsConnected);
+            Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
+            Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
+            Debug.Log("In Room: " + PhotonNetwork.InRoom);
+        }
+
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
             foreach (Team t in gameManager.teams)
             {
                 if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                    return;
+                    break;
             }
             startTurn(1);
         }
         
+
+    }
+
+    [PunRPC]
+    public void setRammingNotice(bool input)
+    {
+        rammingNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setRedirectNotice(bool input)
+    {
+        redirectNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setCaptureNotice(bool input)
+    {
+        captureNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setCatapultNotice(bool input)
+    {
+        catapultNotice.SetActive(input);
+    }
+
+    [PunRPC]
+    public void setTurnPhaseText(int input)
+    {
+        turnPhase.text = "Turn: " + input;
     }
 
     /// <summary>
@@ -323,7 +377,7 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void onShipSelection() {
         if(selected != null) {
-            StartCoroutine(PhaseManager.focus(selected.Position));
+            StartCoroutine(PhaseManager.Focus(selected.Position));
             selected.setIconString(selected.getNumeralID());
         }
     }
@@ -396,7 +450,7 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            Debug.Log("Phase not == 4");
+            //Debug.Log("Phase not == 4");
         }
     }
     
@@ -421,9 +475,8 @@ public class UIControl : MonoBehaviour
             {
                 if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
                 {
-                    if (PhotonNetwork.IsConnected)
-                        PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
-                    else
+                    PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+                    if (!PhotonNetwork.IsMasterClient)
                         selected.setAction(selected.currentActionIndex, i, -1);
                     setActionImages(i);
 
@@ -445,9 +498,8 @@ public class UIControl : MonoBehaviour
         }
         else
         {
-            if (PhotonNetwork.IsConnected)
-                PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
-            else
+            PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
+            if (!PhotonNetwork.IsMasterClient)
                 selected.setAction(selected.currentActionIndex, i, -1);
             setActionImages(i);
             if (selected.currentActionIndex < (selected.life - 1))

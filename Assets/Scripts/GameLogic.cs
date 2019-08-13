@@ -76,18 +76,19 @@ public class GameLogic : MonoBehaviour {
             return false;
         } else {
             phaseIndex++;
-            PhaseManager.updateText();
+            PhaseManager.updateText(GameLogic.phaseIndex);
             executePhase(phaseIndex);
             return true;
         }
     }
 
+    [PunRPC]
     public void endTurn() {
         determineGameState();
 
         gameManager.uiControl.enableControls();
 
-        GameManager.main.uiControl.GoText.text = "START TURN";
+        
         PhaseManager.DisablePhaseUI();
         phaseIndex = 4;
         resetShips();
@@ -122,6 +123,11 @@ public class GameLogic : MonoBehaviour {
 
         if(GameManager.playerTeam.ships.Count != 0) {
             gameManager.uiControl.setSelection(gameManager.getHumanShips()[0].Id);
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonView.Get(this).RPC("endTurn", RpcTarget.Others);
         }
     }
     
@@ -330,6 +336,7 @@ public class GameLogic : MonoBehaviour {
                         } else {
                             chosenShip = ship.Ai.selectShip(potentialCollisions);
                         }
+                        Debug.LogFormat("Ship from team {0} rammed ship from team {1}",ship.team.TeamFaction,chosenShip.team.TeamFaction);
                         ship.ram(chosenShip);
                     }
                 }

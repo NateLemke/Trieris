@@ -33,7 +33,7 @@ public class HeadOnRammingResolution : RammingResolution {
 
         Vector3 midPoint = (shipA.Position + shipB.Position) / 2;
 
-        yield return PhaseManager.focus((shipA.Position + shipB.Position) / 2);
+        yield return PhaseManager.SyncFocus((shipA.Position + shipB.Position) / 2);
 
         shipA.setIcon(Sprites.main.AttackIcon);
         shipB.setIcon(Sprites.main.AttackIcon);

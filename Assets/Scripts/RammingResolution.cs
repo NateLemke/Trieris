@@ -31,7 +31,7 @@ public class RammingResolution : CombatResolution
             yield break;
         }
 
-        yield return PhaseManager.focus(shipA.getNode().getRealPos());
+        yield return PhaseManager.SyncFocus(shipA.getNode().getRealPos());
 
         shipA.SetIconAttack();
         shipB.SetIconAttack();
