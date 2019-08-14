@@ -51,10 +51,10 @@ public class StartMenu : MonoBehaviourPun
                 if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
 
-                for (int i = 1; i <= 6; i++)
-                {
-                    GameManager.teamTypes[i - 1] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
-                }
+                //for (int i = 1; i <= 6; i++)
+                //{
+                //    GameManager.teamTypes[i - 1] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
+                //}
                 SceneManager.LoadScene("GameScene");
             }
             else
@@ -128,14 +128,16 @@ public class StartMenu : MonoBehaviourPun
     {
         for (int i = 1; i <= 6; i++)
         {
-            if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 0)
-            {
-                Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be ai");
-                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)0;
-            }
-            else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1)
-            {
-                Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be human");
+            Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be " + (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value);
+            GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
+            //if(GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 0)
+            //{
+            //    Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be ai");
+            //    GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)0;
+            //}
+            //else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1)
+            //{
+                //Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be human");
                 //foreach (Player p in PhotonNetwork.PlayerList)
                 //{
                 //    if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
@@ -147,13 +149,13 @@ public class StartMenu : MonoBehaviourPun
                 //        break;
                 //    }
                 //}
-                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)1;
-            }
-            else
-            {
-                Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be off");
-                GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)2;
-            }
+                //GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)1;
+            //}
+            //else
+            //{
+                //Debug.Log("set team " + (Team.Faction)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be off");
+                //GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)2;
+            //}
         }
         
     }
