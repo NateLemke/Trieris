@@ -401,12 +401,12 @@ public class UIControl : MonoBehaviour
         }
         
         if (PhotonNetwork.IsMasterClient){
-                bool doesNeedRedirect = false;
+                bool canStart = true;
                 foreach(Team t in gameManager.teams){
-                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && t.needRedirectChoice())
-                        doesNeedRedirect = true;
+                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
+                        canStart = false;
                 }
-                if(!doesNeedRedirect)
+                if(canStart)
                     startTurn(1);
         }
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
