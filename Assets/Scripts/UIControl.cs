@@ -402,7 +402,7 @@ public class UIControl : MonoBehaviour
         
         if (PhotonNetwork.IsMasterClient){
                 bool doesNeedRedirect = false;
-                foreach(Team t in teams){
+                foreach(Team t in gameManager.teams){
                     if(!t.eliminated && t.TeamType == (Team.Type) 1 && t.needRedirectChoice())
                         doesNeedRedirect = true;
                 }
