@@ -140,16 +140,16 @@ public class GameManager : MonoBehaviour {
             {
                 switch(teamTypes[i]){
                     case (Team.Type) 2:
-                        Debug.Log("Team " + (i + 1) + " is off");
+                        Debug.Log("Team " + teams[i].TeamFaction + " is off");
                         teams[i].setTeamType((Team.Type)2);
                         break;
                     case (Team.Type) 1:
-                        Debug.Log("Team " + (i + 1) + " is human");
+                        Debug.Log("Team " + teams[i].TeamFaction + " is human");
                         teams[i].setTeamType((Team.Type)1);
                         break;
                     case (Team.Type) 0:
                     default:
-                        Debug.Log("Team " + (i + 1) + " is ai");
+                        Debug.Log("Team " + teams[i].TeamFaction + " is ai");
                         teams[i].setTeamType((Team.Type)0);
                         break;
                 }

@@ -124,7 +124,7 @@ public class StartMenu : MonoBehaviourPun
     /// <summary>
     /// Sets the teams that are currently assigned
     /// </summary>
-    private void setPlayerTeams()
+    public void setPlayerTeams()
     {
         for (int i = 1; i <= 6; i++)
         {
