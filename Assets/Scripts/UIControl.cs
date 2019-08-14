@@ -269,15 +269,15 @@ public class UIControl : MonoBehaviour
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
         }
 
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
-        {
-            foreach (Team t in gameManager.teams)
-            {
-                if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                    break;
-            }
-            startTurn(1);
-        }
+        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        //{
+        //    foreach (Team t in gameManager.teams)
+        //    {
+        //        if (t.TeamType == (Team.Type)1 && t.Ready == false)
+        //            break;
+        //    }
+        //    startTurn(1);
+        //}
         
 
     }
@@ -422,6 +422,15 @@ public class UIControl : MonoBehaviour
         if (PhotonNetwork.IsConnected && input == 0)
         {
             readyBtnClick();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                foreach (Team t in gameManager.teams)
+                {
+                    if (t.TeamType == (Team.Type)1 && t.Ready == false)
+                        break;
+                }
+                startTurn(1);
+            }
             return;
         }
         if (GameManager.main.needRedirect()) {

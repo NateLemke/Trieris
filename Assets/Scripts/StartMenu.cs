@@ -48,8 +48,8 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
-                //if (PhotonNetwork.IsMasterClient)
-                //    setPlayerTeams();
+                if (PhotonNetwork.IsMasterClient)
+                    setPlayerTeams();
 
                 for (int i = 1; i <= 6; i++)
                 {
@@ -135,20 +135,18 @@ public class StartMenu : MonoBehaviourPun
             }
             else if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value == 1)
             {
-                Debug.Log("set team " + GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " to be human");
-                /*
-                foreach (Player p in PhotonNetwork.PlayerList)
-                {
-                    if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
-                    {
-                        ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
-                        ht["TeamNum"] = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
-                        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
-                        Debug.Log("Set " + p.NickName + " to " + p.CustomProperties["TeamNum"]);
-                        break;
-                    }
-                }
-                */
+                Debug.Log("set team " + i + " to be human");
+                //foreach (Player p in PhotonNetwork.PlayerList)
+                //{
+                //    if (GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text == p.NickName)
+                //    {
+                //        ExitGames.Client.Photon.Hashtable ht = p.CustomProperties;
+                //        ht["TeamNum"] = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
+                //        PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
+                //        Debug.Log("Set " + p.NickName + " to " + p.CustomProperties["TeamNum"]);
+                //        break;
+                //    }
+                //}
                 GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)1;
             }
             else
