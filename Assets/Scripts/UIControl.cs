@@ -400,7 +400,15 @@ public class UIControl : MonoBehaviour
             }
         }
         
-
+        if (PhotonNetwork.IsMasterClient){
+                bool doesNeedRedirect = false;
+                foreach(Team t in teams){
+                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && t.needRedirectChoice())
+                        doesNeedRedirect = true;
+                }
+                if(!doesNeedRedirect)
+                    startTurn(1);
+        }
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
         //if (GameManager.playerTeam.Ready) {
         //    foreach(Team t in gameManager.getHumanTeams()) {
@@ -422,15 +430,7 @@ public class UIControl : MonoBehaviour
         if (PhotonNetwork.IsConnected && input == 0)
         {
             readyBtnClick();
-            if (PhotonNetwork.IsMasterClient)
-            {
-                foreach (Team t in gameManager.teams)
-                {
-                    if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                        break;
-                }
-                startTurn(1);
-            }
+            
             return;
         }
         if (GameManager.main.needRedirect()) {

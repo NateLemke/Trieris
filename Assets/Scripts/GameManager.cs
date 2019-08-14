@@ -257,7 +257,7 @@ public class GameManager : MonoBehaviour {
     /// Checks if any ships currently need to be redirected
     /// </summary>
     public bool needRedirect() {
-
+        
         return playerTeam.needRedirectChoice();
 
         //foreach (Team t in teams) {
