@@ -269,6 +269,16 @@ public class UIControl : MonoBehaviour
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
         }
 
+        if (PhotonNetwork.IsMasterClient){
+                bool canStart = true;
+                foreach(Team t in gameManager.teams){
+                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
+                        canStart = false;
+                }
+                if(canStart)
+                    startTurn(1);
+        }
+
         //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         //{
         //    foreach (Team t in gameManager.teams)
@@ -400,15 +410,7 @@ public class UIControl : MonoBehaviour
             }
         }
         
-        if (PhotonNetwork.IsMasterClient){
-                bool canStart = true;
-                foreach(Team t in gameManager.teams){
-                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
-                        canStart = false;
-                }
-                if(canStart)
-                    startTurn(1);
-        }
+        
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
         //if (GameManager.playerTeam.Ready) {
         //    foreach(Team t in gameManager.getHumanTeams()) {
