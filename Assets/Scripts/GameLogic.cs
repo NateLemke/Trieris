@@ -327,6 +327,11 @@ public class GameLogic : MonoBehaviour {
                         if (!ship.belongsToAI()) {
                             
                             if(potentialCollisions.Count > 1) {
+                                Debug.Log("Collisions: ");
+                                foreach(Ship s in potentialCollisions){
+                                    Debug.Log(s.team.TeamFaction + " " + s.Id);
+                                }
+                                Debug.Log("Collison List End");
                                 ship.NeedRammingChoice = true;
                                 PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
                                 PhaseManager.involvedInRamming.Add(ship);
