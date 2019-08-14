@@ -138,14 +138,20 @@ public class GameManager : MonoBehaviour {
         {
             for (int i = 0; i < teamTypes.Length; i++)
             {
-                if (teamTypes[i] == (Team.Type)1)
-                {
-                    Debug.Log("Team " + (i + 1) + " is human");
-                    teams[i].setTeamType((Team.Type)1);
-                }
-                else
-                {
-                    teams[i].setTeamType((Team.Type)0);
+                switch(teamTypes[i]){
+                    case (Team.Type) 2:
+                        Debug.Log("Team " + (i + 1) + " is off");
+                        teams[i].setTeamType((Team.Type)2);
+                        break;
+                    case (Team.Type) 1:
+                        Debug.Log("Team " + (i + 1) + " is human");
+                        teams[i].setTeamType((Team.Type)1);
+                        break;
+                    case (Team.Type) 0:
+                    default:
+                        Debug.Log("Team " + (i + 1) + " is ai");
+                        teams[i].setTeamType((Team.Type)0);
+                        break;
                 }
             }
 
