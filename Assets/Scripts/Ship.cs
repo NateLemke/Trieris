@@ -54,7 +54,9 @@ public class Ship : MonoBehaviour {
     public bool NeedRedirect {
         get { return needRedirect; }
         set { needRedirect = value;
-            PhotonView.Get(this).RPC("SyncNeedRedirect",RpcTarget.Others,value);
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedRedirect",RpcTarget.Others,value);
+            }
         }
     }
     private bool needRedirect;
@@ -62,7 +64,9 @@ public class Ship : MonoBehaviour {
     public bool NeedCaptureChoice {
         get { return needCaptureChoice; }
         set { needCaptureChoice = value;
-            PhotonView.Get(this).RPC("SyncNeedCaptureChoice",RpcTarget.Others,value);
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedCaptureChoice",RpcTarget.Others,value);
+            }
         }
     }
     private bool needCaptureChoice;
@@ -70,7 +74,9 @@ public class Ship : MonoBehaviour {
     public bool NeedRammingChoice {
         get { return needRammingChoice; }
         set { needRammingChoice = value;
-            PhotonView.Get(this).RPC("SyncNeedRammingChoice",RpcTarget.Others,value);
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedRammingChoice",RpcTarget.Others,value);
+            }
         }
     }
     private bool needRammingChoice;
@@ -78,7 +84,9 @@ public class Ship : MonoBehaviour {
     public bool NeedCatapultChoice {
         get { return needCatapultChoice; }
         set { needCatapultChoice = value;
-            PhotonView.Get(this).RPC("SyncNeedCatapultChoice",RpcTarget.Others,value);
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedCatapultChoice",RpcTarget.Others,value);
+            }
         }
     }
     private bool needCatapultChoice;
