@@ -67,14 +67,14 @@ public class MovementAnimation : Animation {
             startTime = Time.time;
             updatePositionOnNode(startNode);
             if(startNode.Port != null) {
-                startNode.Port.setTransparency();
+                startNode.Port.TransparencyCheck();
             }
             while (Time.time - startTime < SpeedManager.ActionSpeed) {
                 ship.transform.position = Vector3.Lerp(startNode.getRealPos(),endPos,(Time.time - startTime) / SpeedManager.ActionSpeed);
                 yield return null;
             }
             if(endNode.Port != null) {
-                endNode.Port.setTransparency();
+                endNode.Port.TransparencyCheck();
             }
             complete = true;
             ship.transform.position = endPos;

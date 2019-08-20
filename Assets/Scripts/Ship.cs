@@ -539,7 +539,7 @@ public class Ship : MonoBehaviour {
         }
 
         if (this.getNode().Port != null) {
-            this.getNode().Port.setTransparency();
+            this.getNode().Port.TransparencyCheck();
         }
 
         foreach (Ship s in this.getNode().Ships) {

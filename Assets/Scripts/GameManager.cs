@@ -801,10 +801,10 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void CheckPortTransparency(int portID) {
+    public void SetPortTransparency(int portID, float alpha) {
         foreach(Port p in board.ports) {
             if(p.id == portID) {
-                p.setTransparency();
+                p.SetTransparency(alpha);
                 return;
             }
         }
@@ -870,7 +870,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SetPortTransparency() {
         foreach (Port p in board.ports) {
-            p.setTransparency();
+            p.TransparencyCheck();
         }
     }
 
