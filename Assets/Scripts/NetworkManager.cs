@@ -31,6 +31,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsConnected)
         {
+            Debug.Log("Entered Room");
             PhotonNetwork.LeaveRoom();
             PhotonNetwork.Disconnect();
         }
@@ -102,6 +103,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         Hashtable privacyHash = new Hashtable() { { "Privacy" , false } };
         PhotonNetwork.JoinRandomRoom(privacyHash, 0);
+    }
+
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        Debug.Log("Left Room");
     }
 
     public void OnClickLeaveRoom()
