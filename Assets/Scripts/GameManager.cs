@@ -193,6 +193,10 @@ public class GameManager : MonoBehaviour {
 
             uiControl.PostTeamSelection();
 
+
+        }
+
+        if (!PhotonNetwork.IsConnected) {
             SetPortTransparency();
 
             SetInitialRedirects();

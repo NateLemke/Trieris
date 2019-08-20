@@ -113,7 +113,7 @@ public class Port {
 
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("CheckPortTransparency",RpcTarget.Others,id,alpha);
+            PhotonView.Get(GameManager.main).RPC("SetPortTransparency",RpcTarget.Others,id,alpha);
         }
     }
 
