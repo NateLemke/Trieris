@@ -136,7 +136,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
-        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+        if(SceneManager.GetActiveScene().name.Contains("StartMenu")){
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+            Debug.Log(newPlayer.NickName + " has left the room");
+        }else{
+            Debug.Log(newPlayer.NickName + " has left the game");
+        }
+        
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
