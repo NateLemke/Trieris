@@ -108,6 +108,14 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
         Debug.Log(newPlayer.NickName + " has left the game");
     }
 
+    
+    public override void OnMasterClientSwitched	(Player newMasterClient){
+        base.OnMasterClientSwitched(newMasterClient);
+        Debug.Log("Master Client has left");
+        Debug.Log("New Master is " + newMasterClient.NickName);
+    }	
+
+
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         base.OnPlayerEnteredRoom(newPlayer);
