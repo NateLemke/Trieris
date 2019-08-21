@@ -8,7 +8,7 @@ using UnityEngine;
 /// Purpose:    This class manages the OptionMenu that shows when the game is paused. From this menu the player can
 ///                 quit the game or view the game's instructions.
 /// </summary>
-public class OptionsMenu : MonoBehaviour
+public class OptionsMenu : MonoBehaviourPunCallbacks
 {
     // reference to the scene's main UI overlay canvas
     GameObject overlay;
@@ -44,7 +44,8 @@ public class OptionsMenu : MonoBehaviour
     /// </summary>
     public void OpenOptions()
     {
-        Time.timeScale = 0;
+        if(!PhotonNetwork.IsConnected)
+            Time.timeScale = 0;
     }
 
     /// <summary>
@@ -84,12 +85,15 @@ public class OptionsMenu : MonoBehaviour
         {
             yield return null;
         }
-
-        GameManager.main.goToStartMenu();
+        PhotonNetwork.Disconnect();
         //curCoroutine = DisconnectEnumerator();
         //StartCoroutine(DisconnectEnumerator());
     }
 
+    public override void OnDisconnected(DisconnectCause cause){
+        base.OnDisconnected(cause);
+        GameManager.main.goToStartMenu();
+    }
     private IEnumerator DisconnectEnumerator()
     {
         PhotonNetwork.Disconnect();

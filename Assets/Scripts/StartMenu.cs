@@ -28,7 +28,8 @@ public class StartMenu : MonoBehaviourPun
         else
         {
             Debug.Log(RpcTarget.All);
-            PhotonView.Get(this).RPC("startGame", RpcTarget.All);
+            startGame();
+            //PhotonView.Get(this).RPC("startGame", RpcTarget.All);
         }
     }
 

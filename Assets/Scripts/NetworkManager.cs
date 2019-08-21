@@ -51,17 +51,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            PhotonNetwork.Disconnect();
-        }
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    PhotonNetwork.Disconnect();
+        //}
     }
 
     public void OnClickConnectToMaster()
     {
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField").gameObject.GetComponent<InputField>().text;
-        //PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "v1";
 
         ConnectingToMaster = true;
