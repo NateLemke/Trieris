@@ -267,6 +267,10 @@ public class UIControl : MonoBehaviour
             Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
+            Debug.Log("Players: " + PhotonNetwork.PlayerList.Count);
+            foreach(Player p in PhotonNetwork.PlayerList){
+                Debug.Log(p.NickName);
+            }
         }
 
         if (PhotonNetwork.IsMasterClient){

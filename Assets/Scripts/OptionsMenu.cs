@@ -93,6 +93,7 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom(){
         base.OnLeftRoom();
+        Debug.Log("You have left the room.");
         PhotonNetwork.Disconnect();
     }
 
