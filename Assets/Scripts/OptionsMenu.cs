@@ -104,11 +104,13 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
+        base.OnPlayerLeftRoom(newPlayer);
         Debug.Log(newPlayer.NickName + " has left the game");
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        base.OnPlayerEnteredRoom(newPlayer);
         Debug.Log(newPlayer.NickName + " has entered the game");
     }
 
