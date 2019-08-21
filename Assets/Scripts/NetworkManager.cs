@@ -136,23 +136,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
-        if(SceneManager.GetActiveScene().name.Contains("StartMenu")){
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
-            Debug.Log(newPlayer.NickName + " has left the room");
-        }else{
-            Debug.Log(newPlayer.NickName + " has left the game");
-        }
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+        Debug.Log(newPlayer.NickName + " has left the room");
         
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        if(SceneManager.GetActiveScene().name.Contains("StartMenu")){
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
-            Debug.Log(newPlayer.NickName + " has entered the room");
-        }else{
-            Debug.Log(newPlayer.NickName + " has entered the game");
-        }
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+        Debug.Log(newPlayer.NickName + " has entered the room");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
