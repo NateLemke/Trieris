@@ -85,7 +85,8 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
         {
             yield return null;
         }
-        PhotonNetwork.Disconnect();
+        PhotonNetwork.LeaveRoom();
+        //PhotonNetwork.Disconnect();
         //curCoroutine = DisconnectEnumerator();
         //StartCoroutine(DisconnectEnumerator());
     }
@@ -94,6 +95,12 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
         base.OnDisconnected(cause);
         GameManager.main.goToStartMenu();
     }
+
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        PhotonNetwork.Disconnect();
+    }
+
     private IEnumerator DisconnectEnumerator()
     {
         PhotonNetwork.Disconnect();
