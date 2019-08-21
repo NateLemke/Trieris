@@ -192,6 +192,16 @@ public class GameManager : MonoBehaviour {
             setAIDirections();
 
             uiControl.PostTeamSelection();
+
+
+        }
+
+        if (!PhotonNetwork.IsConnected) {
+            SetPortTransparency();
+
+            SetInitialRedirects();
+
+            RevealRedirects();
         }
 
         if (PhotonNetwork.IsConnected) {
@@ -257,7 +267,9 @@ public class GameManager : MonoBehaviour {
     /// Checks if any ships currently need to be redirected
     /// </summary>
     public bool needRedirect() {
-        
+        if (playerTeam == null) {
+            return false;
+        }
         return playerTeam.needRedirectChoice();
 
         //foreach (Team t in teams) {
@@ -275,7 +287,9 @@ public class GameManager : MonoBehaviour {
     /// Checks if any ships need to make a port capture choice
     /// </summary>
     public bool needCaptureChoice() {
-
+        if (playerTeam == null) {
+            return false;
+        }
         return playerTeam.needCaptureChoice();
 
         //foreach (Team t in teams) {
@@ -291,7 +305,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool needRammingChoice() {
-
+        if(playerTeam == null) {
+            return false;
+        }
         return playerTeam.needRammingChoice();
 
         //foreach (Team t in teams) {
@@ -307,7 +323,9 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool needCatapultChoice() {
-
+        if (playerTeam == null) {
+            return false;
+        }
         return playerTeam.needCatapultChoice();
 
         //foreach (Team t in teams) {
@@ -787,10 +805,10 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void CheckPortTransparency(int portID) {
+    public void SetPortTransparency(int portID, float alpha) {
         foreach(Port p in board.ports) {
             if(p.id == portID) {
-                p.setTransparency();
+                p.SetTransparency(alpha);
                 return;
             }
         }
@@ -856,7 +874,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SetPortTransparency() {
         foreach (Port p in board.ports) {
-            p.setTransparency();
+            p.TransparencyCheck();
         }
     }
 

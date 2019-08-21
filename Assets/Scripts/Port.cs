@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Port{
+public class Port {
 
     public int id;
 
@@ -22,7 +22,7 @@ public class Port{
         set {
             team = value;
             setSprite(team);
-            if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
                 PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.Others,id,(int)team.TeamFaction);
             }
             go.transform.Find("MinimapSprite").GetComponent<SpriteRenderer>().color = team.getColor();
@@ -62,7 +62,7 @@ public class Port{
         spriteRenderer.sprite = IsCapital ? t.CapitalSprite : t.PortSprite;
         go.name = IsCapital ? t.ToString() + " captial" : "port";
         GameObject parent;
-        if((parent = GameObject.Find("Ports")) == null) {
+        if ((parent = GameObject.Find("Ports")) == null) {
             parent = GameObject.Instantiate(new GameObject());
             parent.name = "Ports";
         }
@@ -70,8 +70,7 @@ public class Port{
         //updateTransparency();
     }
 
-    public GameObject getGameObject()
-    {
+    public GameObject getGameObject() {
         return go;
     }
 
@@ -102,22 +101,25 @@ public class Port{
     /// <summary>
     /// Checks if a ship is present on the node and sets the sprite to be transparent if so
     /// </summary>
-    public void setTransparency() {
-        updateTransparency();
+    public void TransparencyCheck() {
+
+        float alpha;
+        if (node.getNumberOfShips() == 0) {
+            alpha = 1;
+        } else {
+            alpha = 0.5f;
+        }
+        SetTransparency(alpha);
+
 
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("CheckPortTransparency",RpcTarget.Others,id);
+            PhotonView.Get(GameManager.main).RPC("SetPortTransparency",RpcTarget.Others,id,alpha);
         }
-        
     }
 
-    void updateTransparency() {
+    public void SetTransparency(float alpha) {
         Color c = spriteRenderer.color;
-        if (node.getNumberOfShips() == 0) {
-            c.a = 1;
-        } else {
-            c.a = 0.5f;
-        }
+        c.a = alpha;
         spriteRenderer.color = c;
     }
 
