@@ -106,9 +106,11 @@ public class GameManager : MonoBehaviour {
         SyncShipPhotonID();
         SetPortTransparency();
         //SetInitialRedirects();
-        PhotonView.Get(this).RPC("SetInitialRedirects",RpcTarget.All);
+        PhotonView.Get(this).RPC("SetInitialRedirects",RpcTarget.Others);
+        SetInitialRedirects();
 
-        PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.All);
+        PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.Others);
+        RevealRedirects();
         //RevealRedirects();
     }
 
