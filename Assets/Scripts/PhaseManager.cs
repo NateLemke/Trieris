@@ -504,26 +504,21 @@ public static class PhaseManager
     /// <returns></returns>
     public static IEnumerator portCaptureChoice() {
         subPhaseProgress(subPhaseIndex);
-        if (!GameManager.main.needCaptureChoice()) {
-            yield break;
-        }
+
         setSubphaseText("choose port capture");
 
-        Ship focusTarget = null;
-        foreach(Ship s in GameManager.main.getPlayerShips()) {
+        //Ship focusTarget = null;
+        //foreach(Ship s in GameManager.main.getPlayerShips()) {
             
-            if (s.NeedCaptureChoice) {
-                focusTarget = s;
-                s.getNode().Port.activatePrompt(s);
-                yield return SyncFocus(focusTarget.Position);
-                while (s.NeedCaptureChoice || s.NeedRedirect)
-                    yield return null;
-            }
-        }
-        while (GameManager.main.needCaptureChoice()) {
-            if (!GameManager.playerTeam.needCaptureChoice()) {
-                // waiting for another player to be ready
-            }
+        //    if (s.NeedCaptureChoice) {
+        //        focusTarget = s;
+        //        s.getNode().Port.activatePrompt(s);
+        //        yield return SyncFocus(focusTarget.Position);
+        //        while (s.NeedCaptureChoice || s.NeedRedirect)
+        //            yield return null;
+        //    }
+        //}
+        while (GameManager.main.HumanNeedsCaptureChoice()) {
             yield return null;
         }
     }
@@ -533,21 +528,19 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator resolveRedirects() {
-        if (!GameManager.main.needRedirect()) {
+        if (!GameManager.main.HumanNeedsRedirect()) {
             yield break;
         }
         setSubphaseText("choose redirects");
-        Ship focusTarget = null;
-        foreach (Ship s in GameManager.main.getPlayerShips()) {
-            if (s.NeedRedirect) {
-                focusTarget = s;
-            }
-        }
-        yield return SyncFocus(focusTarget.Position);
-        while (GameManager.main.needRedirect()) {
-            if (!GameManager.playerTeam.needRedirectChoice()) {
-                // waiting for another player
-            }
+        //Ship focusTarget = null;
+        //foreach (Ship s in GameManager.main.getPlayerShips()) {
+        //    if (s.NeedRedirect) {
+        //        focusTarget = s;
+        //    }
+        //}
+        //yield return SyncFocus(focusTarget.Position);
+        while (GameManager.main.HumanNeedsRedirect()) {
+
             yield return null;
         }        
     }

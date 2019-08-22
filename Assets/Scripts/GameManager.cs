@@ -928,4 +928,21 @@ public class GameManager : MonoBehaviour {
         PhaseManager.chosenTarget = GetShip(shipID,teamID);
     }
 
+    public bool HumanNeedsRedirect() {
+        foreach(Team t in teams) {
+            if (t.needRedirectChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HumanNeedsCaptureChoice() {
+        foreach (Team t in teams) {
+            if (t.needCaptureChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
