@@ -920,7 +920,7 @@ public class GameManager : MonoBehaviour {
         //List<ShipTargetResolution> targetChoices = new List<ShipTargetResolution>();
 
         ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
-        targetChoice.resolve();
+        StartCoroutine(targetChoice.resolve());        
     }
 
     [PunRPC]
