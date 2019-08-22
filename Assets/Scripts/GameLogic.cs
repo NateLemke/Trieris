@@ -395,8 +395,8 @@ public class GameLogic : MonoBehaviour {
                 else if(potentialTargets.Count == 1) {
                     chosenShip = potentialTargets[0];
                 } else if (!ship.belongsToAI()) {
-                    if (potentialTargets.Count > 0) {
-
+                    if (potentialTargets.Count > 1) {
+                        Debug.Log("Catapult target choice detected in GameLogic");
                         // need player ship catapult choice
                         ship.NeedCatapultChoice = true;
 
