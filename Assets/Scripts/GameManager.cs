@@ -907,18 +907,18 @@ public class GameManager : MonoBehaviour {
     public void SendTargetInfo(int shipID,int teamID,int[] targetIDs,int[] targetTeamIDs) {
 
         if(teamID != (int)playerTeam.TeamFaction) {
+            Debug.Log("Player's team does NOT own this multi target choice");
             return;
         }
 
+        Debug.Log("Player's team DOES own this multi target choice");
 
         Ship attacker = GetShip(shipID,teamID);
         List<Ship> targets = new List<Ship>();
         for(int i = 0; i < targetIDs.Length; i++) {
             targets.Add(GetShip(targetIDs[i],targetTeamIDs[i]));
         }
-
-        //List<ShipTargetResolution> targetChoices = new List<ShipTargetResolution>();
-
+        
         ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
         StartCoroutine(targetChoice.resolve());        
     }

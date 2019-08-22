@@ -407,11 +407,14 @@ public static class PhaseManager
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
             if (!tr.attacker.CanFire || !tr.needsResolving()) {
                 tr.attacker.NeedCatapultChoice = false;
+                Debug.Log("Catapult choice does not need resolution");
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
 
             if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
+
+                Debug.Log("Non master-client player has a catapult choice");
 
                 chosenTarget = null;
 
