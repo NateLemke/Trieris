@@ -658,7 +658,7 @@ public static class PhaseManager
         }
 
         if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-            Debug.Log("Non master client running subPhaseProgress function");
+            Debug.Log("Non master client running subPhaseProgress function with index "+index);
         }
 
         GameObject outline = GameObject.Find("subphaseoutline");
@@ -676,8 +676,8 @@ public static class PhaseManager
             default:
             subPhaseIcon = null;break;
         }
-        if(subPhaseIcon == null) {
-            Debug.LogError("no valid subphase icon found");
+        if(subPhaseIcon ?? false) {
+            Debug.LogError("no valid subphase icon found, index "+index);
         }
 
         outline.transform.position = subPhaseIcon.transform.position;
