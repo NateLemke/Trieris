@@ -22,9 +22,44 @@ public class Ship : MonoBehaviour {
     public const int MAX_HEALTH = 4;
 
     public int currentActionIndex;
-    public int catapultIndex;
-    public int catapultDirection;
 
+    private int CatapultIndex;
+    public int catapultIndex
+    {
+        get{
+            return CatapultIndex;
+        }
+        set { 
+            CatapultIndex = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncCatapultIndex",RpcTarget.Others,value);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void SyncCatapultIndex(int input){
+        CatapultIndex = input;
+    }
+
+    private int CatapultDirection;
+    public int catapultDirection
+    {
+        get{
+            return CatapultDirection;
+        }
+        set { 
+            CatapultDirection = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncCatapultDirection",RpcTarget.Others,value);
+            }
+        }
+    }
+
+    [PunRPC]
+    public void SyncCatapultDirection(int input){
+        CatapultDirection = input;
+    }
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
     bool canFire;
