@@ -676,9 +676,6 @@ public static class PhaseManager
             default:
             subPhaseIcon = null;break;
         }
-        if(subPhaseIcon ?? false) {
-            Debug.LogError("no valid subphase icon found, index "+index);
-        }
 
         outline.transform.position = subPhaseIcon.transform.position;
         subPhaseIndex++;
