@@ -69,6 +69,7 @@ MonoBehaviour:
   - CreateMovementArrow
   - CreateRotationArrow
   - setLocalPlayerTeam
+  - playerCapture
   - SetPortTransparency
   - setSubphaseText
   - updateText

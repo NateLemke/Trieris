@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -45,7 +46,7 @@ public class InputControl : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
+    void Start() {
 
         moveRate = (moveRate == 0) ? 1 : moveRate;
         zoomRate = (zoomRate == 0) ? 1 : zoomRate;
@@ -68,13 +69,16 @@ public class InputControl : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         cameraUpdate();
-        
-        if (Input.GetKeyDown(KeyCode.F)) {
-            SpeedManager.toggleFastAnimations();
+
+        if (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient) {
+            if (Input.GetKeyDown(KeyCode.F)) {
+                SpeedManager.toggleFastAnimations();
+            }
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                SpeedManager.skipSubPhase();
+            }
         }
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            SpeedManager.skipSubPhase();
-        }
+
         if (GameManager.playerTeam != null) {
             shipSelectUpdate();
         }

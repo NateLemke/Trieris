@@ -84,6 +84,8 @@ public static class PhaseManager
         involvedInRamming.Clear();
         captureAnimations.Clear();
         catapultResolutions.Clear();
+        catapultTargetResolutions.Clear();
+        rammingTargetResolutions.Clear();
 
         GameManager.main.gameLogic.postAnimation();
         
@@ -655,6 +657,9 @@ public static class PhaseManager
             PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
         }
 
+        if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+            Debug.Log("Non master client running subPhaseProgress function with index "+index);
+        }
 
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
@@ -671,10 +676,6 @@ public static class PhaseManager
             default:
             subPhaseIcon = null;break;
         }
-        if(subPhaseIcon == null) {
-            Debug.LogError("no valid subphase icon found");
-        }
-
 
         outline.transform.position = subPhaseIcon.transform.position;
         subPhaseIndex++;
