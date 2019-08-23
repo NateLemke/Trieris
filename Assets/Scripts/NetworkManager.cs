@@ -31,6 +31,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsConnected)
         {
+            Debug.Log("Entered Room");
             PhotonNetwork.LeaveRoom();
             PhotonNetwork.Disconnect();
         }
@@ -50,17 +51,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
         }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            PhotonNetwork.Disconnect();
-        }
+        //if (Input.GetKeyDown(KeyCode.F))
+        //{
+        //    PhotonNetwork.Disconnect();
+        //}
     }
 
     public void OnClickConnectToMaster()
     {
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.NickName = GameObject.Find("Canvas/MenuPanel/Menu/MP/InputField").gameObject.GetComponent<InputField>().text;
-        //PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "v1";
 
         ConnectingToMaster = true;
@@ -104,6 +105,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRandomRoom(privacyHash, 0);
     }
 
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        Debug.Log("Left Room");
+    }
+
     public void OnClickLeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
@@ -131,11 +137,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+        Debug.Log(newPlayer.NickName + " has left the room");
+        
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
+        Debug.Log(newPlayer.NickName + " has entered the room");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)

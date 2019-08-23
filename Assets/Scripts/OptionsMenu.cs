@@ -8,7 +8,7 @@ using UnityEngine;
 /// Purpose:    This class manages the OptionMenu that shows when the game is paused. From this menu the player can
 ///                 quit the game or view the game's instructions.
 /// </summary>
-public class OptionsMenu : MonoBehaviour
+public class OptionsMenu : MonoBehaviourPunCallbacks
 {
     // reference to the scene's main UI overlay canvas
     GameObject overlay;
@@ -44,7 +44,8 @@ public class OptionsMenu : MonoBehaviour
     /// </summary>
     public void OpenOptions()
     {
-        Time.timeScale = 0;
+        if(!PhotonNetwork.IsConnected)
+            Time.timeScale = 0;
     }
 
     /// <summary>
@@ -84,10 +85,41 @@ public class OptionsMenu : MonoBehaviour
         {
             yield return null;
         }
-
-        GameManager.main.goToStartMenu();
+        PhotonNetwork.LeaveRoom();
+        //PhotonNetwork.Disconnect();
         //curCoroutine = DisconnectEnumerator();
         //StartCoroutine(DisconnectEnumerator());
+    }
+
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        Debug.Log("You have left the room.");
+        PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause){
+        base.OnDisconnected(cause);
+        GameManager.main.goToStartMenu();
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerLeftRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has left the game");
+    }
+
+    
+    public override void OnMasterClientSwitched	(Player newMasterClient){
+        base.OnMasterClientSwitched(newMasterClient);
+        Debug.Log("Master Client has left");
+        Debug.Log("New Master is " + newMasterClient.NickName);
+    }	
+
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has entered the game");
     }
 
     private IEnumerator DisconnectEnumerator()

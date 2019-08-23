@@ -84,6 +84,8 @@ public static class PhaseManager
         involvedInRamming.Clear();
         captureAnimations.Clear();
         catapultResolutions.Clear();
+        catapultTargetResolutions.Clear();
+        rammingTargetResolutions.Clear();
 
         GameManager.main.gameLogic.postAnimation();
         
@@ -362,7 +364,7 @@ public static class PhaseManager
 
             tr.attacker.ram(chosenTarget);
             yield return rammingResolutions[rammingResolutions.Count-1].resolve();
-            tr.attacker.needRammingChoice = false;
+            tr.attacker.NeedRammingChoice = false;
         }
         //while (GameManager.main.needRammingChoice()) {
         //    if (!GameManager.playerTeam.needRammingChoice()) {
@@ -406,12 +408,15 @@ public static class PhaseManager
 
         foreach(ShipTargetResolution tr in catapultTargetResolutions) {
             if (!tr.attacker.CanFire || !tr.needsResolving()) {
-                tr.attacker.needCatapultChoice = false;
+                tr.attacker.NeedCatapultChoice = false;
+                Debug.Log("Catapult choice does not need resolution");
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
 
             if (PhotonNetwork.IsConnected && (int)tr.attacker.team.TeamFaction != (int)GameManager.playerFaction) {
+
+                Debug.Log("Non master-client player has a catapult choice");
 
                 chosenTarget = null;
 
@@ -427,7 +432,7 @@ public static class PhaseManager
 
 
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
-            tr.attacker.needCatapultChoice = false;
+            tr.attacker.NeedCatapultChoice = false;
         }
 
         //while (GameManager.main.needCatapultChoice()) {
@@ -504,26 +509,21 @@ public static class PhaseManager
     /// <returns></returns>
     public static IEnumerator portCaptureChoice() {
         subPhaseProgress(subPhaseIndex);
-        if (!GameManager.main.needCaptureChoice()) {
-            yield break;
-        }
+
         setSubphaseText("choose port capture");
 
-        Ship focusTarget = null;
-        foreach(Ship s in GameManager.main.getPlayerShips()) {
+        //Ship focusTarget = null;
+        //foreach(Ship s in GameManager.main.getPlayerShips()) {
             
-            if (s.needCaptureChoice) {
-                focusTarget = s;
-                s.getNode().Port.activatePrompt(s);
-                yield return SyncFocus(focusTarget.Position);
-                while (s.needCaptureChoice || s.needRedirect)
-                    yield return null;
-            }
-        }
-        while (GameManager.main.needCaptureChoice()) {
-            if (!GameManager.playerTeam.needCaptureChoice()) {
-                // waiting for another player to be ready
-            }
+        //    if (s.NeedCaptureChoice) {
+        //        focusTarget = s;
+        //        s.getNode().Port.activatePrompt(s);
+        //        yield return SyncFocus(focusTarget.Position);
+        //        while (s.NeedCaptureChoice || s.NeedRedirect)
+        //            yield return null;
+        //    }
+        //}
+        while (GameManager.main.HumanNeedsCaptureChoice()) {
             yield return null;
         }
     }
@@ -533,21 +533,19 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator resolveRedirects() {
-        if (!GameManager.main.needRedirect()) {
+        if (!GameManager.main.HumanNeedsRedirect()) {
             yield break;
         }
         setSubphaseText("choose redirects");
-        Ship focusTarget = null;
-        foreach (Ship s in GameManager.main.getPlayerShips()) {
-            if (s.needRedirect) {
-                focusTarget = s;
-            }
-        }
-        yield return SyncFocus(focusTarget.Position);
-        while (GameManager.main.needRedirect()) {
-            if (!GameManager.playerTeam.needRedirectChoice()) {
-                // waiting for another player
-            }
+        //Ship focusTarget = null;
+        //foreach (Ship s in GameManager.main.getPlayerShips()) {
+        //    if (s.NeedRedirect) {
+        //        focusTarget = s;
+        //    }
+        //}
+        //yield return SyncFocus(focusTarget.Position);
+        while (GameManager.main.HumanNeedsRedirect()) {
+
             yield return null;
         }        
     }
@@ -659,6 +657,9 @@ public static class PhaseManager
             PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
         }
 
+        if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+            Debug.Log("Non master client running subPhaseProgress function");
+        }
 
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
@@ -678,7 +679,6 @@ public static class PhaseManager
         if(subPhaseIcon == null) {
             Debug.LogError("no valid subphase icon found");
         }
-
 
         outline.transform.position = subPhaseIcon.transform.position;
         subPhaseIndex++;

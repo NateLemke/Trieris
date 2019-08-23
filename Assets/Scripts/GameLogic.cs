@@ -148,7 +148,7 @@ public class GameLogic : MonoBehaviour {
 
 
                 //if (ship.needRedirect && ship.team != GameManager.playerTeam)
-                if (ship.needRedirect && ship.team.TeamType == Team.Type.ai)
+                if (ship.NeedRedirect && ship.team.TeamType == Team.Type.ai)
                 {
                     int newDirection = 0;
                     newDirection = ship.Ai.setNewShipDirection(ship);
@@ -284,7 +284,7 @@ public class GameLogic : MonoBehaviour {
                 }
                 if (!ship.belongsToAI() && enemyShipNo == 0)
                 {
-                    ship.needCaptureChoice = true;
+                    ship.NeedCaptureChoice = true;
                     
                     //Debug.Log(ship + " needs port capture choice");
                 }
@@ -327,7 +327,12 @@ public class GameLogic : MonoBehaviour {
                         if (!ship.belongsToAI()) {
                             
                             if(potentialCollisions.Count > 1) {
-                                ship.needRammingChoice = true;
+                                Debug.Log("Collisions: ");
+                                foreach(Ship s in potentialCollisions){
+                                    Debug.Log(s.team.TeamFaction + " " + s.Id);
+                                }
+                                Debug.Log("Collison List End");
+                                ship.NeedRammingChoice = true;
                                 PhaseManager.rammingTargetResolutions.Add(new ShipTargetResolution(ship,potentialCollisions));
                                 PhaseManager.involvedInRamming.Add(ship);
                             } else {
@@ -336,7 +341,7 @@ public class GameLogic : MonoBehaviour {
                         } else {
                             chosenShip = ship.Ai.selectShip(potentialCollisions);
                         }
-                        Debug.LogFormat("Ship from team {0} rammed ship from team {1}",ship.team.TeamFaction,chosenShip.team.TeamFaction);
+                        //Debug.LogFormat("Ship from team {0} rammed ship from team {1}",ship.team.TeamFaction,chosenShip.team.TeamFaction);
                         ship.ram(chosenShip);
                     }
                 }
@@ -390,10 +395,10 @@ public class GameLogic : MonoBehaviour {
                 else if(potentialTargets.Count == 1) {
                     chosenShip = potentialTargets[0];
                 } else if (!ship.belongsToAI()) {
-                    if (potentialTargets.Count > 0) {
-
+                    if (potentialTargets.Count > 1) {
+                        Debug.Log("Catapult target choice detected in GameLogic");
                         // need player ship catapult choice
-                        ship.needCatapultChoice = true;
+                        ship.NeedCatapultChoice = true;
 
                         PhaseManager.catapultTargetResolutions.Add(new ShipTargetResolution(ship,potentialTargets));
                     }

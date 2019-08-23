@@ -51,10 +51,45 @@ public class Ship : MonoBehaviour {
     private int id = -1;
     public TrierisAI Ai { get; set; }
 
-    public bool needRedirect = true;
-    public bool needCaptureChoice;
-    public bool needRammingChoice;
-    public bool needCatapultChoice;
+    public bool NeedRedirect {
+        get { return needRedirect; }
+        set { needRedirect = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedRedirect",RpcTarget.Others,value);
+            }
+        }
+    }
+    private bool needRedirect;
+
+    public bool NeedCaptureChoice {
+        get { return needCaptureChoice; }
+        set { needCaptureChoice = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedCaptureChoice",RpcTarget.Others,value);
+            }
+        }
+    }
+    private bool needCaptureChoice;
+
+    public bool NeedRammingChoice {
+        get { return needRammingChoice; }
+        set { needRammingChoice = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedRammingChoice",RpcTarget.Others,value);
+            }
+        }
+    }
+    private bool needRammingChoice;
+
+    public bool NeedCatapultChoice {
+        get { return needCatapultChoice; }
+        set { needCatapultChoice = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncNeedCatapultChoice",RpcTarget.Others,value);
+            }
+        }
+    }
+    private bool needCatapultChoice;
 
     public Image icon;
 
@@ -388,7 +423,7 @@ public class Ship : MonoBehaviour {
             canAct = false;
             canActAfterCollision = false;
             //Debug.Log("----Ship crashed");
-            needRedirect = true;
+            NeedRedirect = true;
             movedForward = false;
             momentum = 0;
             if (PhotonNetwork.IsConnected)
@@ -504,7 +539,7 @@ public class Ship : MonoBehaviour {
         }
 
         if (this.getNode().Port != null) {
-            this.getNode().Port.setTransparency();
+            this.getNode().Port.TransparencyCheck();
         }
 
         foreach (Ship s in this.getNode().Ships) {
@@ -757,7 +792,7 @@ public class Ship : MonoBehaviour {
     /// Disables this ship's redirect UI
     /// </summary>
     public void chooseDirection() {
-        if (needRedirect) {
+        if (NeedRedirect) {
             transform.Find("ShipUI/RedirectNotification").gameObject.SetActive(true);
         }
     }
@@ -782,7 +817,7 @@ public class Ship : MonoBehaviour {
         else
         {
             setDirection(newDirection);
-            needRedirect = false;
+            NeedRedirect = false;
         }
         Destroy(directionLabel);
         redirectUI.SetActive(false);
@@ -802,7 +837,7 @@ public class Ship : MonoBehaviour {
     [PunRPC]
     protected void setNeedRedirect(bool input)
     {
-        needRedirect = input;
+        NeedRedirect = input;
     }
 
      /// <summary>
@@ -823,30 +858,30 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Draws debug gizmos for this ship
     /// </summary>
-//    private void OnDrawGizmos() {
-//
-//        Handles.color = Color.magenta;
-//
-//        if (needRedirect) {
-//            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
-//        }
-//
-//        if (!canAct) {
-//            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
-//        }
-//
-//        if (needCaptureChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
-//        }
-//
-//        if (needRammingChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
-//        }
-//
-//        if (needCatapultChoice) {
-//            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
-//        }
-//    }
+    private void OnDrawGizmos() {
+
+        Handles.color = Color.magenta;
+
+        if (needRedirect) {
+            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+        }
+
+        if (!canAct) {
+            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
+        }
+
+        if (needCaptureChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
+        }
+
+        if (needRammingChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
+        }
+
+        if (needCatapultChoice) {
+            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+        }
+    }
 
     /// <summary>
     /// Initiates the combat damage text for this ship
@@ -1077,5 +1112,24 @@ public class Ship : MonoBehaviour {
         }
 
         setIcon(Sprites.main.SinkIcon);
+    }
+
+    [PunRPC]
+    private void SyncNeedRedirect(bool b) {
+        needRedirect = b;
+    }
+
+    [PunRPC]
+    private void SyncNeedCaptureChoice(bool b) {
+        needCaptureChoice = b;
+    }
+
+    [PunRPC]
+    private void SyncNeedRammingChoice(bool b) {
+        needRammingChoice = b;
+    }
+    [PunRPC]
+    private void SyncNeedCatapultChoice(bool b) {
+        needCatapultChoice = b;
     }
 }

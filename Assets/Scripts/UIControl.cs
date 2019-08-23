@@ -239,23 +239,14 @@ public class UIControl : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (!PhotonNetwork.IsConnected)
-        {
-            rammingNotice.SetActive(gameManager.needRammingChoice());
-            redirectNotice.SetActive(gameManager.needRedirect());
-            captureNotice.SetActive(gameManager.needCaptureChoice());
-            catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-            turnPhase.text = "Turn: " + gameLogic.TurnIndex;
-            
-        }
-        else if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
-        {
-            PhotonView.Get(this).RPC("setRammingNotice", RpcTarget.All, gameManager.needRammingChoice());
-            PhotonView.Get(this).RPC("setRedirectNotice", RpcTarget.All, gameManager.needRedirect());
-            PhotonView.Get(this).RPC("setCaptureNotice", RpcTarget.All, gameManager.needCaptureChoice());
-            PhotonView.Get(this).RPC("setCatapultNotice", RpcTarget.All, gameManager.needCatapultChoice());
+        rammingNotice.SetActive(gameManager.needRammingChoice());
+        redirectNotice.SetActive(gameManager.needRedirect());
+        captureNotice.SetActive(gameManager.needCaptureChoice());
+        catapultNotice.SetActive(gameManager.needCatapultChoice());
 
+        if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
+        {
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
         }
 
@@ -276,17 +267,32 @@ public class UIControl : MonoBehaviour
             Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
+            Debug.Log("Is Master: " + PhotonNetwork.IsMasterClient);
+            Debug.Log("Players: " + PhotonNetwork.PlayerList.Length);
+            foreach(Player p in PhotonNetwork.PlayerList){
+                Debug.Log(p.NickName);
+            }
         }
 
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
-        {
-            foreach (Team t in gameManager.teams)
-            {
-                if (t.TeamType == (Team.Type)1 && t.Ready == false)
-                    break;
-            }
-            startTurn(1);
+        if (PhotonNetwork.IsMasterClient){
+                bool canStart = true;
+                foreach(Team t in gameManager.teams){
+                    if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
+                        canStart = false;
+                }
+                if(canStart)
+                    startTurn(1);
         }
+
+        //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        //{
+        //    foreach (Team t in gameManager.teams)
+        //    {
+        //        if (t.TeamType == (Team.Type)1 && t.Ready == false)
+        //            break;
+        //    }
+        //    startTurn(1);
+        //}
         
 
     }
@@ -409,7 +415,7 @@ public class UIControl : MonoBehaviour
             }
         }
         
-
+        
         //GameManager.playerTeam.Ready = !GameManager.playerTeam.Ready;
         //if (GameManager.playerTeam.Ready) {
         //    foreach(Team t in gameManager.getHumanTeams()) {
@@ -431,6 +437,7 @@ public class UIControl : MonoBehaviour
         if (PhotonNetwork.IsConnected && input == 0)
         {
             readyBtnClick();
+            
             return;
         }
         if (GameManager.main.needRedirect()) {

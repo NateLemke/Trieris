@@ -74,7 +74,7 @@ public class PortPrompt : MonoBehaviour{
     public void accept()
     {
         foreach (Ship s in currentShip.getNode().Ships)
-            s.needCaptureChoice = false;
+            s.NeedCaptureChoice = false;
 
         // needs to be changed for multiplayer
         //GameManager.PortsCaptured++;
@@ -90,7 +90,7 @@ public class PortPrompt : MonoBehaviour{
     public void decline()
     {        
         portPromptPanel.SetActive(false);
-        currentShip.needCaptureChoice = false;
+        currentShip.NeedCaptureChoice = false;
         GameManager.main.StartCoroutine(declineAnimation());
     }
 
@@ -110,12 +110,12 @@ public class PortPrompt : MonoBehaviour{
     static IEnumerator acceptAnimation(Ship s) {
         yield return new PortCaptureAnimation(s).playAnimation();
         foreach (Ship ps in GameManager.main.getPlayerShips()) {
-            if (ps.needCaptureChoice) {
+            if (ps.NeedCaptureChoice) {
                 yield return PhaseManager.SyncFocus(ps.Position);
                 break;
             }
         }
-        s.needCaptureChoice = false;
+        s.NeedCaptureChoice = false;
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class PortPrompt : MonoBehaviour{
     static IEnumerator declineAnimation() {
         yield return new WaitForSeconds(0.5f);
         foreach (Ship ps in GameManager.main.getPlayerShips()) {
-            if (ps.needCaptureChoice) {
+            if (ps.NeedCaptureChoice) {
                 yield return PhaseManager.SyncFocus(ps.Position);
                 break;
             }

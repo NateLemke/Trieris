@@ -105,20 +105,18 @@ public class GameManager : MonoBehaviour {
         }
         SyncShipPhotonID();
         SetPortTransparency();
+        //SetInitialRedirects();
+        PhotonView.Get(this).RPC("SetInitialRedirects",RpcTarget.Others);
+        SetInitialRedirects();
+
+        PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.Others);
+        RevealRedirects();
+        //RevealRedirects();
     }
 
     public void setupGame(int playerChoice) {
         Debug.Log(PhotonNetwork.LocalPlayer.NickName + " " + PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
         Debug.Log("Setup for " + playerChoice);
-        //if (!PhotonNetwork.IsConnected) {
-        //    for (int i = 0; i < 6; i++) {
-        //        if (i == playerChoice) {
-        //            teamTypes[i] = Team.Type.player;
-        //        } else {
-        //            teamTypes[i] = Team.Type.ai;
-        //        }
-        //    }
-        //}
 
         // TEMPORARY
         if (!PhotonNetwork.IsConnected)
@@ -142,14 +140,20 @@ public class GameManager : MonoBehaviour {
         {
             for (int i = 0; i < teamTypes.Length; i++)
             {
-                if (teamTypes[i] == (Team.Type)1)
-                {
-                    Debug.Log("Team " + (i + 1) + " is human");
-                    teams[i].setTeamType((Team.Type)1);
-                }
-                else
-                {
-                    teams[i].setTeamType((Team.Type)0);
+                switch(teamTypes[i]){
+                    case (Team.Type) 2:
+                        Debug.Log("Team " + teams[i].TeamFaction + " is off");
+                        teams[i].setTeamType((Team.Type)2);
+                        break;
+                    case (Team.Type) 1:
+                        Debug.Log("Team " + teams[i].TeamFaction + " is human");
+                        teams[i].setTeamType((Team.Type)1);
+                        break;
+                    case (Team.Type) 0:
+                    default:
+                        Debug.Log("Team " + teams[i].TeamFaction + " is ai");
+                        teams[i].setTeamType((Team.Type)0);
+                        break;
                 }
             }
 
@@ -181,23 +185,25 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();
-
-        
+        createShips();        
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-
-
             
             assignAI();
 
             setAIDirections();
 
-            //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            //    FindShips();
-            //}
-
             uiControl.PostTeamSelection();
+
+
+        }
+
+        if (!PhotonNetwork.IsConnected) {
+            SetPortTransparency();
+
+            SetInitialRedirects();
+
+            RevealRedirects();
         }
 
         if (PhotonNetwork.IsConnected) {
@@ -206,22 +212,8 @@ public class GameManager : MonoBehaviour {
             PhotonNetwork.LocalPlayer.SetCustomProperties(ht);
         }
 
-
-        //if (PhotonNetwork.IsConnected) {
-        //    PhotonView photonView = PhotonView.Get(this);
-        //    photonView.RPC("CopyTeams",RpcTarget.All,teams);
-        //}
-
-
-
-        //uiControl.setTeam((int)PhotonNetwork.LocalPlayer.CustomProperties["TeamInt"]);
-        promptInitialRedirets();
-        revealRedirects();
-
-
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
-
     }
 
     public void SyncShipPhotonID() {
@@ -273,30 +265,81 @@ public class GameManager : MonoBehaviour {
         gameLogic.executeTurn();
     }
 
-    public bool needRammingChoice() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-
-            if (!t.aiTeam && t.needRammingChoice()) {
-                return true;
-            }
+    /// <summary>
+    /// Checks if any ships currently need to be redirected
+    /// </summary>
+    public bool needRedirect() {
+        if (playerTeam == null) {
+            return false;
         }
-        return false;
+        return playerTeam.needRedirectChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+        //    if (t.aiTeam == false && t.needRedirectChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
+    }
+
+    /// <summary>
+    /// Checks if any ships need to make a port capture choice
+    /// </summary>
+    public bool needCaptureChoice() {
+        if (playerTeam == null) {
+            return false;
+        }
+        return playerTeam.needCaptureChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (t.aiTeam == false && t.needCaptureChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
+    }
+
+    public bool needRammingChoice() {
+        if(playerTeam == null) {
+            return false;
+        }
+        return playerTeam.needRammingChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (!t.aiTeam && t.needRammingChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
     }
 
     public bool needCatapultChoice() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-
-            if (!t.aiTeam && t.needCatapultChoice()) {
-                return true;
-            }
+        if (playerTeam == null) {
+            return false;
         }
-        return false;
+        return playerTeam.needCatapultChoice();
+
+        //foreach (Team t in teams) {
+        //    if (t == null) {
+        //        continue;
+        //    }
+
+        //    if (!t.aiTeam && t.needCatapultChoice()) {
+        //        return true;
+        //    }
+        //}
+        //return false;
     }
 
     //[PunRPC]
@@ -305,13 +348,10 @@ public class GameManager : MonoBehaviour {
     //    teams[i].setTeamType((Team.Type) 1);
     //}
 
-    public void promptInitialRedirets() {
-        foreach (Team t in teams) {
-            if (!t.aiTeam) {
-                foreach (Ship s in t.ships) {
-                    s.needRedirect = true;
-                }
-            }
+    [PunRPC]
+    public void SetInitialRedirects() {
+        foreach (Ship s in playerTeam.ships) {
+            s.NeedRedirect = true;
         }
     }
 
@@ -330,38 +370,7 @@ public class GameManager : MonoBehaviour {
         cameraLock = true;
     }
 
-    /// <summary>
-    /// Checks if any ships currently need to be redirected
-    /// </summary>
-    public bool needRedirect() {
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-            if (t.aiTeam == false && t.needRedirectChoice()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    /// <summary>
-    /// Checks if any ships need to make a port capture choice
-    /// </summary>
-    public bool needCaptureChoice() {
-
-
-        foreach (Team t in teams) {
-            if (t == null) {
-                continue;
-            }
-
-            if (t.aiTeam == false && t.needCaptureChoice()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 
@@ -590,7 +599,8 @@ public class GameManager : MonoBehaviour {
     /// <summary>
     /// Sets the redirect UI to active for all ships that need a redirect choice made
     /// </summary>
-    public void revealRedirects() {
+    [PunRPC]
+    public void RevealRedirects() {
         foreach (Ship s in playerTeam.ships) {
             s.setRedirectUI(true);
         }
@@ -606,9 +616,9 @@ public class GameManager : MonoBehaviour {
         playerTeam = teams[i];
         playerTeam.aiTeam = false;
         foreach (Ship ship in playerTeam.ships) {
-            ship.needRedirect = true;
+            ship.NeedRedirect = true;
         }
-        revealRedirects();
+        RevealRedirects();
         setAIDirections();
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
@@ -626,7 +636,7 @@ public class GameManager : MonoBehaviour {
 
                 int direction = ship.Ai.setNewShipDirection(ship);
                 ship.setFront(direction);
-                ship.needRedirect = false;
+                ship.NeedRedirect = false;
                 ship.setSpriteRotation();
             }
         }
@@ -797,10 +807,10 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void CheckPortTransparency(int portID) {
+    public void SetPortTransparency(int portID, float alpha) {
         foreach(Port p in board.ports) {
             if(p.id == portID) {
-                p.setTransparency();
+                p.SetTransparency(alpha);
                 return;
             }
         }
@@ -866,7 +876,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SetPortTransparency() {
         foreach (Port p in board.ports) {
-            p.setTransparency();
+            p.TransparencyCheck();
         }
     }
 
@@ -899,20 +909,20 @@ public class GameManager : MonoBehaviour {
     public void SendTargetInfo(int shipID,int teamID,int[] targetIDs,int[] targetTeamIDs) {
 
         if(teamID != (int)playerTeam.TeamFaction) {
+            Debug.Log("Player's team does NOT own this multi target choice");
             return;
         }
 
+        Debug.Log("Player's team DOES own this multi target choice");
 
         Ship attacker = GetShip(shipID,teamID);
         List<Ship> targets = new List<Ship>();
         for(int i = 0; i < targetIDs.Length; i++) {
             targets.Add(GetShip(targetIDs[i],targetTeamIDs[i]));
         }
-
-        //List<ShipTargetResolution> targetChoices = new List<ShipTargetResolution>();
-
+        
         ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
-        targetChoice.resolve();
+        StartCoroutine(targetChoice.resolve());        
     }
 
     [PunRPC]
@@ -920,4 +930,21 @@ public class GameManager : MonoBehaviour {
         PhaseManager.chosenTarget = GetShip(shipID,teamID);
     }
 
+    public bool HumanNeedsRedirect() {
+        foreach(Team t in teams) {
+            if (t.needRedirectChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public bool HumanNeedsCaptureChoice() {
+        foreach (Team t in teams) {
+            if (t.needCaptureChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
