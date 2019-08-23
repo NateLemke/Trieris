@@ -85,7 +85,11 @@ public class OptionsMenu : MonoBehaviourPunCallbacks
         {
             yield return null;
         }
-        PhotonNetwork.LeaveRoom();
+        if(PhotonNetwork.IsConnected){
+            PhotonNetwork.LeaveRoom();
+        }else{
+            GameManager.main.goToStartMenu();
+        }
         //PhotonNetwork.Disconnect();
         //curCoroutine = DisconnectEnumerator();
         //StartCoroutine(DisconnectEnumerator());
