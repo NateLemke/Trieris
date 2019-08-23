@@ -176,8 +176,8 @@ public class Ship : MonoBehaviour {
         id = team.shipIdCounter++;
         life = MAX_HEALTH;
 
-        catapultIndex = -1;
-        catapultDirection = -1;
+        CatapultIndex = -1;
+        CatapultDirection = -1;
         canFire = true;
 
         this.node = node;
