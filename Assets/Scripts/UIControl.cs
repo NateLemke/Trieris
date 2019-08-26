@@ -798,7 +798,7 @@ public class UIControl : MonoBehaviour
         controlsEnabled = false;
         goButton.enabled = false;
         if(PhotonNetwork.IsConnected){
-            GameObject.Find("OverlayCanvas/BottomUIPanel/ReadyUpLegend").gameObject.SetActive(false);
+            GameObject.Find("OverlayCanvas/UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
         }
         foreach(Button b in commandPanels)
         {
