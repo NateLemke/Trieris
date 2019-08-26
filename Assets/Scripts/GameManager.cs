@@ -112,6 +112,9 @@ public class GameManager : MonoBehaviour {
         PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.Others);
         RevealRedirects();
         //RevealRedirects();
+        foreach(Ship s in getAllShips()) {
+            s.PortIDSync();
+        }
     }
 
     public void setupGame(int playerChoice) {
@@ -992,4 +995,5 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+
 }

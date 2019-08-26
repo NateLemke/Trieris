@@ -1149,6 +1149,8 @@ public class Ship : MonoBehaviour {
         PortID = id;
     }
 
-
+    public void PortIDSync() {
+        Node = nodeValue;
+    }
 
 }
