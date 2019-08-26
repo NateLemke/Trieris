@@ -43,7 +43,7 @@ public class Ship : MonoBehaviour {
         }
     }
     private Node nodeValue;
-    public int PortID;
+    public int PortID = -1;
 
     public int momentum { get; set; }
 
