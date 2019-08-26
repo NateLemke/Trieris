@@ -400,16 +400,16 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator catapultChoices() {
-        subPhaseProgress(subPhaseIndex);
+        subPhaseProgress(subPhaseIndex);        
+        setSubphaseText("chose catapult targets");
         if (catapultTargetResolutions.Count == 0) {
             yield break;
         }
-        setSubphaseText("chose catapult targets");
 
-        foreach(ShipTargetResolution tr in catapultTargetResolutions) {
-            if (!tr.attacker.CanFire || !tr.needsResolving()) {
+        foreach (ShipTargetResolution tr in catapultTargetResolutions) {
+            if (!tr.attacker.CanFire || !tr.needsResolving() || !GameManager.main.HumanNeedsCaptureChoice()) {
                 tr.attacker.NeedCatapultChoice = false;
-                Debug.Log("Catapult choice does not need resolution");
+                Debug.Log("Catapult choice does not need resolution for ship "+tr.attacker.name);
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
@@ -421,10 +421,6 @@ public static class PhaseManager
                 chosenTarget = null;
 
                 SendTargetChoiceInfo(tr);
-
-                while (chosenTarget == null) {
-                    yield return null;
-                }
 
             } else {
                 yield return tr.resolve();
@@ -511,6 +507,10 @@ public static class PhaseManager
         subPhaseProgress(subPhaseIndex);
 
         setSubphaseText("choose port capture");
+
+        if (!GameManager.main.HumanNeedsCaptureChoice()) {
+            yield break;
+        }
 
         PhotonView.Get(GameManager.main).RPC("CheckPortCaptureChoice()",RpcTarget.Others);
         GameManager.main.CheckPortCaptureChoice();

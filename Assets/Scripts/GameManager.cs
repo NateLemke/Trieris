@@ -955,6 +955,15 @@ public class GameManager : MonoBehaviour {
         }
         return false;
     }
+    
+    public bool HumanNeedsCatapultChoice() {
+        foreach (Team t in teams) {
+            if (t.needCatapultChoice()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     [PunRPC]
     public void ActivatePortPrompt(int shipID, int teamID, int portID) {
