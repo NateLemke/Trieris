@@ -512,7 +512,7 @@ public static class PhaseManager
             yield break;
         }
 
-        PhotonView.Get(GameManager.main).RPC("CheckPortCaptureChoice()",RpcTarget.Others);
+        PhotonView.Get(GameManager.main).RPC("CheckPortCaptureChoice",RpcTarget.Others);
         GameManager.main.CheckPortCaptureChoice();
 
         //Ship focusTarget = null;
