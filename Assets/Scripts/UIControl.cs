@@ -798,7 +798,7 @@ public class UIControl : MonoBehaviour
         controlsEnabled = false;
         goButton.enabled = false;
         if(PhotonNetwork.IsConnected){
-            GameObject.Find("OverlayCanvas/UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
+            optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
         }
         foreach(Button b in commandPanels)
         {
@@ -816,7 +816,7 @@ public class UIControl : MonoBehaviour
         controlsEnabled = true;
         goButton.enabled = true;
         if(PhotonNetwork.IsConnected){
-            GameObject.Find("OverlayCanvas/BottomUIPanel/ReadyUpLegend").gameObject.SetActive(true);
+            optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
         }
         foreach (Button b in commandPanels)
         {
