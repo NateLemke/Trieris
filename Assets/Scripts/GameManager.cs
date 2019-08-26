@@ -980,7 +980,7 @@ public class GameManager : MonoBehaviour {
         //}
 
         PortCaptureAnimation anim = new PortCaptureAnimation(ship);
-        anim.playAnimation();
+        StartCoroutine(anim.playAnimation());
 
         //PhotonView.Get(this).RPC("RunPortCaptureAnimation",RpcTarget.Others,teamID,(int)port.Team.TeamFaction,ship.Position.x,ship.Position.y);
 
