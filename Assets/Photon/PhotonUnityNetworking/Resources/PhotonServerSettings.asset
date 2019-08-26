@@ -69,6 +69,7 @@ MonoBehaviour:
   - CreateMovementArrow
   - CreateRotationArrow
   - setLocalPlayerTeam
+  - playerCapture
   - SetPortTransparency
   - setSubphaseText
   - updateText
@@ -96,5 +97,7 @@ MonoBehaviour:
   - playerCapture
   - PlayerCapturePort
   - SyncPortID
+  - SyncCatapultDirection
+  - SyncCatapultIndex
   DisableAutoOpenWizard: 1
   ShowSettings: 1
