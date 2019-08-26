@@ -529,6 +529,11 @@ public static class PhaseManager
         while (GameManager.main.HumanNeedsCaptureChoice()) {
             yield return null;
         }
+
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
+
     }
 
     /// <summary>
