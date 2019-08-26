@@ -512,9 +512,12 @@ public static class PhaseManager
 
         setSubphaseText("choose port capture");
 
+        PhotonView.Get(GameManager.main).RPC("CheckPortCaptureChoice()",RpcTarget.Others);
+        CheckPortCaptureChoice();
+
         //Ship focusTarget = null;
         //foreach(Ship s in GameManager.main.getPlayerShips()) {
-            
+
         //    if (s.NeedCaptureChoice) {
         //        focusTarget = s;
         //        s.getNode().Port.activatePrompt(s);
