@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Represents one team in the game, and contains it's ships and ports.
@@ -38,7 +39,8 @@ public class Team {
         set
         {
             ready = value;
-            GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
+            GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (TeamFaction + 1) + "Text").GetComponent<Text>().color = ready ? Color.green : Color.red;
+            //GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
         }
     }
 

@@ -92,5 +92,9 @@ MonoBehaviour:
   - RevealRedirects
   - SetInitialRedirects
   - SetPortTransparency
+  - SyncCatapultDirection
+  - SyncCatapultIndex
+  - DisconnectFromPhoton
+  - LeavePhotonRoom
   DisableAutoOpenWizard: 1
   ShowSettings: 1
