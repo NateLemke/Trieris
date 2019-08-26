@@ -498,7 +498,7 @@ public static class PhaseManager
         }
         setSubphaseText("port capture");
         foreach (PortCaptureAnimation ca in captureAnimations) {
-            
+            yield return PhaseManager.SyncFocus(ca.focusPoint);
             yield return ca.playAnimation();
         }
     }
@@ -760,5 +760,7 @@ public static class PhaseManager
         PhotonView.Get(GameManager.main).RPC("SendTargetInfo",RpcTarget.Others,shipID,teamID,targetIds,targetTeamIDs);
 
     }
+
+
 
 }

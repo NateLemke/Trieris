@@ -730,6 +730,16 @@ public class GameManager : MonoBehaviour {
         return null;
     }
 
+    public Port GetPort(int portID) {
+        foreach(Port p in board.ports) {
+            if(p.id == portID) {
+                return p;
+            }
+        }
+        Debug.LogError("Cannot find port from GetPort() id: " + portID);
+        return null;
+    }
+
     //[PunRPC]
     //public void SyncDamage(int dmg,int shipID,int team) {
     //    GameManager.main.GetShip(shipID,team).life -= dmg;
@@ -761,50 +771,50 @@ public class GameManager : MonoBehaviour {
         bullet.endPos = new Vector2(endX,endY);
     }
 
-    [PunRPC]
-    public void LaunchSound() {
-        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("LaunchSound",RpcTarget.Others);
-        }
+    //[PunRPC]
+    //public void LaunchSound() {
+    //    if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+    //        PhotonView.Get(this).RPC("LaunchSound",RpcTarget.Others);
+    //    }
 
-        Sounds.main.playClip(Sounds.main.Launch);
-    }
+    //    Sounds.main.playClip(Sounds.main.Launch);
+    //}
 
-    [PunRPC]
-    public void PlaySplash() {
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("PlaySplash",RpcTarget.Others);
-        }
+    //[PunRPC]
+    //public void PlaySplash() {
+    //    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+    //        PhotonView.Get(this).RPC("PlaySplash",RpcTarget.Others);
+    //    }
 
-        Sounds.main.playClip(Sounds.main.Splash);
-    }
+    //    Sounds.main.playClip(Sounds.main.Splash);
+    //}
 
-    [PunRPC]
-    public void PlayFireball() {
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("PlayFireball",RpcTarget.Others);
-        }
+    //[PunRPC]
+    //public void PlayFireball() {
+    //    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+    //        PhotonView.Get(this).RPC("PlayFireball",RpcTarget.Others);
+    //    }
 
-        Sounds.main.playClip(Sounds.main.Fireball);
-    }
+    //    Sounds.main.playClip(Sounds.main.Fireball);
+    //}
 
-    [PunRPC]
-    public void PlayWhistle() {
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("PlayWhistle",RpcTarget.Others);
-        }
+    //[PunRPC]
+    //public void PlayWhistle() {
+    //    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+    //        PhotonView.Get(this).RPC("PlayWhistle",RpcTarget.Others);
+    //    }
 
-        Sounds.main.playClip(Sounds.main.Whistle,0.4f);
-    }
+    //    Sounds.main.playClip(Sounds.main.Whistle,0.4f);
+    //}
 
-    [PunRPC]
-    public void PlayRandomCrunch() {
-        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(this).RPC("PlayRandomCrunch",RpcTarget.Others);
-        }
+    //[PunRPC]
+    //public void PlayRandomCrunch() {
+    //    if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+    //        PhotonView.Get(this).RPC("PlayRandomCrunch",RpcTarget.Others);
+    //    }
 
-        Sounds.main.playRandomCrunch();
-    }
+    //    Sounds.main.playRandomCrunch();
+    //}
 
     [PunRPC]
     public void SetPortTransparency(int portID, float alpha) {
@@ -946,5 +956,45 @@ public class GameManager : MonoBehaviour {
             }
         }
         return false;
+    }
+
+    [PunRPC]
+    public void ActivatePortPrompt(int shipID, int teamID, int portID) {
+
+        if(teamID != (int)playerTeam.TeamFaction) {
+            return;
+        }
+
+        Ship ship = GetShip(shipID,teamID);
+        Port port = GetPort(portID);
+
+        port.activatePrompt(ship);
+    }
+
+    [PunRPC]
+    public void PlayerCapturePort(int shipID, int teamID) {
+
+        Ship ship = GetShip(shipID,teamID);
+        //Port port = ship.getNode().Port;
+
+        //foreach(Ship s in ship.getNode().Ships) {
+        //    s.NeedCaptureChoice = false;
+        //}
+
+        PortCaptureAnimation anim = new PortCaptureAnimation(ship);
+        anim.playAnimation();
+
+        //PhotonView.Get(this).RPC("RunPortCaptureAnimation",RpcTarget.Others,teamID,(int)port.Team.TeamFaction,ship.Position.x,ship.Position.y);
+
+    }
+
+    [PunRPC]
+    public void CheckPortCaptureChoice() {
+        foreach(Ship s in playerTeam.ships) {
+            if (s.NeedCaptureChoice) {
+                ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.PortID);
+                return;
+            }
+        }
     }
 }

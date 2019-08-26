@@ -87,12 +87,12 @@ public class RammingResolution : CombatResolution
 
         
         InitRammingAnimation();
-        //Sounds.main.playRandomCrunch();
-        GameManager.main.PlayRandomCrunch();
+        Sounds.main.playRandomCrunch();
+        //GameManager.main.PlayRandomCrunch();
         if (damageToA > 0) {
             yield return new WaitForSeconds(0.3f);
-            //Sounds.main.playRandomCrunch();
-            GameManager.main.PlayRandomCrunch();
+            Sounds.main.playRandomCrunch();
+            //GameManager.main.PlayRandomCrunch();
         }
 
         shipA.TakeDamage(damageToA);
