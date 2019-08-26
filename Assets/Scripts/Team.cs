@@ -39,7 +39,7 @@ public class Team {
         set
         {
             ready = value;
-            GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (TeamFaction + 1) + "Text").GetComponent<Text>().color = ready ? Color.green : Color.red;
+            GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)TeamFaction + 1) + "Text").GetComponent<Text>().color = ready ? Color.green : Color.red;
             //GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
         }
     }
