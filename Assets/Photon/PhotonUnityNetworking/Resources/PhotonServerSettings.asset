@@ -91,5 +91,10 @@ MonoBehaviour:
   - RevealRedirects
   - SetInitialRedirects
   - SetPortTransparency
+  - ActivatePortPrompt
+  - CheckPortCaptureChoice
+  - playerCapture
+  - PlayerCapturePort
+  - SyncPortID
   DisableAutoOpenWizard: 1
   ShowSettings: 1

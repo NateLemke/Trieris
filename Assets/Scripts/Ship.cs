@@ -575,16 +575,6 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Used when the a player ship captures a port, activates port capture UI
     /// </summary>
-<<<<<<< Updated upstream
-    public void playerCapture() {
-        NeedCaptureChoice = false;
-        canActAfterCollision = false;
-        canAct = false;
-        movedForward = false;
-        NeedRedirect = true;
-        portRepairCount = -5;
-        activateRedirectNotification();
-=======
     [PunRPC]
     public void playerCapture()
     {
@@ -611,7 +601,7 @@ public class Ship : MonoBehaviour {
             portRepairCount = -5;
             activateRedirectNotification();
         }
->>>>>>> Stashed changes
+
     }
 
     /// <summary>
