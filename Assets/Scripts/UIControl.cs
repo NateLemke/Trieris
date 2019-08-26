@@ -280,8 +280,10 @@ public class UIControl : MonoBehaviour
                     if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
                         canStart = false;
                 }
-                if(canStart)
+                if(canStart){
+                    PhotonView.Get(this).RPC("disableControls", RpcTarget.All);
                     startTurn(1);
+                }
         }
 
         //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
@@ -790,11 +792,14 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    [PunRPC]
     public void disableControls()
     {
         controlsEnabled = false;
         goButton.enabled = false;
-
+        if(PhotonNetwork.IsConnected){
+            GameObject.Find("OverlayCanvas/BottomUIPanel/ReadyUpLegend").gameObject.SetActive(false);
+        }
         foreach(Button b in commandPanels)
         {
             b.interactable = false;
@@ -810,7 +815,9 @@ public class UIControl : MonoBehaviour
     {
         controlsEnabled = true;
         goButton.enabled = true;
-
+        if(PhotonNetwork.IsConnected){
+            GameObject.Find("OverlayCanvas/BottomUIPanel/ReadyUpLegend").gameObject.SetActive(true);
+        }
         foreach (Button b in commandPanels)
         {
             b.interactable = true;
