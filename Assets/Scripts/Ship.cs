@@ -613,27 +613,41 @@ public class Ship : MonoBehaviour {
     [PunRPC]
     public void playerCapture()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
-            {
-                NeedCaptureChoice = false;
-                canActAfterCollision = false;
-                canAct = false;
-                movedForward = false;
-                NeedRedirect = true;
-                portRepairCount = -5;
-                activateRedirectNotification();
-            }
-        }
-        else
-        {
-            NeedCaptureChoice = false;
-            canActAfterCollision = false;
-            canAct = false;
-            movedForward = false;
-            needRedirect = true;
-            portRepairCount = -5;
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
+        //    {
+        //        NeedCaptureChoice = false;
+        //        canActAfterCollision = false;
+        //        canAct = false;
+        //        movedForward = false;
+        //        NeedRedirect = true;
+        //        portRepairCount = -5;
+        //        activateRedirectNotification();
+        //    }
+        //}
+        //else
+        //{
+        //    NeedCaptureChoice = false;
+        //    canActAfterCollision = false;
+        //    canAct = false;
+        //    movedForward = false;
+        //    needRedirect = true;
+        //    portRepairCount = -5;
+        //    activateRedirectNotification();
+        //}
+
+        NeedCaptureChoice = false;
+        canActAfterCollision = false;
+        canAct = false;
+        movedForward = false;
+        NeedRedirect = true;
+        portRepairCount = -5;
+        
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(this).RPC("activateRedirectNotification",RpcTarget.All);
+        } else {
             activateRedirectNotification();
         }
 
