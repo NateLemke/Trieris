@@ -53,7 +53,7 @@ public class PortCaptureAnimation : Animation {
 
         ship.getNode().Port.Team = ship.team;
 
-        if (!GameManager.main.getPlayerShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
+        if (!GameManager.main.getHumanShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
             int direction = ship.Ai.setNewShipDirection(ship);
             ship.setFront(direction);
             ship.setSpriteRotation();
