@@ -643,7 +643,8 @@ public class Ship : MonoBehaviour {
         movedForward = false;
         NeedRedirect = true;
         portRepairCount = -5;
-        
+
+        Debug.Log("playerCapture() for "+name);
 
         if (PhotonNetwork.IsConnected) {
             PhotonView.Get(this).RPC("activateRedirectNotification",RpcTarget.All);
@@ -1065,7 +1066,7 @@ public class Ship : MonoBehaviour {
         {
             if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
             {
-                Debug.Log((int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
+                Debug.Log("redirect activated for"+(int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
                 Destroy(directionLabel);
                 redirectNotification.SetActive(true);
                 redirectUI.SetActive(false);

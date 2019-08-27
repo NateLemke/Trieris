@@ -999,6 +999,7 @@ public class GameManager : MonoBehaviour {
     public void CheckPortCaptureChoice() {
         foreach(Ship s in playerTeam.ships) {
             if (s.NeedCaptureChoice) {
+                Debug.Log("Check port capture choice found ship");
                 ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.PortID);
                 return;
             }
