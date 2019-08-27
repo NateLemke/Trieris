@@ -55,8 +55,9 @@ public static class PhaseManager
         resolveCatapults,
         sinkShips,
         portCaptureChoice,
-        resolvePortCapture,        
         resolveRedirects,
+        resolvePortCapture 
+        
     };
 
     /// <summary>
