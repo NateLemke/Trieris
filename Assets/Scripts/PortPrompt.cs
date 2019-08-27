@@ -89,6 +89,7 @@ public class PortPrompt : MonoBehaviour{
         } else {
             GameManager.main.PlayerCapturePort(currentShip.Id,(int)currentShip.team.TeamFaction);
         }
+        currentShip.NeedCaptureChoice = false;
         GameManager.main.CheckPortCaptureChoice();
     }
 

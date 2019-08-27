@@ -661,13 +661,13 @@ public static class PhaseManager
     /// </summary>
     public static void subPhaseProgress(int index) {
 
-        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
-        }
+        //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+        //    PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
+        //}
 
-        if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-            Debug.Log("Non master client running subPhaseProgress function with index "+index);
-        }
+        //if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+        //    Debug.Log("Non master client running subPhaseProgress function with index "+index);
+        //}
 
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
