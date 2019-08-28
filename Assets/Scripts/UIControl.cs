@@ -799,8 +799,8 @@ public class UIControl : MonoBehaviour
         goButton.enabled = false;
         if(PhotonNetwork.IsConnected){
             optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
-            GameObject.Find("OverlayCanvas/UISidePanel/GoButton/GoText").GetComponent<Text>().text = "Waiting";
-            GameObject.Find("OverlayCanvas/UISidePanel/GoButton").GetComponent<Image>().color = Color.red;
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = "Waiting";
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton").GetComponent<Image>().color = Color.red;
         }
         foreach(Button b in commandPanels)
         {
@@ -819,8 +819,8 @@ public class UIControl : MonoBehaviour
         goButton.enabled = true;
         if(PhotonNetwork.IsConnected){
             optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(true);
-            GameObject.Find("OverlayCanvas/UISidePanel/GoButton/GoText").GetComponent<Text>().text = "Click to Ready Up";
-            GameObject.Find("OverlayCanvas/UISidePanel/GoButton").GetComponent<Image>().color = Color.green;
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = "Click to Ready Up";
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton").GetComponent<Image>().color = Color.green;
         }
         foreach (Button b in commandPanels)
         {
