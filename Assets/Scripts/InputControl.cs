@@ -126,7 +126,7 @@ public class InputControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F1)) {
             foreach(Port p in GameManager.main.Board.ports) {
                 if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-                    PhotonView.Get(GameManager.main).RPC("SetPortTean",RpcTarget.MasterClient,p.id,(int)GameManager.playerTeam.TeamFaction);
+                    PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.MasterClient,p.id,(int)GameManager.playerTeam.TeamFaction);
                 } else {
                     GameManager.main.SetPortTeam(p.id,(int)GameManager.playerTeam.TeamFaction);
                 }
@@ -137,7 +137,14 @@ public class InputControl : MonoBehaviour {
             int teamID = (int)GameManager.playerTeam.TeamFaction;
             foreach (Ship s in GameManager.main.getAllShips()) {
                 if((int)s.team.TeamFaction != teamID) {
-                    s.TakeDamage(s.life);
+                    if (PhotonNetwork.IsConnected) {
+                        if (PhotonNetwork.IsMasterClient) {
+                            s.TakeDamage(s.life);
+                        } else {
+                            PhotonView.Get(s).RPC("TakeDamage",RpcTarget.MasterClient,s.life);
+                        }
+                    }
+                    
                 }
             }
         }
@@ -145,7 +152,7 @@ public class InputControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F3)) {
             foreach (Port p in GameManager.main.Board.ports) {
                 if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-                    PhotonView.Get(GameManager.main).RPC("SetPortTean",RpcTarget.MasterClient,p.id,((int)GameManager.playerTeam.TeamFaction + 1) % 6);
+                    PhotonView.Get(GameManager.main).RPC("SetPortTeam",RpcTarget.MasterClient,p.id,((int)GameManager.playerTeam.TeamFaction + 1) % 6);
                 } else {
                     GameManager.main.SetPortTeam(p.id,((int)GameManager.playerTeam.TeamFaction + 1)%6);
                 }
@@ -155,7 +162,13 @@ public class InputControl : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F4)) {
             int teamID = (int)GameManager.playerTeam.TeamFaction;
             foreach (Ship s in GameManager.playerTeam.ships) {
-                s.TakeDamage(s.life);
+                if (PhotonNetwork.IsConnected) {
+                    if (PhotonNetwork.IsMasterClient) {
+                        s.TakeDamage(s.life);
+                    } else {
+                        PhotonView.Get(s).RPC("TakeDamage",RpcTarget.MasterClient,s.life);
+                    }
+                }
             }
         }
 
