@@ -402,7 +402,9 @@ public class UIControl : MonoBehaviour
 
     public void readyBtnClick()
     {
-        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.TeamFaction);
+        if(!gameManager.needRedirect()){
+            PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.TeamFaction);
+        }
     }
 
     [PunRPC]
