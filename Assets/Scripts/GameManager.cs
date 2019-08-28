@@ -138,6 +138,7 @@ public class GameManager : MonoBehaviour {
 
         if (PhotonNetwork.IsConnected)
         {
+            GameObject.Find("OverlayCanvas/UISidePanel/GoButton/GoText").GetComponent<Text>().text = "Click to Ready Up";
             for (int i = 0; i < teamTypes.Length; i++)
             {
                 switch(teamTypes[i]){
