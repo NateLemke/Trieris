@@ -280,8 +280,10 @@ public class UIControl : MonoBehaviour
                     if(!t.eliminated && t.TeamType == (Team.Type) 1 && (t.needRedirectChoice() || !t.Ready))
                         canStart = false;
                 }
-                if(canStart)
+                if(canStart){
+                    PhotonView.Get(this).RPC("disableControls", RpcTarget.All);
                     startTurn(1);
+                }
         }
 
         //if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
@@ -400,7 +402,9 @@ public class UIControl : MonoBehaviour
 
     public void readyBtnClick()
     {
-        PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.TeamFaction);
+        if(!gameManager.needRedirect()){
+            PhotonView.Get(this).RPC("toggleReady", RpcTarget.All, (int)GameManager.playerTeam.TeamFaction);
+        }
     }
 
     [PunRPC]
@@ -790,11 +794,16 @@ public class UIControl : MonoBehaviour
         }
     }
 
+    [PunRPC]
     public void disableControls()
     {
         controlsEnabled = false;
         goButton.enabled = false;
-
+        if(PhotonNetwork.IsConnected){
+            optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(false);
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = "Waiting";
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton").GetComponent<Image>().color = Color.red;
+        }
         foreach(Button b in commandPanels)
         {
             b.interactable = false;
@@ -810,7 +819,11 @@ public class UIControl : MonoBehaviour
     {
         controlsEnabled = true;
         goButton.enabled = true;
-
+        if(PhotonNetwork.IsConnected){
+            optionsPanel.transform.parent.Find("UIBottomPanel/ReadyUpLegend").gameObject.SetActive(true);
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = "Click to Ready Up";
+            GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton").GetComponent<Image>().color = Color.green;
+        }
         foreach (Button b in commandPanels)
         {
             b.interactable = true;

@@ -99,5 +99,9 @@ MonoBehaviour:
   - SyncPortID
   - SyncCatapultDirection
   - SyncCatapultIndex
+  - SyncCatapultDirection
+  - SyncCatapultIndex
+  - DisconnectFromPhoton
+  - LeavePhotonRoom
   DisableAutoOpenWizard: 1
   ShowSettings: 1

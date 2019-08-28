@@ -28,9 +28,20 @@ public class StartMenu : MonoBehaviourPun
         else
         {
             Debug.Log(RpcTarget.All);
+            PhotonView.Get(this).RPC("DisableSelectionControls", RpcTarget.Others);
             startGame();
             //PhotonView.Get(this).RPC("startGame", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    public void DisableSelectionControls(){
+        for(int i = 1; i <= 6; i++){
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().interactable = false;
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().interactable = false;
+        }
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/FilterPanel/PrivateGameFilter").GetComponent<Toggle>().interactable = false;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/LeaveRoomBtn").GetComponent<Button>().interactable = false;
     }
 
     /// <summary>
