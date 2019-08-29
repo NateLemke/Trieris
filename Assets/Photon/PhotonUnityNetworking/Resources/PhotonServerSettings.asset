@@ -105,5 +105,6 @@ MonoBehaviour:
   - LeavePhotonRoom
   - disableControls
   - DisableSelectionControls
+  - DisableLoadingOverlay
   DisableAutoOpenWizard: 1
   ShowSettings: 1
