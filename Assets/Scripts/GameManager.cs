@@ -191,6 +191,8 @@ public class GameManager : MonoBehaviour {
                 if (t.TeamType == (Team.Type)1)
                 {
                     t.aiTeam = false;
+                }else{
+                    GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Image>().color = Color.green;
                 }
             }
         }
