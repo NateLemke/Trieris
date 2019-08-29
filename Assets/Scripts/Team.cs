@@ -43,7 +43,7 @@ public class Team {
             if(PhotonNetwork.IsConnected && (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"] == (int)TeamFaction){
                 GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = ready ? "Waiting" : "Click to Ready Up";
                 GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton").GetComponent<Image>().color = ready ? Color.red : Color.green;
-                GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
+                //GameObject.Find("OverlayCanvas/UIBottomPanel/TeamImage" + (int)teamFaction + "/ReadyIcon").gameObject.SetActive(ready);
             }
         }
     }
