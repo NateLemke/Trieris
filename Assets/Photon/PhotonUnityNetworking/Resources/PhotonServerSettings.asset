@@ -96,5 +96,7 @@ MonoBehaviour:
   - SyncCatapultIndex
   - DisconnectFromPhoton
   - LeavePhotonRoom
+  - disableControls
+  - DisableSelectionControls
   DisableAutoOpenWizard: 1
   ShowSettings: 1

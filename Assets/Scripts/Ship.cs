@@ -893,30 +893,30 @@ public class Ship : MonoBehaviour {
     /// <summary>
     /// Draws debug gizmos for this ship
     /// </summary>
-    private void OnDrawGizmos() {
+    //private void OnDrawGizmos() {
 
-        Handles.color = Color.magenta;
+    //    Handles.color = Color.magenta;
 
-        if (needRedirect) {
-            Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
-        }
+    //    if (needRedirect) {
+    //        Handles.Label(transform.position + new Vector3(0,-0.25f),"need redirect");
+    //    }
 
-        if (!canAct) {
-            Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
-        }
-
-        if (needCaptureChoice) {
-            Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
-        }
-
-        if (needRammingChoice) {
-            Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
-        }
-
-        if (needCatapultChoice) {
-            Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
-        }
-    }
+    //    if (!canAct) {
+    //        Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
+    //   }
+//
+    //    if (needCaptureChoice) {
+    //        Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
+    //    }
+//
+    //    if (needRammingChoice) {
+    //        Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
+     //   }
+//
+  //    if (needCatapultChoice) {
+  //        Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+  //    }
+  //}
 
     /// <summary>
     /// Initiates the combat damage text for this ship
