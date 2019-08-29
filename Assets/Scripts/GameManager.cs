@@ -197,7 +197,11 @@ public class GameManager : MonoBehaviour {
 
         foreach (Team t in teams)
             {
-                GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
+                if (t.TeamType == (Team.Type)1)
+                {
+                    GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
+                }
+                
             }
 
         playerFaction = (Team.Faction)playerChoice;
