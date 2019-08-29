@@ -56,7 +56,8 @@ public class GameLogic : MonoBehaviour {
         Debug.Log("Ready Reset");
         foreach (Team t in gameManager.teams)
         {
-            t.Ready = false;
+            if(t.TeamType != Team.Type.ai)
+                t.Ready = false;
         }
     }
 
