@@ -767,8 +767,14 @@ public class UIControl : MonoBehaviour
     /// <param name="teamNo">The team the dead ship was on
     /// Red = 0, Orange = 1, Yellow = 2, Green = 3, Blue = 4, Black = 5</param>
     /// <param name="shipNo">The ID of the dead ship</param>
+    [PunRPC]
     public void setDead(int teamNo, int shipNo)
     {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            PhotonView.Get(this).RPC("setDead", RpcTarget.Others);
+        }
+
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
     }
 
@@ -777,8 +783,14 @@ public class UIControl : MonoBehaviour
     /// Called each time a port is captured.
     /// Also updates the port total for the player's team on the victory panel.
     /// </summary>
+    [PunRPC]
     public void updatePortsUI()
     {
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            PhotonView.Get(this).RPC("updatePortsUI", RpcTarget.Others);
+        }
+
         int[] scores = new int[6];
 
         foreach (Port p in GameManager.main.Board.ports)
@@ -792,6 +804,7 @@ public class UIControl : MonoBehaviour
                 GameObject.Find("VictoryText").GetComponent<Text>().text = scores[i] + "/12\nports";
             portTexts[i].text = scores[i] + " / 12";
         }
+
     }
 
     [PunRPC]
