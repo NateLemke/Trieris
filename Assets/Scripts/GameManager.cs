@@ -179,6 +179,11 @@ public class GameManager : MonoBehaviour {
                         teams[i].setTeamType((Team.Type)0);
                         break;
                 }
+                foreach(Player p in PhotonNetwork.PlayerList){
+                    if((int)p.CustomProperties["TeamNum"] == i){
+                        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (i+1) + "Text").GetComponent<Text>().text = p.NickName;
+                    }
+                }
             }
 
             foreach (Team t in teams)
