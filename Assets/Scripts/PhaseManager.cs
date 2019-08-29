@@ -55,8 +55,9 @@ public static class PhaseManager
         resolveCatapults,
         sinkShips,
         portCaptureChoice,
-        resolvePortCapture,        
         resolveRedirects,
+        resolvePortCapture 
+        
     };
 
     /// <summary>
@@ -400,16 +401,16 @@ public static class PhaseManager
     /// </summary>
     /// <returns></returns>
     public static IEnumerator catapultChoices() {
-        subPhaseProgress(subPhaseIndex);
+        subPhaseProgress(subPhaseIndex);        
+        setSubphaseText("chose catapult targets");
         if (catapultTargetResolutions.Count == 0) {
             yield break;
         }
-        setSubphaseText("chose catapult targets");
 
-        foreach(ShipTargetResolution tr in catapultTargetResolutions) {
-            if (!tr.attacker.CanFire || !tr.needsResolving()) {
+        foreach (ShipTargetResolution tr in catapultTargetResolutions) {
+            if (!tr.attacker.CanFire || !tr.needsResolving() || !GameManager.main.HumanNeedsCaptureChoice()) {
                 tr.attacker.NeedCatapultChoice = false;
-                Debug.Log("Catapult choice does not need resolution");
+                Debug.Log("Catapult choice does not need resolution for ship "+tr.attacker.name);
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
@@ -421,10 +422,6 @@ public static class PhaseManager
                 chosenTarget = null;
 
                 SendTargetChoiceInfo(tr);
-
-                while (chosenTarget == null) {
-                    yield return null;
-                }
 
             } else {
                 yield return tr.resolve();
@@ -498,7 +495,7 @@ public static class PhaseManager
         }
         setSubphaseText("port capture");
         foreach (PortCaptureAnimation ca in captureAnimations) {
-            
+            yield return PhaseManager.SyncFocus(ca.focusPoint);
             yield return ca.playAnimation();
         }
     }
@@ -512,9 +509,16 @@ public static class PhaseManager
 
         setSubphaseText("choose port capture");
 
+        if (!GameManager.main.HumanNeedsCaptureChoice()) {
+            yield break;
+        }
+
+        PhotonView.Get(GameManager.main).RPC("CheckPortCaptureChoice",RpcTarget.Others);
+        GameManager.main.CheckPortCaptureChoice();
+
         //Ship focusTarget = null;
         //foreach(Ship s in GameManager.main.getPlayerShips()) {
-            
+
         //    if (s.NeedCaptureChoice) {
         //        focusTarget = s;
         //        s.getNode().Port.activatePrompt(s);
@@ -526,6 +530,11 @@ public static class PhaseManager
         while (GameManager.main.HumanNeedsCaptureChoice()) {
             yield return null;
         }
+
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay + SpeedManager.CaptureSpeed);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay);
+        yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
+
     }
 
     /// <summary>
@@ -653,13 +662,13 @@ public static class PhaseManager
     /// </summary>
     public static void subPhaseProgress(int index) {
 
-        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
-        }
+        //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+        //    PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
+        //}
 
-        if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-            Debug.Log("Non master client running subPhaseProgress function with index "+index);
-        }
+        //if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+        //    Debug.Log("Non master client running subPhaseProgress function with index "+index);
+        //}
 
         GameObject outline = GameObject.Find("subphaseoutline");
         GameObject subPhaseIcon = null;
@@ -760,5 +769,7 @@ public static class PhaseManager
         PhotonView.Get(GameManager.main).RPC("SendTargetInfo",RpcTarget.Others,shipID,teamID,targetIds,targetTeamIDs);
 
     }
+
+
 
 }

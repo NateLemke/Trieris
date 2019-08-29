@@ -68,7 +68,17 @@ public class Ship : MonoBehaviour {
     public GameObject CBTprefab;
 
     public Action[] actions;
-    private Node node;
+    private Node Node {
+        get { return nodeValue;  }
+        set { nodeValue = value;
+            PortID = (value.Port != null) ? value.Port.id : -1;
+            if (PhotonNetwork.IsConnected && PhotonView.Get(this).ViewID != 0) {
+                PhotonView.Get(this).RPC("SyncPortID",RpcTarget.Others,PortID);
+            }
+        }
+    }
+    private Node nodeValue;
+    public int PortID = -1;
 
     public int momentum { get; set; }
 
@@ -180,7 +190,7 @@ public class Ship : MonoBehaviour {
         CatapultDirection = -1;
         canFire = true;
 
-        this.node = node;
+        this.Node = node;
         node.Ships.Add(this);
         //if (node.Port != null) {
         //    node.Port.setTransparency();
@@ -372,13 +382,13 @@ public class Ship : MonoBehaviour {
             return null;
         }
         if (fireDirection == 8) {
-            return node;
+            return Node;
         }
-        return node.getAdjacentNode(getRelativeDirection(fireDirection));
+        return Node.getAdjacentNode(getRelativeDirection(fireDirection));
     }
 
     public Node getNode() {
-        return node;
+        return Node;
     }
 
     public int getLife() {
@@ -451,7 +461,7 @@ public class Ship : MonoBehaviour {
     public void move(int direction) {                           //throws ShipCrashedException 
 
         DebugControl.log("action","----moving ship");
-        Node destNode = node.getAdjacentNode(direction);
+        Node destNode = Node.getAdjacentNode(direction);
         if (destNode == null) {
             //life--;
             TakeDamage(1);
@@ -471,11 +481,11 @@ public class Ship : MonoBehaviour {
         }
 
 
-        Node startNode = node;
+        Node startNode = Node;
 
-        node.Ships.Remove(this);
-        node = destNode;
-        node.Ships.Add(this);
+        Node.Ships.Remove(this);
+        Node = destNode;
+        Node.Ships.Add(this);
         bool reverse = direction == getRelativeDirection(-4);
 
         PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,momentum,reverse));
@@ -518,8 +528,8 @@ public class Ship : MonoBehaviour {
     /// Repairs the current ship IF they are on a node that contains a port belonging to their team
     /// </summary>
     public void repair() {
-        if (node.Port != null && node.Port.Team == team) {
-            if (node.Port.IsCapital && node.Port.Team == team) {
+        if (Node.Port != null && Node.Port.Team == team) {
+            if (Node.Port.IsCapital && Node.Port.Team == team) {
                 if (life < MAX_HEALTH)
                     Heal(1);
             } else {
@@ -545,8 +555,8 @@ public class Ship : MonoBehaviour {
 
 
 
-        if (node != null) {
-            node.Ships.Remove(this);
+        if (Node != null) {
+            Node.Ships.Remove(this);
         }
         if (this.team == GameManager.playerTeam) {
             Button st = GameManager.main.uiControl.ShipTabs[this.Id].GetComponent<Button>();
@@ -603,29 +613,45 @@ public class Ship : MonoBehaviour {
     [PunRPC]
     public void playerCapture()
     {
-        if (PhotonNetwork.IsConnected)
-        {
-            if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
-            {
-                needCaptureChoice = false;
-                canActAfterCollision = false;
-                canAct = false;
-                movedForward = false;
-                needRedirect = true;
-                portRepairCount = -5;
-                activateRedirectNotification();
-            }
-        }
-        else
-        {
-            needCaptureChoice = false;
-            canActAfterCollision = false;
-            canAct = false;
-            movedForward = false;
-            needRedirect = true;
-            portRepairCount = -5;
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
+        //    {
+        //        NeedCaptureChoice = false;
+        //        canActAfterCollision = false;
+        //        canAct = false;
+        //        movedForward = false;
+        //        NeedRedirect = true;
+        //        portRepairCount = -5;
+        //        activateRedirectNotification();
+        //    }
+        //}
+        //else
+        //{
+        //    NeedCaptureChoice = false;
+        //    canActAfterCollision = false;
+        //    canAct = false;
+        //    movedForward = false;
+        //    needRedirect = true;
+        //    portRepairCount = -5;
+        //    activateRedirectNotification();
+        //}
+
+        NeedCaptureChoice = false;
+        canActAfterCollision = false;
+        canAct = false;
+        movedForward = false;
+        NeedRedirect = true;
+        portRepairCount = -5;
+
+        Debug.Log("playerCapture() for "+name);
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(this).RPC("activateRedirectNotification",RpcTarget.All);
+        } else {
             activateRedirectNotification();
         }
+
     }
 
     /// <summary>
@@ -1040,7 +1066,7 @@ public class Ship : MonoBehaviour {
         {
             if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
             {
-                Debug.Log((int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
+                Debug.Log("redirect activated for"+(int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
                 Destroy(directionLabel);
                 redirectNotification.SetActive(true);
                 redirectUI.SetActive(false);
@@ -1074,14 +1100,14 @@ public class Ship : MonoBehaviour {
     /// Used to set the ship's position on a node, spacing it out with any other ships sharing the node
     /// </summary>
     public void updateNodePos(float xSpacing = Node.shipSpacingX,float ySpacing = Node.shipSpacingY) {
-        Position = node.shipNodePos(this,xSpacing,ySpacing);
+        Position = Node.shipNodePos(this,xSpacing,ySpacing);
     }
 
     /// <summary>
     /// Used to get this ship's intended position on its node, without updating its actual position
     /// </summary>
     public Vector2 getNodePos() {
-        return node.shipNodePos(this);
+        return Node.shipNodePos(this);
     }
 
     public bool belongsToAI() {
@@ -1167,4 +1193,14 @@ public class Ship : MonoBehaviour {
     private void SyncNeedCatapultChoice(bool b) {
         needCatapultChoice = b;
     }
+
+    [PunRPC]
+    private void SyncPortID(int id) {
+        PortID = id;
+    }
+
+    public void PortIDSync() {
+        Node = nodeValue;
+    }
+
 }

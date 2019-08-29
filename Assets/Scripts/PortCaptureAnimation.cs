@@ -35,7 +35,7 @@ public class PortCaptureAnimation : Animation {
         }
         //ship.team.TeamFactionDebug.LogFormat("Playing animation for team {0} which is {1} team, port number {2}, ship id {3}",(int)ship.team.TeamFaction,(int)ship.getNode().Port.Team.TeamFaction,ship.getNode().Port.id,ship.Id);
 
-        yield return PhaseManager.SyncFocus(focusPoint);
+        
         GameObject prefab = Resources.Load<GameObject>("Prefabs/PortCaptureAnimation");
 
         PortCaptureAnimationObject animObj;
@@ -53,7 +53,7 @@ public class PortCaptureAnimation : Animation {
 
         ship.getNode().Port.Team = ship.team;
 
-        if (!GameManager.main.getPlayerShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
+        if (!GameManager.main.getHumanShips().Contains(ship) && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
             int direction = ship.Ai.setNewShipDirection(ship);
             ship.setFront(direction);
             ship.setSpriteRotation();
@@ -62,5 +62,9 @@ public class PortCaptureAnimation : Animation {
         yield return new WaitForSeconds(SpeedManager.CaptureDelay);       
         GameManager.main.uiControl.updatePortsUI();
         yield return new WaitForSeconds(SpeedManager.CaptureDelay / 2);
+
+        if(!ship.belongsToAI() && (!PhotonNetwork.IsConnected || PhotonNetwork.IsMasterClient)) {
+            ship.playerCapture();
+        }
     }
 }

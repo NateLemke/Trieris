@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -73,15 +74,23 @@ public class PortPrompt : MonoBehaviour{
     /// </summary>
     public void accept()
     {
-        foreach (Ship s in currentShip.getNode().Ships)
+        foreach (Ship s in GameManager.main.GetPort(currentShip.PortID).node.Ships)
             s.NeedCaptureChoice = false;
 
         // needs to be changed for multiplayer
         //GameManager.PortsCaptured++;
-        
-        currentShip.playerCapture();
+
+        //currentShip.playerCapture();
         portPromptPanel.SetActive(false);
-        GameManager.main.StartCoroutine(acceptAnimation(currentShip));
+
+        if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
+            //GameManager.main.PlayerCapturePort(currentShip.Id,(int)currentShip.team.TeamFaction);
+            PhotonView.Get(GameManager.main).RPC("PlayerCapturePort",RpcTarget.MasterClient,currentShip.Id,(int)currentShip.team.TeamFaction);
+        } else {
+            GameManager.main.PlayerCapturePort(currentShip.Id,(int)currentShip.team.TeamFaction);
+        }
+        currentShip.NeedCaptureChoice = false;
+        GameManager.main.CheckPortCaptureChoice();
     }
 
     /// <summary>
@@ -91,7 +100,8 @@ public class PortPrompt : MonoBehaviour{
     {        
         portPromptPanel.SetActive(false);
         currentShip.NeedCaptureChoice = false;
-        GameManager.main.StartCoroutine(declineAnimation());
+        GameManager.main.CheckPortCaptureChoice();
+        //GameManager.main.StartCoroutine(declineAnimation());
     }
 
     /// <summary>

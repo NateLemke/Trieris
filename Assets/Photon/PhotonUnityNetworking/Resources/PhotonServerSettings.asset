@@ -92,11 +92,19 @@ MonoBehaviour:
   - RevealRedirects
   - SetInitialRedirects
   - SetPortTransparency
+  - ActivatePortPrompt
+  - CheckPortCaptureChoice
+  - playerCapture
+  - PlayerCapturePort
+  - SyncPortID
+  - SyncCatapultDirection
+  - SyncCatapultIndex
   - SyncCatapultDirection
   - SyncCatapultIndex
   - DisconnectFromPhoton
   - LeavePhotonRoom
   - disableControls
   - DisableSelectionControls
+  - DisableLoadingOverlay
   DisableAutoOpenWizard: 1
   ShowSettings: 1

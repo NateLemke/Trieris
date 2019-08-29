@@ -73,12 +73,12 @@ public class Team {
         return count;
     }
 
-    public void toggleReady() {
-        ready = !ready;
-        if (ready) {
+    //public void toggleReady() {
+    //    ready = !ready;
+    //    if (ready) {
 
-        }
-    }
+    //    }
+    //}
 
     public bool needRammingChoice() {
         foreach(Ship s in ships) {

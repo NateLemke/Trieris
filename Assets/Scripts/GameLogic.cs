@@ -87,7 +87,6 @@ public class GameLogic : MonoBehaviour {
         determineGameState();
 
         gameManager.uiControl.enableControls();
-
         
         PhaseManager.DisablePhaseUI();
         phaseIndex = 4;
@@ -108,9 +107,7 @@ public class GameLogic : MonoBehaviour {
                 s.actions = new Ship.Action[4];
                 s.populateDefaultActions();
             }
-        }
-
-        
+        }        
 
         Image image;
         for (int i = 0; i < 4; i++) {
@@ -223,7 +220,6 @@ public class GameLogic : MonoBehaviour {
 
             // check if the player has captured 12 ports or not
             if (t.portsCaptured() >= 12) {
-                if (t == GameManager.playerTeam)
                     gameOverCapture(t);
                 return;
             }            
@@ -396,7 +392,7 @@ public class GameLogic : MonoBehaviour {
                     chosenShip = potentialTargets[0];
                 } else if (!ship.belongsToAI()) {
                     if (potentialTargets.Count > 1) {
-                        Debug.Log("Catapult target choice detected in GameLogic");
+                        Debug.Log("Catapult target choice detected in GameLogic for ship "+ship.name);
                         // need player ship catapult choice
                         ship.NeedCatapultChoice = true;
 
