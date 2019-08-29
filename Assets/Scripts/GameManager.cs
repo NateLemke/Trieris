@@ -49,6 +49,24 @@ public class GameManager : MonoBehaviour {
     public bool shipsSynced = false;
 
     /// <summary>
+    /// Sets the static reference to the main gamemanager
+    /// creates the game board
+    /// creates game board visuals
+    /// </summary>
+    private void Awake() {
+        lineRenderer = GetComponent<LineRenderer>();
+        main = this;
+        board = new Board();
+        board.CreateGridVisuals();
+
+        cameraLock = true;
+
+        if (!PhotonNetwork.IsConnected) {
+            GameObject.Find("LoadingOverlay").SetActive(false);
+        }
+    }
+
+    /// <summary>
     /// Creates teams, ports, and ships
     /// Assigns additional references
     /// </summary>
@@ -89,14 +107,13 @@ public class GameManager : MonoBehaviour {
         //PhaseManager.drawFocusMargin();
 
 
-        if (PhotonNetwork.IsMasterClient) {
+        if (PhotonNetwork.IsMasterClient && !shipsSynced) {
             CheckPlayersReady();
         }
     }
 
     public void CheckPlayersReady() {
-        if (shipsSynced)
-            return;
+
         Player[] players = PhotonNetwork.PlayerList;
         foreach (Player p in players) {
             if (!(bool)p.CustomProperties["LoadedGame"]) {
@@ -115,6 +132,9 @@ public class GameManager : MonoBehaviour {
         foreach(Ship s in getAllShips()) {
             s.PortIDSync();
         }
+
+        GameObject.Find("LoadingOverlay").SetActive(false);
+        PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
     }
 
     public void setupGame(int playerChoice) {
@@ -358,26 +378,7 @@ public class GameManager : MonoBehaviour {
             s.NeedRedirect = true;
         }
     }
-
-
-    /// <summary>
-    /// Sets the static reference to the main gamemanager
-    /// creates the game board
-    /// creates game board visuals
-    /// </summary>
-    private void Awake() {
-        lineRenderer = GetComponent<LineRenderer>();
-        main = this;
-        board = new Board();
-        board.CreateGridVisuals();
-
-        cameraLock = true;
-    }
-
-
-
-
-
+          
     /// <summary>
     /// Checks for pending redirects or port captures
     /// </summary>
@@ -1005,6 +1006,11 @@ public class GameManager : MonoBehaviour {
                 return;
             }
         }
+    }
+
+    [PunRPC]
+    public void DisableLoadingOverlay() {
+        GameObject.Find("LoadingOverlay").SetActive(false);
     }
 
 }

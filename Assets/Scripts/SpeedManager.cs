@@ -33,7 +33,7 @@ public static class SpeedManager {
     static float cameraFocusSpeed = 0.3f;
     public static float CameraFocusSpeed { get { return (fastAnimations) ? cameraFocusSpeed * fastFactor : cameraFocusSpeed; } }
 
-    public static float fastFactor = 0.1f;
+    public static float fastFactor = 0.3f;
     static bool fastAnimations = false;
     static bool subPhaseFast = false;
 
