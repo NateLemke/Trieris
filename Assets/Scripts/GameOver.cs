@@ -50,7 +50,7 @@ public class GameOver : MonoBehaviour
     /// <param name="gameOverState">Whether the player as won or lost</param>
     public void Initialize()
     {
-        portsHeld.text = "Ports Owned: " + GameManager.playerTeam.ports.Count.ToString();
+        portsHeld.text = "Ports Owned: " + countPorts();
         shipsAlive.text = "Ships Owned: " + GameManager.playerTeam.ships.Count.ToString();
     }
 
