@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour {
 
     public bool shipsSynced = false;
 
+    public static GameData data;
+
     /// <summary>
     /// Sets the static reference to the main gamemanager
     /// creates the game board
@@ -64,6 +66,7 @@ public class GameManager : MonoBehaviour {
         if (!PhotonNetwork.IsConnected) {
             GameObject.Find("LoadingOverlay").SetActive(false);
         }
+        data = new GameData();
     }
 
     /// <summary>

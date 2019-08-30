@@ -106,5 +106,7 @@ MonoBehaviour:
   - disableControls
   - DisableSelectionControls
   - DisableLoadingOverlay
+  - setDead
+  - updatePortsUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1
