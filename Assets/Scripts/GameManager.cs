@@ -195,14 +195,16 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        foreach (Team t in teams)
+        if(PhotonNetwork.IsMasterClient){
+            foreach (Team t in teams)
             {
-                if (t.TeamType == (Team.Type)1)
+                if (t.TeamType == (Team.Type)0)
                 {
-                    GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
-                }
-                
+                    PhotonView.Get(this).RPC("SetDefaultAITextColor",RpcTarget.All,((int)t.TeamFaction + 1));
+                }   
             }
+        }
+        
 
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
@@ -252,6 +254,11 @@ public class GameManager : MonoBehaviour {
 
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+    }
+
+    [PunRPC]
+    public void SetDefaultAITextColor(int playerSlot){
+        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + playerSlot + "Text").GetComponent<Text>().color = Color.green;
     }
 
     public void SyncShipPhotonID() {
