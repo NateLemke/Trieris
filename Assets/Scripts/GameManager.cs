@@ -135,6 +135,7 @@ public class GameManager : MonoBehaviour {
 
         GameObject.Find("LoadingOverlay").SetActive(false);
         PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
+        PhotonView.Get(this).RPC("SyncPlayersSyncStatus",RpcTarget.Others);
     }
 
     public void setupGame(int playerChoice) {
@@ -219,24 +220,18 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();        
+        createShips();
+        assignAI();
 
-        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
+        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {          
             
-            assignAI();
-
             setAIDirections();
-
             uiControl.PostTeamSelection();
-
-
         }
 
         if (!PhotonNetwork.IsConnected) {
             SetPortTransparency();
-
             SetInitialRedirects();
-
             RevealRedirects();
         }
 
@@ -1023,4 +1018,8 @@ public class GameManager : MonoBehaviour {
         GameObject.Find("LoadingOverlay").SetActive(false);
     }
 
+    [PunRPC]
+    public void SyncPlayersSyncStatus() {
+        shipsSynced = true;
+    }
 }

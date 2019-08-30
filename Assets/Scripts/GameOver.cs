@@ -30,7 +30,7 @@ public class GameOver : MonoBehaviour
         if (t == GameManager.playerTeam) {
             title.text = "Victory, you've captured 12 ports";
         } else {
-            title.text = t.TeamFaction.ToString() + " team won by capturng 12 ports";
+            title.text = t.TeamFaction.ToString() + " team won by capturing 12 ports";
         }
     }
 
