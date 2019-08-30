@@ -76,11 +76,14 @@ public class GameLogic : MonoBehaviour {
         
         // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
-            foreach(Team t in gameManager.teams){
-                if(t.TeamType == Team.Type.player){
-                    PhotonView.Get(this).RPC("setUnready", RpcTarget.All, (int)t.TeamFaction);
+            if(PhotonNetwork.IsMasterClient){
+                foreach(Team t in gameManager.teams){
+                    if(t.TeamType == Team.Type.player){
+                        PhotonView.Get(this).RPC("setUnready", RpcTarget.All, (int)t.TeamFaction);
+                    }  
                 }
             }
+            
             
             endTurn();
 
