@@ -26,7 +26,7 @@ public class PortCaptureAnimation : Animation {
     /// <returns></returns>
     public override IEnumerator playAnimation() {
 
-        if(ship == null) {
+        if(ship.isSunk) {
             yield break;
         }
 

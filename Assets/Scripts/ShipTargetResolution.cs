@@ -92,13 +92,13 @@ public class ShipTargetResolution
     /// </summary>
     /// <returns></returns>
     public bool needsResolving() {
-        if(attacker == null) {
+        if(attacker.isSunk) {
             return false;
         }
         int validTargets = 0;
         Ship target = null;
         foreach(Ship s in targets) {
-            if(s != null) {
+            if(!s.isSunk) {
                 target = s;
                 validTargets++;
             } 

@@ -103,8 +103,8 @@ public class GameLogic : MonoBehaviour {
 
             foreach (Ship s in t.ships) {
                 s.currentActionIndex = 0;
-                s.catapultIndex = -1;
-                s.catapultDirection = -1;
+                s.CatapultPhaseIndex = -1;
+                s.CatapultDirection = -1;
                 s.actions = new Ship.Action[4];
                 s.populateDefaultActions();
             }

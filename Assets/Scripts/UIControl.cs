@@ -484,7 +484,7 @@ public class UIControl : MonoBehaviour
         {
             if(selected.currentActionIndex > 0)
             {
-                if(selected.actions[selected.currentActionIndex -1].actionIndex == 4)
+                if(selected.actions[selected.currentActionIndex -1].actionType == 4)
                 {
                     PhotonView.Get(selected.gameObject).RPC("setAction", RpcTarget.MasterClient, selected.currentActionIndex, i, -1);
                     if (!PhotonNetwork.IsMasterClient)
@@ -726,7 +726,7 @@ public class UIControl : MonoBehaviour
             colBlock.normalColor = attackClicked;
             attackPanels[i].colors = colBlock;
 
-            selected.catapultIndex = i;
+            selected.CatapultPhaseIndex = i;
         }
     }
 
@@ -747,7 +747,7 @@ public class UIControl : MonoBehaviour
                 b.colors = cb;
             }
 
-            if (selected.catapultIndex >= 0 && selected != null)
+            if (selected.CatapultPhaseIndex >= 0 && selected != null)
             {
 
 
@@ -755,7 +755,7 @@ public class UIControl : MonoBehaviour
                 colBlock.normalColor = attackClicked;
                 attackArrows[i].colors = colBlock;
 
-                selected.catapultDirection = i;
+                selected.CatapultDirection = i;
 
             }
         }
@@ -857,8 +857,8 @@ public class UIControl : MonoBehaviour
                 a.setCatapult(-1);
             }
 
-            if (s.catapultIndex >= 0 && s.catapultDirection >= 0)
-                s.actions[s.catapultIndex].setCatapult(s.catapultDirection);
+            if (s.CatapultPhaseIndex >= 0 && s.CatapultDirection >= 0)
+                s.actions[s.CatapultPhaseIndex].setCatapult(s.CatapultDirection);
         }
     }
 
@@ -879,7 +879,7 @@ public class UIControl : MonoBehaviour
             else
             {
                 setUndamaged();
-                setActionImages(selected.actions[selected.currentActionIndex].actionIndex);
+                setActionImages(selected.actions[selected.currentActionIndex].actionType);
             }
             selected.currentActionIndex++;
         }
@@ -920,17 +920,17 @@ public class UIControl : MonoBehaviour
             b.colors = cb;
         }
 
-        if (selected.catapultIndex >= 0)
+        if (selected.CatapultPhaseIndex >= 0)
         {
-            ColorBlock colBlock = attackPanels[selected.catapultIndex].colors;
+            ColorBlock colBlock = attackPanels[selected.CatapultPhaseIndex].colors;
             colBlock.normalColor = attackClicked;
-            attackPanels[selected.catapultIndex].colors = colBlock;
+            attackPanels[selected.CatapultPhaseIndex].colors = colBlock;
 
-            if (selected.catapultDirection >= 0)
+            if (selected.CatapultDirection >= 0)
             {
-                ColorBlock colorBlock = attackArrows[selected.catapultDirection].colors;
+                ColorBlock colorBlock = attackArrows[selected.CatapultDirection].colors;
                 colorBlock.normalColor = attackClicked;
-                attackArrows[selected.catapultDirection].colors = colBlock;
+                attackArrows[selected.CatapultDirection].colors = colBlock;
             }
         }
     }

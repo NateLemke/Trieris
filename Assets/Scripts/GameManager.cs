@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour {
         PhotonView.Get(this).RPC("RevealRedirects",RpcTarget.Others);
         RevealRedirects();
         //RevealRedirects();
-        foreach(Ship s in getAllShips()) {
+        foreach (Ship s in getAllShips()) {
             s.PortIDSync();
         }
 
@@ -146,16 +146,11 @@ public class GameManager : MonoBehaviour {
         Debug.Log("Setup for " + playerChoice);
 
         // TEMPORARY
-        if (!PhotonNetwork.IsConnected)
-        {
-            for (int i = 0; i < 6; i++)
-            {
-                if (i == playerChoice)
-                {
+        if (!PhotonNetwork.IsConnected) {
+            for (int i = 0; i < 6; i++) {
+                if (i == playerChoice) {
                     teamTypes[i] = Team.Type.player;
-                }
-                else
-                {
+                } else {
                     teamTypes[i] = Team.Type.ai;
                 }
             }
@@ -163,50 +158,44 @@ public class GameManager : MonoBehaviour {
 
         createTeams();
 
-        if (PhotonNetwork.IsConnected)
-        {
+        if (PhotonNetwork.IsConnected) {
             GameObject.Find("OverlayCanvas/UISidePanel/UIShipControl/GoButton/GoText").GetComponent<Text>().text = "Click to Ready Up";
-            for (int i = 0; i < teamTypes.Length; i++)
-            {
-                switch(teamTypes[i]){
-                    case (Team.Type) 2:
-                        Debug.Log("Team " + teams[i].TeamFaction + " is off");
-                        teams[i].setTeamType((Team.Type)2);
-                        break;
-                    case (Team.Type) 1:
-                        Debug.Log("Team " + teams[i].TeamFaction + " is human");
-                        teams[i].setTeamType((Team.Type)1);
-                        break;
-                    case (Team.Type) 0:
+            for (int i = 0; i < teamTypes.Length; i++) {
+                switch (teamTypes[i]) {
+                    case (Team.Type)2:
+                    Debug.Log("Team " + teams[i].TeamFaction + " is off");
+                    teams[i].setTeamType((Team.Type)2);
+                    break;
+                    case (Team.Type)1:
+                    Debug.Log("Team " + teams[i].TeamFaction + " is human");
+                    teams[i].setTeamType((Team.Type)1);
+                    break;
+                    case (Team.Type)0:
                     default:
-                        Debug.Log("Team " + teams[i].TeamFaction + " is ai");
-                        teams[i].setTeamType((Team.Type)0);
-                        break;
+                    Debug.Log("Team " + teams[i].TeamFaction + " is ai");
+                    teams[i].setTeamType((Team.Type)0);
+                    break;
                 }
-                foreach(Player p in PhotonNetwork.PlayerList){
-                    if((int)p.CustomProperties["TeamNum"] == i){
-                        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (i+1) + "Text").GetComponent<Text>().text = p.NickName;
+                foreach (Player p in PhotonNetwork.PlayerList) {
+                    if ((int)p.CustomProperties["TeamNum"] == i) {
+                        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (i + 1) + "Text").GetComponent<Text>().text = p.NickName;
                     }
                 }
             }
 
-            foreach (Team t in teams)
-            {
-                if (t.TeamType == (Team.Type)1)
-                {
+            foreach (Team t in teams) {
+                if (t.TeamType == (Team.Type)1) {
                     t.aiTeam = false;
                 }
             }
         }
 
-        foreach (Team t in teams)
-            {
-                if (t.TeamType == (Team.Type)1)
-                {
-                    GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
-                }
-                
+        foreach (Team t in teams) {
+            if (t.TeamType == (Team.Type)1) {
+                GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
             }
+
+        }
 
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
@@ -230,8 +219,8 @@ public class GameManager : MonoBehaviour {
         createShips();
         assignAI();
 
-        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {          
-            
+        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
+
             setAIDirections();
             uiControl.PostTeamSelection();
         }
@@ -343,7 +332,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public bool needRammingChoice() {
-        if(playerTeam == null) {
+        if (playerTeam == null) {
             return false;
         }
         return playerTeam.needRammingChoice();
@@ -390,7 +379,7 @@ public class GameManager : MonoBehaviour {
             s.NeedRedirect = true;
         }
     }
-          
+
     /// <summary>
     /// Checks for pending redirects or port captures
     /// </summary>
@@ -505,7 +494,7 @@ public class GameManager : MonoBehaviour {
         GameObject spawn = Instantiate(shipPrefab,node.getRealPos(),Quaternion.identity);
 
         Ship ship = spawn.GetComponent<Ship>();
-               
+
         PhotonView pv = spawn.AddComponent<PhotonView>();
         PhotonTransformView ptv = spawn.AddComponent<PhotonTransformView>();
         pv.ObservedComponents = new List<Component>();
@@ -523,7 +512,7 @@ public class GameManager : MonoBehaviour {
                 pv.TransferOwnership(PhotonNetwork.MasterClient);
             }
         }
-        
+
         //    Debug.Log((int)(team.TeamFaction + 1) * 100 + (ship.Id + 1) * 10);
         //Debug.Log(pv.ViewID);
 
@@ -531,7 +520,7 @@ public class GameManager : MonoBehaviour {
             pv.TransferOwnership(PhotonNetwork.MasterClient);
             //spawn = PhotonNetwork.Instantiate("Prefabs/Ship",node.getRealPos(),Quaternion.identity);
         }
-               
+
         spawn.transform.parent = parent.transform;
 
         ship.intialize(team,node);
@@ -706,19 +695,16 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public Player findOwnerOfShip(Ship inputShip)
-    {
+    public Player findOwnerOfShip(Ship inputShip) {
         Team curT = inputShip.team;
-        foreach(Player p in PhotonNetwork.PlayerList)
-        {
+        foreach (Player p in PhotonNetwork.PlayerList) {
             if ((int)p.CustomProperties["TeamNum"] == (int)curT.TeamFaction)
                 return p;
         }
         return null;
     }
 
-    public void changeFXVolume()
-    {
+    public void changeFXVolume() {
         gameObject.GetComponents<AudioSource>()[0].volume = GameObject.Find("OverlayCanvas/OptionsMenu/FXVolumeSlider").GetComponent<Slider>().value; ;
     }
 
@@ -743,8 +729,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public Port GetPort(int portID) {
-        foreach(Port p in board.ports) {
-            if(p.id == portID) {
+        foreach (Port p in board.ports) {
+            if (p.id == portID) {
                 return p;
             }
         }
@@ -829,9 +815,9 @@ public class GameManager : MonoBehaviour {
     //}
 
     [PunRPC]
-    public void SetPortTransparency(int portID, float alpha) {
-        foreach(Port p in board.ports) {
-            if(p.id == portID) {
+    public void SetPortTransparency(int portID,float alpha) {
+        foreach (Port p in board.ports) {
+            if (p.id == portID) {
                 p.SetTransparency(alpha);
                 return;
             }
@@ -843,9 +829,9 @@ public class GameManager : MonoBehaviour {
     public void focus(float x,float y) {
         StartCoroutine(PhaseManager.Focus(new Vector2(x,y)));
     }
-    
+
     [PunRPC]
-    public void RunPortCaptureAnimation(int team1 , int team2 , float x, float y) {
+    public void RunPortCaptureAnimation(int team1,int team2,float x,float y) {
 
         //Ship ship = GetShip(shipID,team);
 
@@ -865,7 +851,7 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void SetPortTeam(int portID, int teamId) {
+    public void SetPortTeam(int portID,int teamId) {
 
         board.ports[portID].Team = teams[teamId];
     }
@@ -887,7 +873,7 @@ public class GameManager : MonoBehaviour {
         arrow.GetComponent<AnimArrow>().Initialize(teams[team],momentum);
         if (reverse) {
             arrow.transform.localScale = new Vector3(0.158f,-0.158f,0.158f);
-        }        
+        }
     }
 
     void SyncPortTransparency() {
@@ -930,7 +916,7 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SendTargetInfo(int shipID,int teamID,int[] targetIDs,int[] targetTeamIDs) {
 
-        if(teamID != (int)playerTeam.TeamFaction) {
+        if (teamID != (int)playerTeam.TeamFaction) {
             Debug.Log("Player's team does NOT own this multi target choice");
             return;
         }
@@ -939,21 +925,21 @@ public class GameManager : MonoBehaviour {
 
         Ship attacker = GetShip(shipID,teamID);
         List<Ship> targets = new List<Ship>();
-        for(int i = 0; i < targetIDs.Length; i++) {
+        for (int i = 0; i < targetIDs.Length; i++) {
             targets.Add(GetShip(targetIDs[i],targetTeamIDs[i]));
         }
-        
+
         ShipTargetResolution targetChoice = new ShipTargetResolution(attacker,targets);
-        StartCoroutine(targetChoice.resolve());        
+        StartCoroutine(targetChoice.resolve());
     }
 
     [PunRPC]
-    public void SyncTargetChoice(int shipID, int teamID) {
+    public void SyncTargetChoice(int shipID,int teamID) {
         PhaseManager.chosenTarget = GetShip(shipID,teamID);
     }
 
     public bool HumanNeedsRedirect() {
-        foreach(Team t in teams) {
+        foreach (Team t in teams) {
             if (t.needRedirectChoice()) {
                 return true;
             }
@@ -969,7 +955,7 @@ public class GameManager : MonoBehaviour {
         }
         return false;
     }
-    
+
     public bool HumanNeedsCatapultChoice() {
         foreach (Team t in teams) {
             if (t.needCatapultChoice()) {
@@ -980,9 +966,9 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void ActivatePortPrompt(int shipID, int teamID, int portID) {
+    public void ActivatePortPrompt(int shipID,int teamID,int portID) {
 
-        if(teamID != (int)playerTeam.TeamFaction) {
+        if (teamID != (int)playerTeam.TeamFaction) {
             return;
         }
 
@@ -993,7 +979,7 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void PlayerCapturePort(int shipID, int teamID) {
+    public void PlayerCapturePort(int shipID,int teamID) {
 
         Ship ship = GetShip(shipID,teamID);
         //Port port = ship.getNode().Port;
@@ -1011,7 +997,7 @@ public class GameManager : MonoBehaviour {
 
     [PunRPC]
     public void CheckPortCaptureChoice() {
-        foreach(Ship s in playerTeam.ships) {
+        foreach (Ship s in playerTeam.ships) {
             if (s.NeedCaptureChoice) {
                 Debug.Log("Check port capture choice found ship");
                 ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.PortID);
@@ -1028,5 +1014,55 @@ public class GameManager : MonoBehaviour {
     [PunRPC]
     public void SyncPlayersSyncStatus() {
         shipsSynced = true;
+    }
+
+    //[PunRPC]
+    //public void SyncGameData(
+    //    float[,] shipPositions,
+    //    int[] shipDirection,
+    //    int[,] shipActions,
+    //    int[] shipCatapultPhase,
+    //    int[] shipCatapultDirection,
+    //    int[] shipHealth,
+    //    bool[] shipSunk,
+    //    int[] portOwners) {
+
+    //    data.shipPositions = shipPositions;
+    //    data.shipDirection = shipDirection;
+    //    data.shipActions = shipActions;
+
+
+    //}
+
+    public void BackupData() {
+        foreach (Ship s in getAllShips()) {
+            s.BackupData();
+        }
+
+        foreach (Port p in board.ports) {
+            p.BackupData();
+        }
+    }
+
+    public void SyncBackupData() {
+
+    }
+
+    public void Restore() {
+        foreach(Node n in board.getAllNodes()) {
+            n.Ships.Clear();
+        }
+        
+        foreach(Ship s in getAllShips()) {
+            s.Restore();
+        }
+
+        foreach (Ship s in getAllShips()) {
+            s.transform.position = s.getNodePos();
+        }
+
+        foreach(Port p in board.ports) {
+            p.Restore();
+        }
     }
 }

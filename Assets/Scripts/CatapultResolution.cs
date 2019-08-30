@@ -22,7 +22,7 @@ public class CatapultResolution : CombatResolution
 
     public override IEnumerator resolve() {
 
-        if(shipA == null || (shipB == null && missedNode == null) || !shipA.CanFire) {
+        if(shipA.isSunk || (shipB.isSunk && missedNode == null) || !shipA.CanFire) {
             yield break;
         }
 

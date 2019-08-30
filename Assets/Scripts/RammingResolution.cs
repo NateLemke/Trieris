@@ -23,11 +23,11 @@ public class RammingResolution : CombatResolution
     /// <returns></returns>
     public override IEnumerator resolve() {
 
-        if(shipA == null || shipA.gameObject == null) {
+        if(shipA.isSunk || shipA.gameObject == null) {
             yield break;
         }
 
-        if (shipB == null || shipB.gameObject == null) {
+        if (shipB.isSunk || shipB.gameObject == null) {
             yield break;
         }
 

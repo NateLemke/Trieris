@@ -23,14 +23,14 @@ public class Ship : MonoBehaviour {
 
     public int currentActionIndex;
 
-    private int CatapultIndex;
-    public int catapultIndex
+    private int catapultPhaseIndex;
+    public int CatapultPhaseIndex
     {
         get{
-            return CatapultIndex;
+            return catapultPhaseIndex;
         }
         set { 
-            CatapultIndex = value;
+            catapultPhaseIndex = value;
             if (PhotonNetwork.IsConnected) {
                 PhotonView.Get(this).RPC("SyncCatapultIndex",RpcTarget.Others,value);
             }
@@ -39,17 +39,17 @@ public class Ship : MonoBehaviour {
 
     [PunRPC]
     public void SyncCatapultIndex(int input){
-        CatapultIndex = input;
+        catapultPhaseIndex = input;
     }
 
-    private int CatapultDirection;
-    public int catapultDirection
+    private int catapultDirection;
+    public int CatapultDirection
     {
         get{
-            return CatapultDirection;
+            return catapultDirection;
         }
         set { 
-            CatapultDirection = value;
+            catapultDirection = value;
             if (PhotonNetwork.IsConnected) {
                 PhotonView.Get(this).RPC("SyncCatapultDirection",RpcTarget.Others,value);
             }
@@ -58,7 +58,7 @@ public class Ship : MonoBehaviour {
 
     [PunRPC]
     public void SyncCatapultDirection(int input){
-        CatapultDirection = input;
+        catapultDirection = input;
     }
 
     public bool CanFire { get { return canFire; } set { canFire = value; } }
@@ -88,7 +88,7 @@ public class Ship : MonoBehaviour {
     public int fireDirection = -1;
 
     // ship front means ship direction
-    private int front = 4;
+    public int front = 4;
     private bool canAct = true;
     public bool canActAfterCollision = true;
     private int frontAfterCollision = -1;
@@ -169,10 +169,22 @@ public class Ship : MonoBehaviour {
         }
     }
 
+    public bool isSunk;
+
     // references to the ship's redirect UI
     private GameObject redirectUI;
     private GameObject redirectNotification;
     private GameObject directionLabel;
+
+    // data to save when starting a turn, so data can be restore if master client disconnects
+    Vector2Int nodeBackup;
+    int directionBackup;
+    int[] actionBackup = new int[4];
+    int catapultPhaseBackup;
+    int catapultDirectionBackup;
+    int healthBackup;
+    bool sunkBackup;
+    
 
     /// <summary>
     /// Used to initialze the ship upon instantiation
@@ -186,8 +198,8 @@ public class Ship : MonoBehaviour {
         id = team.shipIdCounter++;
         life = MAX_HEALTH;
 
-        CatapultIndex = -1;
-        CatapultDirection = -1;
+        catapultPhaseIndex = -1;
+        catapultDirection = -1;
         canFire = true;
 
         this.Node = node;
@@ -250,13 +262,13 @@ public class Ship : MonoBehaviour {
     public abstract class Action {
         public int catapultDirection = -1;
         public bool reverseReady = false;
-        public int actionIndex;
+        public int actionType;
         protected Ship ship;
 
         public Action(int catapultDirection,Ship ship,int index) {
             this.ship = ship;
             this.catapultDirection = catapultDirection;
-            actionIndex = index;
+            actionType = index;
         }
 
         public void act() {                 //throws ShipCrashedException 
@@ -1211,6 +1223,32 @@ public class Ship : MonoBehaviour {
         }
         newNode.Ships.Add(this);
         nodeValue = newNode;
+    }
+
+    public void BackupData() {
+        nodeBackup = new Vector2Int(Node.X,Node.Y);
+        directionBackup = front;
+        actionBackup[0] = actions[0].actionType;
+        actionBackup[1] = actions[1].actionType;
+        actionBackup[2] = actions[2].actionType;
+        actionBackup[3] = actions[3].actionType;
+        catapultDirectionBackup = catapultDirection;
+        catapultPhaseBackup = catapultPhaseIndex;
+        healthBackup = life;
+        sunkBackup = isSunk;
+    }
+
+    public void Restore() {
+        Node = GameManager.main.Board.getNodeAt(nodeBackup);
+        front = directionBackup;
+        actions[0] = getAction(actionBackup[0],-1);
+        actions[1] = getAction(actionBackup[1],-1);
+        actions[2] = getAction(actionBackup[2],-1);
+        actions[3] = getAction(actionBackup[3],-1);
+        CatapultDirection = catapultDirectionBackup;
+        CatapultPhaseIndex = catapultPhaseBackup;
+        life = healthBackup;
+        isSunk = sunkBackup;
     }
 
 }
