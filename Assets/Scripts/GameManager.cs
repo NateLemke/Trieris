@@ -138,6 +138,7 @@ public class GameManager : MonoBehaviour {
 
         GameObject.Find("LoadingOverlay").SetActive(false);
         PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
+        PhotonView.Get(this).RPC("SyncPlayersSyncStatus",RpcTarget.Others);
     }
 
     public void setupGame(int playerChoice) {
@@ -182,6 +183,11 @@ public class GameManager : MonoBehaviour {
                         teams[i].setTeamType((Team.Type)0);
                         break;
                 }
+                foreach(Player p in PhotonNetwork.PlayerList){
+                    if((int)p.CustomProperties["TeamNum"] == i){
+                        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + (i+1) + "Text").GetComponent<Text>().text = p.NickName;
+                    }
+                }
             }
 
             foreach (Team t in teams)
@@ -192,6 +198,15 @@ public class GameManager : MonoBehaviour {
                 }
             }
         }
+
+        foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type)1)
+                {
+                    GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
+                }
+                
+            }
 
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
@@ -212,24 +227,18 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();        
+        createShips();
+        assignAI();
 
-        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
+        if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {          
             
-            assignAI();
-
             setAIDirections();
-
             uiControl.PostTeamSelection();
-
-
         }
 
         if (!PhotonNetwork.IsConnected) {
             SetPortTransparency();
-
             SetInitialRedirects();
-
             RevealRedirects();
         }
 
@@ -1016,4 +1025,8 @@ public class GameManager : MonoBehaviour {
         GameObject.Find("LoadingOverlay").SetActive(false);
     }
 
+    [PunRPC]
+    public void SyncPlayersSyncStatus() {
+        shipsSynced = true;
+    }
 }

@@ -56,7 +56,8 @@ public class GameLogic : MonoBehaviour {
         Debug.Log("Ready Reset");
         foreach (Team t in gameManager.teams)
         {
-            t.Ready = false;
+            if(t.TeamType != Team.Type.ai)
+                t.Ready = false;
         }
     }
 
@@ -208,9 +209,9 @@ public class GameLogic : MonoBehaviour {
 
         foreach (Team t in GameManager.main.teams) {
 
-            if (t.eliminated) {
-                continue;
-            }
+            //if (t.eliminated) {
+            //    continue;
+            //}
 
             // check if the only the teams's ships remain
             if (GameManager.main.getAllShips().Count == t.ships.Count) {
@@ -225,12 +226,10 @@ public class GameLogic : MonoBehaviour {
             }            
         }
 
-        foreach(Team t in gameManager.teams) {
-            // check if the player has lost all their ships
-            if (t.ships.Count == 0) {
-                eliminatePlayer(t);
-            }
+        if (GameManager.playerTeam.ships.Count == 0 && !GameManager.playerTeam.eliminated) {
+            eliminatePlayer(GameManager.playerTeam);
         }
+
     }
 
     private void eliminatePlayer(Team t) {
