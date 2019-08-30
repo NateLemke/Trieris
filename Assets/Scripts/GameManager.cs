@@ -440,7 +440,7 @@ public class GameManager : MonoBehaviour {
     public List<Team> getHumanTeams() {
         List<Team> teams = new List<Team>();
         foreach (Team t in this.teams) {
-            if (t != null && !t.aiTeam) {
+            if (t != null && t.TeamType == Team.Type.player) {
                 teams.Add(t);
             }
         }

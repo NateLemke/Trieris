@@ -112,8 +112,8 @@ public class GameLogic : MonoBehaviour {
         }
 
         foreach(Team t in gameManager.getHumanTeams()) {
-
-            t.Ready = false;
+            if(PhotonNetwork.IsMasterClient)
+                t.Ready = false;
 
             foreach (Ship s in t.ships) {
                 s.currentActionIndex = 0;
