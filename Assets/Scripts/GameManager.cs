@@ -48,6 +48,8 @@ public class GameManager : MonoBehaviour {
 
     public bool shipsSynced = false;
 
+    public static GameData data;
+
     /// <summary>
     /// Sets the static reference to the main gamemanager
     /// creates the game board
@@ -64,6 +66,7 @@ public class GameManager : MonoBehaviour {
         if (!PhotonNetwork.IsConnected) {
             GameObject.Find("LoadingOverlay").SetActive(false);
         }
+        data = new GameData();
     }
 
     /// <summary>
@@ -195,6 +198,17 @@ public class GameManager : MonoBehaviour {
             }
         }
 
+        if(PhotonNetwork.IsMasterClient){
+            foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type)0)
+                {
+                    PhotonView.Get(this).RPC("SetDefaultAITextColor",RpcTarget.All,((int)t.TeamFaction + 1));
+                }   
+            }
+        }
+        
+
         playerFaction = (Team.Faction)playerChoice;
         playerTeam = teams[(int)playerFaction];
 
@@ -243,6 +257,11 @@ public class GameManager : MonoBehaviour {
 
         cameraLock = false;
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
+    }
+
+    [PunRPC]
+    public void SetDefaultAITextColor(int playerSlot){
+        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + playerSlot + "Text").GetComponent<Text>().color = Color.green;
     }
 
     public void SyncShipPhotonID() {

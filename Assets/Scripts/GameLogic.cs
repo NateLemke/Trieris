@@ -56,8 +56,14 @@ public class GameLogic : MonoBehaviour {
         Debug.Log("Ready Reset");
         foreach (Team t in gameManager.teams)
         {
-            t.Ready = false;
+            if(t.TeamType != Team.Type.ai)
+                t.Ready = false;
         }
+    }
+
+    [PunRPC]
+    public void setUnready(int faction){
+        gameManager.teams[faction].Ready = false;
     }
 
     /// <summary>
