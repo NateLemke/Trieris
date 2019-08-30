@@ -108,7 +108,5 @@ MonoBehaviour:
   - DisableLoadingOverlay
   - setDead
   - updatePortsUI
-  - SyncNode
-  - SyncPlayersSyncStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 1

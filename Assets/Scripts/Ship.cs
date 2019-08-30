@@ -1203,14 +1203,4 @@ public class Ship : MonoBehaviour {
         Node = nodeValue;
     }
 
-    [PunRPC]
-    private void SyncNode(int x, int y) {
-        Node newNode = GameManager.main.Board.getNodeAt(new Vector2Int(x,y));
-        if(Node != null) {
-            Node.Ships.Remove(this);
-        }
-        newNode.Ships.Add(this);
-        nodeValue = newNode;
-    }
-
 }
