@@ -61,6 +61,11 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
+    [PunRPC]
+    public void setUnready(int faction){
+        gameManager.teams[faction].Ready = false;
+    }
+
     /// <summary>
     /// Executes the next phase, ends the turn if the phase index is at 3
     /// </summary>
@@ -71,7 +76,12 @@ public class GameLogic : MonoBehaviour {
         
         // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
-            PhotonView.Get(this).RPC("setAllTeamsUnready", RpcTarget.All);
+            foreach(Team t in gameManager.teams){
+                if(t.TeamType == Team.Type.player){
+                    PhotonView.Get(this).RPC("setUnready", RpcTarget.All, (int)t.TeamFaction);
+                }
+            }
+            
             endTurn();
 
             return false;
