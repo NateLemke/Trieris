@@ -63,7 +63,10 @@ public class GameLogic : MonoBehaviour {
 
     [PunRPC]
     public void setUnready(int faction){
+
+        Debug.Log(faction + " start ");
         gameManager.teams[faction].Ready = false;
+        Debug.Log(faction + " finish ");
     }
 
     /// <summary>
