@@ -594,7 +594,7 @@ public class Ship : MonoBehaviour {
         }
         //PhaseManager.sinkAnimations.Add(new SinkAnimation(this));
         //node = null;
-        team.ships.Remove(this);
+        //team.ships.Remove(this);
 
         if (team.ships.Count != 0 && this == GameManager.main.uiControl.Selected) {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
@@ -612,7 +612,8 @@ public class Ship : MonoBehaviour {
             s.updateNodePos();
         }
 
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        
     }
 
     /// <summary>
