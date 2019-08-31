@@ -63,7 +63,10 @@ public class GameLogic : MonoBehaviour {
 
     [PunRPC]
     public void setUnready(int faction){
+
+        Debug.Log(faction + " start ");
         gameManager.teams[faction].Ready = false;
+        Debug.Log(faction + " finish ");
     }
 
     /// <summary>
@@ -79,6 +82,7 @@ public class GameLogic : MonoBehaviour {
             if(PhotonNetwork.IsMasterClient){
                 foreach(Team t in gameManager.teams){
                     if(t.TeamType == Team.Type.player){
+                        Debug.Log(t.TeamFaction + " is being set unready.");
                         PhotonView.Get(this).RPC("setUnready", RpcTarget.All, (int)t.TeamFaction);
                     }  
                 }
@@ -111,8 +115,8 @@ public class GameLogic : MonoBehaviour {
         }
 
         foreach(Team t in gameManager.getHumanTeams()) {
-
-            t.Ready = false;
+            if(PhotonNetwork.IsMasterClient)
+                t.Ready = false;
 
             foreach (Ship s in t.ships) {
                 s.currentActionIndex = 0;

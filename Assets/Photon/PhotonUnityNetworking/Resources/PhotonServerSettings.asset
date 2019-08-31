@@ -110,5 +110,6 @@ MonoBehaviour:
   - updatePortsUI
   - SetDefaultAITextColor
   - setUnready
+  - UpdateTeamImage
   DisableAutoOpenWizard: 1
   ShowSettings: 1

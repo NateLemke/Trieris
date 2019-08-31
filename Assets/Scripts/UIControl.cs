@@ -412,7 +412,7 @@ public class UIControl : MonoBehaviour
 
         foreach (Team t in gameManager.teams)
         {
-            if (t.TeamFaction == (Team.Faction)teamValue)
+            if (t.TeamFaction == (Team.Faction)teamValue && !t.eliminated)
             {
                 t.Ready = !t.Ready;
                 break;
