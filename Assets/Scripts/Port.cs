@@ -11,7 +11,7 @@ public class Port {
 
     // the team that the port belongs to
     private Team originalTeam;
-    private int teamBackup;
+    //private int teamBackup;
     public Team OriginalTeam { get { return originalTeam; } }
 
     //public Team.Faction teamFaction { get; set; }
@@ -131,11 +131,11 @@ public class Port {
         go.GetComponent<PortPrompt>().activateNotification(this,s);
     }
 
-    public void BackupData() {
-        teamBackup = (int)team.TeamFaction;
-    }
+    //public void BackupData() {
+    //    teamBackup = (int)team.TeamFaction;
+    //}
 
-    public void Restore() {
-        Team = GameManager.main.teams[teamBackup];
-    }
+    //public void Restore() {
+    //    Team = GameManager.main.teams[teamBackup];
+    //}
 }

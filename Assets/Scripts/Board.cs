@@ -21,6 +21,8 @@ public class Board{
 
     public static int portIDCounter = 0;
 
+    public int[] portOwnerBackup;
+
     public Board() {
         node = new Node[ROW_OF_NODES,COLUMN_OF_NODES];
         initialize();
@@ -206,6 +208,19 @@ public class Board{
                 a = v2;
                 b = v1;
             }
+        }
+    }
+
+    public void BackupPorts() {
+        portOwnerBackup = new int[ports.Count];
+        for (int i = 0; i < portOwnerBackup.Length; i++) {
+            portOwnerBackup[i] = (int)ports[i].Team.TeamFaction;
+        }
+    }
+
+    public void RestorePorts() {
+        for(int i = 0; i < portOwnerBackup.Length; i++) {
+            ports[i].Team = GameManager.main.teams[portOwnerBackup[i]];
         }
     }
 }

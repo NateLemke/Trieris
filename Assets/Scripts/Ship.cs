@@ -24,12 +24,11 @@ public class Ship : MonoBehaviour {
     public int currentActionIndex;
 
     private int catapultPhaseIndex;
-    public int CatapultPhaseIndex
-    {
-        get{
+    public int CatapultPhaseIndex {
+        get {
             return catapultPhaseIndex;
         }
-        set { 
+        set {
             catapultPhaseIndex = value;
             if (PhotonNetwork.IsConnected) {
                 PhotonView.Get(this).RPC("SyncCatapultIndex",RpcTarget.Others,value);
@@ -38,17 +37,16 @@ public class Ship : MonoBehaviour {
     }
 
     [PunRPC]
-    public void SyncCatapultIndex(int input){
+    public void SyncCatapultIndex(int input) {
         catapultPhaseIndex = input;
     }
 
     private int catapultDirection;
-    public int CatapultDirection
-    {
-        get{
+    public int CatapultDirection {
+        get {
             return catapultDirection;
         }
-        set { 
+        set {
             catapultDirection = value;
             if (PhotonNetwork.IsConnected) {
                 PhotonView.Get(this).RPC("SyncCatapultDirection",RpcTarget.Others,value);
@@ -57,7 +55,7 @@ public class Ship : MonoBehaviour {
     }
 
     [PunRPC]
-    public void SyncCatapultDirection(int input){
+    public void SyncCatapultDirection(int input) {
         catapultDirection = input;
     }
 
@@ -69,7 +67,7 @@ public class Ship : MonoBehaviour {
 
     public Action[] actions;
     private Node Node {
-        get { return nodeValue;  }
+        get { return nodeValue; }
         set { nodeValue = value;
             PortID = (value.Port != null) ? value.Port.id : -1;
             if (PhotonNetwork.IsConnected && PhotonView.Get(this).ViewID != 0) {
@@ -80,7 +78,14 @@ public class Ship : MonoBehaviour {
     private Node nodeValue;
     public int PortID = -1;
 
-    public int momentum { get; set; }
+    private int momentum;
+    public int Momentum { get { return momentum; } set {
+            momentum = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncMomentum",RpcTarget.Others,value);
+            }
+        }
+    }
 
     private int portRepairCount = 0;
     private bool movedForward = false;
@@ -88,7 +93,16 @@ public class Ship : MonoBehaviour {
     public int fireDirection = -1;
 
     // ship front means ship direction
-    public int front = 4;
+    private int direction = 4;
+    public int Direction {
+        get { return direction; }
+        set { direction = value;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("SyncDirection",RpcTarget.Others,value);
+            }
+        }
+    }
+
     private bool canAct = true;
     public bool canActAfterCollision = true;
     private int frontAfterCollision = -1;
@@ -177,14 +191,14 @@ public class Ship : MonoBehaviour {
     private GameObject directionLabel;
 
     // data to save when starting a turn, so data can be restore if master client disconnects
-    Vector2Int nodeBackup;
-    int directionBackup;
+    int[] nodeBackup;
     int[] actionBackup = new int[4];
     int catapultPhaseBackup;
     int catapultDirectionBackup;
-    int healthBackup;
+    int lifeBackup;
     bool sunkBackup;
-    
+    int directionBackup;
+    int momentumBackup;
 
     /// <summary>
     /// Used to initialze the ship upon instantiation
@@ -297,7 +311,7 @@ public class Ship : MonoBehaviour {
 
         protected override void affectShip() {           // throws ShipCrashedException 
             ship.speedup();
-            ship.move(ship.front);
+            ship.move(ship.Direction);
 
         }
     }
@@ -378,11 +392,11 @@ public class Ship : MonoBehaviour {
     }
 
     public int getFront() {
-        return front;
+        return Direction;
     }
 
     public int getMomentum() {
-        return momentum;
+        return Momentum;
     }
 
     /// <summary>
@@ -439,7 +453,7 @@ public class Ship : MonoBehaviour {
             target.CanFire = false;
             ramDamageAndAngle(target);
             canAct = canActAfterCollision;
-            momentum = 0;
+            Momentum = 0;
         }
     }
 
@@ -482,16 +496,14 @@ public class Ship : MonoBehaviour {
             //Debug.Log("----Ship crashed");
             NeedRedirect = true;
             movedForward = false;
-            momentum = 0;
-            if (PhotonNetwork.IsConnected)
-            {
-                PhotonView.Get(this).RPC("activateRedirectNotification", RpcTarget.All);
+            Momentum = 0;
+            if (PhotonNetwork.IsConnected) {
+                PhotonView.Get(this).RPC("activateRedirectNotification",RpcTarget.All);
             }
-            if(team == GameManager.playerTeam)
+            if (team == GameManager.playerTeam)
                 activateRedirectNotification();
             return;
         }
-
 
         Node startNode = Node;
 
@@ -500,8 +512,7 @@ public class Ship : MonoBehaviour {
         Node.Ships.Add(this);
         bool reverse = direction == getRelativeDirection(-4);
 
-        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,momentum,reverse));
-
+        PhaseManager.actionAnimations.Add(this,new MovementAnimation(startNode,destNode,this,Momentum,reverse));
     }
 
     /// <summary>
@@ -509,12 +520,12 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="relativeDirection">the direction to turn the ship</param>
     public void turn(int relativeDirection) {
-        front = getRelativeDirection(relativeDirection);
-        momentum = 0;
+        Direction = getRelativeDirection(relativeDirection);
+        Momentum = 0;
         bool portTurn = (relativeDirection == -1);
-        if (PhaseManager.actionAnimations.ContainsKey(this)) {
-            ;
-        }
+        //if (PhaseManager.actionAnimations.ContainsKey(this)) {
+        //    ;
+        //}
 
         PhaseManager.actionAnimations.Add(this,new RotationAnimation(this.transform.rotation,this.transform.rotation * Quaternion.Euler(0,0,-45 * relativeDirection),this,portTurn));
 
@@ -522,17 +533,17 @@ public class Ship : MonoBehaviour {
     }
 
     public void setFront(int direction) {
-        front = direction % 8;
+        this.Direction = direction % 8;
     }
 
     public void hold() {
-        momentum = 0;
+        Momentum = 0;
         movedForward = false;
     }
 
     public void speedup() {
         DebugControl.log("movement","Speeding up...");
-        momentum++;
+        Momentum++;
         movedForward = true;
     }
 
@@ -564,7 +575,7 @@ public class Ship : MonoBehaviour {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(this).RPC("sink",RpcTarget.Others);
         }
-               
+
         if (Node != null) {
             Node.Ships.Remove(this);
         }
@@ -613,7 +624,7 @@ public class Ship : MonoBehaviour {
         canActAfterCollision = false;
         canAct = false;
         movedForward = false;
-        momentum = 0;
+        Momentum = 0;
         PhaseManager.addCaptureAnimation(this);
     }
 
@@ -621,8 +632,7 @@ public class Ship : MonoBehaviour {
     /// Used when the a player ship captures a port, activates port capture UI
     /// </summary>
     [PunRPC]
-    public void playerCapture()
-    {
+    public void playerCapture() {
         //if (PhotonNetwork.IsConnected)
         //{
         //    if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
@@ -654,7 +664,7 @@ public class Ship : MonoBehaviour {
         NeedRedirect = true;
         portRepairCount = -5;
 
-        Debug.Log("playerCapture() for "+name);
+        Debug.Log("playerCapture() for " + name);
 
         if (PhotonNetwork.IsConnected) {
             PhotonView.Get(this).RPC("activateRedirectNotification",RpcTarget.All);
@@ -670,7 +680,7 @@ public class Ship : MonoBehaviour {
     public void updateFrontAfterCollision() {
         movedForward = false;
         if (frontAfterCollision != -1) {
-            front = frontAfterCollision;
+            Direction = frontAfterCollision;
         }
         canAct = canActAfterCollision;
         frontAfterCollision = -1;
@@ -717,7 +727,7 @@ public class Ship : MonoBehaviour {
     /// <returns>the relative direction as an int</returns>
     private int getRelativeDirection(int relativeDelta) {
         relativeDelta %= 8;
-        int result = front + relativeDelta;
+        int result = Direction + relativeDelta;
         if (result > 7) {
             result -= 8;
         } else if (result < 0) {
@@ -731,7 +741,7 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="target">the ramming target of this ship</param>
     private void ramDamageAndAngle(Ship target) {
-        int enemyAngle = target.front;
+        int enemyAngle = target.Direction;
         disableCatapults(target);
         if (!target.movedForward && (enemyAngle == getRelativeDirection(2) ||
                 enemyAngle == getRelativeDirection(6))) {
@@ -744,7 +754,7 @@ public class Ship : MonoBehaviour {
                 enemyAngle == getRelativeDirection(6) ||
                 enemyAngle == getRelativeDirection(7)) {
             glancingRam(target,1);
-        } else if (Mathf.Abs(this.front - target.front) == 4) {
+        } else if (Mathf.Abs(this.Direction - target.Direction) == 4) {
             headOnRam(target);
         } else {
             glancingRam(target,0);
@@ -769,7 +779,7 @@ public class Ship : MonoBehaviour {
     private void broadsideRam(Ship target) {
         target.canActAfterCollision = false;
         canActAfterCollision = false;
-        PhaseManager.addRammingResolution(this,target,momentum * 2);
+        PhaseManager.addRammingResolution(this,target,Momentum * 2);
     }
 
     /// <summary>
@@ -796,7 +806,7 @@ public class Ship : MonoBehaviour {
             movedForward = false;
             PhaseManager.addAdjHeadOnRamming(this,target);
         } else {
-            PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+            PhaseManager.addRammingResolution(this,target,Momentum,dmgToSelf);
         }
     }
 
@@ -809,11 +819,11 @@ public class Ship : MonoBehaviour {
 
         target.frontAfterCollision = target.getRelativeDirection(relativeTurn);
         int dmgToSelf = 0;
-        if (!target.movedForward && this.front != target.front) {
+        if (!target.movedForward && this.Direction != target.Direction) {
             this.frontAfterCollision = this.getRelativeDirection(-relativeTurn);
             dmgToSelf = 1;
         }
-        PhaseManager.addRammingResolution(this,target,momentum,dmgToSelf);
+        PhaseManager.addRammingResolution(this,target,Momentum,dmgToSelf);
 
     }
 
@@ -872,7 +882,7 @@ public class Ship : MonoBehaviour {
     /// Sets the rotation of the ships sprite according to its front facing
     /// </summary>
     public void setSpriteRotation() {
-        transform.eulerAngles = new Vector3(0,0,(front) * -45);
+        transform.eulerAngles = new Vector3(0,0,(Direction) * -45);
     }
 
     /// <summary>
@@ -880,13 +890,10 @@ public class Ship : MonoBehaviour {
     /// </summary>
     /// <param name="newDirection">the new direction for this ship to face</param>
     public void redirect(int newDirection) {
-        if (PhotonNetwork.IsConnected)
-        {
-            PhotonView.Get(this).RPC("setDirection", RpcTarget.MasterClient, newDirection);
-            PhotonView.Get(this).RPC("setNeedRedirect", RpcTarget.MasterClient, false);
-        }
-        else
-        {
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(this).RPC("setDirection",RpcTarget.MasterClient,newDirection);
+            PhotonView.Get(this).RPC("setNeedRedirect",RpcTarget.MasterClient,false);
+        } else {
             setDirection(newDirection);
             NeedRedirect = false;
         }
@@ -900,22 +907,20 @@ public class Ship : MonoBehaviour {
     /// <param name="newDirection">the new direction for this ship to face</param>
     [PunRPC]
     protected void setDirection(int newDirection) {
-        front = newDirection;
+        Direction = newDirection;
         setSpriteRotation();
 
     }
 
     [PunRPC]
-    protected void setNeedRedirect(bool input)
-    {
+    protected void setNeedRedirect(bool input) {
         NeedRedirect = input;
     }
 
-     /// <summary>
-     /// enables this ship's UI
-     /// </summary>
-    public void shipUIOn()
-    {
+    /// <summary>
+    /// enables this ship's UI
+    /// </summary>
+    public void shipUIOn() {
         transform.Find("ShipUI").gameObject.SetActive(true);
     }
 
@@ -940,19 +945,19 @@ public class Ship : MonoBehaviour {
     //    if (!canAct) {
     //        Handles.Label(transform.position + new Vector3(0,-0.5f),"cannot act");
     //   }
-//
+    //
     //    if (needCaptureChoice) {
     //        Handles.Label(transform.position + new Vector3(0,0.0f),"need capture");
     //    }
-//
+    //
     //    if (needRammingChoice) {
     //        Handles.Label(transform.position + new Vector3(0,0.25f),"need ramming");
-     //   }
-//
-  //    if (needCatapultChoice) {
-  //        Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
-  //    }
-  //}
+    //   }
+    //
+    //    if (needCatapultChoice) {
+    //        Handles.Label(transform.position + new Vector3(0,0.5f),"need catapult");
+    //    }
+    //}
 
     /// <summary>
     /// Initiates the combat damage text for this ship
@@ -1070,21 +1075,16 @@ public class Ship : MonoBehaviour {
     /// Activates the redirection notification UI
     /// </summary>
     [PunRPC]
-    public void activateRedirectNotification()
-    {
-        if (PhotonNetwork.IsConnected)
-        {
-            if((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"])
-            {
-                Debug.Log("redirect activated for"+(int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
+    public void activateRedirectNotification() {
+        if (PhotonNetwork.IsConnected) {
+            if ((int)team.TeamFaction == (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]) {
+                Debug.Log("redirect activated for" + (int)team.TeamFaction + ", " + (int)PhotonNetwork.LocalPlayer.CustomProperties["TeamNum"]);
                 Destroy(directionLabel);
                 redirectNotification.SetActive(true);
                 redirectUI.SetActive(false);
                 return;
             }
-        }
-        else
-        {
+        } else {
             Destroy(directionLabel);
             redirectNotification.SetActive(true);
             redirectUI.SetActive(false);
@@ -1203,13 +1203,21 @@ public class Ship : MonoBehaviour {
     private void SyncNeedCatapultChoice(bool b) {
         needCatapultChoice = b;
     }
+    [PunRPC]
+    void SyncMomentum(int i) {
+        Momentum = i;
+    }
+    [PunRPC]
+    void SyncDirection(int i) {
+        Direction = i;
+    }
 
     [PunRPC]
     private void SyncPortID(int id) {
         PortID = id;
     }
 
-    public void PortIDSync() {
+    public void ForceNodeAndPortIDSync() {
         Node = nodeValue;
     }
 
@@ -1223,30 +1231,74 @@ public class Ship : MonoBehaviour {
         nodeValue = newNode;
     }
 
-    public void BackupData() {
-        nodeBackup = new Vector2Int(Node.X,Node.Y);
-        directionBackup = front;
+    public void BackupDataAndSend() {
+        nodeBackup = new int[] { Node.X,Node.Y };
         actionBackup[0] = actions[0].actionType;
         actionBackup[1] = actions[1].actionType;
         actionBackup[2] = actions[2].actionType;
         actionBackup[3] = actions[3].actionType;
         catapultDirectionBackup = catapultDirection;
         catapultPhaseBackup = catapultPhaseIndex;
-        healthBackup = life;
+        lifeBackup = life;
         sunkBackup = isSunk;
+        directionBackup = Direction;
+        momentumBackup = Momentum;
+
+        PhotonView.Get(this).RPC("SyncBackupData",RpcTarget.Others,
+            nodeBackup,
+            actionBackup,
+            catapultDirectionBackup,
+            catapultPhaseBackup,
+            lifeBackup,
+            sunkBackup,
+            directionBackup,
+            momentumBackup
+            );
+    }
+      
+
+    [PunRPC]
+    public void SyncBackupData(
+        int[] node, 
+        int direction,
+        int[] actions,
+        int catapultDir,
+        int catapultPhase,
+        int life,
+        bool sunk,
+        int momentum
+        ) {
+        nodeBackup = node;
+        directionBackup = direction;
+        actionBackup = actions;
+        catapultDirectionBackup = catapultDir;
+        catapultPhaseBackup = catapultPhase;
+        lifeBackup = life;
+        sunkBackup = sunk;        
+        momentumBackup = momentum;
     }
 
+    [PunRPC]
     public void Restore() {
-        Node = GameManager.main.Board.getNodeAt(nodeBackup);
-        front = directionBackup;
+        Node = GameManager.main.Board.getNodeAt(nodeBackup[0],nodeBackup[1]);
+        Direction = directionBackup;
         actions[0] = getAction(actionBackup[0],-1);
         actions[1] = getAction(actionBackup[1],-1);
         actions[2] = getAction(actionBackup[2],-1);
         actions[3] = getAction(actionBackup[3],-1);
         CatapultDirection = catapultDirectionBackup;
         CatapultPhaseIndex = catapultPhaseBackup;
-        life = healthBackup;
+        life = lifeBackup;
         isSunk = sunkBackup;
+        Momentum = momentumBackup;
     }
+
+    //void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+    //    if (stream.IsWriting) {
+    //        stream.SendNext(momentum);
+    //    } else {
+    //        momentum = (int)stream.ReceiveNext();
+    //    }
+    //}
 
 }

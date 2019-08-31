@@ -46,7 +46,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    public bool playersSynced = false;
+    public bool playersSynced;
+    public bool needRestoreIfMaster;
 
     public static GameData data;
 
@@ -110,11 +111,21 @@ public class GameManager : MonoBehaviourPunCallbacks {
         //PhaseManager.drawFocusMargin();
 
 
-        if (PhotonNetwork.IsMasterClient && !playersSynced) {
-            CheckPlayersReady();
+        if (PhotonNetwork.IsMasterClient) {
+            if (!playersSynced) {
+                CheckPlayersReady();
+            }
+            if (needRestoreIfMaster) {
+                needRestoreIfMaster = false;
+                RestoreAndRunTurn();                
+            }
         }
     }
 
+    /// <summary>
+    /// Function to be run once all players have loaded in and setup the game on their ends
+    /// Does some addition sync stuff
+    /// </summary>
     public void CheckPlayersReady() {
 
         Player[] players = PhotonNetwork.PlayerList;
@@ -133,7 +144,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         RevealRedirects();
         //RevealRedirects();
         foreach (Ship s in getAllShips()) {
-            s.PortIDSync();
+            s.ForceNodeAndPortIDSync();
         }
 
         GameObject.Find("LoadingOverlay").SetActive(false);
@@ -190,17 +201,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
             }
         }
 
-        if(PhotonNetwork.IsMasterClient){
-            foreach (Team t in teams)
-            {
-                if (t.TeamType == (Team.Type)0)
-                {
+        if (PhotonNetwork.IsMasterClient) {
+            foreach (Team t in teams) {
+                if (t.TeamType == (Team.Type)0) {
                     PhotonView.Get(this).RPC("SetDefaultAITextColor",RpcTarget.All,((int)t.TeamFaction + 1));
-                }   
+                }
             }
-        }
-        
-
         }
 
         playerFaction = (Team.Faction)playerChoice;
@@ -222,10 +228,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();        
+        createShips();
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
-            
+
             assignAI();
 
             setAIDirections();
@@ -254,7 +260,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     [PunRPC]
-    public void SetDefaultAITextColor(int playerSlot){
+    public void SetDefaultAITextColor(int playerSlot) {
         GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + playerSlot + "Text").GetComponent<Text>().color = Color.green;
     }
 
@@ -1033,47 +1039,44 @@ public class GameManager : MonoBehaviourPunCallbacks {
         playersSynced = true;
     }
 
-    public override void OnLeftRoom(){
+    public override void OnLeftRoom() {
         base.OnLeftRoom();
         Debug.Log("You have left the room.");
         PhotonNetwork.Disconnect();
     }
 
-    public override void OnDisconnected(DisconnectCause cause){
+    public override void OnDisconnected(DisconnectCause cause) {
         base.OnDisconnected(cause);
         GameManager.main.goToStartMenu();
     }
 
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
-    {
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer) {
         base.OnPlayerLeftRoom(newPlayer);
         Debug.Log(newPlayer.NickName + " has left the game");
     }
 
-    public override void OnMasterClientSwitched	(Player newMasterClient){
+    public override void OnMasterClientSwitched(Player newMasterClient) {
         base.OnMasterClientSwitched(newMasterClient);
         Debug.Log("Master Client has left");
         Debug.Log("New Master is " + newMasterClient.NickName);
         //if(PhotonNetwork.IsMasterClient){
         //    PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
         //}
-    }	
+    }
 
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
-    {
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) {
         base.OnPlayerEnteredRoom(newPlayer);
         Debug.Log(newPlayer.NickName + " has entered the game");
     }
 
-    public IEnumerator MasterHasLeftEnumerator()
-    {
+    public IEnumerator MasterHasLeftEnumerator() {
         GameObject.Find("OverlayCanvas/MasterLeft").gameObject.SetActive(true);
         yield return new WaitForSeconds(5);
         PhotonNetwork.LeaveRoom();
     }
 
     [PunRPC]
-    public void LeavePhotonRoom(){
+    public void LeavePhotonRoom() {
         StartCoroutine(MasterHasLeftEnumerator());
     }
 
@@ -1095,21 +1098,21 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     //}
 
-    public void BackupData() {
+    public void BackupDataAndSend() {
         foreach (Ship s in getAllShips()) {
-            s.BackupData();
+            s.BackupDataAndSend();
         }
 
-        foreach (Port p in board.ports) {
-            p.BackupData();
-        }
+        board.BackupPorts();
+        photonView.RPC("SyncPortBackup",RpcTarget.Others,board.portOwnerBackup);
     }
 
-    public void SyncBackupData() {
-
+    [PunRPC]
+    void SyncPortBackup (int[] portOwnerBackup){
+        board.portOwnerBackup = portOwnerBackup;
     }
 
-    public void Restore() {
+    public void RestoreAndRunTurn() {
         foreach(Node n in board.getAllNodes()) {
             n.Ships.Clear();
         }
@@ -1119,11 +1122,24 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         foreach (Ship s in getAllShips()) {
+            s.reset();
             s.transform.position = s.getNodePos();
+            s.setSpriteRotation();            
         }
 
-        foreach(Port p in board.ports) {
-            p.Restore();
-        }
+        board.RestorePorts();
+
+        executeTurn();
+
+    }
+
+    [PunRPC]
+    void NeedRestoreIfMasterOn() {
+        needRestoreIfMaster = true;
+    }
+
+    [PunRPC]
+    void NeedRestoreIfMasterOff() {
+        needRestoreIfMaster = false;
     }
 }

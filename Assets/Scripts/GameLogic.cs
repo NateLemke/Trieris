@@ -36,6 +36,8 @@ public class GameLogic : MonoBehaviour {
     /// Starts a new turn
     /// </summary>
     public void executeTurn() {
+        gameManager.BackupDataAndSend();
+        PhotonView.Get(this).RPC("NeedRestoreIfMasterOn",RpcTarget.Others);
         PhaseManager.EnablePhaseUI();
         gameManager.setAIActions();
         gameManager.processingTurn = true;
@@ -143,6 +145,7 @@ public class GameLogic : MonoBehaviour {
         if (PhotonNetwork.IsMasterClient)
         {
             PhotonView.Get(this).RPC("endTurn", RpcTarget.Others);
+            PhotonView.Get(this).RPC("NeedRestoreIfMasterOff",RpcTarget.Others);
         }
     }
     

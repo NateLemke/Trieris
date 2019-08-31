@@ -52,7 +52,7 @@ public class GameData
                 shipPositions[shipDataID,0] = ship.getNode().X;
                 shipPositions[shipDataID,0] = ship.getNode().Y;
 
-                shipDirection[shipDataID] = ship.front;
+                shipDirection[shipDataID] = ship.Direction;
                 shipActions[shipDataID,0] = ship.actions[0].actionType;
                 shipActions[shipDataID,1] = ship.actions[1].actionType;
                 shipActions[shipDataID,2] = ship.actions[2].actionType;
