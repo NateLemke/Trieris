@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    public bool shipsSynced = false;
+    public bool playersSynced = false;
 
     public static GameData data;
 
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         //PhaseManager.drawFocusMargin();
 
 
-        if (PhotonNetwork.IsMasterClient && !shipsSynced) {
+        if (PhotonNetwork.IsMasterClient && !playersSynced) {
             CheckPlayersReady();
         }
     }
@@ -137,7 +137,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         GameObject.Find("LoadingOverlay").SetActive(false);
-        PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
+        photonView.RPC("DisableLoadingOverlay",RpcTarget.Others);
+        photonView.RPC("SyncPlayersReady",RpcTarget.Others);
     }
 
     public void setupGame(int playerChoice) {
@@ -272,7 +273,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             i++;
         }
         PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
-        shipsSynced = true;
+        playersSynced = true;
         Debug.Log("Syncing ships");
     }
 
@@ -1035,6 +1036,11 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void DisableLoadingOverlay() {
         GameObject.Find("LoadingOverlay").SetActive(false);
+    }
+
+    [PunRPC]
+    public void SyncPlayersReady() {
+        playersSynced = true;
     }
 
     public override void OnLeftRoom(){

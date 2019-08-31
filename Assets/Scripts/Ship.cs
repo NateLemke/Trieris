@@ -552,20 +552,18 @@ public class Ship : MonoBehaviour {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
             PhotonView.Get(this).RPC("sink",RpcTarget.Others);
         }
-
-
-
+               
         if (Node != null) {
             Node.Ships.Remove(this);
         }
-        if (this.team == GameManager.playerTeam) {
-            Button st = GameManager.main.uiControl.ShipTabs[this.Id].GetComponent<Button>();
+        if (team == GameManager.playerTeam) {
+            Button st = GameManager.main.uiControl.ShipTabs[Id].GetComponent<Button>();
 
             ColorBlock cb = st.colors;
             cb.normalColor = CustomColor.TeamBlack;
             st.colors = cb;
 
-            Text tt = GameManager.main.uiControl.Tabtexts[this.Id].GetComponent<Text>();
+            Text tt = GameManager.main.uiControl.Tabtexts[Id].GetComponent<Text>();
 
             tt.color = CustomColor.TeamBlack;
 
@@ -579,19 +577,19 @@ public class Ship : MonoBehaviour {
             GameManager.main.uiControl.setSelection(GameManager.main.getPlayerShips()[0].Id);
         }
 
-        if (this.getNode().Ships.Contains(this)) {
-            this.getNode().Ships.Remove(this);
+        if (getNode().Ships.Contains(this)) {
+            getNode().Ships.Remove(this);
         }
 
-        if (this.getNode().Port != null) {
-            this.getNode().Port.TransparencyCheck();
+        if (getNode().Port != null) {
+            getNode().Port.TransparencyCheck();
         }
 
-        foreach (Ship s in this.getNode().Ships) {
+        foreach (Ship s in getNode().Ships) {
             s.updateNodePos();
         }
 
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 
     /// <summary>

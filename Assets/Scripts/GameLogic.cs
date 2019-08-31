@@ -245,7 +245,7 @@ public class GameLogic : MonoBehaviour {
 
         foreach(Team t in gameManager.teams) {
             // check if the player has lost all their ships
-            if (t.ships.Count == 0) {
+            if (t.ships.Count == 0 && !t.eliminated) {
                 eliminatePlayer(t);
             }
         }
