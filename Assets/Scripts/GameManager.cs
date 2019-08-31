@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviourPunCallbacks {
 
     public Board Board { get { return board; } }
     private Board board;
@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    public bool shipsSynced = false;
+    public bool playersSynced = false;
 
     public static GameData data;
 
@@ -110,7 +110,7 @@ public class GameManager : MonoBehaviour {
         //PhaseManager.drawFocusMargin();
 
 
-        if (PhotonNetwork.IsMasterClient && !shipsSynced) {
+        if (PhotonNetwork.IsMasterClient && !playersSynced) {
             CheckPlayersReady();
         }
     }
@@ -137,8 +137,8 @@ public class GameManager : MonoBehaviour {
         }
 
         GameObject.Find("LoadingOverlay").SetActive(false);
-        PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
-        PhotonView.Get(this).RPC("SyncPlayersSyncStatus",RpcTarget.Others);
+        photonView.RPC("DisableLoadingOverlay",RpcTarget.Others);
+        photonView.RPC("SyncPlayersReady",RpcTarget.Others);
     }
 
     public void setupGame(int playerChoice) {
@@ -190,10 +190,16 @@ public class GameManager : MonoBehaviour {
             }
         }
 
-        foreach (Team t in teams) {
-            if (t.TeamType == (Team.Type)1) {
-                GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + ((int)t.TeamFaction + 1) + "Text").GetComponent<Text>().color = Color.green;
+        if(PhotonNetwork.IsMasterClient){
+            foreach (Team t in teams)
+            {
+                if (t.TeamType == (Team.Type)0)
+                {
+                    PhotonView.Get(this).RPC("SetDefaultAITextColor",RpcTarget.All,((int)t.TeamFaction + 1));
+                }   
             }
+        }
+        
 
         }
 
@@ -216,18 +222,24 @@ public class GameManager : MonoBehaviour {
             Debug.LogError("Player's team is null");
         }
 
-        createShips();
-        assignAI();
+        createShips();        
 
         if (!PhotonNetwork.IsConnected || (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)) {
+            
+            assignAI();
 
             setAIDirections();
+
             uiControl.PostTeamSelection();
+
+
         }
 
         if (!PhotonNetwork.IsConnected) {
             SetPortTransparency();
+
             SetInitialRedirects();
+
             RevealRedirects();
         }
 
@@ -241,6 +253,11 @@ public class GameManager : MonoBehaviour {
         GameObject.Find("TeamIcon").GetComponent<Image>().sprite = playerTeam.getPortSprite();
     }
 
+    [PunRPC]
+    public void SetDefaultAITextColor(int playerSlot){
+        GameObject.Find("OverlayCanvas/UIBottomPanel/Player" + playerSlot + "Text").GetComponent<Text>().color = Color.green;
+    }
+
     public void SyncShipPhotonID() {
         int[] ids = new int[getAllShips().Count];
         int i = 0;
@@ -249,7 +266,7 @@ public class GameManager : MonoBehaviour {
             i++;
         }
         PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
-        shipsSynced = true;
+        playersSynced = true;
         Debug.Log("Syncing ships");
     }
 
@@ -1012,8 +1029,52 @@ public class GameManager : MonoBehaviour {
     }
 
     [PunRPC]
-    public void SyncPlayersSyncStatus() {
-        shipsSynced = true;
+    public void SyncPlayersReady() {
+        playersSynced = true;
+    }
+
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        Debug.Log("You have left the room.");
+        PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause){
+        base.OnDisconnected(cause);
+        GameManager.main.goToStartMenu();
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerLeftRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has left the game");
+    }
+
+    public override void OnMasterClientSwitched	(Player newMasterClient){
+        base.OnMasterClientSwitched(newMasterClient);
+        Debug.Log("Master Client has left");
+        Debug.Log("New Master is " + newMasterClient.NickName);
+        //if(PhotonNetwork.IsMasterClient){
+        //    PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
+        //}
+    }	
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has entered the game");
+    }
+
+    public IEnumerator MasterHasLeftEnumerator()
+    {
+        GameObject.Find("OverlayCanvas/MasterLeft").gameObject.SetActive(true);
+        yield return new WaitForSeconds(5);
+        PhotonNetwork.LeaveRoom();
+    }
+
+    [PunRPC]
+    public void LeavePhotonRoom(){
+        StartCoroutine(MasterHasLeftEnumerator());
     }
 
     //[PunRPC]

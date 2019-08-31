@@ -61,6 +61,14 @@ public class GameLogic : MonoBehaviour {
         }
     }
 
+    [PunRPC]
+    public void setUnready(int faction){
+
+        Debug.Log(faction + " start ");
+        gameManager.teams[faction].Ready = false;
+        Debug.Log(faction + " finish ");
+    }
+
     /// <summary>
     /// Executes the next phase, ends the turn if the phase index is at 3
     /// </summary>
@@ -71,7 +79,16 @@ public class GameLogic : MonoBehaviour {
         
         // if the phase index is 3, then the fourth phase has been completed
         if (phaseIndex >= 3) {
-            PhotonView.Get(this).RPC("setAllTeamsUnready", RpcTarget.All);
+            if(PhotonNetwork.IsMasterClient){
+                foreach(Team t in gameManager.teams){
+                    if(t.TeamType == Team.Type.player){
+                        Debug.Log(t.TeamFaction + " is being set unready.");
+                        PhotonView.Get(this).RPC("setUnready", RpcTarget.All, (int)t.TeamFaction);
+                    }  
+                }
+            }
+            
+            
             endTurn();
 
             return false;
@@ -98,8 +115,8 @@ public class GameLogic : MonoBehaviour {
         }
 
         foreach(Team t in gameManager.getHumanTeams()) {
-
-            t.Ready = false;
+            if(PhotonNetwork.IsMasterClient)
+                t.Ready = false;
 
             foreach (Ship s in t.ships) {
                 s.currentActionIndex = 0;
@@ -209,9 +226,9 @@ public class GameLogic : MonoBehaviour {
 
         foreach (Team t in GameManager.main.teams) {
 
-            //if (t.eliminated) {
-            //    continue;
-            //}
+            if (t.eliminated) {
+                continue;
+            }
 
             // check if the only the teams's ships remain
             if (GameManager.main.getAllShips().Count == t.ships.Count) {
@@ -226,10 +243,12 @@ public class GameLogic : MonoBehaviour {
             }            
         }
 
-        if (GameManager.playerTeam.ships.Count == 0 && !GameManager.playerTeam.eliminated) {
-            eliminatePlayer(GameManager.playerTeam);
+        foreach(Team t in gameManager.teams) {
+            // check if the player has lost all their ships
+            if (t.ships.Count == 0 && !t.eliminated) {
+                eliminatePlayer(t);
+            }
         }
-
     }
 
     private void eliminatePlayer(Team t) {

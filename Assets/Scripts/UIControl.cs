@@ -245,7 +245,7 @@ public class UIControl : MonoBehaviour
         captureNotice.SetActive(gameManager.needCaptureChoice());
         catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-        if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
+        if(PhotonNetwork.IsMasterClient && gameManager.playersSynced)
         {
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
         }
@@ -412,7 +412,7 @@ public class UIControl : MonoBehaviour
 
         foreach (Team t in gameManager.teams)
         {
-            if (t.TeamFaction == (Team.Faction)teamValue)
+            if (t.TeamFaction == (Team.Faction)teamValue && !t.eliminated)
             {
                 t.Ready = !t.Ready;
                 break;

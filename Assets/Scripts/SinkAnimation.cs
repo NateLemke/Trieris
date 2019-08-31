@@ -18,8 +18,6 @@ public class SinkAnimation : Animation {
 
         ship.SetIconSink();
 
-
-
         InitSinkAnimation();
         
         yield return new WaitForSeconds(SpeedManager.CombatSinking);
