@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviourPunCallbacks {
 
     public Board Board { get { return board; } }
     private Board board;
@@ -1037,4 +1037,47 @@ public class GameManager : MonoBehaviour {
         GameObject.Find("LoadingOverlay").SetActive(false);
     }
 
+    public override void OnLeftRoom(){
+        base.OnLeftRoom();
+        Debug.Log("You have left the room.");
+        PhotonNetwork.Disconnect();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause){
+        base.OnDisconnected(cause);
+        GameManager.main.goToStartMenu();
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerLeftRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has left the game");
+    }
+
+    public override void OnMasterClientSwitched	(Player newMasterClient){
+        base.OnMasterClientSwitched(newMasterClient);
+        Debug.Log("Master Client has left");
+        Debug.Log("New Master is " + newMasterClient.NickName);
+        //if(PhotonNetwork.IsMasterClient){
+        //    PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
+        //}
+    }	
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + " has entered the game");
+    }
+
+    public IEnumerator MasterHasLeftEnumerator()
+    {
+        GameObject.Find("OverlayCanvas/MasterLeft").gameObject.SetActive(true);
+        yield return new WaitForSeconds(5);
+        PhotonNetwork.LeaveRoom();
+    }
+
+    [PunRPC]
+    public void LeavePhotonRoom(){
+        StartCoroutine(MasterHasLeftEnumerator());
+    }
 }

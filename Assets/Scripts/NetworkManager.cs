@@ -77,6 +77,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         base.OnDisconnected(cause);
         ConnectingToMaster = false;
         ConnectingToRoom = false;
+        if(GameObject.Find("Canvas/MultiplayerPanel") != null){
+            GameObject.Find("Canvas/MultiplayerPanel").SetActive(false);
+        }
         Debug.Log(cause);
     }
 
