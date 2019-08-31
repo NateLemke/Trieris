@@ -111,12 +111,12 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
 
         if (PhotonNetwork.IsMasterClient && !playersSynced) {
-            CheckPlayersReady();
+            CheckPlayersSynced();
         }
     }
 
-    public void CheckPlayersReady() {
-
+    public void CheckPlayersSynced() {
+        photonView.RPC("SyncPlayersReady",RpcTarget.Others);
         Player[] players = PhotonNetwork.PlayerList;
         foreach (Player p in players) {
             if (!(bool)p.CustomProperties["LoadedGame"]) {
@@ -137,8 +137,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         GameObject.Find("LoadingOverlay").SetActive(false);
-        photonView.RPC("DisableLoadingOverlay",RpcTarget.Others);
-        photonView.RPC("SyncPlayersReady",RpcTarget.Others);
+        photonView.RPC("DisableLoadingOverlay",RpcTarget.Others);        
     }
 
     public void setupGame(int playerChoice) {
