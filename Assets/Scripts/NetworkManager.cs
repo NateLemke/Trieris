@@ -215,16 +215,25 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void ChangeTeamImage(int slot)
     {
         int inputTeamNum = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
-        PhotonView.Get(this).RPC("SendTeamImage", RpcTarget.Others, slot, inputTeamNum);
-    }
-
-    [PunRPC]
-    public void SendTeamImage(int slot, int inputTeamNum)
-    {
-        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamNum;
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Team" + slot + "Int"] = (int)inputTeamNum;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        PhotonView.Get(this).RPC("UpdateTeamImage", RpcTarget.Others);
+    }
+
+    [PunRPC]
+    //public void SendTeamImage(int slot, int inputTeamNum)
+    public void UpdateTeamImage()
+    {
+        Debug.Log("Updating Team Image");
+        for(int i = 1; i <= 6; i++){
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (int)ht["Team" + i + "Int"];
+        }
+        //GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = inputTeamNum;
+        //Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        //ht["Team" + slot + "Int"] = (int)inputTeamNum;
+        //PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
     }
 
     public void ChangeTeamTypeDropdown(int slot)
