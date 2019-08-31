@@ -108,5 +108,7 @@ MonoBehaviour:
   - DisableLoadingOverlay
   - setDead
   - updatePortsUI
+  - SetDefaultAITextColor
+  - setUnready
   DisableAutoOpenWizard: 1
   ShowSettings: 1
