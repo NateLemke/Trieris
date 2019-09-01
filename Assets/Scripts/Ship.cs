@@ -69,16 +69,18 @@ public class Ship : MonoBehaviour {
 
     public Action[] actions;
     private Node Node {
-        get { return nodeValue;  }
-        set { nodeValue = value;
-            PortID = (value.Port != null) ? value.Port.id : -1;
-            if (PhotonNetwork.IsConnected && PhotonView.Get(this).ViewID != 0) {
-                PhotonView.Get(this).RPC("SyncPortID",RpcTarget.Others,PortID);
-            }
+        get { return node;  }
+        set { node = value;
+            PhotonView.Get(this).RPC("SyncNode",RpcTarget.Others,);
+
+            //PortID = (value.Port != null) ? value.Port.id : -1;
+            //if (PhotonNetwork.IsConnected && PhotonView.Get(this).ViewID != 0) {
+            //    PhotonView.Get(this).RPC("SyncPortID",RpcTarget.Others,PortID);
+            //}
         }
     }
-    private Node nodeValue;
-    public int PortID = -1;
+    private Node node;
+    //public int PortID = -1;
 
     public int momentum { get; set; }
 
@@ -1192,13 +1194,23 @@ public class Ship : MonoBehaviour {
         needCatapultChoice = b;
     }
 
+    //[PunRPC]
+    //private void SyncPortID(int id) {
+    //    PortID = id;
+    //}
+
     [PunRPC]
-    private void SyncPortID(int id) {
-        PortID = id;
+    private void SyncNode(int x,int y) {
+        Node newNode = GameManager.main.Board.getNodeAt(new Vector2Int(x,y));
+        if (Node != null) {
+            Node.Ships.Remove(this);
+        }
+        newNode.Ships.Add(this);
+        node = newNode;
     }
 
     public void PortIDSync() {
-        Node = nodeValue;
+        Node = node;
     }
 
 }

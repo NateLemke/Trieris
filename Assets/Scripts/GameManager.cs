@@ -1026,7 +1026,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         foreach(Ship s in playerTeam.ships) {
             if (s.NeedCaptureChoice) {
                 Debug.Log("Check port capture choice found ship");
-                ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.PortID);
+                ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.getNode().Port.id);
                 return;
             }
         }
