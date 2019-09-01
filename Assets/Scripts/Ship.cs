@@ -71,7 +71,7 @@ public class Ship : MonoBehaviour {
     private Node Node {
         get { return node;  }
         set { node = value;
-            PhotonView.Get(this).RPC("SyncNode",RpcTarget.Others,);
+            PhotonView.Get(this).RPC("SyncNode",RpcTarget.Others,node.X,node.Y);
 
             //PortID = (value.Port != null) ? value.Port.id : -1;
             //if (PhotonNetwork.IsConnected && PhotonView.Get(this).ViewID != 0) {
