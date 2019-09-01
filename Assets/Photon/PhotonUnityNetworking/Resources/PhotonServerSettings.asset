@@ -111,5 +111,8 @@ MonoBehaviour:
   - SetDefaultAITextColor
   - setUnready
   - UpdateTeamImage
+  - SyncNode
+  - SyncPlayersReady
+  - UpdateReadyStatus
   DisableAutoOpenWizard: 1
   ShowSettings: 1

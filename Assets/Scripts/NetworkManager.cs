@@ -67,7 +67,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToMaster = true;
 
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(true);
-
+        
         PhotonNetwork.ConnectUsingSettings();
         //PhotonNetwork.ConnectToRegion("usw");
     }
@@ -139,6 +139,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + (PhotonNetwork.PlayerList.Length-1) + "Ready"] = true;
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has left the room");
         
