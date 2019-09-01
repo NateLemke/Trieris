@@ -92,7 +92,7 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         Debug.Log("Updating Ready Status");
         for(int i = 1; i <= 6; i++){
             Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (bool)ht["Team" + i + "Ready"];
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)ht["Team" + i + "Ready"];
         }
     }
 
