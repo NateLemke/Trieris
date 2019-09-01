@@ -772,7 +772,7 @@ public class UIControl : MonoBehaviour
     {
         if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
-            PhotonView.Get(this).RPC("setDead", RpcTarget.Others);
+            PhotonView.Get(this).RPC("setDead", RpcTarget.Others, teamNo, shipNo);
         }
 
         bottomIcons[teamNo, shipNo].color = new Color(0.2f, 0.2f, 0.2f, 1f);
