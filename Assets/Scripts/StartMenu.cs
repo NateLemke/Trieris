@@ -38,7 +38,7 @@ public class StartMenu : MonoBehaviourPun
                 }
             }
             if(allPlayersReady){
-                beginStartingGame();
+                startGame();
             }else{
                 GameObject notReadyPanel = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel");
                 notReadyPanel = notReadyPanel.transform.Find("PlayersNotReady").gameObject;
@@ -52,19 +52,15 @@ public class StartMenu : MonoBehaviourPun
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/PlayersNotReady").SetActive(false);
     }
 
-    public void beginStartingGame(){
-        PhotonView.Get(this).RPC("DisableSelectionControls", RpcTarget.Others);
-        startGame();
-    }
 
     [PunRPC]
-    public void DisableSelectionControls(){
+    public void SelectionControlsActivity(bool input){
         for(int i = 1; i <= 6; i++){
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().interactable = false;
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().interactable = false;
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().interactable = input;
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().interactable = input;
         }
-        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/FilterPanel/PrivateGameFilter").GetComponent<Toggle>().interactable = false;
-        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/LeaveRoomBtn").GetComponent<Button>().interactable = false;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/FilterPanel/PrivateGameFilter").GetComponent<Toggle>().interactable = input;
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/LeaveRoomBtn").GetComponent<Button>().interactable = input;
     }
 
     /// <summary>
@@ -83,6 +79,7 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
+                PhotonView.Get(this).RPC("SelectionControlsActivity", RpcTarget.Others, false);
                 RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
                 if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
@@ -114,7 +111,7 @@ public class StartMenu : MonoBehaviourPun
 
     public IEnumerator duplicatePanelTime()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").GetComponent<Image>().CrossFadeAlpha(0, 2f, false);
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel/Text").GetComponent<Text>().CrossFadeAlpha(0, 2f, false);
         StartCoroutine(setDuplicatePanelInactive());
