@@ -307,8 +307,7 @@ public class GameLogic : MonoBehaviour {
                     // AI port capture
                     if (ship.Ai.decidePortCapture())
                     {
-                        ship.capturePort();
-                        
+                        ship.capturePort();                        
                     }
                 }
             }
