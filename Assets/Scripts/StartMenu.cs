@@ -87,10 +87,9 @@ public class StartMenu : MonoBehaviourPun
                 if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
 
-                for (int i = 1; i <= 6; i++)
+                for (int i = 1; i <= PhotonNetwork.PlayerList.Length; i++)
                 {
-                    if(rh.playerInSlot(i) != null)
-                        GameManager.teamTypes[i - 1] = (Team.Type)Team.Type.player;
+                    GameManager.teamTypes[i - 1] = (Team.Type)Team.Type.player;
                 }
                 SceneManager.LoadScene("GameScene");
             }
