@@ -17,8 +17,6 @@ public class Sounds : MonoBehaviour
     private AudioClip hiCrack;
     public AudioClip HiCrack { get { return hiCrack; } }
 
-
-
     [SerializeField]
     private List<AudioClip> impacts;
     public List<AudioClip> Impacts { get { return impacts; } }

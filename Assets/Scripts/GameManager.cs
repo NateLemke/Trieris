@@ -1085,4 +1085,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public void LeavePhotonRoom(){
         StartCoroutine(MasterHasLeftEnumerator());
     }
+
+    [PunRPC]
+    public void InitSinkAnimation(int shipID, int teamID) {
+        Sounds.main.playClip(Sounds.main.Blub);
+        GetShip(shipID,teamID).GetComponent<Animator>().SetTrigger("Sinking");
+    }
 }

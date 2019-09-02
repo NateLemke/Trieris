@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,10 @@ public class SinkAnimation : Animation {
     {
         Sounds.main.playClip(Sounds.main.Blub);
         ship.GetComponent<Animator>().SetTrigger("Sinking");
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(GameManager.main).RPC("InitSinkAnimation",RpcTarget.Others,ship.Id,(int)ship.team.TeamFaction);
+        }
     }
 
 }
