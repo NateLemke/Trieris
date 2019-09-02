@@ -1093,4 +1093,10 @@ public class GameManager : MonoBehaviourPunCallbacks {
         Sounds.main.playClip(Sounds.main.Blub);
         GetShip(shipID,teamID).GetComponent<Animator>().SetTrigger("Sinking");
     }
+
+    [PunRPC]
+    public void RamAnimation(int shipAid, int teamAid, int shipBid, int teamBid) {
+        GetShip(shipAid,teamAid).GetComponent<Animator>().SetTrigger("Collision");
+        GetShip(shipBid,teamBid).GetComponent<Animator>().SetTrigger("Collision");
+    }
 }

@@ -248,6 +248,8 @@ public class UIControl : MonoBehaviour
         if(PhotonNetwork.IsMasterClient && gameManager.playersSynced)
         {
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
+        } else {
+            setTurnPhaseText(gameLogic.TurnIndex);
         }
 
 

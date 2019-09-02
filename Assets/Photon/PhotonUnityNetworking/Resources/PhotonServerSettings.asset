@@ -114,5 +114,7 @@ MonoBehaviour:
   - SyncNode
   - SyncPlayersReady
   - UpdateReadyStatus
+  - InitSinkAnimation
+  - RamAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
