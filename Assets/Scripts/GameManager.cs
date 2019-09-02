@@ -785,7 +785,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     //}
 
     [PunRPC]
-    public void SpawnFireball(float startX,float startY,float endX,float endY) {
+    public void SpawnFireball(float startX,float startY,float endX,float endY,bool missed) {
         Vector2 start = new Vector2(startX,startY);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
@@ -793,6 +793,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         bullet.startPos = start;
         bullet.endPos = new Vector2(endX,endY);
+        bullet.missed = missed;
     }
 
     //[PunRPC]
