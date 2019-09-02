@@ -79,6 +79,8 @@ public class RoomHandling : MonoBehaviourPunCallbacks
 
     public void SendReadyStatus(int slot)
     {
+        Toggle tog = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>();
+        tog.isOn = !tog.isOn;
         bool inputPlayerReady = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn;
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Team" + slot + "Ready"] = (bool)inputPlayerReady;
