@@ -1063,9 +1063,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
         base.OnMasterClientSwitched(newMasterClient);
         Debug.Log("Master Client has left");
         Debug.Log("New Master is " + newMasterClient.NickName);
-        //if(PhotonNetwork.IsMasterClient){
-        //    PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
-        //}
+        if(PhotonNetwork.IsMasterClient){
+            PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
+        }
     }	
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -1076,7 +1076,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public IEnumerator MasterHasLeftEnumerator()
     {
-        GameObject.Find("OverlayCanvas/MasterLeft").gameObject.SetActive(true);
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("MasterLeft").gameObject.SetActive(true);
         yield return new WaitForSeconds(5);
         PhotonNetwork.LeaveRoom();
     }
