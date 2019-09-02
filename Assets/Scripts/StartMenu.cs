@@ -22,16 +22,39 @@ public class StartMenu : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
-            startNotMasterFade();
+            //GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
+            //startNotMasterFade();
+            RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
+            rh.SendReadyStatus(rh.getSlotPosition(PhotonNetwork.LocalPlayer));
         }
         else
         {
             Debug.Log(RpcTarget.All);
-            PhotonView.Get(this).RPC("DisableSelectionControls", RpcTarget.Others);
-            startGame();
+            bool allPlayersReady = true;
+            for(int i=1; i<=6; i++){
+                if(!(bool) PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Ready"]){
+                    allPlayersReady = false;
+                    break;
+                }
+            }
+            if(allPlayersReady){
+                beginStartingGame();
+            }else{
+                GameObject notReadyPanel = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel");
+                notReadyPanel = notReadyPanel.transform.Find("PlayersNotReady").gameObject;
+                notReadyPanel.SetActive(true);
+            }
             //PhotonView.Get(this).RPC("startGame", RpcTarget.All);
         }
+    }
+
+    public void closePlayersNotReady(){
+        GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/PlayersNotReady").SetActive(false);
+    }
+
+    public void beginStartingGame(){
+        PhotonView.Get(this).RPC("DisableSelectionControls", RpcTarget.Others);
+        startGame();
     }
 
     [PunRPC]
@@ -60,13 +83,14 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
+                RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
                 if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
 
-                //for (int i = 1; i <= 6; i++)
-                //{
-                //    GameManager.teamTypes[i - 1] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
-                //}
+                for (int i = 1; i <= PhotonNetwork.PlayerList.Length; i++)
+                {
+                    GameManager.teamTypes[i - 1] = (Team.Type)Team.Type.player;
+                }
                 SceneManager.LoadScene("GameScene");
             }
             else

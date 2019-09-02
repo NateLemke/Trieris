@@ -74,7 +74,6 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
 
     public void displayRoomsInLobby()
     {
-
         foreach (Transform child in transform.Find("Lobby/RoomList/ScrollView/Viewport/Content").transform)
         {
             Destroy(child.gameObject);
@@ -148,6 +147,7 @@ public class LobbyHandling : MonoBehaviourPunCallbacks
         {
             return;
         }
+        
         PhotonNetwork.JoinRoom(input);
     }
 }

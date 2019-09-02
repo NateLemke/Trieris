@@ -35,16 +35,25 @@ public class RoomHandling : MonoBehaviourPunCallbacks
             {
                 Debug.Log("Team" + i + "Int set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value);
                 ht["Team" + i + "Int"] = (int) GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value;
+                ht["Team" + i + "Ready"] = true;
             }
             PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
         }
         else
         {
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            ht["Team" + getSlotPosition(PhotonNetwork.LocalPlayer) + "Ready"] = false;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+
             for (int i = 1; i <= 6; i++)
             {
                 Debug.Log("Image set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " for Team" + i);
                 GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value = (int)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Int"];
+                if(i != 1)
+                    GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Ready"];
             }
+
+            PhotonView.Get(this).RPC("UpdateReadyStatus", RpcTarget.Others);
         }
         UpdatePlayerList();
         setRoomName();
@@ -56,13 +65,43 @@ public class RoomHandling : MonoBehaviourPunCallbacks
     {
         for (int i = 1; i <= 6; i++)
         {
-            thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "Empty";
-            thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
+            thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Name/Text").GetComponent<Text>().text = "AI";
+            if(i != 1){
+                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = true;
+                thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().interactable = false;
+            }   
+            //thisRoom.transform.Find("Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 0;
         }
         foreach (Player p in PhotonNetwork.PlayerList)
         {
             thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
-            thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
+            if(p != PhotonNetwork.MasterClient){
+                Debug.Log("Team " + getSlotPosition(p) + " Ready: " + (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + getSlotPosition(p) + "Ready"]);
+                thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + getSlotPosition(p) + "Ready"];
+                //thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().interactable = PhotonNetwork.LocalPlayer.ActorNumber == p.ActorNumber;
+            }
+            //thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value = 1;
+        }
+    }
+
+    public void SendReadyStatus(int slot)
+    {
+        Toggle tog = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>();
+        tog.isOn = !tog.isOn;
+        bool inputPlayerReady = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + slot + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn;
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + slot + "Ready"] = (bool)inputPlayerReady;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        PhotonView.Get(this).RPC("UpdateReadyStatus", RpcTarget.Others);
+    }
+
+    [PunRPC]
+    public void UpdateReadyStatus()
+    {
+        Debug.Log("Updating Ready Status");
+        for(int i = 2; i <= 6; i++){
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)ht["Team" + i + "Ready"];
         }
     }
 
@@ -124,5 +163,4 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         Debug.Log(getSlotPosition(PhotonNetwork.LocalPlayer));
         setPlayerTeam(getSlotPosition(PhotonNetwork.LocalPlayer));
     }
-
 }
