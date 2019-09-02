@@ -70,6 +70,7 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         {
             thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/Name/Text").GetComponent<Text>().text = p.NickName;
             if(p != PhotonNetwork.MasterClient){
+                Debug.Log("Team " + getSlotPosition(p) + " Ready: " + (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + getSlotPosition(p) + "Ready"]);
                 thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + getSlotPosition(p) + "Ready"];
                 //thisRoom.transform.Find("Teams/Team" + getSlotPosition(p) + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().interactable = PhotonNetwork.LocalPlayer.ActorNumber == p.ActorNumber;
             }
