@@ -37,7 +37,7 @@ public class StartMenu : MonoBehaviourPun
                     break;
                 }
             }
-            if(!allPlayersReady){
+            if(allPlayersReady){
                 beginStartingGame();
             }else{
                 GameObject notReadyPanel = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel");
