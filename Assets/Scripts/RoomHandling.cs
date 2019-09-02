@@ -41,6 +41,10 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         }
         else
         {
+            Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+            ht["Team" + getSlotPosition(PhotonNetwork.LocalPlayer) + "Ready"] = false;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+
             for (int i = 1; i <= 6; i++)
             {
                 Debug.Log("Image set to " + (int)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value + " for Team" + i);

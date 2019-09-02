@@ -144,8 +144,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
+        RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
+        int playerLoc = rh.getSlotPosition(newPlayer);
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-        ht["Team" + (PhotonNetwork.PlayerList.Length-1) + "Ready"] = true;
+        ht["Team" + (PhotonNetwork.PlayerList.Length+1) + "Ready"] = true;
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has left the room");
         
@@ -153,12 +155,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
-        int playerLoc = rh.getSlotPosition(newPlayer);
-        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
-        ht["Team" + playerLoc + "Ready"] = false;
-        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
-        Debug.Log("Team 2 ready: " + (bool)ht["Team2Ready"]);
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has entered the room");
     }
