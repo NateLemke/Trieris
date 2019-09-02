@@ -426,8 +426,7 @@ public static class PhaseManager
             } else {
                 yield return tr.resolve();
             }
-
-
+            
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
             tr.attacker.NeedCatapultChoice = false;
         }
@@ -450,7 +449,6 @@ public static class PhaseManager
             foreach(CatapultResolution cr in catapultResolutions) {
 
                 yield return cr.resolve();
-                cr.shipA.CanFire = false;
             }
         }        
     }    
@@ -769,7 +767,4 @@ public static class PhaseManager
         PhotonView.Get(GameManager.main).RPC("SendTargetInfo",RpcTarget.Others,shipID,teamID,targetIds,targetTeamIDs);
 
     }
-
-
-
 }

@@ -5093,7 +5093,7 @@ MonoBehaviour:
   uiControl: {fileID: 0}
   gameOver: 0
   cameraLock: 0
-  shipsSynced: 0
+  playersSynced: 0
 --- !u!4 &535529807
 Transform:
   m_ObjectHideFlags: 0
@@ -7216,7 +7216,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1

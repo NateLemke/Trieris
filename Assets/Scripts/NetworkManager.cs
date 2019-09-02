@@ -50,6 +50,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
+            Debug.Log("Players ready:");
+            for(int i=1; i<=6; i++){
+                if((bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Ready"])
+                    Debug.Log(i);
+            }
         }
         //if (Input.GetKeyDown(KeyCode.F))
         //{
@@ -67,7 +72,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         ConnectingToMaster = true;
 
         GameObject.Find("Canvas/MenuPanel/ConnectionPanel").gameObject.SetActive(true);
-
+        
         PhotonNetwork.ConnectUsingSettings();
         //PhotonNetwork.ConnectToRegion("usw");
     }
@@ -139,6 +144,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
     {
+        RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
+        int playerLoc = rh.getSlotPosition(newPlayer);
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + (PhotonNetwork.PlayerList.Length+1) + "Ready"] = true;
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has left the room");
         
