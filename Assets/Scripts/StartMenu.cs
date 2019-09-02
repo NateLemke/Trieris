@@ -86,7 +86,7 @@ public class StartMenu : MonoBehaviourPun
 
                 for (int i = 1; i <= PhotonNetwork.PlayerList.Length; i++)
                 {
-                    GameManager.teamTypes[i - 1] = (Team.Type)Team.Type.player;
+                    GameManager.teamTypes[GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/TeamImage/Dropdown").GetComponent<Dropdown>().value] = (Team.Type)Team.Type.player;
                 }
                 SceneManager.LoadScene("GameScene");
             }

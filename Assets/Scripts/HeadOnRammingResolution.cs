@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,6 +85,10 @@ public class HeadOnRammingResolution : RammingResolution {
     {
         shipA.GetComponent<Animator>().SetTrigger("Collision");
         shipB.GetComponent<Animator>().SetTrigger("Collision");
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(GameManager.main).RPC("RamAnimation",RpcTarget.Others,shipA.Id,(int)shipA.team.TeamFaction,shipB.Id,(int)shipB.team.TeamFaction);
+        }
     }
 
 

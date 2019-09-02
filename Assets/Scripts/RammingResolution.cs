@@ -127,6 +127,10 @@ public class RammingResolution : CombatResolution
     {
         shipA.GetComponent<Animator>().SetTrigger("Collision");
         shipB.GetComponent<Animator>().SetTrigger("Collision");
+
+        if (PhotonNetwork.IsConnected) {
+            PhotonView.Get(GameManager.main).RPC("RamAnimation",RpcTarget.Others,shipA.Id,(int)shipA.team.TeamFaction,shipB.Id,(int)shipB.team.TeamFaction);
+        }
     }
 
 }

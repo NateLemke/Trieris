@@ -74,7 +74,7 @@ public class PortPrompt : MonoBehaviour{
     /// </summary>
     public void accept()
     {
-        foreach (Ship s in GameManager.main.GetPort(currentShip.PortID).node.Ships)
+        foreach (Ship s in currentShip.getNode().Ships)
             s.NeedCaptureChoice = false;
 
         // needs to be changed for multiplayer

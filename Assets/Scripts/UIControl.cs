@@ -245,9 +245,11 @@ public class UIControl : MonoBehaviour
         captureNotice.SetActive(gameManager.needCaptureChoice());
         catapultNotice.SetActive(gameManager.needCatapultChoice());
 
-        if(PhotonNetwork.IsMasterClient && gameManager.shipsSynced)
+        if(PhotonNetwork.IsMasterClient && gameManager.playersSynced)
         {
             PhotonView.Get(this).RPC("setTurnPhaseText", RpcTarget.All, gameLogic.TurnIndex);
+        } else {
+            setTurnPhaseText(gameLogic.TurnIndex);
         }
 
 

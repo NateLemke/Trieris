@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     public static Team.Faction playerFaction;
     public static Team.Type[] teamTypes = new Team.Type[6];
 
-    public bool shipsSynced = false;
+    public bool playersSynced = false;
 
     public static GameData data;
 
@@ -110,13 +110,13 @@ public class GameManager : MonoBehaviourPunCallbacks {
         //PhaseManager.drawFocusMargin();
 
 
-        if (PhotonNetwork.IsMasterClient && !shipsSynced) {
-            CheckPlayersReady();
+        if (PhotonNetwork.IsMasterClient && !playersSynced) {
+            CheckPlayersSynced();
         }
     }
 
-    public void CheckPlayersReady() {
-
+    public void CheckPlayersSynced() {
+        photonView.RPC("SyncPlayersReady",RpcTarget.Others);
         Player[] players = PhotonNetwork.PlayerList;
         foreach (Player p in players) {
             if (!(bool)p.CustomProperties["LoadedGame"]) {
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         }
 
         GameObject.Find("LoadingOverlay").SetActive(false);
-        PhotonView.Get(this).RPC("DisableLoadingOverlay",RpcTarget.Others);
+        photonView.RPC("DisableLoadingOverlay",RpcTarget.Others);        
     }
 
     public void setupGame(int playerChoice) {
@@ -272,7 +272,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
             i++;
         }
         PhotonView.Get(this).RPC("SetShipPhotonID",RpcTarget.Others,ids);
-        shipsSynced = true;
+        playersSynced = true;
         Debug.Log("Syncing ships");
     }
 
@@ -785,7 +785,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
     //}
 
     [PunRPC]
-    public void SpawnFireball(float startX,float startY,float endX,float endY) {
+    public void SpawnFireball(float startX,float startY,float endX,float endY,bool missed) {
         Vector2 start = new Vector2(startX,startY);
 
         GameObject go = Resources.Load<GameObject>("prefabs/CatapultBullet");
@@ -793,6 +793,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
         bullet.startPos = start;
         bullet.endPos = new Vector2(endX,endY);
+        bullet.missed = missed;
     }
 
     //[PunRPC]
@@ -1026,7 +1027,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
         foreach(Ship s in playerTeam.ships) {
             if (s.NeedCaptureChoice) {
                 Debug.Log("Check port capture choice found ship");
-                ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.PortID);
+                ActivatePortPrompt(s.Id,(int)s.team.TeamFaction,s.getNode().Port.id);
                 return;
             }
         }
@@ -1035,6 +1036,11 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void DisableLoadingOverlay() {
         GameObject.Find("LoadingOverlay").SetActive(false);
+    }
+
+    [PunRPC]
+    public void SyncPlayersReady() {
+        playersSynced = true;
     }
 
     public override void OnLeftRoom(){
@@ -1058,9 +1064,9 @@ public class GameManager : MonoBehaviourPunCallbacks {
         base.OnMasterClientSwitched(newMasterClient);
         Debug.Log("Master Client has left");
         Debug.Log("New Master is " + newMasterClient.NickName);
-        //if(PhotonNetwork.IsMasterClient){
-        //    PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
-        //}
+        if(PhotonNetwork.IsMasterClient){
+            PhotonView.Get(GameManager.main).RPC("LeavePhotonRoom",RpcTarget.All);
+        }
     }	
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -1071,7 +1077,8 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public IEnumerator MasterHasLeftEnumerator()
     {
-        GameObject.Find("OverlayCanvas/MasterLeft").gameObject.SetActive(true);
+        GameObject overlay = GameObject.Find("OverlayCanvas");
+        overlay.transform.Find("MasterLeft").gameObject.SetActive(true);
         yield return new WaitForSeconds(5);
         PhotonNetwork.LeaveRoom();
     }
@@ -1079,5 +1086,17 @@ public class GameManager : MonoBehaviourPunCallbacks {
     [PunRPC]
     public void LeavePhotonRoom(){
         StartCoroutine(MasterHasLeftEnumerator());
+    }
+
+    [PunRPC]
+    public void InitSinkAnimation(int shipID, int teamID) {
+        Sounds.main.playClip(Sounds.main.Blub);
+        GetShip(shipID,teamID).GetComponent<Animator>().SetTrigger("Sinking");
+    }
+
+    [PunRPC]
+    public void RamAnimation(int shipAid, int teamAid, int shipBid, int teamBid) {
+        GetShip(shipAid,teamAid).GetComponent<Animator>().SetTrigger("Collision");
+        GetShip(shipBid,teamBid).GetComponent<Animator>().SetTrigger("Collision");
     }
 }

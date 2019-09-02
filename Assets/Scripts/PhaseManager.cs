@@ -68,11 +68,9 @@ public static class PhaseManager
     public static IEnumerator playPhaseAnimations() {
         //playingAnimation = true;
         subPhaseIndex = 0;
-        yield return null;
-
-        updateText(GameLogic.phaseIndex);
         subPhaseProgress(subPhaseIndex);
-        
+        updateText(GameLogic.phaseIndex);
+        yield return null;
 
         foreach(subPhase s in subPhaseOrder) {
             yield return s();
@@ -408,9 +406,11 @@ public static class PhaseManager
         }
 
         foreach (ShipTargetResolution tr in catapultTargetResolutions) {
-            if (!tr.attacker.CanFire || !tr.needsResolving() || !GameManager.main.HumanNeedsCaptureChoice()) {
-                tr.attacker.NeedCatapultChoice = false;
-                Debug.Log("Catapult choice does not need resolution for ship "+tr.attacker.name);
+            if (tr.attacker == null || !tr.attacker.CanFire || !tr.needsResolving()) {
+                if(tr.attacker != null) {
+                    tr.attacker.NeedCatapultChoice = false;
+                    Debug.Log("Catapult choice does not need resolution for ship " + tr.attacker.name);
+                }                
                 continue;
             }
             yield return SyncFocus(tr.attacker.Position);
@@ -426,8 +426,7 @@ public static class PhaseManager
             } else {
                 yield return tr.resolve();
             }
-
-
+            
             yield return new CatapultResolution(tr.attacker,chosenTarget,1).resolve();
             tr.attacker.NeedCatapultChoice = false;
         }
@@ -450,7 +449,6 @@ public static class PhaseManager
             foreach(CatapultResolution cr in catapultResolutions) {
 
                 yield return cr.resolve();
-                cr.shipA.CanFire = false;
             }
         }        
     }    
@@ -662,9 +660,9 @@ public static class PhaseManager
     /// </summary>
     public static void subPhaseProgress(int index) {
 
-        //if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
-        //    PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
-        //}
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
+            PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
+        }
 
         //if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
         //    Debug.Log("Non master client running subPhaseProgress function with index "+index);
@@ -769,7 +767,4 @@ public static class PhaseManager
         PhotonView.Get(GameManager.main).RPC("SendTargetInfo",RpcTarget.Others,shipID,teamID,targetIds,targetTeamIDs);
 
     }
-
-
-
 }

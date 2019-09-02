@@ -23,6 +23,15 @@ public class CatapultResolution : CombatResolution
     public override IEnumerator resolve() {
 
         if(shipA == null || (shipB == null && missedNode == null) || !shipA.CanFire) {
+            if(shipA == null) {
+                Debug.Log("attacker is null for catapult resolution");
+            }
+            if (shipA != null && !shipA.CanFire) {
+                Debug.Log(shipA.name + " canfire is false");
+            }
+            if(shipB == null) {
+                Debug.Log(shipA.name + " catapult target was null");
+            }
             yield break;
         }
 
@@ -63,16 +72,14 @@ public class CatapultResolution : CombatResolution
         bullet.startPos = shipA.transform.position;
 
         if (PhotonNetwork.IsMasterClient) {
-            PhotonView.Get(GameManager.main).RPC("SpawnFireball",RpcTarget.Others,bullet.startPos.x,bullet.startPos.y,bullet.endPos.x,bullet.endPos.y);
+            PhotonView.Get(GameManager.main).RPC("SpawnFireball",RpcTarget.Others,bullet.startPos.x,bullet.startPos.y,bullet.endPos.x,bullet.endPos.y,bullet.missed);
         }
         
-
         while (!bullet.impacted) {
 
             yield return null;
         }
-
-
+        
         if (missedNode == null) {
             //shipB.life -= damageToB;
             shipB.TakeDamage(damageToB);
@@ -88,13 +95,11 @@ public class CatapultResolution : CombatResolution
 
         shipA.DisableIcon();
         shipA.CanFire = false;
-
-
+        
         if (missedNode == null) {
             shipB.DisableIcon();
         }
         
-
         resolved = true;
         yield return null;
     }
