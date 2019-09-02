@@ -92,7 +92,9 @@ public class StartMenu : MonoBehaviourPun
             }
             else
             {
-                GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/DuplicateTeamPanel").SetActive(true);
+                Debug.Log("Duplicates");
+                GameObject rp = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel");
+                rp.transform.Find("DuplicateTeamPanel").gameObject.SetActive(true);
                 startDuplicatePanelFade();
             }
             

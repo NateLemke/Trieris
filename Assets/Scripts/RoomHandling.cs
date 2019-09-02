@@ -92,6 +92,7 @@ public class RoomHandling : MonoBehaviourPunCallbacks
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Team" + slot + "Ready"] = (bool)inputPlayerReady;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        GameObject.Find("Canvas/MenuPanel/Menu").GetComponent<StartMenu>().SelectionControlsActivity(!(bool)ht["Team" + slot + "Ready"]);
         PhotonView.Get(this).RPC("UpdateReadyStatus", RpcTarget.Others);
     }
 
