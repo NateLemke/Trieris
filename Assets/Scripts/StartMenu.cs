@@ -22,8 +22,10 @@ public class StartMenu : MonoBehaviourPun
     {
         if (!PhotonNetwork.IsMasterClient)
         {
-            GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
-            startNotMasterFade();
+            //GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/NotMasterClient").SetActive(true);
+            //startNotMasterFade();
+            RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
+            rh.SendReadyStatus(rh.getSlotPosition(PhotonNetwork.LocalPlayer));
         }
         else
         {
