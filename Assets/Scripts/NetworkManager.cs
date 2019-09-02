@@ -158,6 +158,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
         ht["Team" + playerLoc + "Ready"] = false;
         PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
+        Debug.Log("Team 2 ready: " + (bool)ht["Team2Ready"]);
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has entered the room");
     }

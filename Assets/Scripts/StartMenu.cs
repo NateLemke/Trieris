@@ -83,13 +83,15 @@ public class StartMenu : MonoBehaviourPun
             
             if (selectedTeams.Count == selectedTeams.Distinct().Count())
             {
+                RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
                 if (PhotonNetwork.IsMasterClient)
                     setPlayerTeams();
 
-                //for (int i = 1; i <= 6; i++)
-                //{
-                //    GameManager.teamTypes[i - 1] = (Team.Type)GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/Dropdown").GetComponent<Dropdown>().value;
-                //}
+                for (int i = 1; i <= 6; i++)
+                {
+                    if(rh.playerInSlot(i) != null)
+                        GameManager.teamTypes[i - 1] = (Team.Type)Team.Type.player;
+                }
                 SceneManager.LoadScene("GameScene");
             }
             else
