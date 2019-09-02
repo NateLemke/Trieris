@@ -52,6 +52,8 @@ public class RoomHandling : MonoBehaviourPunCallbacks
                 if(i != 1)
                     GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/Teams/Team" + i + "/InformationPanel/ReadyToggle/Toggle").GetComponent<Toggle>().isOn = (bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Ready"];
             }
+
+            PhotonView.Get(this).RPC("UpdateReadyStatus", RpcTarget.others);
         }
         UpdatePlayerList();
         setRoomName();
