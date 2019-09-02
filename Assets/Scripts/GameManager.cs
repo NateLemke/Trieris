@@ -743,7 +743,11 @@ public class GameManager : MonoBehaviourPunCallbacks {
     }
 
     public void goToStartMenu() {
-        SceneManager.LoadScene("StartMenu");
+        if(PhotonNetwork.IsConnected){
+            PhotonNetwork.LeaveRoom();
+        }else{
+            SceneManager.LoadScene("StartMenu");
+        }
     }
 
     public Ship GetShip(int shipID,int team) {
@@ -1051,7 +1055,7 @@ public class GameManager : MonoBehaviourPunCallbacks {
 
     public override void OnDisconnected(DisconnectCause cause){
         base.OnDisconnected(cause);
-        GameManager.main.goToStartMenu();
+        goToStartMenu();
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player newPlayer)
