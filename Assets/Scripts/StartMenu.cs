@@ -52,7 +52,7 @@ public class StartMenu : MonoBehaviourPun
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel/PlayersNotReady").SetActive(false);
     }
 
-    private void beginStartingGame(){
+    public void beginStartingGame(){
         PhotonView.Get(this).RPC("DisableSelectionControls", RpcTarget.Others);
         startGame();
     }

@@ -50,6 +50,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             Debug.Log("OfflineMode: " + PhotonNetwork.OfflineMode);
             Debug.Log("In Lobby: " + PhotonNetwork.InLobby);
             Debug.Log("In Room: " + PhotonNetwork.InRoom);
+            Debug.Log("Players ready:");
+            for(int i=1; i<=6; i++){
+                if((bool)PhotonNetwork.CurrentRoom.CustomProperties["Team" + i + "Ready"])
+                    Debug.Log(i);
+            }
         }
         //if (Input.GetKeyDown(KeyCode.F))
         //{
@@ -148,6 +153,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        RoomHandling rh = GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>();
+        int playerLoc = rh.getSlotPosition(newPlayer);
+        Hashtable ht = PhotonNetwork.CurrentRoom.CustomProperties;
+        ht["Team" + playerLoc + "Ready"] = false;
+        PhotonNetwork.CurrentRoom.SetCustomProperties(ht);
         GameObject.Find("Canvas/MultiplayerPanel/RoomPanel").GetComponent<RoomHandling>().UpdatePlayerList();
         Debug.Log(newPlayer.NickName + " has entered the room");
     }
