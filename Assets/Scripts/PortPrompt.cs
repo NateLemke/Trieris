@@ -82,7 +82,7 @@ public class PortPrompt : MonoBehaviour{
 
         //currentShip.playerCapture();
         portPromptPanel.SetActive(false);
-
+        currentShip.NeedRedirect = true;
         if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
             //GameManager.main.PlayerCapturePort(currentShip.Id,(int)currentShip.team.TeamFaction);
             PhotonView.Get(GameManager.main).RPC("PlayerCapturePort",RpcTarget.MasterClient,currentShip.Id,(int)currentShip.team.TeamFaction);

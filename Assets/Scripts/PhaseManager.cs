@@ -67,9 +67,9 @@ public static class PhaseManager
     /// <returns></returns>
     public static IEnumerator playPhaseAnimations() {
         //playingAnimation = true;
-        subPhaseIndex = 0;
-        subPhaseProgress(subPhaseIndex);
+        subPhaseIndex = 0;        
         updateText(GameLogic.phaseIndex);
+        subPhaseProgress(subPhaseIndex);
         yield return null;
 
         foreach(subPhase s in subPhaseOrder) {
@@ -423,6 +423,10 @@ public static class PhaseManager
 
                 SendTargetChoiceInfo(tr);
 
+                while (chosenTarget == null) {
+                    yield return null;
+                }
+
             } else {
                 yield return tr.resolve();
             }
@@ -613,6 +617,7 @@ public static class PhaseManager
         phaseObj.GetComponentInChildren<Text>().text = "Phase " + (phase + 1);
         GameManager.main.uiControl.GoText.text = "PHASE " + (phase + 1);
 
+
     }
 
     /// <summary>
@@ -664,27 +669,19 @@ public static class PhaseManager
             PhotonView.Get(GameManager.main).RPC("subPhaseProgress",RpcTarget.Others,index);
         }
 
-        //if(PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient) {
-        //    Debug.Log("Non master client running subPhaseProgress function with index "+index);
-        //}
+        GameObject[] outlines = new GameObject[] {
+            GameObject.Find("actionphase"),
+            GameObject.Find("rammingphase"),
+            GameObject.Find("catapultphase"),
+            GameObject.Find("capturephase")
+        };
 
-        GameObject outline = GameObject.Find("subphaseoutline");
-        GameObject subPhaseIcon = null;
-        
-        switch (index) {
-            case 0:
-            subPhaseIcon = GameObject.Find("actionphase"); break;
-            case 1:
-            subPhaseIcon = GameObject.Find("rammingphase"); break;
-            case 2:
-            subPhaseIcon = GameObject.Find("catapultphase"); break;
-            case 3:
-            subPhaseIcon = GameObject.Find("capturephase"); break;
-            default:
-            subPhaseIcon = null;break;
+        foreach(GameObject g in outlines) {
+            g.transform.GetChild(0).gameObject.SetActive(false);
         }
 
-        outline.transform.position = subPhaseIcon.transform.position;
+        outlines[index].transform.GetChild(0).gameObject.SetActive(true);
+
         subPhaseIndex++;
     }
     
